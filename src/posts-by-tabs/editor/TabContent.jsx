@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { RichText } from '@wordpress/block-editor';
-import { memo } from '@wordpress/element';
+import { memo, useEffect } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
 
 function CustomTabPanel({children, selectedTab, value, index}) {
@@ -10,6 +11,11 @@ function CustomTabPanel({children, selectedTab, value, index}) {
       hidden={value !== selectedTab}
       id={`tabpanel-${value}`}
       aria-labelledby={`tab-${index}`}
+      onClick={(e) => {
+        if (e.currentTarget === e.target) {
+          e.stopPropagation();
+        }
+      }}
     >
       {value === selectedTab && <Paper sx={{ p: 3, backgroundColor:'oklch(0.968 0.007 247.896)' }} elevation={2}>{children}</Paper>}
     </div>
@@ -21,10 +27,22 @@ const MemoizedRichText = memo(function RichTextEditor({
   index,
   editingContent,
   setEditingContent,
-  handleTabValueChange
+  handleTabValueChange,
+  clientId
 }) {
+
+  const { selectBlock } = useDispatch('core/block-editor');
+
   return (
-    <RichText
+    <div 
+      className="rich-text-wrapper"
+      onClick={(e) => {
+        if (clientId) {
+          selectBlock(clientId);
+        }
+      }}
+    >
+      <RichText
       tagName="p"
       placeholder="Écrivez ici."
       value={content}
@@ -41,19 +59,23 @@ const MemoizedRichText = memo(function RichTextEditor({
           setEditingContent(null);
         }
       }}
-    />
+      />
+    </div>
   );
 }, (prevProps, nextProps) => {
-  // Only re-render if content changed or editing status changed
-  if (prevProps.content !== nextProps.content) return false;
+  if (prevProps.content !== nextProps.content) {
+    return false;
+  }
   
-  // Check editing status
   const prevEditing = prevProps.editingContent?.index === prevProps.index;
   const nextEditing = nextProps.editingContent?.index === nextProps.index;
-  if (prevEditing !== nextEditing) return false;
+  if (prevEditing !== nextEditing) {
+    return false;
+  }
   
-  // If we're editing, always update
-  if (nextEditing) return false;
+  if (nextEditing) {
+    return false;
+  }
   
   return true;
 });
@@ -64,8 +86,17 @@ export default function TabContent({
   selectedTab,
   editingContent,
   setEditingContent,
-  handleTabValueChange
+  handleTabValueChange,
+  clientId
 }) {
+
+  useEffect(() => {
+    return () => {
+      if (editingContent && editingContent.index === index) {
+        setEditingContent(null);
+      }
+    };
+  }, []);
 
   const content = editingContent !== null && editingContent.index === index 
     ? editingContent.content 
@@ -96,6 +127,7 @@ export default function TabContent({
             editingContent={editingContent}
             setEditingContent={setEditingContent}
             handleTabValueChange={handleTabValueChange}
+            clientId={clientId}
           />
         </div>   
         <div className="w-full md:w-1/2 p-2">

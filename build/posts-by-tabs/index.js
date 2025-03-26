@@ -21194,264 +21194,6 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 
 /***/ }),
 
-/***/ "./src/posts-by-tabs/components/ParallaxMedia.jsx":
-/*!********************************************************!*\
-  !*** ./src/posts-by-tabs/components/ParallaxMedia.jsx ***!
-  \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ParallaxImage)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var react_scroll_parallax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-scroll-parallax */ "./node_modules/react-scroll-parallax/dist/react-scroll-parallax.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-function ParallaxImage(props) {
-  const {
-    src
-  } = props;
-  const {
-    ref
-  } = (0,react_scroll_parallax__WEBPACK_IMPORTED_MODULE_1__.useParallax)({
-    speed: 10,
-    scale: [.9, 1.2]
-  });
-  const parallaxController = (0,react_scroll_parallax__WEBPACK_IMPORTED_MODULE_1__.useParallaxController)();
-  if (!src) {
-    return null;
-  }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    className: "absolute inset-0 w-[150%] h-[150%] -left-1/3 -top-1/3",
-    ref: ref,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-      onLoad: () => parallaxController.update(),
-      src: src,
-      className: "w-full h-full object-cover"
-    })
-  });
-}
-
-/***/ }),
-
-/***/ "./src/posts-by-tabs/components/SectionBackground.jsx":
-/*!************************************************************!*\
-  !*** ./src/posts-by-tabs/components/SectionBackground.jsx ***!
-  \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ SectionBackground)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _ParallaxMedia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ParallaxMedia */ "./src/posts-by-tabs/components/ParallaxMedia.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-
-function SectionBackground(props) {
-  const {
-    background
-  } = props;
-  if (!background) {
-    return null;
-  }
-  if (!background.mediaUrl) {
-    return null;
-  }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [background.isParallax ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_ParallaxMedia__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        src: background.mediaUrl
-      })
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-      children: [background.mediaType === 'image' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        className: "absolute inset-0 w-full h-full bg-cover bg-center",
-        style: {
-          backgroundImage: `url(${background.mediaUrl})`
-        }
-      }), background.mediaType === 'video' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("video", {
-        autoPlay: true,
-        muted: true,
-        loop: true,
-        playsinline: true,
-        className: "absolute inset-0 w-full h-full object-cover",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("source", {
-          src: background.mediaUrl,
-          type: "video/mp4"
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "absolute inset-0  w-full h-full  bg-black opacity-30"
-    })]
-  });
-}
-
-/***/ }),
-
-/***/ "./src/posts-by-tabs/components/TabContent.jsx":
-/*!*****************************************************!*\
-  !*** ./src/posts-by-tabs/components/TabContent.jsx ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ TabContent)
-/* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-
-
-function CustomTabPanel({
-  children,
-  selectedTab,
-  value,
-  index
-}) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-    role: "tabpanel",
-    hidden: value !== selectedTab,
-    id: `tabpanel-${value}`,
-    "aria-labelledby": `tab-${index}`,
-    children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      sx: {
-        p: 3,
-        backgroundColor: 'oklch(0.968 0.007 247.896)'
-      },
-      elevation: 2,
-      children: children
-    })
-  });
-}
-const MemoizedRichText = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.memo)(function RichTextEditor({
-  content,
-  index,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange
-}) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
-    tagName: "p",
-    placeholder: "\xC9crivez ici.",
-    value: content,
-    allowedFormats: ['core/bold', 'core/italic'],
-    onChange: value => {
-      setEditingContent({
-        index: index,
-        content: value
-      });
-    },
-    onBlur: () => {
-      if (editingContent && editingContent.index === index) {
-        handleTabValueChange(editingContent.content, 'content', index);
-        setEditingContent(null);
-      }
-    }
-  });
-}, (prevProps, nextProps) => {
-  // Only re-render if content changed or editing status changed
-  if (prevProps.content !== nextProps.content) return false;
-
-  // Check editing status
-  const prevEditing = prevProps.editingContent?.index === prevProps.index;
-  const nextEditing = nextProps.editingContent?.index === nextProps.index;
-  if (prevEditing !== nextEditing) return false;
-
-  // If we're editing, always update
-  if (nextEditing) return false;
-  return true;
-});
-function TabContent({
-  tab,
-  index,
-  selectedTab,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange
-}) {
-  const content = editingContent !== null && editingContent.index === index ? editingContent.content : tab?.content || '';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(CustomTabPanel, {
-    selectedTab: selectedTab,
-    value: index,
-    index: index,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h3", {
-      className: "flex justify-between pb-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
-        className: "block",
-        children: [tab.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "block text-xl font-bold",
-          children: tab.title
-        }), tab.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "block text-2xl text-secondary font-regular",
-          children: tab.subtitle
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
-        className: "block",
-        children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "block text-xl font-regular",
-          children: tab.meta_1
-        }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "block text-xl leading-2xl font-regular",
-          children: tab.meta_2
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "flex justify-start flex-wrap border-y border-slate-50",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(MemoizedRichText, {
-          content: content,
-          index: index,
-          editingContent: editingContent,
-          setEditingContent: setEditingContent,
-          handleTabValueChange: handleTabValueChange
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "w-full md:w-1/2 p-2",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "aspect-video",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "relative",
-            children: tab.mediaUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
-              src: tab.mediaUrl,
-              alt: tab.title || '',
-              className: "aspect-video object-cover"
-            })
-          })
-        })
-      })]
-    })]
-  });
-}
-
-/***/ }),
-
 /***/ "./src/posts-by-tabs/components/ThemePalette.jsx":
 /*!*******************************************************!*\
   !*** ./src/posts-by-tabs/components/ThemePalette.jsx ***!
@@ -21624,7 +21366,8 @@ __webpack_require__.r(__webpack_exports__);
 
 function Edit({
   attributes,
-  setAttributes
+  setAttributes,
+  clientId
 }) {
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     if (!attributes.blockId) {
@@ -21682,7 +21425,8 @@ function Edit({
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_Editor__WEBPACK_IMPORTED_MODULE_8__["default"], {
       attributes: attributes,
       setAttributes: setAttributes,
-      handleTabValueChange: handleTabValueChange
+      handleTabValueChange: handleTabValueChange,
+      clientId: clientId
     })]
   });
 }
@@ -21830,15 +21574,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
 /* harmony import */ var _mui_material_Container__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Container */ "./node_modules/@mui/material/Container/Container.js");
 /* harmony import */ var _mui_material_Tabs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/material/Tabs */ "./node_modules/@mui/material/Tabs/Tabs.js");
 /* harmony import */ var _mui_material_Tab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/material/Tab */ "./node_modules/@mui/material/Tab/Tab.js");
-/* harmony import */ var react_scroll_parallax__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-scroll-parallax */ "./node_modules/react-scroll-parallax/dist/react-scroll-parallax.esm.js");
-/* harmony import */ var _components_TabContent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/TabContent */ "./src/posts-by-tabs/components/TabContent.jsx");
-/* harmony import */ var _components_SectionBackground__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/SectionBackground */ "./src/posts-by-tabs/components/SectionBackground.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_scroll_parallax__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-scroll-parallax */ "./node_modules/react-scroll-parallax/dist/react-scroll-parallax.esm.js");
+/* harmony import */ var _TabContent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./TabContent */ "./src/posts-by-tabs/editor/TabContent.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -21854,67 +21600,78 @@ function Editor(props) {
   const {
     attributes,
     setAttributes,
-    handleTabValueChange
+    handleTabValueChange,
+    clientId
   } = props;
   const [selectedTab, setSelectedTab] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(0);
   const [editingContent, setEditingContent] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const {
+    selectBlock
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
   const handleTabChange = (event, value) => {
+    selectBlock(clientId);
     setSelectedTab(value);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_scroll_parallax__WEBPACK_IMPORTED_MODULE_3__.ParallaxProvider, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps)(),
-      className: "p-4 md:p-6 lg:p-8 bg-primary-light relative overflow-hidden",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_SectionBackground__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        ...attributes
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        maxWidth: "xl",
+  const ensureBlockSelected = e => {
+    if (e.currentTarget === e.target) {
+      selectBlock(clientId);
+    }
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps)(),
+    className: "p-4 md:p-6 lg:p-8 bg-primary-light relative overflow-hidden",
+    onClick: ensureBlockSelected,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      maxWidth: "xl",
+      sx: {
+        position: 'relative',
+        zIndex: 10
+      },
+      onClick: e => {
+        selectBlock(clientId);
+      },
+      children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        component: "h2",
         sx: {
-          position: 'relative',
-          zIndex: 10
+          color: 'secondary.main'
         },
-        children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          component: "h2",
+        className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
+        children: attributes.title
+      }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        className: "font-bold text-xl text-[30px] mb-0",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+          children: attributes.subtitle
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        sx: ({
+          theme
+        }) => ({
+          backgroundColor: "white",
+          borderRadius: '2px'
+        }),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          value: selectedTab,
+          onChange: handleTabChange,
+          variant: "scrollable",
+          scrollButtons: "auto",
+          "aria-label": "detailed list tabs",
           sx: {
-            color: 'secondary.main'
+            mb: 3
           },
-          className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
-          children: attributes.title
-        }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          className: "font-bold text-xl text-[30px] mb-0",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
-            children: attributes.subtitle
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          sx: ({
-            theme
-          }) => ({
-            backgroundColor: "white",
-            borderRadius: '2px'
-          }),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_8__["default"], {
-            value: selectedTab,
-            onChange: handleTabChange,
-            variant: "scrollable",
-            scrollButtons: "auto",
-            "aria-label": "detailed list tabs",
-            sx: {
-              mb: 3
-            },
-            children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_9__["default"], {
-              label: tab.title,
-              id: `tab-${index}`,
-              "aria-controls": `tabpanel-${index}`
-            }, index))
-          }), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_TabContent__WEBPACK_IMPORTED_MODULE_10__["default"], {
-            tab: tab,
-            index: index,
-            selectedTab: selectedTab,
-            editingContent: editingContent,
-            setEditingContent: setEditingContent,
-            handleTabValueChange: handleTabValueChange
-          }, index))]
-        })]
+          children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            label: tab.title,
+            id: `tab-${index}`,
+            "aria-controls": `tabpanel-${index}`
+          }, index))
+        }), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_TabContent__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          tab: tab,
+          index: index,
+          selectedTab: selectedTab,
+          editingContent: editingContent,
+          setEditingContent: setEditingContent,
+          handleTabValueChange: handleTabValueChange,
+          clientId: clientId
+        }, index))]
       })]
     })
   });
@@ -21993,6 +21750,185 @@ function QueryFields({
     onNumberOfItemsChange: newNumberOfItems => updateQuery({
       numberOfItems: newNumberOfItems
     })
+  });
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/editor/TabContent.jsx":
+/*!*************************************************!*\
+  !*** ./src/posts-by-tabs/editor/TabContent.jsx ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TabContent)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+function CustomTabPanel({
+  children,
+  selectedTab,
+  value,
+  index
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    role: "tabpanel",
+    hidden: value !== selectedTab,
+    id: `tabpanel-${value}`,
+    "aria-labelledby": `tab-${index}`,
+    onClick: e => {
+      if (e.currentTarget === e.target) {
+        e.stopPropagation();
+      }
+    },
+    children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      sx: {
+        p: 3,
+        backgroundColor: 'oklch(0.968 0.007 247.896)'
+      },
+      elevation: 2,
+      children: children
+    })
+  });
+}
+const MemoizedRichText = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.memo)(function RichTextEditor({
+  content,
+  index,
+  editingContent,
+  setEditingContent,
+  handleTabValueChange,
+  clientId
+}) {
+  const {
+    selectBlock
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    className: "rich-text-wrapper",
+    onClick: e => {
+      if (clientId) {
+        selectBlock(clientId);
+      }
+    },
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
+      tagName: "p",
+      placeholder: "\xC9crivez ici.",
+      value: content,
+      allowedFormats: ['core/bold', 'core/italic'],
+      onChange: value => {
+        setEditingContent({
+          index: index,
+          content: value
+        });
+      },
+      onBlur: () => {
+        if (editingContent && editingContent.index === index) {
+          handleTabValueChange(editingContent.content, 'content', index);
+          setEditingContent(null);
+        }
+      }
+    })
+  });
+}, (prevProps, nextProps) => {
+  if (prevProps.content !== nextProps.content) {
+    return false;
+  }
+  const prevEditing = prevProps.editingContent?.index === prevProps.index;
+  const nextEditing = nextProps.editingContent?.index === nextProps.index;
+  if (prevEditing !== nextEditing) {
+    return false;
+  }
+  if (nextEditing) {
+    return false;
+  }
+  return true;
+});
+function TabContent({
+  tab,
+  index,
+  selectedTab,
+  editingContent,
+  setEditingContent,
+  handleTabValueChange,
+  clientId
+}) {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    return () => {
+      if (editingContent && editingContent.index === index) {
+        setEditingContent(null);
+      }
+    };
+  }, []);
+  const content = editingContent !== null && editingContent.index === index ? editingContent.content : tab?.content || '';
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(CustomTabPanel, {
+    selectedTab: selectedTab,
+    value: index,
+    index: index,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h3", {
+      className: "flex justify-between pb-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+        className: "block",
+        children: [tab.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "block text-xl font-bold",
+          children: tab.title
+        }), tab.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "block text-2xl text-secondary font-regular",
+          children: tab.subtitle
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+        className: "block",
+        children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "block text-xl font-regular",
+          children: tab.meta_1
+        }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "block text-xl leading-2xl font-regular",
+          children: tab.meta_2
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: "flex justify-start flex-wrap border-y border-slate-50",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(MemoizedRichText, {
+          content: content,
+          index: index,
+          editingContent: editingContent,
+          setEditingContent: setEditingContent,
+          handleTabValueChange: handleTabValueChange,
+          clientId: clientId
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "w-full md:w-1/2 p-2",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          className: "aspect-video",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "relative",
+            children: tab.mediaUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+              src: tab.mediaUrl,
+              alt: tab.title || '',
+              className: "aspect-video object-cover"
+            })
+          })
+        })
+      })]
+    })]
   });
 }
 
@@ -22255,6 +22191,17 @@ module.exports = window["wp"]["blocks"];
 
 "use strict";
 module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = window["wp"]["data"];
 
 /***/ }),
 
