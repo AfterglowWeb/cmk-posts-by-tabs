@@ -21410,6 +21410,7 @@ function Edit({
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Onglets'),
+        initialOpen: false,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_TabFields__WEBPACK_IMPORTED_MODULE_6__["default"], {
           attributes: attributes,
           setAttributes: setAttributes
@@ -21615,7 +21616,6 @@ function PostsByTabs(props) {
     const fetchPosts = async () => {
       setIsLoading(true);
       setError(null);
-      console.log("Fetching posts with attributes:", attributes);
       try {
         var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
         if (attributes.postType === 'post') {
@@ -21632,16 +21632,16 @@ function PostsByTabs(props) {
           queryPath += `&orderby=${attributes.orderBy}`;
         }
         if (attributes.taxonomy && attributes.term) {
-          queryPath += `&${attributes.taxonomy}=${attributes.term}`;
+          if (attributes.taxonomy === 'category') {
+            queryPath += `&categories=${attributes.term}`;
+          } else {
+            queryPath += `&${attributes.taxonomy}=${attributes.term}`;
+          }
         }
-        console.log("Fetching posts with query:", queryPath);
         const fetchedPosts = await wp.apiFetch({
           path: queryPath
         });
-        console.log("Fetched posts:", fetchedPosts);
         setPosts(fetchedPosts);
-
-        // Store the posts in the block attributes if you want to cache them
         setAttributes({
           posts: fetchedPosts
         });
@@ -21799,7 +21799,6 @@ function QueryFields({
           });
         }
       });
-      console.log(availableTypes);
       setPostTypes(availableTypes);
       setIsLoading(false);
       if (!attributes.postType) {
@@ -21830,7 +21829,7 @@ function QueryFields({
             setSelectedTaxonomy(taxonomyOptions[0].value);
             setAttributes({
               taxonomy: taxonomyOptions[0].value,
-              term: null // Reset term when taxonomy changes
+              term: null
             });
           } else if (!selectedTaxonomy) {
             setSelectedTaxonomy('');
@@ -21854,13 +21853,13 @@ function QueryFields({
       const taxonomy = taxonomies.find(t => t.value === selectedTaxonomy);
       if (taxonomy && taxonomy.restBase) {
         setIsLoading(true);
+        console.log(`/wp/v2/${taxonomy.restBase}?per_page=100`);
         wp.apiFetch({
           path: `/wp/v2/${taxonomy.restBase}?per_page=100`
         }).then(fetchedTerms => {
-          // Map terms to format needed by QueryControls
           const termOptions = fetchedTerms.map(term => ({
-            id: term.id,
-            name: term.name
+            label: term.name,
+            value: term.id
           }));
           setTerms(termOptions);
           setIsLoading(false);
@@ -21909,7 +21908,19 @@ function QueryFields({
           setSelectedTaxonomy(newTaxonomy);
           updateQuery({
             taxonomy: newTaxonomy,
-            term: null // Reset term when changing taxonomy
+            term: null
+          });
+        }
+      }), selectedTaxonomy && terms.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Term'),
+        value: attributes.term || '',
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select term'),
+          value: ''
+        }, ...terms],
+        onChange: newTerm => {
+          updateQuery({
+            term: newTerm ? parseInt(newTerm) : null
           });
         }
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.QueryControls, {
@@ -21924,11 +21935,6 @@ function QueryFields({
         order: order,
         onOrderChange: value => updateQuery({
           order: value
-        }),
-        categoriesList: terms,
-        selectedCategoryId: attributes.term,
-        onCategoryChange: value => updateQuery({
-          term: value
         })
       })]
     })

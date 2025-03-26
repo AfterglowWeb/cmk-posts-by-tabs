@@ -47,7 +47,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 					<QueryFields attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 
-				<PanelBody title={ __( 'Onglets' ) }>
+				<PanelBody title={__('Onglets')} initialOpen={false}>
 					<TabFields attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 

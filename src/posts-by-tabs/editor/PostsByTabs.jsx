@@ -25,7 +25,7 @@ export default function PostsByTabs(props) {
         const fetchPosts = async () => {
             setIsLoading(true);
             setError(null);
-            console.log("Fetching posts with attributes:", attributes);
+      
             try {
 
                 var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
@@ -45,17 +45,19 @@ export default function PostsByTabs(props) {
                 if (attributes.orderBy) {
                     queryPath += `&orderby=${attributes.orderBy}`;
                 }
-                
+
                 if (attributes.taxonomy && attributes.term) {
-                    queryPath += `&${attributes.taxonomy}=${attributes.term}`;
+                    if (attributes.taxonomy === 'category') {
+                        queryPath += `&categories=${attributes.term}`;
+                    } else {
+                        queryPath += `&${attributes.taxonomy}=${attributes.term}`;
+                    }
                 }
                 
-                console.log("Fetching posts with query:", queryPath);
                 const fetchedPosts = await wp.apiFetch({ path: queryPath });
-                console.log("Fetched posts:", fetchedPosts);
+
                 setPosts(fetchedPosts);
-                
-                // Store the posts in the block attributes if you want to cache them
+
                 setAttributes({ posts: fetchedPosts });
             } catch (err) {
                 console.error("Error fetching posts:", err);

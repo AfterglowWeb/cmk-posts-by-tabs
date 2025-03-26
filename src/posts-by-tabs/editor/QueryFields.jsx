@@ -37,9 +37,7 @@ export default function QueryFields({attributes, setAttributes}) {
                     });
                 }
             });
-
-            console.log(availableTypes);
-            
+    
             setPostTypes(availableTypes);
             setIsLoading(false);
             
@@ -72,7 +70,7 @@ export default function QueryFields({attributes, setAttributes}) {
                         setSelectedTaxonomy(taxonomyOptions[0].value);
                         setAttributes({ 
                             taxonomy: taxonomyOptions[0].value,
-                            term: null // Reset term when taxonomy changes
+                            term: null
                         });
                     }
                     else if (!selectedTaxonomy) {
@@ -90,15 +88,15 @@ export default function QueryFields({attributes, setAttributes}) {
     useEffect(() => {
         if (selectedTaxonomy) {
             const taxonomy = taxonomies.find(t => t.value === selectedTaxonomy);
-            
+        
             if (taxonomy && taxonomy.restBase) {
                 setIsLoading(true);
+                console.log(`/wp/v2/${taxonomy.restBase}?per_page=100`);
                 wp.apiFetch({ path: `/wp/v2/${taxonomy.restBase}?per_page=100` })
                     .then((fetchedTerms) => {
-                        // Map terms to format needed by QueryControls
                         const termOptions = fetchedTerms.map(term => ({
-                            id: term.id,
-                            name: term.name
+                            label: term.name,
+                            value: term.id,
                         }));
                         
                         setTerms(termOptions);
@@ -155,8 +153,22 @@ export default function QueryFields({attributes, setAttributes}) {
                                 setSelectedTaxonomy(newTaxonomy);
                                 updateQuery({ 
                                     taxonomy: newTaxonomy,
-                                    term: null // Reset term when changing taxonomy
+                                    term: null
                                 });
+                            }}
+                        />
+                    )}
+
+                    {selectedTaxonomy && terms.length > 0 && (
+                        <SelectControl
+                            label={__('Term')}
+                            value={attributes.term || ''}
+                            options={[
+                                { label: __('Select term'), value: '' },
+                                ...terms
+                            ]}
+                            onChange={(newTerm) => {
+                                updateQuery({ term: newTerm ? parseInt(newTerm) : null });
                             }}
                         />
                     )}
@@ -168,9 +180,6 @@ export default function QueryFields({attributes, setAttributes}) {
                         onOrderByChange={(value) => updateQuery({ orderBy: value })}
                         order={order}
                         onOrderChange={(value) => updateQuery({ order: value })}
-                        categoriesList={terms}
-                        selectedCategoryId={attributes.term}
-                        onCategoryChange={(value) => updateQuery({ term: value })}
                     />
                 </>
             )}
