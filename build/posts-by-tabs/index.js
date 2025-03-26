@@ -21615,8 +21615,16 @@ function PostsByTabs(props) {
     const fetchPosts = async () => {
       setIsLoading(true);
       setError(null);
+      console.log("Fetching posts with attributes:", attributes);
       try {
-        let queryPath = `/wp/v2/${attributes.postType || 'posts'}?_embed&per_page=${attributes.numberOfItems || 5}`;
+        var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
+        if (attributes.postType === 'post') {
+          restEndpoint = `/wp/v2/posts`;
+        }
+        if (attributes.postType === 'page') {
+          restEndpoint = `/wp/v2/pages`;
+        }
+        var queryPath = `${restEndpoint}?_embed&per_page=${attributes.numberOfItems || 5}`;
         if (attributes.order) {
           queryPath += `&order=${attributes.order}`;
         }
