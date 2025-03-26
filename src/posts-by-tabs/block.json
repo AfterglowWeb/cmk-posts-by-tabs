@@ -1,0 +1,137 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cmk/posts-by-tabs",
+	"version": "0.1.0",
+	"title": "Posts by Tabs",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Display posts in multiple template formats using tabs.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"innerBlocks": true
+	},
+	"providesContext": {
+		"cmk/selectedTab": "selectedTab"
+	},
+	"allowedBlocks": [],
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"subtitle": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"template": {
+					"type": "string",
+					"default": ""
+					},
+					"title": {
+					"type": "string",
+					"default": ""
+					},
+					"subtitle": {
+					"type": "string",
+					"default": ""
+					},
+					"content": {
+					"type": "string",
+					"source": "html",
+					"default": ""
+					},
+					"hideTab": {
+					"type": "boolean",
+					"default": false
+					},
+					"showNavigation": {
+					"type": "boolean",
+					"default": false
+					},
+					"showPagination": {
+					"type": "boolean",
+					"default": false
+					},
+					"showLoadMore": {
+					"type": "boolean",
+					"default": false
+					},
+					"showExcerpt": {
+					"type": "boolean",
+					"default": false
+					},
+					"showTitle": {
+					"type": "boolean",
+					"default": false
+					},
+					"showSubtitle": {
+					"type": "boolean",
+					"default": false
+					},
+					"showDate": {
+					"type": "boolean",
+					"default": false
+					},
+					"showAuthor": {
+					"type": "boolean",
+					"default": false
+					},
+					"showCategory": {
+					"type": "boolean",
+					"default": false
+					},
+					"showTags": {
+					"type": "boolean",
+					"default": false
+					}
+				}
+			}
+		},
+		"posts": {
+			"type": "array",
+			"default": []
+		},
+		"query": {
+			"type": "object",
+			"default": {
+				"postType": "post",
+				"postsPerPage": 6,
+				"orderBy": "date",
+				"order": "desc",
+				"offset": 0,
+				"category": "",
+				"tag": "",
+				"author": "",
+				"exclude": "",
+				"include": "",
+				"metaKey": "",
+				"metaValue": "",
+				"metaCompare": "",
+				"taxQuery": [],
+				"metaQuery": [],
+				"postStatus": "publish",
+				"sticky": false,
+				"ignoreSticky": false,
+				"postIn": [],
+				"postNotIn": []
+			}
+		},
+		"blockId": {
+			"type": "string"
+		}
+	},
+	"textdomain": "cmk-posts-by-tab",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./output.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

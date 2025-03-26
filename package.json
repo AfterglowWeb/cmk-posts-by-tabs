@@ -1,0 +1,31 @@
+{
+	"name": "posts-by-tabs",
+	"version": "1.0.1b",
+	"description": "Material UI Tabs Block Dedicated to Golf Courses",
+	"author": "Cédric Moris Kelly",
+	"license": "GPL-3.0-or-later",
+	"main": "build/index.js",
+	"sideEffects": false,
+	"scripts": {
+		"build": "wp-scripts build --webpack-copy-php",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start --webpack-copy-php",
+		"tailwind": "tailwindcss -i ./src/posts-by-tabs/input.css -o ./build/posts-by-tabs/output.css --watch"
+	},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.0.12",
+		"@wordpress/scripts": "^30.12.0",
+		"tailwindcss": "^4.0.12"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.0",
+		"@mui/icons-material": "^6.4.7",
+		"@mui/material": "^6.4.7",
+		"react-scroll-parallax": "^3.4.5"
+	}
+}
