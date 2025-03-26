@@ -87,7 +87,8 @@ export default function TabContent({
   editingContent,
   setEditingContent,
   handleTabValueChange,
-  clientId
+  clientId,
+  posts
 }) {
 
   useEffect(() => {
@@ -144,6 +145,48 @@ export default function TabContent({
             </div>
         </div>
       </div>
+
+      <TabPosts posts={posts} />
     </CustomTabPanel>
   );
 }
+
+function TabPosts (props) {
+  const { posts } = props;
+  
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="posts-grid mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {posts.map((post) => (
+        <div key={post.id} className="post-card bg-white p-4 rounded shadow">
+          {post._embedded && post._embedded['wp:featuredmedia'] && (
+            <div className="post-thumbnail mb-3">
+              <img 
+                src={post._embedded['wp:featuredmedia'][0].source_url} 
+                alt={post._embedded['wp:featuredmedia'][0].alt_text || ''} 
+                className="w-full h-48 object-cover"
+              />
+            </div>
+          )}
+          
+          <h4 className="post-title text-lg font-bold mb-2" 
+              dangerouslySetInnerHTML={{ __html: post.title.rendered }} 
+          />
+          
+          <div className="post-excerpt text-sm mb-2" 
+               dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+          />
+          
+          <div className="post-meta text-xs text-gray-500">
+            {post.date && (
+              <span>{new Date(post.date).toLocaleDateString()}</span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};

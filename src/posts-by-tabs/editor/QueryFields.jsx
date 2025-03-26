@@ -1,43 +1,179 @@
 import { __ } from '@wordpress/i18n';
 import { 
-	QueryControls
+    QueryControls,
+    SelectControl,
+    Spinner,
+    FormTokenField
 } from '@wordpress/components';
 import { 
-	useState, 
+    useState, 
     useEffect
 } from '@wordpress/element';
 
 export default function QueryFields({attributes, setAttributes}) {
-    const { maxItems, minItems, numberOfItems, order, orderBy, category } = attributes;
-    const [categories, setCategories] = useState([]);
+    const { numberOfItems, order, orderBy } = attributes;
+
+    const [postTypes, setPostTypes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const [taxonomies, setTaxonomies] = useState([]);
+    const [selectedTaxonomy, setSelectedTaxonomy] = useState(attributes.taxonomy || '');
+    const [terms, setTerms] = useState([]);
 
     useEffect(() => {
-        
-        if (!attributes.posts || !Array.isArray(attributes.posts)) {
-            setAttributes({ posts: [] });
-        }
+        setIsLoading(true);
+        wp.apiFetch({ path: '/wp/v2/types' }).then((types) => {
+            const availableTypes = [];
+            Object.keys(types).forEach((type) => {
 
-        wp.apiFetch({ path: '/wp/v2/categories' }).then((categories) => {
-            setCategories(categories);
+                if (!type.startsWith('wp_') && 
+                    type !== 'attachment' && 
+                    type !== 'nav_menu_item' &&
+                    type !== 'rm_content_editor') {
+                    
+                    availableTypes.push({
+                        label: types[type].name,
+                        value: type
+                    });
+                }
+            });
+
+            console.log(availableTypes);
+            
+            setPostTypes(availableTypes);
+            setIsLoading(false);
+            
+            if (!attributes.postType) {
+                setAttributes({ postType: 'post' });
+            }
         });
-    }
-    , []);
+    }, []);
+
+
+    useEffect(() => {
+        if (attributes.postType) {
+            setIsLoading(true);
+            wp.apiFetch({ path: `/wp/v2/taxonomies?type=${attributes.postType}` }).then((fetchedTaxonomies) => {
+                const taxonomyOptions = [];
+                
+                Object.keys(fetchedTaxonomies).forEach((tax) => {
+                    taxonomyOptions.push({
+                        label: fetchedTaxonomies[tax].name,
+                        value: tax,
+                        restBase: fetchedTaxonomies[tax].rest_base
+                    });
+                });
+                
+                setTaxonomies(taxonomyOptions);
+                setIsLoading(false);
+                
+                if (taxonomyOptions.length > 0) {
+                    if (selectedTaxonomy && !taxonomyOptions.some(t => t.value === selectedTaxonomy)) {
+                        setSelectedTaxonomy(taxonomyOptions[0].value);
+                        setAttributes({ 
+                            taxonomy: taxonomyOptions[0].value,
+                            term: null // Reset term when taxonomy changes
+                        });
+                    }
+                    else if (!selectedTaxonomy) {
+                        setSelectedTaxonomy('');
+                        setAttributes({ taxonomy: '', term: null });
+                    }
+                } else {
+                    setSelectedTaxonomy('');
+                    setAttributes({ taxonomy: '', term: null });
+                }
+            });
+        }
+    }, [attributes.postType]);
+
+    useEffect(() => {
+        if (selectedTaxonomy) {
+            const taxonomy = taxonomies.find(t => t.value === selectedTaxonomy);
+            
+            if (taxonomy && taxonomy.restBase) {
+                setIsLoading(true);
+                wp.apiFetch({ path: `/wp/v2/${taxonomy.restBase}?per_page=100` })
+                    .then((fetchedTerms) => {
+                        // Map terms to format needed by QueryControls
+                        const termOptions = fetchedTerms.map(term => ({
+                            id: term.id,
+                            name: term.name
+                        }));
+                        
+                        setTerms(termOptions);
+                        setIsLoading(false);
+                    })
+                    .catch(() => {
+                        setTerms([]);
+                        setIsLoading(false);
+                    });
+            }
+        } else {
+            setTerms([]);
+        }
+    }, [selectedTaxonomy, taxonomies]);
 
     const updateQuery = (newAttributes) => {
-        setAttributes(newAttributes);
-    }
+        setAttributes({...attributes, ...newAttributes});
+    };
 
     return (
-        <QueryControls
-            { ...{ maxItems, minItems, numberOfItems, order, orderBy } }
-            onOrderByChange={ ( newOrderBy ) => updateQuery( { orderBy: newOrderBy } ) }
-            onOrderChange={ ( newOrder ) => updateQuery( { order: newOrder } ) }
-            categoriesList={ categories }
-            selectedCategoryId={ category }
-            onCategoryChange={ ( newCategory ) => updateQuery( { category: newCategory } ) }
-            onNumberOfItemsChange={ ( newNumberOfItems ) =>
-                updateQuery( { numberOfItems: newNumberOfItems } )
-            }
-        />
+        <>
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <>
+                    <SelectControl
+                        label={__('Post Type')}
+                        value={attributes.postType || 'post'}
+                        options={[
+                            { label: __('Select post type'), value: '' },
+                            ...postTypes
+                        ]}
+                        onChange={(newPostType) => {
+                            updateQuery({ 
+                                postType: newPostType,
+                                taxonomy: '',
+                                term: null
+                            });
+                        }}
+                    />
+                    
+                    {taxonomies.length > 0 && (
+                        <SelectControl
+                            label={__('Taxonomy')}
+                            value={selectedTaxonomy}
+                            options={[
+                                { label: __('Select taxonomy'), value: '' },
+                                ...taxonomies.map(tax => ({
+                                    label: tax.label,
+                                    value: tax.value
+                                }))
+                            ]}
+                            onChange={(newTaxonomy) => {
+                                setSelectedTaxonomy(newTaxonomy);
+                                updateQuery({ 
+                                    taxonomy: newTaxonomy,
+                                    term: null // Reset term when changing taxonomy
+                                });
+                            }}
+                        />
+                    )}
+                    
+                    <QueryControls
+                        numberOfItems={numberOfItems}
+                        onNumberOfItemsChange={(value) => updateQuery({ numberOfItems: value })}
+                        orderBy={orderBy}
+                        onOrderByChange={(value) => updateQuery({ orderBy: value })}
+                        order={order}
+                        onOrderChange={(value) => updateQuery({ order: value })}
+                        categoriesList={terms}
+                        selectedCategoryId={attributes.term}
+                        onCategoryChange={(value) => updateQuery({ term: value })}
+                    />
+                </>
+            )}
+        </>
     );
 }
