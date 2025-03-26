@@ -3,12 +3,12 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
-import Editor from './editor/Editor';
+import PostsByTabs from './editor/PostsByTabs';
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
 import Background from './editor/Background';
 
-export default function Edit({attributes, setAttributes}) {
+export default function Edit({attributes, setAttributes, clientId}) {
 
 	useEffect(() => {
 
@@ -56,7 +56,12 @@ export default function Edit({attributes, setAttributes}) {
 				</PanelBody>
 			</InspectorControls>
 			
-			<Editor attributes={attributes} setAttributes={setAttributes} handleTabValueChange={handleTabValueChange} />
+			<PostsByTabs 
+			attributes={attributes} 
+			setAttributes={setAttributes} 
+			handleTabValueChange={handleTabValueChange} 
+			clientId={clientId} 
+			/>
 
 		</>
 

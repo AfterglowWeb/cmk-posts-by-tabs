@@ -124,6 +124,29 @@
 				"postNotIn": []
 			}
 		},
+		"postType": {
+        "type": "string",
+        "default": "post"
+		},
+		"taxonomy": {
+			"type": "string",
+			"default": "category"
+		},
+		"term": {
+			"type": "number"
+		},
+		"numberOfItems": {
+			"type": "number",
+			"default": 5
+		},
+		"order": {
+			"type": "string",
+			"default": "desc"
+		},
+		"orderBy": {
+			"type": "string",
+			"default": "date"
+		},
 		"blockId": {
 			"type": "string"
 		}

@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { RichText } from '@wordpress/block-editor';
-import { memo } from '@wordpress/element';
+import { memo, useEffect } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
 
 function CustomTabPanel({children, selectedTab, value, index}) {
@@ -10,6 +11,11 @@ function CustomTabPanel({children, selectedTab, value, index}) {
       hidden={value !== selectedTab}
       id={`tabpanel-${value}`}
       aria-labelledby={`tab-${index}`}
+      onClick={(e) => {
+        if (e.currentTarget === e.target) {
+          e.stopPropagation();
+        }
+      }}
     >
       {value === selectedTab && <Paper sx={{ p: 3, backgroundColor:'oklch(0.968 0.007 247.896)' }} elevation={2}>{children}</Paper>}
     </div>
@@ -21,10 +27,22 @@ const MemoizedRichText = memo(function RichTextEditor({
   index,
   editingContent,
   setEditingContent,
-  handleTabValueChange
+  handleTabValueChange,
+  clientId
 }) {
+
+  const { selectBlock } = useDispatch('core/block-editor');
+
   return (
-    <RichText
+    <div 
+      className="rich-text-wrapper"
+      onClick={(e) => {
+        if (clientId) {
+          selectBlock(clientId);
+        }
+      }}
+    >
+      <RichText
       tagName="p"
       placeholder="Écrivez ici."
       value={content}
@@ -41,19 +59,23 @@ const MemoizedRichText = memo(function RichTextEditor({
           setEditingContent(null);
         }
       }}
-    />
+      />
+    </div>
   );
 }, (prevProps, nextProps) => {
-  // Only re-render if content changed or editing status changed
-  if (prevProps.content !== nextProps.content) return false;
+  if (prevProps.content !== nextProps.content) {
+    return false;
+  }
   
-  // Check editing status
   const prevEditing = prevProps.editingContent?.index === prevProps.index;
   const nextEditing = nextProps.editingContent?.index === nextProps.index;
-  if (prevEditing !== nextEditing) return false;
+  if (prevEditing !== nextEditing) {
+    return false;
+  }
   
-  // If we're editing, always update
-  if (nextEditing) return false;
+  if (nextEditing) {
+    return false;
+  }
   
   return true;
 });
@@ -64,8 +86,18 @@ export default function TabContent({
   selectedTab,
   editingContent,
   setEditingContent,
-  handleTabValueChange
+  handleTabValueChange,
+  clientId,
+  posts
 }) {
+
+  useEffect(() => {
+    return () => {
+      if (editingContent && editingContent.index === index) {
+        setEditingContent(null);
+      }
+    };
+  }, []);
 
   const content = editingContent !== null && editingContent.index === index 
     ? editingContent.content 
@@ -96,6 +128,7 @@ export default function TabContent({
             editingContent={editingContent}
             setEditingContent={setEditingContent}
             handleTabValueChange={handleTabValueChange}
+            clientId={clientId}
           />
         </div>   
         <div className="w-full md:w-1/2 p-2">
@@ -112,6 +145,48 @@ export default function TabContent({
             </div>
         </div>
       </div>
+
+      <TabPosts posts={posts} />
     </CustomTabPanel>
   );
 }
+
+function TabPosts (props) {
+  const { posts } = props;
+  
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="posts-grid mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {posts.map((post) => (
+        <div key={post.id} className="post-card bg-white p-4 rounded shadow">
+          {post._embedded && post._embedded['wp:featuredmedia'] && (
+            <div className="post-thumbnail mb-3">
+              <img 
+                src={post._embedded['wp:featuredmedia'][0].source_url} 
+                alt={post._embedded['wp:featuredmedia'][0].alt_text || ''} 
+                className="w-full h-48 object-cover"
+              />
+            </div>
+          )}
+          
+          <h4 className="post-title text-lg font-bold mb-2" 
+              dangerouslySetInnerHTML={{ __html: post.title.rendered }} 
+          />
+          
+          <div className="post-excerpt text-sm mb-2" 
+               dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+          />
+          
+          <div className="post-meta text-xs text-gray-500">
+            {post.date && (
+              <span>{new Date(post.date).toLocaleDateString()}</span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
