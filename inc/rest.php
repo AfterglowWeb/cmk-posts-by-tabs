@@ -168,14 +168,14 @@ public static function events($params) {
                             'compare' => '<',
                         ),
                         array(
-                            'key' => 'datefin',
+                            'key' => 'datedebut',
                             'value' => $today,
                             'type'  => 'DATE',
-                            'compare' => '>=',
+                            'compare' => '<=',
                         ),
                     );
                 $args['order'] = 'ASC';
-                $argss['meta_key'] = 'datefin';
+                $args['meta_key'] = 'datedebut';
                 break;
             case 'passed' :
                 $args['meta_query'] = [
@@ -187,7 +187,7 @@ public static function events($params) {
                     ],
                 ];
                 $args['order'] = 'DESC';
-                $args['orderby'] = 'datefin';
+                $args['orderby'] = 'datedebut';
                 break;
             case 'now' :
             default :
