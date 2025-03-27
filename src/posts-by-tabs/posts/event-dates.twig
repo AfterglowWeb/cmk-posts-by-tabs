@@ -1,0 +1,19 @@
+{% set date_range = format_date_range(start, end) %}
+<p class="w-full text-white flex justify-between items-center gap-1">
+  <span class="flex items-center gap-1 text-sm leading-none">
+    <span class="flex gap-1 text-md leading-none">
+        {% if date_range.start and date_range.end %}
+          <span>Du {{date_range.start}}</span>
+          <span> au </span>
+          <span>{{date_range.start}}</span>
+          {% elseif date_range.start %}
+          <span>Le {{date_range.start}}</span>
+        {% endif %}
+    </span>
+  </span>
+</p>
+{% if is_current_event(start, end) %}
+<span class="absolute z-10 top-[4px] right-[4px] flex h-5 w-5 border-2 border-red-700 items-center text-sm text-white leading-none animate-pulse bg-red-500 rounded-full shadow-md">
+  <span class="flex items-center gap-1 h-4 w-4 "></span>
+</span>
+{% endif %}

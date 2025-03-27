@@ -1,4 +1,5 @@
-<?php
+<?php namespace cmk\postsByTabs;
+
 /**
  * Plugin Name:       Posts By Tabs
  * Description:       Display the same posts in multiple template formats using tabs : grid, list, slider, calendar, google map (events, venues).
@@ -14,10 +15,15 @@
  * @package CreateBlock
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
+if (!file_exists(plugin_dir_path(__FILE__) . '/vendor/autoload.php')) {
+	return;
 }
-function create_block_posts_by_tabs_block_init() {
+require_once realpath(plugin_dir_path(__FILE__) . '/vendor/autoload.php');
+
+restExtend::get_instance();
+
+add_action( 'init', function () {
 	register_block_type( __DIR__ . '/build/posts-by-tabs' );
-}
-add_action( 'init', 'create_block_posts_by_tabs_block_init' );
+} );

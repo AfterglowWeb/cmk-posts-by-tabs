@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 $title = isset($attributes['title']) ? $attributes['title'] : '';
 $subtitle = isset($attributes['subtitle']) ? $attributes['subtitle'] : '';

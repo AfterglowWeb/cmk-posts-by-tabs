@@ -7,30 +7,8 @@ import Paper from '@mui/material/Paper';
 
 export default function TabFields(props) {
     
-    const { attributes, setAttributes, handleTabValueChange } = props;
+    const { attributes, setAttributes, handleTabValueChange, templates } = props;
     const { tabs } = attributes;
-    const templates = [
-		{
-			label: __('Posts Grid'),
-			value: 'posts-grid',
-		},
-		{
-			label: __('Posts Slider'),
-			value: 'posts-slider',
-		},
-		{
-			label: __('Posts Grid Simple Row'),
-			value: 'posts-grid',
-		},
-		{
-			label: __('Posts Map (events)'),
-			value: 'events-map',
-		},
-		{
-			label: __('Posts Calendar (events)'),
-			value: 'events-calendar',
-		}
-	];
 
     useEffect(() => {
         if (!attributes.tabs || !Array.isArray(attributes.tabs)) {

@@ -1,0 +1,62 @@
+{% if post %}
+    <div class="relative overflow-hidden rounded" style="width: 100%; padding-top: 100%;">
+       
+        <img  
+        src="{{ post.featured_image }}" 
+        alt="Lire {{ post.title }}"
+        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; object-fit: cover;"
+        />
+
+        <div class="absolute inset-0 z-[10] flex flex-col justify-between p-0 text-white bg-black bg-opacity-40">
+
+            <div>
+                {% if post.fields.start %}
+                    <div class="w-full px-2 py-1 flex justify-start items-center">
+                        {% include 'posts/event-dates.twig' with {'start':fields.start,'end':fields.end} %}
+                    </div>
+                {% endif %}
+
+                <h3 class="mb-0 leading-none drop-shadow-md p-4">
+                    <a href="{{ post.url }}" title="{{ post.title }}" class="font-bold leading-none no-underline text-3xl text-white hover:text-white flex items-center">
+                        {% if post.title %}
+                            {{ post.title }}
+                        {% endif %}
+                        
+                        {% if post.fields.subtitle %}
+                            <span class="text-lg leading-none">
+                                {{ post.fields.subtitle }}
+                            </span>
+                        {% endif %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                </h3>
+            </div>
+
+            <div class="flex justify-start items-center relative px-2 text-white w-full">
+         
+                <div class="flex gap-1 items-center w-1/3 text-white">
+                    {% include 'posts/post-date.twig' %}
+                </div>
+                
+                <div class="flex gap-1 items-center w-1/3 *:text-white *:hover:text-white">
+                    {% include 'posts/post-categories.twig' %}
+                </div>
+                
+                <div class="w-1/3 flex items-center justify-end">
+                        <a 
+                        href="{{ post.url }}" 
+                        title="Ouvrir {{ post.title }}"
+                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white shadow-md hover:bg-secondary transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endif %}

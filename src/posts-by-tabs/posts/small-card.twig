@@ -1,0 +1,42 @@
+{% if post %}
+<div class="card flex justify-between shadow-md rounded-lg overflow-hidden bg-white">
+  <div class="flex-1 flex flex-col justify-between p-0">
+    
+    <div class="p-2">
+      {% if post.title %}
+        <h3 class="font-bold text-lg mb-0 leading-none">
+          {{ post.title }}
+        </h3>
+      {% endif %}
+      
+      {% if post.subtitle %}
+        <p class="text-sm text-slate-500 mb-0 leading-none">
+          {{ post.subtitle }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="relative w-[150px] h-[150px]">
+    {% if post.featured_image %}
+      <img 
+        src="{{ post.featured_image }}" 
+        alt="Lire {{ post.title }}"
+        class="w-[150px] h-[150px] object-cover"
+      />
+    {% endif %}
+    
+    <a 
+      href="{{ post.permalink }}" 
+      title="Lire {{ post.title }}"
+      class="absolute top-1/2 right-1 -translate-y-1/2 z-10 bg-secondary text-white px-2 py-1 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-secondary-dark transition-colors"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+      Lire
+    </a>
+  </div>
+</div>
+{% endif %}
