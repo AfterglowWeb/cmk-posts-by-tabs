@@ -48,7 +48,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 				</PanelBody>
 
 				<PanelBody title={__('Onglets')} initialOpen={false}>
-					<TabFields attributes={attributes} setAttributes={setAttributes} />
+					<TabFields attributes={attributes} setAttributes={setAttributes} handleTabValueChange={handleTabValueChange}  />
 				</PanelBody>
 
 				<PanelBody title={__('Fond du bloc')} initialOpen={false}>

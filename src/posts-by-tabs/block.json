@@ -99,31 +99,6 @@
 			"type": "array",
 			"default": []
 		},
-		"query": {
-			"type": "object",
-			"default": {
-				"postType": "post",
-				"postsPerPage": 6,
-				"orderBy": "date",
-				"order": "desc",
-				"offset": 0,
-				"category": "",
-				"tag": "",
-				"author": "",
-				"exclude": "",
-				"include": "",
-				"metaKey": "",
-				"metaValue": "",
-				"metaCompare": "",
-				"taxQuery": [],
-				"metaQuery": [],
-				"postStatus": "publish",
-				"sticky": false,
-				"ignoreSticky": false,
-				"postIn": [],
-				"postNotIn": []
-			}
-		},
 		"postType": {
         "type": "string",
         "default": "post"
@@ -134,6 +109,40 @@
 		},
 		"term": {
 			"type": "number"
+		},
+		"metaFields": {
+			"type": "object",
+			"default": {
+				"relation": {
+					"type": "string",
+					"default": "AND"
+				},
+				"fields": {
+					"type": "array",
+					"default": [],
+					"items": {
+						"type": "object",
+						"properties": {
+							"key": {
+								"type": "string",
+								"default": ""
+							},
+							"value": {
+								"type": "string",
+								"default": ""
+							},
+							"compare": {
+								"type": "string",
+								"default": ""
+							},
+							"type": {
+								"type": "string",
+								"default": "CHAR"
+							}
+						}
+					}
+				}	
+			}
 		},
 		"numberOfItems": {
 			"type": "number",
