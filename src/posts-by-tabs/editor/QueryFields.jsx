@@ -9,6 +9,7 @@ import {
     useState, 
     useEffect
 } from '@wordpress/element';
+import MetaFields from './MetaFields';
 
 export default function QueryFields({attributes, setAttributes}) {
     const { numberOfItems, order, orderBy } = attributes;
@@ -172,6 +173,8 @@ export default function QueryFields({attributes, setAttributes}) {
                             }}
                         />
                     )}
+
+                    <MetaFields />
                     
                     <QueryControls
                         numberOfItems={numberOfItems}
