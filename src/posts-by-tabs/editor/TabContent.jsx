@@ -3,6 +3,8 @@ import { RichText } from '@wordpress/block-editor';
 import { memo, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
+import Post from '../posts/Post';
+
 
 function CustomTabPanel({children, selectedTab, value, index}) {
   return (
@@ -88,7 +90,8 @@ export default function TabContent({
   setEditingContent,
   handleTabValueChange,
   clientId,
-  posts
+  posts,
+  templates
 }) {
 
   useEffect(() => {
@@ -99,6 +102,8 @@ export default function TabContent({
     };
   }, []);
 
+  const template = tab?.template || 'posts-grid';
+console.log(template)
   const content = editingContent !== null && editingContent.index === index 
     ? editingContent.content 
     : tab?.content || '';
@@ -120,7 +125,7 @@ export default function TabContent({
         </span>
       </h3>
     
-      <div className="flex justify-start flex-wrap border-y border-slate-50">
+      <div className="flex justify-start flex-wrap">
         <div className="w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between">
           <MemoizedRichText
             content={content}
@@ -131,27 +136,13 @@ export default function TabContent({
             clientId={clientId}
           />
         </div>   
-        <div className="w-full md:w-1/2 p-2">
-          <div className="aspect-video">
-            <div className="relative">
-              {tab.mediaUrl && (
-                <img 
-                  src={tab.mediaUrl} 
-                  alt={tab.title || ''} 
-                  className="aspect-video object-cover" 
-                />
-              )}
-            </div>
-            </div>
-        </div>
       </div>
-
-      <TabPosts posts={posts} />
+      {template === 'posts-grid' && <PostsGrid posts={posts} />}
     </CustomTabPanel>
   );
 }
 
-function TabPosts (props) {
+function PostsGrid (props) {
   const { posts } = props;
   
   if (!Array.isArray(posts) || posts.length === 0) {
@@ -159,33 +150,9 @@ function TabPosts (props) {
   }
 
   return (
-    <div className="posts-grid mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="py-4 flex flex-wrap gap-0">
       {posts.map((post) => (
-        <div key={post.id} className="post-card bg-white p-4 rounded shadow">
-          {post._embedded && post._embedded['wp:featuredmedia'] && (
-            <div className="post-thumbnail mb-3">
-              <img 
-                src={post._embedded['wp:featuredmedia'][0].source_url} 
-                alt={post._embedded['wp:featuredmedia'][0].alt_text || ''} 
-                className="w-full h-48 object-cover"
-              />
-            </div>
-          )}
-          
-          <h4 className="post-title text-lg font-bold mb-2" 
-              dangerouslySetInnerHTML={{ __html: post.title.rendered }} 
-          />
-          
-          <div className="post-excerpt text-sm mb-2" 
-               dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-          />
-          
-          <div className="post-meta text-xs text-gray-500">
-            {post.date && (
-              <span>{new Date(post.date).toLocaleDateString()}</span>
-            )}
-          </div>
-        </div>
+        <Post key={post.id} post={post} />
       ))}
     </div>
   );

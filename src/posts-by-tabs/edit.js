@@ -10,6 +10,29 @@ import Background from './editor/Background';
 
 export default function Edit({attributes, setAttributes, clientId}) {
 
+	const templates = [
+		{
+			label: __('Posts Grid'),
+			value: 'posts-grid',
+		},
+		{
+			label: __('Posts Slider'),
+			value: 'posts-slider',
+		},
+		{
+			label: __('Posts Grid Simple Row'),
+			value: 'posts-grid',
+		},
+		{
+			label: __('Posts Map (events)'),
+			value: 'events-map',
+		},
+		{
+			label: __('Posts Calendar (events)'),
+			value: 'events-calendar',
+		}
+	];
+
 	useEffect(() => {
 
 		if (!attributes.blockId) {
@@ -30,33 +53,34 @@ export default function Edit({attributes, setAttributes, clientId}) {
 		<>
 			<InspectorControls>
 				
-				<PanelBody title={__('Titre du bloc')} initialOpen={true}>
+				<PanelBody title={__('Bloc title')} initialOpen={true}>
 					<TextControl
-						placeholder="Titre"
+						placeholder="Title"
 						value={attributes.title || ''}
 						onChange={(value) => setAttributes({ title: value })}
 					/>
 					<TextControl
-						placeholder="Sous-titre"
+						placeholder="Subtitle"
 						value={attributes.subtitle || ''}
 						onChange={(value) => setAttributes({ subtitle: value })}
 					/>
 				</PanelBody>
 				
-				<PanelBody title={__('Posts')} initialOpen={false}>
+				<PanelBody title={__('Query settings')} initialOpen={false}>
 					<QueryFields attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 
-				<PanelBody title={__('Onglets')} initialOpen={false}>
-					<TabFields attributes={attributes} setAttributes={setAttributes} handleTabValueChange={handleTabValueChange}  />
+				<PanelBody title={__('Tabs')} initialOpen={false}>
+					<TabFields attributes={attributes} setAttributes={setAttributes} handleTabValueChange={handleTabValueChange} templates={templates}  />
 				</PanelBody>
 
-				<PanelBody title={__('Fond du bloc')} initialOpen={false}>
+				<PanelBody title={__('Bloc background')} initialOpen={false}>
 					<Background attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 			</InspectorControls>
 			
 			<PostsByTabs 
+			templates={templates}
 			attributes={attributes} 
 			setAttributes={setAttributes} 
 			handleTabValueChange={handleTabValueChange} 

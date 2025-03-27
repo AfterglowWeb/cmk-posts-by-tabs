@@ -10,7 +10,13 @@
 	"example": {},
 	"supports": {
 		"html": false,
-		"innerBlocks": true
+		"innerBlocks": true,
+		"align": ["wide", "full", "left", "center", "right"],
+		"alignWide": true,
+		"background": {
+			"backgroundImage": true,
+			"backgroundSize": true
+		}
 	},
 	"providesContext": {
 		"cmk/selectedTab": "selectedTab"

@@ -3,13 +3,15 @@ import {
     QueryControls,
     SelectControl,
     Spinner,
-    FormTokenField
+    FormTokenField,
+    PanelBody
 } from '@wordpress/components';
 import { 
     useState, 
     useEffect
 } from '@wordpress/element';
 import MetaFields from './MetaFields';
+import Divider from '@mui/material/Divider';
 
 export default function QueryFields({attributes, setAttributes}) {
     const { numberOfItems, order, orderBy } = attributes;
@@ -174,16 +176,25 @@ export default function QueryFields({attributes, setAttributes}) {
                         />
                     )}
 
-                    <MetaFields />
-                    
                     <QueryControls
                         numberOfItems={numberOfItems}
                         onNumberOfItemsChange={(value) => updateQuery({ numberOfItems: value })}
+                    />
+
+                    <div className="py-2" />
+
+                    <PanelBody title={__('Meta settings')} initialOpen={false}>
+                        <MetaFields attributes={attributes} setAttributes={setAttributes} />
+                    </PanelBody>
+                    
+                    <QueryControls
                         orderBy={orderBy}
                         onOrderByChange={(value) => updateQuery({ orderBy: value })}
                         order={order}
                         onOrderChange={(value) => updateQuery({ order: value })}
                     />
+
+                    
                 </>
             )}
         </>

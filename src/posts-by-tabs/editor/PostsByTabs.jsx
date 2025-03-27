@@ -13,7 +13,7 @@ import TabContent from './TabContent';
 import SectionBackground from '../components/SectionBackground';
 
 export default function PostsByTabs(props) {
-    const { attributes, setAttributes, handleTabValueChange, clientId } = props;
+    const { attributes, setAttributes, handleTabValueChange, clientId, templates } = props;
     const [selectedTab, setSelectedTab] = useState(0);
     const [editingContent, setEditingContent] = useState(null);
     const { selectBlock } = useDispatch('core/block-editor');
@@ -84,12 +84,6 @@ export default function PostsByTabs(props) {
         setSelectedTab(value);
 	  };
 
-      const ensureBlockSelected = (e) => {
-        if (e.currentTarget === e.target) {
-            selectBlock(clientId);
-        }
-    };
-
     const renderPostsStatus = () => {
         if (isLoading) {
             return <div className="p-4 text-center">Loading posts...</div>;
@@ -108,14 +102,9 @@ export default function PostsByTabs(props) {
     
     return (
 
-        <div { ...useBlockProps() } 
-        className="p-4 md:p-6 lg:p-8 bg-primary-light relative overflow-hidden"
-        onClick={ensureBlockSelected}
-        >
-
+        <div { ...useBlockProps() } >
             <Container 
-            maxWidth="xl" 
-            sx={{position: 'relative', zIndex: 10}}
+            sx={{position: 'relative'}}
             onClick={(e) => {
                 selectBlock(clientId);
             }}
@@ -123,7 +112,6 @@ export default function PostsByTabs(props) {
                 {attributes.title && 
                 <Box 
                 component="h2" 
-                sx={{color:'secondary.main'}} 
                 className={`font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`}>
                     {attributes.title}
                 </Box>}
@@ -134,8 +122,7 @@ export default function PostsByTabs(props) {
                 
                 <Box 
                 sx={({theme}) => ({
-                    backgroundColor: "white",
-                    borderRadius: '2px',
+                    backgroundColor: "white"
                 })}
                 >
                     <Tabs
@@ -168,6 +155,7 @@ export default function PostsByTabs(props) {
                             setEditingContent={setEditingContent}
                             handleTabValueChange={handleTabValueChange}
                             clientId={clientId}
+                            templates={templates}
                             posts={posts}
                         />
                     ))}

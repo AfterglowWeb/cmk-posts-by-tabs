@@ -5,12 +5,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 #373737
 #b3b3b3
 #ffffff
-#eaffff
-#d3ebeb
-#a0caca
-#5ac8b2
-#007a80
-#0a3d2f
+#0c1923
+#091219
+#010203
+#f47979
+#f56060
+#f14d4d 
 #e8d396
 #ebc655
 #bfb064
@@ -21,20 +21,20 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     text: {
-      primary:'#0a0a0a',
+      primary:'#000000',
       secondary:'#373737',
       disabled:'#b3b3b3',
     },
     primary:{
-      light: '#eaffff',
-      main: '#d3ebeb',
-      dark: '#a0caca',
-      contrastText: '#0a0a0a',
+      light: '#0c1923',
+      main: '#091219',
+      dark: '#010203',
+      contrastText: '#ffffff',
     },
     secondary:{
-      light: '#5ac8b2',
-      main: '#007a80',
-      dark: '#0a3d2f',
+      light: '#f47979',
+      main: '#f56060',
+      dark: '#f14d4d',
       contrastText: '#ffffff',
     },
     info:{
@@ -53,46 +53,46 @@ const theme = createTheme({
   typography: {
     fontFamily: '"ui-sans-serif", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontFamily: '"title", serif'
+      fontFamily: '"Archivo Black", sans-serif'
     },
     h2: {
-      fontFamily: '"bold", serif'
+      fontFamily: '"Archivo Black", sans-serif'
     },
     h3: {
-      fontFamily: '"bold", serif'
+      fontFamily: '"Archivo Black", sans-serif'
     },
     h4: {
-      fontFamily: '"bold", serif'
+      fontFamily: '"Archivo Black", sans-serif'
     },
     h5: {
-      fontFamily: '"bold", serif'
+      fontFamily: '"Archivo Black", sans-serif'
     },
     h6: {
-      fontFamily: '"bold", serif'
+      fontFamily: '"Archivo Black", sans-serif'
     },
     p: {
-      fontFamily: '"regular", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     a: {
-      fontFamily: '"regular", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     button: {
-      fontFamily: '"regular", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     strong: {
-      fontFamily: '"bold", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     b: {
-      fontFamily: '"bold", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     em: {
-      fontFamily: '"italic", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     i: {
-      fontFamily: '"italic", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     },
     blockquote: {
-      fontFamily: '"italic", sans-serif'
+      fontFamily: '"Rubik", sans-serif'
     }
   },
   breakpoints: {
