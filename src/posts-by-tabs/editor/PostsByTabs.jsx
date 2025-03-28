@@ -12,6 +12,16 @@ import { ParallaxProvider } from 'react-scroll-parallax';
 import TabContent from './TabContent';
 import SectionBackground from '../components/SectionBackground';
 
+function hasMetaQuery(attributes) {
+    if(
+        attributes.metaFields?.fields && 
+        attributes.metaFields?.fields.length > 0 
+        ) {
+            return true;
+    }
+    return false;
+} 
+
 export default function PostsByTabs(props) {
     const { attributes, setAttributes, handleTabValueChange, clientId, templates } = props;
     const [selectedTab, setSelectedTab] = useState(0);
@@ -27,38 +37,68 @@ export default function PostsByTabs(props) {
             setError(null);
       
             try {
-
-                var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
-                if(attributes.postType === 'post') {
-                    restEndpoint = `/wp/v2/posts`;
-                }
-
-                if(attributes.postType === 'page') {
-                    restEndpoint = `/wp/v2/pages`;
-                }
+                let fetchedPosts;
+                const useMetaQuery = hasMetaQuery(attributes);
+                
+                if (useMetaQuery) {
+                    const endpoint = '/posts-by-tabs/v1/posts';
+      
+                    const requestData = {
+                        post_type: attributes.postType || 'post',
+                        per_page: attributes.numberOfItems || 5,
+                        order: attributes.order || 'desc',
+                        orderby: attributes.orderBy || 'date',
+                        meta_query: attributes.metaFields,
+                    };
      
-                var queryPath = `${restEndpoint}?_embed&per_page=${attributes.numberOfItems || 5}`;
-                
-                if (attributes.order) {
-                    queryPath += `&order=${attributes.order}`;
-                }
-                if (attributes.orderBy) {
-                    queryPath += `&orderby=${attributes.orderBy}`;
-                }
+                    if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {
 
-                if (attributes.taxonomy && attributes.term) {
-                    if (attributes.taxonomy === 'category') {
-                        queryPath += `&categories=${attributes.term}`;
-                    } else {
-                        queryPath += `&${attributes.taxonomy}=${attributes.term}`;
+                        requestData.terms = {};
+                        requestData.terms[attributes.taxonomy] = attributes.terms;
                     }
-                }
+
+                    fetchedPosts = await wp.apiFetch({ 
+                        path: endpoint,
+                        method: 'POST',
+                        data: requestData
+                    });
+
+                    console.log('Sending POST request with:', requestData);
+   
+                } else {
+
+                    var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
+                    if (attributes.postType === 'post') {
+                        restEndpoint = `/wp/v2/posts`;
+                    } else if (attributes.postType === 'page') {
+                        restEndpoint = `/wp/v2/pages`;
+                    }
+
+                    var queryPath = `${restEndpoint}?_embed&per_page=${attributes.numberOfItems || 5}`;
                 
-                const fetchedPosts = await wp.apiFetch({ path: queryPath });
+                    if (attributes.order) {
+                        queryPath += `&order=${attributes.order}`;
+                    }
+                    if (attributes.orderBy) {
+                        queryPath += `&orderby=${attributes.orderBy}`;
+                    }
+
+                    if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {
+                        if (attributes.taxonomy === 'category') {
+                            queryPath += `&categories=${attributes.terms.join(',')}`;
+                        } else {
+                            queryPath += `&${attributes.taxonomy}=${attributes.terms.join(',')}`;
+                        }
+                    }
+
+                    console.log('Fetching with GET:', queryPath);
+                    fetchedPosts = await wp.apiFetch({ path: queryPath });
+                }
 
                 setPosts(fetchedPosts);
 
                 setAttributes({ posts: fetchedPosts });
+
             } catch (err) {
                 console.error("Error fetching posts:", err);
                 setError(err.message);
@@ -72,10 +112,14 @@ export default function PostsByTabs(props) {
     }, [
         attributes.postType,
         attributes.taxonomy,
-        attributes.term,
+        attributes.terms,
         attributes.numberOfItems,
         attributes.order,
-        attributes.orderBy
+        attributes.orderBy,
+        attributes.metaFields,
+        attributes.metaFields?.fields,
+        attributes.metaFields?.relation,
+        attributes.metaFields?.fields?.length,
     ]);
 
     const handleTabChange = (event, value) => {

@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-import { SelectControl, DatePicker, TextControl, PanelBody, CheckboxControl } from '@wordpress/components';
-import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { SelectControl, DatePicker, TextControl, CheckboxControl } from '@wordpress/components';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
@@ -83,52 +82,77 @@ const compares = [
     },
 ];
 
+const metaCache = {};
+
+function useMetaFields(postType) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [metaFields, setMetaFields] = useState([]);
+    const [availableValues, setAvailableValues] = useState({});
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!postType) return;
+
+        if (metaCache[postType]) {
+            setMetaFields(metaCache[postType].metaFields);
+            setAvailableValues(metaCache[postType].availableValues);
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+        
+        wp.apiFetch({ path: `/posts-by-tabs/v1/meta/${postType}` })
+            .then((metas) => {
+                const metaArray = [];
+                const metaValues = {};
+
+                Object.keys(metas).forEach((meta) => {
+                    if (!meta.startsWith('_')) {
+                        const metaLabel = meta.split('_').join(' ')
+                        metaArray.push({
+                            label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
+                            value: meta
+                        });
+
+                        metaValues[meta] = metas[meta].map(val => ({
+                            label: String(val),
+                            value: String(val)
+                        }));
+                    }
+                });
+
+
+                setMetaFields(metaArray);
+                setAvailableValues(metaValues);
+  
+                metaCache[postType] = {
+                    metaFields: metaArray,
+                    availableValues: metaValues
+                };
+            })
+            .catch(error => {
+                console.error(`Error fetching meta fields for ${postType}:`, error);
+                setError(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, [postType]);
+
+    return { isLoading, metaFields, availableValues, error };
+}
+
 export default function MetaField(props) {
     
     const { attributes, setAttributes, metaField, index } = props;
-    const [isLoading, setIsLoading] = useState(false);
-    const [metaFields, setMetaFields] = useState([]);
-    const [availableValues, setAvailableValues] = useState([]);
-    //const { metaFields, relation } = attributes;
-    //const metaFields = attributes.metaFields || { relation: 'AND', fields: [] };
 
-    useEffect(() => {
-        setIsLoading(true);
-        wp.apiFetch({ path: `/posts-by-tabs/v1/meta/${attributes.postType}` }).then((metas) => {
-            const metaArray = [];
-            const metaValues = {};
+    const { 
+        isLoading, 
+        metaFields, 
+        availableValues 
+    } = useMetaFields(attributes.postType);
 
-            Object.keys(metas).forEach((meta) => {
-
-          
-
-                if (!meta.startsWith('_')) {
-                    const metaLabel = meta.split('_').join(' ')
-                    metaArray.push({
-                        label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
-                        value: meta
-                    });
-
-                    metaValues[meta] = metas[meta].map(val => ({
-                        label: String(val),
-                        value: String(val)
-                    }));
-                }
-            });
-    
-            setMetaFields(metaArray);
-            setAvailableValues(metaValues);
-            setIsLoading(false);
-            
-            if (!attributes.postType) {
-                setAttributes({ postType: 'post' });
-            }
-        }).catch(error => {
-            console.error("Error fetching meta fields:", error);
-            setIsLoading(false);
-        });
-    }, [attributes.postType]);
-    
     const handleMetaFieldValueChange = (value, key, index) => {
         const updatedMetaFields = { 
             ...attributes.metaFields,
@@ -154,20 +178,59 @@ export default function MetaField(props) {
     function freeFieldByType( type, value ) {
         switch ( type ) {
             case 'CHAR':
-                return <TextControl label="My Value" value={value} onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+                return <TextControl 
+                label={__('My string value')} 
+                value={value || ''} 
+                onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
             case 'NUMERIC':
-                return <TextControl label="My Value" type="number" value={value} onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+                return <TextControl 
+                label={__('My number value')} 
+                type="number" value={value || 0} 
+                onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
             case 'DATE':
-                return <DatePicker label="My Value" currentDate={value || new Date()} onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+                
+                let dateValue;
+
+        
+                    try {
+                        if (!value) {
+                            dateValue = new Date();
+                        } else if (typeof value === 'string') {
+                            dateValue = new Date(value);
+                            if (isNaN(dateValue.getTime())) {
+                                dateValue = new Date();
+                            }
+                        } else {
+                            dateValue = value;
+                        }
+                    } catch (e) {
+                        console.error("Error parsing date:", e);
+                        dateValue = new Date();
+                    }
+        
+                    return <DatePicker 
+                    label={__('My date value')} 
+                    currentDate={dateValue} 
+                    onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+
+            
+
             case 'BOOLEAN':
-                return <CheckboxControl label="My Value" checked={value} onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+                return <CheckboxControl 
+                label={__('My boolean value')} 
+                checked={!!value} 
+                onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
             default:
-                return null;
+                return <TextControl 
+                         label={__('My string value')} 
+                         value={value || ''} 
+                         onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} 
+                       />
         }
     }
 
     return (
-        <Paper className="p-2 mb-4" elevation={3}>
+        <Paper className="p-2 mb-4" elevation={2}>
             <div className="mb-2 flex justify-between">
                 <h3 className="lowercase">{__('Meta query')} {index + 1}</h3>
                 <Button 
@@ -184,11 +247,23 @@ export default function MetaField(props) {
                         label="Key"
                         value={ metaField?.key || '' }
                         options={metaFields}
-                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'key', index)} }
+                        onChange={ ( value ) => {
+                            handleMetaFieldValueChange(value, 'key', index);
+                            handleMetaFieldValueChange('', 'value', index);
+                        }}
                     />
+
+                    <SelectControl
+                        label="Type"
+                        value={ metaField?.type || 'CHAR' }
+                        options={types}
+                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'type', index)} }
+                    />
+
+
                     {metaField?.isUserValue ?
                         <div className="bg-gray-100 p-2 mb-2">
-                            <p className="font-bold my-1">{__('Select TYPE to change the input field')}</p>
+                            <span className="block font-bold my-2">{__('Choose a TYPE to change the input field')}</span>
                             {freeFieldByType(metaField?.type, metaField?.value)}
                         </div>
                     :
@@ -196,20 +271,34 @@ export default function MetaField(props) {
                             label="Value"
                             value={metaField?.value || ''}
                             options={
-                                metaField?.key && availableValues[metaField.key] 
-                                    ? [{ label: __('Select a value'), value: '' }, ...availableValues[metaField.key]]
+                                metaField?.key && availableValues[metaField.key] && Array.isArray(availableValues[metaField.key])
+                                    ? [{ label: __('Select a value'), value: '' }, ...availableValues[metaField.key]] 
                                     : [{ label: __('Select a value'), value: '' }]
                             }
                             onChange={(value) => handleMetaFieldValueChange(value, 'value', index)}
                         />
                     }
-                    <CheckboxControl label={__('No, enter my value')} checked={metaField?.isUserValue} onChange={(value) => handleMetaFieldValueChange(value, 'isUserValue', index)} />
-                    <SelectControl
-                        label="Type"
-                        value={ metaField?.type || 'CHAR' }
-                        options={types}
-                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'type', index)} }
-                    />
+
+
+                    <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">
+                        <CheckboxControl 
+                        label={__('No, enter my value')} 
+                        checked={metaField?.isUserValue} 
+                        onChange={(value) => handleMetaFieldValueChange(value, 'isUserValue', index)} />
+                    </div>
+  
+                
+
+                    {metaField?.type === 'DATE' &&
+                    <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">
+                        <CheckboxControl 
+                        label={__('Today')} 
+                        checked={metaField?.isDateToday} 
+                        onChange={(value) => handleMetaFieldValueChange(value, 'isDateToday', index)} />
+                    </div>
+                    }
+
+                   
                     <SelectControl
                         label="Compare"
                         value={ metaField?.compare || '' }

@@ -3,6 +3,7 @@
 class restExtend {
 
     protected static $instance = null;
+    public static $endpoint = 'posts-by-tabs/v1';
 
 	public static function get_instance() {
 		if ( null === static::$instance ) {
@@ -19,21 +20,22 @@ class restExtend {
     {
         add_action('rest_api_init', function() {
 
-            register_rest_route('posts-by-tabs/v1', '/meta/(?P<posttype>evenement|event|lieu|place)', [
+            $post_types = join('|', self::public_post_types());
+            register_rest_route(self::$endpoint, "/meta/(?P<post_type>$post_types)", [
                 'methods' => 'GET',
                 'callback' => ['\cmk\postsByTabs\restExtend', 'get_metafields_rest'],
                 'permission_callback' => '__return_true',//'\cmk\postsByTabs\restExtend::validate_token',
                 'args' => [
-                    'posttype' => [
+                    'post_type' => [
                         'default' => 'evenement',
                         'sanitize_callback' => 'sanitize_text_field',
                     ]
                 ],
             ]);
         
-            register_rest_route('posts-by-tabs/v1', '/events', [
+            register_rest_route(self::$endpoint, '/posts', [
                 'methods' => 'POST',
-                'callback' => ['\cmk\postsByTabs\restExtend::get_events_rest'],
+                'callback' => ['\cmk\postsByTabs\restExtend', 'get_posts_rest'],
                 'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
                 'args' => [
                     'post_type' => [
@@ -52,7 +54,7 @@ class restExtend {
                         'default' => null,
                         'sanitize_callback' => 'absint',
                     ],
-                    'metaFields' => [
+                    'meta_query' => [
                         'default' => [],
                         'sanitize_callback' => function($param) {
                         if (is_string($param) && !empty($param)) {
@@ -94,14 +96,14 @@ class restExtend {
 		return wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'wp_rest' ) ? true : false;
 	}
 
-    public static function get_events_rest(\WP_REST_Request $request): \WP_REST_Response
+    public static function get_posts_rest(\WP_REST_Request $request): \WP_REST_Response
     {
         $params = array(
             'post_type' => $request->get_param('post_type'),
             'paged' => $request->get_param('paged'),
             'posts_per_page' => $request->get_param('posts_per_page'),
             'terms' => $request->get_param('terms'),
-            'metaFields' => $request->get_param('metaFields'),
+            'meta_query' => $request->get_param('meta_query'),
             'order' => $request->get_param('order'),
             'orderby' => $request->get_param('orderby'),
             'meta_key' => $request->get_param('meta_key'),
@@ -114,14 +116,14 @@ class restExtend {
 
     public static function get_metafields_rest(\WP_REST_Request $request): \WP_REST_Response
     {
-        $post_type = $request->get_param('posttype');
+        $post_type = $request->get_param('post_type');
         $fields = self::get_meta_fields($post_type);
         return new \WP_REST_Response( $fields, 200 );
     }
 
-    public static function get_meta_fields($post_type) : array
+    private static function get_meta_fields($post_type) : array
     {
-        //$meta_keys = array();
+        
         $meta_values = array();
         $posts = get_posts( array( 
             'post_type' => $post_type, 
@@ -154,27 +156,29 @@ class restExtend {
         return $meta_values;
     }
 
-    public static function events(array $params) : array
+    private static function events(array $params) : array
     {
 
         if(!empty($params['terms'])) {
-            $args['tax_query'] = [
-                'taxonomy' => 'type',
-                'terms' => $params['terms'],
-                'field' => 'term_id',
-                'include_children' => false,
-            ];
+            foreach ($params['terms'] as $taxonomy => $term_ids) {
+                $args['tax_query'][] = [
+                    'taxonomy' => $taxonomy,
+                    'terms' => $term_ids,
+                    'field' => 'term_id',
+                    'include_children' => false,
+                ];
+            }
         }
 
-        if (!empty($params['metaFields']) && 
-            is_array($params['metaFields']) && 
-            !empty($params['metaFields']['fields'])) {
+        if (!empty($params['meta_query']) && 
+            is_array($params['meta_query']) && 
+            !empty($params['meta_query']['fields'])) {
             
             $meta_query = [];
             
-            $meta_query['relation'] = $params['metaFields']['relation'] ?? 'AND';
+            $meta_query['relation'] = $params['meta_query']['relation'] ?? 'AND';
             
-            foreach ($params['metaFields']['fields'] as $field) {
+            foreach ($params['meta_query']['fields'] as $field) {
                 if (!empty($field['key'])) {
                     $meta_query[] = [
                         'key' => $field['key'],
@@ -213,7 +217,7 @@ class restExtend {
 
     }
 
-    public static function places($towns = []) : array
+    private static function places($towns = []) : array
     {
             
         if(!is_array($towns)) {
@@ -247,7 +251,8 @@ class restExtend {
         return $posts;
     }
 
-    private static function sanitize_meta_fields($fields) {
+    private static function sanitize_meta_fields($fields): array
+    {
         if (!is_array($fields)) {
             return ['relation' => 'AND', 'fields' => []];
         }
@@ -276,6 +281,12 @@ class restExtend {
         
         return $sanitized;
     }
+
+    private static function public_post_types()
+    {
+		$types = array_keys( get_post_types( array( 'public' => true ) ) );
+		return array_diff($types, ['attachment', 'nav_menu_item']);
+	}
 
 
 }
