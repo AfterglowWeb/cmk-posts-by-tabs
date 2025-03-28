@@ -103,7 +103,7 @@ export default function TabContent({
   }, []);
 
   const template = tab?.template || 'posts-grid';
-console.log(template)
+
   const content = editingContent !== null && editingContent.index === index 
     ? editingContent.content 
     : tab?.content || '';

@@ -94,7 +94,6 @@ export default function QueryFields({attributes, setAttributes}) {
         
             if (taxonomy && taxonomy.restBase) {
                 setIsLoading(true);
-                console.log(`/wp/v2/${taxonomy.restBase}?per_page=100`);
                 wp.apiFetch({ path: `/wp/v2/${taxonomy.restBase}?per_page=100` })
                     .then((fetchedTerms) => {
                         const termOptions = fetchedTerms.map(term => ({

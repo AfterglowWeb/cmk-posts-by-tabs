@@ -18,9 +18,6 @@ export default function Post({post}) {
     const [isHovered, setIsHovered] = useState(false);
     const cardRef = useRef(null);
 
-
-    console.log(post)
-
     useEffect(() => {
         if(cardRef.current) {
             cardRef.current.addEventListener('mouseenter', () => {
