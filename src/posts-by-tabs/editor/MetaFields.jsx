@@ -4,6 +4,7 @@ import { SelectControl, TextControl, PanelBody, CheckboxControl } from '@wordpre
 import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import MetaField from './MetaField';
 
 const relations = [
     {
@@ -108,39 +109,51 @@ const values = [
 export default function MetaFields(props) {
     
     const { attributes, setAttributes } = props;
-    const [isLoading, setIsLoading] = useState(false);
+    /*const [isLoading, setIsLoading] = useState(false);
     const [metaFields, setMetaFields] = useState([]);
-    const [availableTypes, setAvailableTypes] = useState([]);
     const [availableValues, setAvailableValues] = useState([]);
     const [availableKeys, setAvailableKeys] = useState([]);
     const [availableCompares, setAvailableCompares] = useState([]);
-    const [availableRelations, setAvailableRelations] = useState([]);
+    const [availableRelations, setAvailableRelations] = useState([]);*/
     //const { metaFields, relation } = attributes;
     //const metaFields = attributes.metaFields || { relation: 'AND', fields: [] };
-
+/*
     useEffect(() => {
         setIsLoading(true);
         wp.apiFetch({ path: `/posts-by-tabs/v1/meta/${attributes.postType}` }).then((metas) => {
-            const metaFields = [];
+            const metaArray = [];
+            const metaValues = {};
+
             Object.keys(metas).forEach((meta) => {
+
+          
 
                 if (!meta.startsWith('_')) {
                     const metaLabel = meta.split('_').join(' ')
-                    metaFields.push({
+                    metaArray.push({
                         label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
                         value: meta
                     });
+
+                    metaValues[meta] = metas[meta].map(val => ({
+                        label: String(val),
+                        value: String(val)
+                    }));
                 }
             });
     
-            setMetaFields(availableTypes);
+            setMetaFields(metaArray);
+            setAvailableValues(metaValues);
             setIsLoading(false);
             
             if (!attributes.postType) {
                 setAttributes({ postType: 'post' });
             }
+        }).catch(error => {
+            console.error("Error fetching meta fields:", error);
+            setIsLoading(false);
         });
-    }, []);
+    }, [attributes.postType]);*/
 
     useEffect(() => {
         if (attributes.metaFields === undefined ||
@@ -185,6 +198,7 @@ export default function MetaFields(props) {
                     value: '',
                     compare: '=',
                     type: 'CHAR',
+                    isUserValue: false,
                 }
             ]
         };
@@ -200,10 +214,7 @@ export default function MetaFields(props) {
         setAttributes({ metaFields: updatedMetaFields });
     };
 
-    if (!attributes.metaFields || !Array.isArray(attributes.metaFields.fields)) {
-        return <div>Initializing meta fields...</div>;
-    }
-
+  
     return (
     <>
     <div className="py-2">
@@ -216,47 +227,7 @@ export default function MetaFields(props) {
     </div>
     {Array.isArray(attributes.metaFields.fields) && attributes.metaFields.fields.map( ( metaField, index ) => {
         return (
-        <Paper key={ index } className="p-2 mb-4" elevation={3}>
-            <div className="mb-2 flex justify-between">
-                <h3 className="lowercase">{__('Meta query')} {index + 1}</h3>
-                <Button 
-                variant="outlined" 
-                size="small" 
-                color="secondary"
-                sx={{textTransform:"none"}} 
-                onClick={() => handleRemoveMetaField(index)} >
-                    { __( 'Remove' ) }
-                </Button>
-            </div>
-            <div className="mb-2">
-                <PanelBody title={__('Textes')} initialOpen={true}>
-                    <SelectControl
-                        label="Key"
-                        value={ metaField?.key || '' }
-                        options={keys}
-                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'key', index)} }
-                    />
-                    <SelectControl
-                        label="Value"
-                        value={ metaField?.value || '' }
-                        options={values}
-                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'value', index)} }
-                    />
-                    <SelectControl
-                        label="Compare"
-                        value={ metaField?.compare || '' }
-                        options={compares}
-                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'compare', index)} }
-                    />
-                    <SelectControl
-                        label="Type"
-                        value={ metaField?.type || '' }
-                        options={types}
-                        onChange={ ( value ) => {handleMetaFieldValueChange(value, 'type', index)} }
-                    />
-                </PanelBody>
-            </div>
-        </Paper>
+        <MetaField attributes={attributes} setAttributes={setAttributes} metaField={metaField} index={index} key={index} />
         )
     })}
     <Button 

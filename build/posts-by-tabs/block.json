@@ -150,6 +150,10 @@
               "type": {
                 "type": "string",
                 "default": "CHAR"
+              },
+              "isUserValue": {
+                "type": "boolean",
+                "default": false
               }
             }
           }

@@ -18,6 +18,7 @@
     --color-slate-200: oklch(0.929 0.013 255.508);
     --color-slate-500: oklch(0.554 0.046 257.417);
     --color-slate-900: oklch(0.208 0.042 265.755);
+    --color-gray-100: oklch(0.967 0.003 264.542);
     --color-gray-600: oklch(0.446 0.03 256.802);
     --color-black: #000;
     --color-white: #fff;
@@ -226,14 +227,8 @@
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
-  .-top-1 {
-    top: calc(var(--spacing) * -1);
-  }
   .-top-1\/3 {
     top: calc(calc(1/3 * 100%) * -1);
-  }
-  .top-1 {
-    top: calc(var(--spacing) * 1);
   }
   .top-1\/2 {
     top: calc(1/2 * 100%);
@@ -259,17 +254,11 @@
   .bottom-\[6px\] {
     bottom: 6px;
   }
-  .-left-1 {
-    left: calc(var(--spacing) * -1);
-  }
   .-left-1\/3 {
     left: calc(calc(1/3 * 100%) * -1);
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
-  }
-  .left-1 {
-    left: calc(var(--spacing) * 1);
   }
   .left-1\/2 {
     left: calc(1/2 * 100%);
@@ -303,6 +292,9 @@
   }
   .mx-auto {
     margin-inline: auto;
+  }
+  .my-1 {
+    margin-block: calc(var(--spacing) * 1);
   }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
@@ -394,9 +386,6 @@
   .min-h-\[320px\] {
     min-height: 320px;
   }
-  .w-1 {
-    width: calc(var(--spacing) * 1);
-  }
   .w-1\/2 {
     width: calc(1/2 * 100%);
   }
@@ -463,19 +452,8 @@
   .basis-\[320px\] {
     flex-basis: 320px;
   }
-  .border-collapse {
-    border-collapse: collapse;
-  }
-  .-translate-x-1 {
-    --tw-translate-x: calc(var(--spacing) * -1);
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
-    translate: var(--tw-translate-x) var(--tw-translate-y);
-  }
-  .-translate-y-1 {
-    --tw-translate-y: calc(var(--spacing) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .-translate-y-1\/2 {
@@ -586,6 +564,9 @@
   }
   .bg-blue-400 {
     background-color: var(--color-blue-400);
+  }
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
   }
   .bg-orange-400 {
     background-color: var(--color-orange-400);
@@ -755,9 +736,6 @@
   }
   .overline {
     text-decoration-line: overline;
-  }
-  .underline {
-    text-decoration-line: underline;
   }
   .opacity-30 {
     opacity: 30%;

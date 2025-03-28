@@ -121,10 +121,12 @@ class restExtend {
 
     public static function get_meta_fields($post_type) : array
     {
-        $meta_keys = array();
+        //$meta_keys = array();
+        $meta_values = array();
         $posts = get_posts( array( 
             'post_type' => $post_type, 
-            'limit' => 5, 
+            'posts_per_page' => -1,
+            'paged' => 1,
             'order' => 'DESC', 
             'orderby' => 'DATE', 
             'status' => 'publish' )
@@ -132,9 +134,24 @@ class restExtend {
 
         foreach ( $posts as $post ) {
             $post_meta_keys = get_post_custom_keys( $post->ID );
-            $meta_keys      = array_merge( $meta_keys, $post_meta_keys );
+
+            if ( empty( $post_meta_keys ) ) {
+                continue;
+            }
+            $post_meta_keys = array_filter( $post_meta_keys, function( $key ) {
+                return strpos( $key, '_' ) !== 0;
+            } );
+
+            foreach ( $post_meta_keys as $key ) {
+                $meta_values[$key][] = get_post_meta( $post->ID, $key, true );
+            }
         }
-        return array_values( array_unique( $meta_keys ) );
+
+        $meta_values = array_map( function( $values ) {
+            return array_values(array_unique( array_filter( $values ) ));
+        }, $meta_values );
+
+        return $meta_values;
     }
 
     public static function events(array $params) : array
