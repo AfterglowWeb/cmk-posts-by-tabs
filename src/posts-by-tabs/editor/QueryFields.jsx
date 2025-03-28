@@ -11,9 +11,10 @@ import {
     useEffect
 } from '@wordpress/element';
 import MetaFields from './MetaFields';
-import Divider from '@mui/material/Divider';
+import MultipleSelectChip from './MultipleSelectChip';
 
-export default function QueryFields({attributes, setAttributes}) {
+export default function QueryFields(props) {
+    const { attributes, setAttributes } = props;
     const { numberOfItems, order, orderBy } = attributes;
 
     const [postTypes, setPostTypes] = useState([]);
@@ -73,20 +74,21 @@ export default function QueryFields({attributes, setAttributes}) {
                         setSelectedTaxonomy(taxonomyOptions[0].value);
                         setAttributes({ 
                             taxonomy: taxonomyOptions[0].value,
-                            term: null
+                            terms: null
                         });
                     }
                     else if (!selectedTaxonomy) {
                         setSelectedTaxonomy('');
-                        setAttributes({ taxonomy: '', term: null });
+                        setAttributes({ taxonomy: '', terms: null });
                     }
                 } else {
                     setSelectedTaxonomy('');
-                    setAttributes({ taxonomy: '', term: null });
+                    setAttributes({ taxonomy: '', terms: null });
                 }
             });
         }
     }, [attributes.postType]);
+
 
     useEffect(() => {
         if (selectedTaxonomy) {
@@ -114,6 +116,7 @@ export default function QueryFields({attributes, setAttributes}) {
         }
     }, [selectedTaxonomy, taxonomies]);
 
+
     const updateQuery = (newAttributes) => {
         setAttributes({...attributes, ...newAttributes});
     };
@@ -135,7 +138,7 @@ export default function QueryFields({attributes, setAttributes}) {
                             updateQuery({ 
                                 postType: newPostType,
                                 taxonomy: '',
-                                term: null
+                                terms: null
                             });
                         }}
                     />
@@ -155,23 +158,21 @@ export default function QueryFields({attributes, setAttributes}) {
                                 setSelectedTaxonomy(newTaxonomy);
                                 updateQuery({ 
                                     taxonomy: newTaxonomy,
-                                    term: null
+                                    terms: null
                                 });
                             }}
                         />
                     )}
 
                     {selectedTaxonomy && terms.length > 0 && (
-                        <SelectControl
-                            label={__('Term')}
-                            value={attributes.term || ''}
-                            options={[
-                                { label: __('Select term'), value: '' },
-                                ...terms
-                            ]}
-                            onChange={(newTerm) => {
-                                updateQuery({ term: newTerm ? parseInt(newTerm) : null });
-                            }}
+                        <MultipleSelectChip
+                        terms={terms}
+                        selectedTerms={attributes.terms || []}
+                        label={__('Select terms')}
+                        onChange={(newTerms) => {
+                            console.log('Selected terms:', newTerms);
+                            updateQuery({ terms: newTerms});
+                        }}
                         />
                     )}
 
@@ -183,8 +184,10 @@ export default function QueryFields({attributes, setAttributes}) {
                     <div className="py-2" />
 
                     <PanelBody title={__('Meta settings')} initialOpen={false}>
-                        <MetaFields attributes={attributes} setAttributes={setAttributes} />
+                        <MetaFields attributes={attributes} setAttributes={setAttributes}  />
                     </PanelBody>
+
+                    <div className="py-2 " />
                     
                     <QueryControls
                         orderBy={orderBy}

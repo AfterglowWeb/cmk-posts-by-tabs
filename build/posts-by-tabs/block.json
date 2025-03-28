@@ -119,8 +119,12 @@
       "type": "string",
       "default": "category"
     },
-    "term": {
-      "type": "number"
+    "terms": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "number"
+      }
     },
     "metaFields": {
       "type": "object",
@@ -152,6 +156,10 @@
                 "default": "CHAR"
               },
               "isUserValue": {
+                "type": "boolean",
+                "default": false
+              },
+              "isDateToday": {
                 "type": "boolean",
                 "default": false
               }
