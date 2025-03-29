@@ -6,7 +6,7 @@ const PostBottom = ({ text, fill = '#091219' }) => {
     return(
     <span
         className="block absolute bottom-[6px] left-0 w-full h-[124px]"
-        dangerouslySetInnerHTML={{__html: createSvg(id, text, fill)}}
+        dangerouslySetInnerHTML={{__html: createSvg(text, fill)}}
     />
     )
 }

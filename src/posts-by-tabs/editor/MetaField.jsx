@@ -190,42 +190,41 @@ export default function MetaField(props) {
             case 'DATE':
                 
                 let dateValue;
-
-        
-                    try {
-                        if (!value) {
-                            dateValue = new Date();
-                        } else if (typeof value === 'string') {
-                            dateValue = new Date(value);
-                            if (isNaN(dateValue.getTime())) {
-                                dateValue = new Date();
-                            }
-                        } else {
-                            dateValue = value;
+                try {
+                    if (!value) {
+                        dateValue = wpDate();
+                    } else if (typeof value === 'string') {
+                        dateValue = wpDate(value);
+                        if (isNaN(dateValue.getTime())) {
+                            dateValue = wpDate();
                         }
-                    } catch (e) {
-                        console.error("Error parsing date:", e);
-                        dateValue = new Date();
+                    } else {
+                        dateValue = wpDate(value);
                     }
-        
-                    return <DatePicker 
-                    label={__('My date value')} 
-                    currentDate={dateValue} 
-                    onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+                } catch (e) {
+                    console.error("Error parsing date:", e);
+                    dateValue = wpDate();
+                }
 
-            
+                console.log(dateValue);
+    
+                return <DatePicker 
+                label={__('My date value')} 
+                currentDate={dateValue} 
+                onChange={(newValue) => handleMetaFieldValueChange(wpDate(newValue), 'value', index)} />
 
             case 'BOOLEAN':
                 return <CheckboxControl 
                 label={__('My boolean value')} 
                 checked={!!value} 
                 onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} />
+            
             default:
                 return <TextControl 
-                         label={__('My string value')} 
-                         value={value || ''} 
-                         onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} 
-                       />
+                label={__('My string value')} 
+                value={value || ''} 
+                onChange={(newValue) => handleMetaFieldValueChange(newValue, 'value', index)} 
+                />
         }
     }
 
@@ -288,13 +287,17 @@ export default function MetaField(props) {
                     </div>
   
                 
-
                     {metaField?.type === 'DATE' &&
                     <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">
                         <CheckboxControl 
                         label={__('Today')} 
                         checked={metaField?.isDateToday} 
-                        onChange={(value) => handleMetaFieldValueChange(value, 'isDateToday', index)} />
+                        onChange={(value) => {
+                            handleMetaFieldValueChange(value, 'isDateToday', index);
+                            if (value) {
+                                handleMetaFieldValueChange(wpDate(value), 'value', index);
+                            }
+                        }} />
                     </div>
                     }
 
@@ -309,3 +312,13 @@ export default function MetaField(props) {
         </Paper>
     );
 }
+
+function wpDate(date = new Date()) {
+    if (!(date instanceof Date)) {
+        date = new Date();
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+} 

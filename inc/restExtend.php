@@ -1,5 +1,7 @@
 <?php namespace cmk\postsByTabs;
 
+use RankMath\Rest\Post;
+
 class restExtend {
 
     protected static $instance = null;
@@ -50,29 +52,18 @@ class restExtend {
                         'default' => 10,
                         'sanitize_callback' => 'absint',
                     ],
-                    'term' => [
-                        'default' => null,
-                        'sanitize_callback' => 'absint',
+                    'terms' => [
+                        'default' => [],
+                        'sanitize_callback' => function($param) {
+                            foreach ($param as $taxonomy => $term_ids) {
+                                $param[$taxonomy] = array_map('absint', $term_ids);
+                            }
+                            return $param;
+                        }
                     ],
                     'meta_query' => [
                         'default' => [],
-                        'sanitize_callback' => function($param) {
-                        if (is_string($param) && !empty($param)) {
-                            $decoded = json_decode($param, true);
-                            if (json_last_error() === JSON_ERROR_NONE) {
-                                return self::sanitize_meta_fields($decoded);
-                            }
-                        }
-                        
-                        if (is_array($param)) {
-                            return self::sanitize_meta_fields($param);
-                        }
-                        
-                        return [
-                            'relation' => 'AND',
-                            'fields' => []
-                        ];
-                    }
+                        'sanitize_callback' => '\cmk\postsByTabs\restExtend::sanitize_meta_fields',
                     ],
                     'order' => [
                         'default' => 'DESC',
@@ -90,6 +81,7 @@ class restExtend {
             ]);
 
         });
+
     }
 
     public static function validate_token( \WP_REST_Request $request ): bool {
@@ -98,33 +90,69 @@ class restExtend {
 
     public static function get_posts_rest(\WP_REST_Request $request): \WP_REST_Response
     {
-        $params = array(
+
+        $args = array(
+            'post_status' => 'publish',
             'post_type' => $request->get_param('post_type'),
             'paged' => $request->get_param('paged'),
-            'posts_per_page' => $request->get_param('posts_per_page'),
-            'terms' => $request->get_param('terms'),
-            'meta_query' => $request->get_param('meta_query'),
+            'posts_per_page' => $request->get_param('per_page'),
             'order' => $request->get_param('order'),
             'orderby' => $request->get_param('orderby'),
             'meta_key' => $request->get_param('meta_key'),
         );
 
-        $events = self::events( $params);
-        return new \WP_REST_Response( $events, 200 );
+        $terms = $request->get_param('terms');
+        if(!empty($terms)) {
+            $args['tax_query'] = array(
+                'relation' => 'OR',
+            );
+            foreach ($terms as $taxonomy => $term_ids) {
+                $args['tax_query'][] = [
+                    'taxonomy' => $taxonomy,
+                    'terms' => $term_ids,
+                    'field' => 'term_id',
+                    'include_children' => false,
+                ];
+            }
+        }
+
+        $meta_query = $request->get_param('meta_query');
+        if (!empty($meta_query) && 
+            is_array($meta_query) && 
+            !empty($meta_query['fields'])) {
+                
+            $args['meta_query'] = [
+                'relation' => $meta_query['relation'],
+                $meta_query['fields'],
+            ];
+
+        }
+        
+        $query = new \WP_Query($args);
+        $posts = $query->get_posts();
+        wp_reset_postdata();
+
+        $data = array();
+        if (empty($posts)) {
+            return new \WP_REST_Response( $args, 200 );
+        }
+
+        $postController = new \WP_REST_Posts_Controller($args['post_type']);
+        foreach ($posts as $post) {
+            $prepared = $postController->prepare_item_for_response( $post, $request );
+            $postPrepared = $postController->prepare_response_for_collection( $prepared );
+            $postPrepared['acf'] = apply_filters( 'rest_prepare_acf_fields', get_fields($post->ID), $post, $request);
+            $data[] = $postPrepared;
+        }
+       
+        return new \WP_REST_Response( $data, 200 );
 
     }
 
     public static function get_metafields_rest(\WP_REST_Request $request): \WP_REST_Response
     {
         $post_type = $request->get_param('post_type');
-        $fields = self::get_meta_fields($post_type);
-        return new \WP_REST_Response( $fields, 200 );
-    }
-
-    private static function get_meta_fields($post_type) : array
-    {
-        
-        $meta_values = array();
+        $meta_fields = array();
         $posts = get_posts( array( 
             'post_type' => $post_type, 
             'posts_per_page' => -1,
@@ -145,65 +173,15 @@ class restExtend {
             } );
 
             foreach ( $post_meta_keys as $key ) {
-                $meta_values[$key][] = get_post_meta( $post->ID, $key, true );
+                $meta_fields[$key][] = get_post_meta( $post->ID, $key, true );
             }
         }
 
-        $meta_values = array_map( function( $values ) {
+        $meta_fields = array_map( function( $values ) {
             return array_values(array_unique( array_filter( $values ) ));
-        }, $meta_values );
+        }, $meta_fields );
 
-        return $meta_values;
-    }
-
-    private static function events(array $params) : array
-    {
-
-        if(!empty($params['terms'])) {
-            foreach ($params['terms'] as $taxonomy => $term_ids) {
-                $args['tax_query'][] = [
-                    'taxonomy' => $taxonomy,
-                    'terms' => $term_ids,
-                    'field' => 'term_id',
-                    'include_children' => false,
-                ];
-            }
-        }
-
-        if (!empty($params['meta_query']) && 
-            is_array($params['meta_query']) && 
-            !empty($params['meta_query']['fields'])) {
-            
-            $meta_query = [];
-            
-            $meta_query['relation'] = $params['meta_query']['relation'] ?? 'AND';
-            
-            foreach ($params['meta_query']['fields'] as $field) {
-                if (!empty($field['key'])) {
-                    $meta_query[] = [
-                        'key' => $field['key'],
-                        'value' => $field['value'],
-                        'compare' => $field['compare'],
-                        'type' => $field['type']
-                    ];
-                }
-            }
-            
-            if (isset($args['meta_query'])) {
-                $args['meta_query'] = array_merge(
-                    ['relation' => 'AND'],
-                    [$args['meta_query']],
-                    [$meta_query]
-                );
-            } else {
-                $args['meta_query'] = $meta_query;
-            }
-        }
-
-        $posts = new \WP_Query($args);
-        $posts = $posts->get_posts();
-        wp_reset_postdata();
-        return $posts;
+        return new \WP_REST_Response( $meta_fields, 200 );
     }
 
     public static function get_places_rest(\WP_REST_Request $request): \WP_REST_Response
@@ -251,28 +229,61 @@ class restExtend {
         return $posts;
     }
 
-    private static function sanitize_meta_fields($fields): array
+    public static function sanitize_meta_fields($param): array
     {
-        if (!is_array($fields)) {
-            return ['relation' => 'AND', 'fields' => []];
+        if (is_string($param) && !empty($param)) {
+            $param = json_decode($param, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return [];
+            }
+        }
+
+        if (!is_array($param)) {
+            return [];
         }
         
         $sanitized = [];
         
-        $sanitized['relation'] = isset($fields['relation']) && 
-            in_array($fields['relation'], ['AND', 'OR']) ? 
-            $fields['relation'] : 'AND';
+        $sanitized['relation'] = isset($param['relation']) && 
+            in_array($param['relation'], ['AND', 'OR']) ? 
+            $param['relation'] : 'AND';
         
-        $sanitized['fields'] = [];
-        if (isset($fields['fields']) && is_array($fields['fields'])) {
-            foreach ($fields['fields'] as $field) {
-                if (!is_array($field)) continue;
+        $sanitized['fields'] = array();
+        if (isset($param['fields']) && is_array($param['fields'])) {
+            
+            foreach ($param['fields'] as $field) {
+                
+                if (!is_array($field)) {
+                    continue;
+                } 
+
+                $value = '';
+                $type = isset($field['type']) ? $field['type'] : 'CHAR';
+
+                switch($type) {
+                    case 'CHAR':
+                        $value = isset($field['value']) ? sanitize_text_field($field['value']) : '';
+                        break;
+                    case 'NUMERIC':
+                        $value = isset($field['value']) ? absint($field['value']) : '';
+                        break;
+                    case 'DATE':
+                        $value = isset($field['value']) ? sanitize_text_field($field['value']) : '';
+                        break;
+                    case 'BOOLEAN':
+                        $value = isset($field['value']) ? (bool) $field['value'] : false;
+                        break;
+                    default:
+                        $value = isset($field['value']) ? sanitize_text_field($field['value']) : '';
+                        break;
+                }
+              
                 
                 $sanitized_field = [
-                    'key' => isset($field['key']) ? sanitize_text_field($field['key']) : '',
-                    'value' => isset($field['value']) ? sanitize_text_field($field['value']) : '',
-                    'compare' => isset($field['compare']) ? sanitize_text_field($field['compare']) : '=',
-                    'type' => isset($field['type']) ? sanitize_text_field($field['type']) : 'CHAR'
+                    'key' => isset($field['key']) ? sanitize_key($field['key']) : '',
+                    'value' => $value,
+                    'compare' => isset($field['compare']) ? html_entity_decode(sanitize_text_field($field['compare'])) : '=',
+                    'type' => $type,
                 ];
                 
                 $sanitized['fields'][] = $sanitized_field;
@@ -288,87 +299,4 @@ class restExtend {
 		return array_diff($types, ['attachment', 'nav_menu_item']);
 	}
 
-
 }
-
- /*elseif(!empty($params['period']) && $params['period'] !== 'all') {
-            
-            
-            $today = date('Y-m-d');
-            $period = is_array($params['period']) ? $params['period'][0] : $params['period'];
-            switch($period) {
-                case 'upcoming' :
-                    $args['meta_query'] = array(
-                        'relation' => 'AND',
-                        array(
-                            'key' => 'datedebut',
-                            'value' => $today,
-                            'type'  => 'DATE',
-                            'compare' => '>',
-                        ),
-                    );
-        
-                    $args['order'] = 'ASC';
-                    $args['meta_key'] = 'datedebut';
-                    $args['orderby'] = 'meta_value_num';
-                    break;
-                case 'last_days' :
-                    $nDays = get_field('last-days','option') ? '+'.get_field('last-days','option').' days' : '+10 days';
-                    $inXdays = date('Y-m-d', strtotime($nDays));
-                    $today = date('Y-m-d');
-                    $args['meta_query'] = array(
-                            'relation' => 'AND',
-                            array(
-                                'key' => 'datefin',
-                                'value' => $inXdays,
-                                'type'  => 'DATE',
-                                'compare' => '<',
-                            ),
-                            array(
-                                'key' => 'datedebut',
-                                'value' => $today,
-                                'type'  => 'DATE',
-                                'compare' => '<=',
-                            ),
-                        );
-                    $args['order'] = 'ASC';
-                    $args['meta_key'] = 'datedebut';
-                    break;
-                case 'passed' :
-                    $args['meta_query'] = [
-                        'datefin' => [
-                            'key' => 'datefin',
-                            'value' => date('Y-m-d'),
-                            'type'  => 'DATE',
-                            'compare' => '<',
-                        ],
-                    ];
-                    $args['order'] = 'DESC';
-                    $args['orderby'] = 'datedebut';
-                    break;
-                case 'now' :
-                default :
-                    $args['meta_query'] = array(
-                        'relation' => 'AND',
-                        array(
-                            'key' => 'datedebut',
-                            'value' => $today,
-                            'type'  => 'DATE',
-                            'compare' => '<=',
-                        ),
-                        array(
-                            'key' => 'datefin',
-                            'value' => $today,
-                            'type' => 'DATE',
-                            'compare' => '>='
-                        )
-                    );
-
-                    $args['order'] = 'ASC';
-                    $args['meta_key'] = 'datefin';
-                    $args['orderby'] = 'meta_value_num';
-                    break;
-
-            }
-        }*/
-

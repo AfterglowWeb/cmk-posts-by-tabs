@@ -63,8 +63,6 @@ export default function PostsByTabs(props) {
                         data: requestData
                     });
 
-                    console.log('Sending POST request with:', requestData);
-   
                 } else {
 
                     var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
@@ -91,7 +89,6 @@ export default function PostsByTabs(props) {
                         }
                     }
 
-                    console.log('Fetching with GET:', queryPath);
                     fetchedPosts = await wp.apiFetch({ path: queryPath });
                 }
 

@@ -56,24 +56,85 @@ export function CurrentEventMarker() {
   )
 }
 
+export function eventDatesString(post) {
+  const {acf} = post;
+  if(!acf) {
+    return null;
+  }
+  
+  const {datedebut, datefin} = acf;
+  if(!datedebut) {
+    return null;
+  }
+  
+  const endDate = datefin || datedebut;
+  const {start, end} = formatDateRange({start: datedebut, end: endDate});
+
+  return (start && end) ? `${start} • ${end}` : (start ? start : null);
+}
+
+function formatDateToFrench(dateString, options = {}) {
+  if (!dateString) return '';
+  
+  try {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      ...options
+    }).format(date);
+  } catch (e) {
+    console.error('Error formatting date:', e);
+    return dateString;
+  }
+}
+
 function formatDateRange(dateRange) {
-  const { start, end } = dateRange;
-
-  let startParts = start.split(' ');
-  let endParts = end ? end.split(' ') : [];
-  for (let i = startParts.length; 0 < i; i--) {
-      if (startParts[i] == endParts[i]) {
-          startParts[i] = '';
-      } else {
-          break;
-      }
+  if (!dateRange) return { start: '', end: '' };
+  
+  const { start: startDate, end: endDate } = dateRange;
+  
+  if (!endDate || startDate === endDate) {
+    return { 
+      start: formatDateToFrench(startDate),
+      end: '' 
+    };
+  }
+  
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  const sameDay = start.getDate() === end.getDate() && 
+                  start.getMonth() === end.getMonth() &&
+                  start.getFullYear() === end.getFullYear();
+  const sameMonth = start.getMonth() === end.getMonth() && 
+                    start.getFullYear() === end.getFullYear();
+  const sameYear = start.getFullYear() === end.getFullYear();
+  
+  if (sameDay) {
+    return {
+      start: __('The') + '' +  formatDateToFrench(startDate),
+      end: ''
+    };
   }
 
-  const newStart = startParts.filter(part => part !== '').join(' ');
+  const startOptions = {
+    day: 'numeric',
+    month: sameMonth ? undefined : 'short',
+    year: sameYear ? undefined : 'numeric'
+  };
+  
+  const endOptions = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  };
+  
   return {
-      start: newStart,
-      end
-  }
+    start: formatDateToFrench(startDate, startOptions),
+    end: formatDateToFrench(endDate, endOptions)
+  };
 }
 
 function isCurrentEvent(dateRange) {
