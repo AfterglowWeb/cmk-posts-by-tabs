@@ -170,7 +170,6 @@ export default function QueryFields(props) {
                         selectedTerms={attributes.terms || []}
                         label={__('Select terms')}
                         onChange={(newTerms) => {
-                            console.log('Selected terms:', newTerms);
                             updateQuery({ terms: newTerms});
                         }}
                         />

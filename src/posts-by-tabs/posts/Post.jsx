@@ -1,17 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import PostCategories from './PostCategories';
-import PostDate from './PostDate';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import Fab from '@mui/material/Fab';
-import EventDates from './EventDates';
-import AddIcon from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
 import PostTop from './PostTop';
 import PostBottom from './PostBottom';
+import { eventDatesString } from './EventDates';
 
 export default function Post({post}) {
 
@@ -47,7 +40,11 @@ export default function Post({post}) {
         return null;
     }
 
- 
+
+    const topTextString = eventDatesString(post);
+    const bottomTextString = bottomText(post);
+    console.log('Post', bottomTextString);
+
     return (
         <article 
         ref={cardRef} 
@@ -88,7 +85,7 @@ export default function Post({post}) {
             }}
             className="h-[260px] w-[260px] border border-white cursor-pointer relative flex justify-center items-center z-10 font-title transition duration-500 bg-white/90 hover:bg-white/0 rounded-full shadow-lg"
             >
-                <PostTop text="blabla l jdlkj bal" />
+                <PostTop text={topTextString} />
                 <div className="max-w-[180px] mx-auto">
                     <PostCategories post={post} />
                     <a href={post.link} 
@@ -97,7 +94,7 @@ export default function Post({post}) {
                         <h3 className="inline text-text font-title text-lg" dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
                     </a>
                 </div>
-                <PostBottom text="zjkszoiqjseflkj sdlkj" />
+                <PostBottom text={bottomTextString} />
                 <span className="post-cross block absolute top-[calc(50% - 20px)] left-[calc(50% - 20px)] w-[40px] h-[40px]"
                 dangerouslySetInnerHTML={{__html: `<svg version='1.1' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 31 31' xml:space='preserve'><line x1='0' y1='15.5' x2='31' y2='15.5' stroke='white'/><line x1='15.5' y1='31' x2='15.5' y2='0' stroke='white'/></svg>`}}
                 />
@@ -113,3 +110,35 @@ export default function Post({post}) {
         </article>
     );
 }
+
+function bottomText(post) {
+       
+    const acf = post?.acf;
+    if(!acf) {
+        return '';
+    }
+    
+    if(post.type === 'evenement') {
+        const subPosts = acf['bidirection-places-events'] ?? [];
+        var metaInfo = '';
+        if(subPosts && subPosts.length > 0) {
+            metaInfo = subPosts.map((subPost) => {
+                if(subPost.type === 'lieu') {
+                    return subPost.title?.rendered;
+                }
+            }
+            );
+            metaInfo = metaInfo.filter((item) => item !== undefined);
+            metaInfo = metaInfo.join(', ');
+        }
+
+        console.log('Meta info', metaInfo);
+        return metaInfo;
+    }
+
+    if(post.type === 'lieu') {
+        return acf?.town;
+    }
+
+}
+
