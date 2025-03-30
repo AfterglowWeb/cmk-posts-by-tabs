@@ -4,6 +4,8 @@ import { SelectControl, TextControl, PanelBody, CheckboxControl } from '@wordpre
 import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import MuiInputSlider from './MuiInputSlider';
+import TabTemplateOptions from './TabTemplateOptions';
 
 export default function TabFields(props) {
     
@@ -101,6 +103,7 @@ export default function TabFields(props) {
                         value={ tab?.meta_2 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_2', index)} }
                     />
+                    <TabTemplateOptions tab={tab} index={index} handleTabValueChange={handleTabValueChange} />
                 </PanelBody>
             </div>
             <div className="mb-2">

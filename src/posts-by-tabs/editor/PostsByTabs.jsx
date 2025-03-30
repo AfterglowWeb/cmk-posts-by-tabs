@@ -140,6 +140,16 @@ export default function PostsByTabs(props) {
         
         return null;
     };
+
+    const maxWidth = () => {
+        if (attributes.align === 'full') {
+            return false;
+        } else if (attributes.align === 'wide') {
+            return 'xl';
+        } else {
+            return 'lg';
+        }
+    }
     
     return (
 
@@ -149,6 +159,7 @@ export default function PostsByTabs(props) {
             onClick={(e) => {
                 selectBlock(clientId);
             }}
+            maxWidth={maxWidth()}
             >
                 {attributes.title && 
                 <Box 
@@ -161,11 +172,7 @@ export default function PostsByTabs(props) {
                     <strong>{attributes.subtitle}</strong>
                 </p>}
                 
-                <Box 
-                sx={({theme}) => ({
-                    backgroundColor: "white"
-                })}
-                >
+                <Box>
                     <Tabs
                     value={selectedTab}
                     onChange={handleTabChange}

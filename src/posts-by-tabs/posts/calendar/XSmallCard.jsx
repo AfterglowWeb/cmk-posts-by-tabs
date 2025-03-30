@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import PostCategories from './PostCategories';
+import PostCategories from '../PostCategories';
 import Tooltip from '@mui/material/Tooltip';
 
 export default function XSmallCard({post, compact = false, hideImage = false}) {

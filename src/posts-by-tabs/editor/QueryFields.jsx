@@ -129,6 +129,8 @@ export default function QueryFields(props) {
                 <Spinner />
             ) : (
                 <>
+                    <div className="py-2" />
+                    
                     <MuiSelect
                     label={__('Post Type')}
                     value={attributes.postType || 'post'}

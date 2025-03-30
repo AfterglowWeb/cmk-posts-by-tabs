@@ -6,8 +6,8 @@ import CardMedia from '@mui/material/CardMedia';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
-import PostCategories from './PostCategories';
-import PostDate from './PostDate';
+import PostCategories from '../PostCategories';
+import PostDate from '../PostDate';
 import EventDates from './EventDates';
 
 export default function SmallCard({post, compact = false, hideImage = false}) {

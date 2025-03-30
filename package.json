@@ -26,6 +26,10 @@
 		"@emotion/styled": "^11.14.0",
 		"@mui/icons-material": "^6.4.7",
 		"@mui/material": "^6.4.7",
-		"react-scroll-parallax": "^3.4.5"
+		"date-fns": "^4.1.0",
+		"dayjs": "^1.11.13",
+		"dompurify": "^3.2.4",
+		"react-scroll-parallax": "^3.4.5",
+		"swiper": "^11.2.6"
 	}
 }
