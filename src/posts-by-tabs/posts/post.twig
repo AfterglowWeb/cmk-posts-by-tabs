@@ -12,7 +12,7 @@
             <div>
                 {% if post.fields.start %}
                     <div class="w-full px-2 py-1 flex justify-start items-center">
-                        {% include 'posts/event-dates.twig' with {'start':fields.start,'end':fields.end} %}
+                        {% include 'posts/calendar/event-dates.twig' with {'start':fields.start,'end':fields.end} %}
                     </div>
                 {% endif %}
 

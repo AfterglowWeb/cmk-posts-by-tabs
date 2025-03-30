@@ -1,0 +1,39 @@
+
+{% if posts or fields or calendar %}
+{% set calendarView = calendarView|default('month') %}
+<div data-uuid="{{fields.diu}}">
+    <section class="pt-12 pb-36 bg-gradient-to-b from-slate-50 to-primary">
+        <div class="container mx-auto max-w-screen-xl">
+            <div class="px-4 sm:px-6 lg:px-8 w-full">
+                {% include 'components/title.twig' %}
+            </div>
+            
+            <div class="flex justify-center items-center w-full gap-3 my-4">
+                <button class="calendar-btn rounded-full bg-primary text-white p-3 shadow-md hover:bg-primary-dark" data-view="day" aria-label="day" 
+                    onclick="document.querySelectorAll('.calendar-content').forEach(el => el.style.display = 'none'); document.querySelector('.calendar-day').style.display = 'flex';">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M12 14h-6.5c-.83 0-1.5-.67-1.5-1.5v-9c0-.83.67-1.5 1.5-1.5h11c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5H12zm-6-10v8h11V4H6zM2 20.5c0 .83.67 1.5 1.5 1.5h17c.83 0 1.5-.67 1.5-1.5v-3c0-.83-.67-1.5-1.5-1.5h-17c-.83 0-1.5.67-1.5 1.5v3zm1.5 0v-3h17v3h-17z"></path>
+                    </svg>
+                </button>
+                <button class="calendar-btn rounded-full bg-primary text-white p-3 shadow-md hover:bg-primary-dark" data-view="week" aria-label="week"
+                    onclick="document.querySelectorAll('.calendar-content').forEach(el => el.style.display = 'none'); document.querySelector('.calendar-week').style.display = 'flex';">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M3 11h2v2H3zm4 0h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM3 16h2v2H3zm4 0h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM3 6h2v2H3zm4 0h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2z"></path>
+                    </svg>
+                </button>
+                <button class="calendar-btn rounded-full bg-primary text-white p-3 shadow-md hover:bg-primary-dark" data-view="month" aria-label="month"
+                    onclick="document.querySelectorAll('.calendar-content').forEach(el => el.style.display = 'none'); document.querySelector('.calendar-month').style.display = 'flex';">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zM9 6H7v2h2V6zm4 0h-2v2h2V6zm4 0h-2v2h2V6zM9 18H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="px-4 sm:px-6 lg:px-8 w-full grid grid-cols-6 h-[600px] relative overflow-hidden">
+                {% for key, day in calendar %}
+                    {% include 'blocks/events-calendar/day-view.twig' with {day:day, key:key} only %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endif %}

@@ -23,6 +23,7 @@ if (!file_exists(plugin_dir_path(__FILE__) . '/vendor/autoload.php')) {
 require_once realpath(plugin_dir_path(__FILE__) . '/vendor/autoload.php');
 
 restExtend::get_instance();
+calendar::get_instance();
 
 add_action( 'init', function () {
 	register_block_type( __DIR__ . '/build/posts-by-tabs' );

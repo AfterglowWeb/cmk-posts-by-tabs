@@ -13,23 +13,23 @@ export default function Edit({attributes, setAttributes, clientId}) {
 	const templates = [
 		{
 			label: __('Posts Grid'),
-			value: 'posts-grid',
+			value: 'grid',
 		},
 		{
 			label: __('Posts Slider'),
-			value: 'posts-slider',
+			value: 'slider',
 		},
 		{
-			label: __('Posts Grid Simple Row'),
-			value: 'posts-grid',
+			label: __('Posts Row'),
+			value: 'row',
 		},
 		{
 			label: __('Posts Map (events)'),
-			value: 'events-map',
+			value: 'map',
 		},
 		{
 			label: __('Posts Calendar (events)'),
-			value: 'events-calendar',
+			value: 'calendar',
 		}
 	];
 

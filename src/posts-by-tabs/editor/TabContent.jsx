@@ -4,7 +4,7 @@ import { memo, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
 import Post from '../posts/Post';
-
+import EventsCalendar from '../posts/calendar/EventsCalendar';
 
 function CustomTabPanel({children, selectedTab, value, index}) {
   return (
@@ -19,7 +19,7 @@ function CustomTabPanel({children, selectedTab, value, index}) {
         }
       }}
     >
-      {value === selectedTab && <Paper sx={{ p: 3, backgroundColor:'oklch(0.968 0.007 247.896)' }} elevation={2}>{children}</Paper>}
+      {value === selectedTab && <Paper elevation={0}>{children}</Paper>}
     </div>
   );
 }
@@ -91,7 +91,6 @@ export default function TabContent({
   handleTabValueChange,
   clientId,
   posts,
-  templates
 }) {
 
   useEffect(() => {
@@ -138,6 +137,7 @@ export default function TabContent({
         </div>   
       </div>
       {template === 'posts-grid' && <PostsGrid posts={posts} />}
+      {template === 'calendar' && <EventsCalendar posts={posts} options={tab} />}
     </CustomTabPanel>
   );
 }

@@ -1,7 +1,5 @@
 <?php namespace cmk\postsByTabs;
 
-use RankMath\Rest\Post;
-
 class restExtend {
 
     protected static $instance = null;
@@ -80,7 +78,13 @@ class restExtend {
                     'meta_key' => [
                         'default' => 'datedebut',
                         'sanitize_callback' => 'sanitize_text_field',
-                    ],   
+                    ],
+                    'options' => [
+                        'default' => [],
+                        'sanitize_callback' => function($param) {
+                            return is_array($param) ? $param : [];
+                        }
+                    ],
                 ],
             ]);
 
@@ -134,6 +138,7 @@ class restExtend {
         
         $query = new \WP_Query($args);
         $posts = $query->get_posts();
+        
         wp_reset_postdata();
 
         $data = array();
@@ -147,6 +152,15 @@ class restExtend {
             $postPrepared = $postController->prepare_response_for_collection( $prepared );
             $postPrepared['acf'] = apply_filters( 'rest_prepare_acf_fields', get_fields($post->ID), $post, $request);
             $data[] = $postPrepared;
+        }
+
+        $options = $request->get_param('options');
+        
+        if (isset($options['calendar']) && $options['calendar'] === true) {
+            $data = apply_filters('cmk_posts_by_tabs_calendar', $data, array(
+                'start_key' => $options['calendar']['start_key'] ?? 'start',
+                'end_key' => $options['calendar']['end_key'] ?? 'end',
+            ));
         }
        
         return new \WP_REST_Response( $data, 200 );
