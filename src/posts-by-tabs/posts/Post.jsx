@@ -40,10 +40,8 @@ export default function Post({post}) {
         return null;
     }
 
-
     const topTextString = eventDatesString(post);
     const bottomTextString = bottomText(post);
-    console.log('Post', bottomTextString);
 
     return (
         <article 
@@ -132,7 +130,6 @@ function bottomText(post) {
             metaInfo = metaInfo.join(', ');
         }
 
-        console.log('Meta info', metaInfo);
         return metaInfo;
     }
 

@@ -7,6 +7,7 @@ import PostsByTabs from './editor/PostsByTabs';
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
 import Background from './editor/Background';
+import TextField from '@mui/material/TextField';
 
 export default function Edit({attributes, setAttributes, clientId}) {
 
@@ -54,19 +55,26 @@ export default function Edit({attributes, setAttributes, clientId}) {
 			<InspectorControls>
 				
 				<PanelBody title={__('Bloc title')} initialOpen={true}>
-					<TextControl
-						placeholder="Title"
+					
+					<div className="py-2">
+						<TextField 
+						label={__('Title')} 
 						value={attributes.title || ''}
 						onChange={(value) => setAttributes({ title: value })}
-					/>
-					<TextControl
-						placeholder="Subtitle"
+						variant="standard" />
+					</div>
+
+					<div className="py-2">
+						<TextField 
+						label={__('Subtitle')} 
 						value={attributes.subtitle || ''}
 						onChange={(value) => setAttributes({ subtitle: value })}
-					/>
+						variant="standard" />
+					</div>
+					
 				</PanelBody>
 				
-				<PanelBody title={__('Query settings')} initialOpen={false}>
+				<PanelBody title={__('Query settings')} initialOpen={true}>
 					<QueryFields attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 

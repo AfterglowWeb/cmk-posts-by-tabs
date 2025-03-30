@@ -7290,6 +7290,245 @@ function useFormControl() {
 
 /***/ }),
 
+/***/ "./node_modules/@mui/material/FormHelperText/FormHelperText.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@mui/material/FormHelperText/FormHelperText.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var _mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/utils/composeClasses */ "./node_modules/@mui/utils/esm/composeClasses/composeClasses.js");
+/* harmony import */ var _FormControl_formControlState_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../FormControl/formControlState.js */ "./node_modules/@mui/material/FormControl/formControlState.js");
+/* harmony import */ var _FormControl_useFormControl_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../FormControl/useFormControl.js */ "./node_modules/@mui/material/FormControl/useFormControl.js");
+/* harmony import */ var _zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../zero-styled/index.js */ "./node_modules/@mui/material/styles/styled.js");
+/* harmony import */ var _utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/memoTheme.js */ "./node_modules/@mui/material/utils/memoTheme.js");
+/* harmony import */ var _DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../DefaultPropsProvider/index.js */ "./node_modules/@mui/material/DefaultPropsProvider/DefaultPropsProvider.js");
+/* harmony import */ var _utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/capitalize.js */ "./node_modules/@mui/material/utils/capitalize.js");
+/* harmony import */ var _formHelperTextClasses_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./formHelperTextClasses.js */ "./node_modules/@mui/material/FormHelperText/formHelperTextClasses.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+'use client';
+
+var _span;
+
+
+
+
+
+
+
+
+
+
+
+
+const useUtilityClasses = ownerState => {
+  const {
+    classes,
+    contained,
+    size,
+    disabled,
+    error,
+    filled,
+    focused,
+    required
+  } = ownerState;
+  const slots = {
+    root: ['root', disabled && 'disabled', error && 'error', size && `size${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(size)}`, contained && 'contained', focused && 'focused', filled && 'filled', required && 'required']
+  };
+  return (0,_mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_4__["default"])(slots, _formHelperTextClasses_js__WEBPACK_IMPORTED_MODULE_5__.getFormHelperTextUtilityClasses, classes);
+};
+const FormHelperTextRoot = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])('p', {
+  name: 'MuiFormHelperText',
+  slot: 'Root',
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [styles.root, ownerState.size && styles[`size${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(ownerState.size)}`], ownerState.contained && styles.contained, ownerState.filled && styles.filled];
+  }
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_7__["default"])(({
+  theme
+}) => ({
+  color: (theme.vars || theme).palette.text.secondary,
+  ...theme.typography.caption,
+  textAlign: 'left',
+  marginTop: 3,
+  marginRight: 0,
+  marginBottom: 0,
+  marginLeft: 0,
+  [`&.${_formHelperTextClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].disabled}`]: {
+    color: (theme.vars || theme).palette.text.disabled
+  },
+  [`&.${_formHelperTextClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].error}`]: {
+    color: (theme.vars || theme).palette.error.main
+  },
+  variants: [{
+    props: {
+      size: 'small'
+    },
+    style: {
+      marginTop: 4
+    }
+  }, {
+    props: ({
+      ownerState
+    }) => ownerState.contained,
+    style: {
+      marginLeft: 14,
+      marginRight: 14
+    }
+  }]
+})));
+const FormHelperText = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function FormHelperText(inProps, ref) {
+  const props = (0,_DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_8__.useDefaultProps)({
+    props: inProps,
+    name: 'MuiFormHelperText'
+  });
+  const {
+    children,
+    className,
+    component = 'p',
+    disabled,
+    error,
+    filled,
+    focused,
+    margin,
+    required,
+    variant,
+    ...other
+  } = props;
+  const muiFormControl = (0,_FormControl_useFormControl_js__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  const fcs = (0,_FormControl_formControlState_js__WEBPACK_IMPORTED_MODULE_10__["default"])({
+    props,
+    muiFormControl,
+    states: ['variant', 'size', 'disabled', 'error', 'filled', 'focused', 'required']
+  });
+  const ownerState = {
+    ...props,
+    component,
+    contained: fcs.variant === 'filled' || fcs.variant === 'outlined',
+    variant: fcs.variant,
+    size: fcs.size,
+    disabled: fcs.disabled,
+    error: fcs.error,
+    filled: fcs.filled,
+    focused: fcs.focused,
+    required: fcs.required
+  };
+
+  // This issue explains why this is required: https://github.com/mui/material-ui/issues/42184
+  delete ownerState.ownerState;
+  const classes = useUtilityClasses(ownerState);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(FormHelperTextRoot, {
+    as: component,
+    className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.root, className),
+    ref: ref,
+    ...other,
+    ownerState: ownerState,
+    children: children === ' ' ? // notranslate needed while Google Translate will not fix zero-width space issue
+    _span || (_span = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: "notranslate",
+      "aria-hidden": true,
+      children: "\u200B"
+    })) : children
+  });
+});
+ true ? FormHelperText.propTypes /* remove-proptypes */ = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * The content of the component.
+   *
+   * If `' '` is provided, the component reserves one line height for displaying a future message.
+   */
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().node),
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object),
+  /**
+   * @ignore
+   */
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string),
+  /**
+   * The component used for the root node.
+   * Either a string to use a HTML element or a component.
+   */
+  component: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().elementType),
+  /**
+   * If `true`, the helper text should be displayed in a disabled state.
+   */
+  disabled: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, helper text should be displayed in an error state.
+   */
+  error: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, the helper text should use filled classes key.
+   */
+  filled: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, the helper text should use focused classes key.
+   */
+  focused: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOf(['dense']),
+  /**
+   * If `true`, the helper text should use required classes key.
+   */
+  required: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_11___default().arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_11___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool)])), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object)]),
+  /**
+   * The variant to use.
+   */
+  variant: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOf(['filled', 'outlined', 'standard']), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string)])
+} : 0;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FormHelperText);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/FormHelperText/formHelperTextClasses.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@mui/material/FormHelperText/formHelperTextClasses.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getFormHelperTextUtilityClasses: () => (/* binding */ getFormHelperTextUtilityClasses)
+/* harmony export */ });
+/* harmony import */ var _mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils/generateUtilityClasses */ "./node_modules/@mui/utils/esm/generateUtilityClasses/generateUtilityClasses.js");
+/* harmony import */ var _mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/generateUtilityClass */ "./node_modules/@mui/utils/esm/generateUtilityClass/generateUtilityClass.js");
+
+
+function getFormHelperTextUtilityClasses(slot) {
+  return (0,_mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__["default"])('MuiFormHelperText', slot);
+}
+const formHelperTextClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('MuiFormHelperText', ['root', 'error', 'disabled', 'sizeSmall', 'sizeMedium', 'contained', 'focused', 'filled', 'required']);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (formHelperTextClasses);
+
+/***/ }),
+
 /***/ "./node_modules/@mui/material/FormLabel/FormLabel.js":
 /*!***********************************************************!*\
   !*** ./node_modules/@mui/material/FormLabel/FormLabel.js ***!
@@ -15411,6 +15650,1976 @@ const selectClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MOD
 
 /***/ }),
 
+/***/ "./node_modules/@mui/material/Slider/Slider.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/@mui/material/Slider/Slider.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SliderMark: () => (/* binding */ SliderMark),
+/* harmony export */   SliderMarkLabel: () => (/* binding */ SliderMarkLabel),
+/* harmony export */   SliderRail: () => (/* binding */ SliderRail),
+/* harmony export */   SliderRoot: () => (/* binding */ SliderRoot),
+/* harmony export */   SliderThumb: () => (/* binding */ SliderThumb),
+/* harmony export */   SliderTrack: () => (/* binding */ SliderTrack),
+/* harmony export */   SliderValueLabel: () => (/* binding */ SliderValueLabel),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var _mui_utils_chainPropTypes__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @mui/utils/chainPropTypes */ "./node_modules/@mui/utils/esm/chainPropTypes/chainPropTypes.js");
+/* harmony import */ var _mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @mui/utils/composeClasses */ "./node_modules/@mui/utils/esm/composeClasses/composeClasses.js");
+/* harmony import */ var _mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/system/colorManipulator */ "./node_modules/@mui/system/esm/colorManipulator/colorManipulator.js");
+/* harmony import */ var _mui_system_RtlProvider__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @mui/system/RtlProvider */ "./node_modules/@mui/system/esm/RtlProvider/index.js");
+/* harmony import */ var _mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @mui/utils/useSlotProps */ "./node_modules/@mui/utils/esm/useSlotProps/useSlotProps.js");
+/* harmony import */ var _useSlider_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./useSlider.js */ "./node_modules/@mui/material/Slider/useSlider.js");
+/* harmony import */ var _utils_isHostComponent_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../utils/isHostComponent.js */ "./node_modules/@mui/material/utils/isHostComponent.js");
+/* harmony import */ var _zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../zero-styled/index.js */ "./node_modules/@mui/material/styles/styled.js");
+/* harmony import */ var _utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/memoTheme.js */ "./node_modules/@mui/material/utils/memoTheme.js");
+/* harmony import */ var _DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../DefaultPropsProvider/index.js */ "./node_modules/@mui/material/DefaultPropsProvider/DefaultPropsProvider.js");
+/* harmony import */ var _styles_slotShouldForwardProp_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../styles/slotShouldForwardProp.js */ "./node_modules/@mui/material/styles/slotShouldForwardProp.js");
+/* harmony import */ var _utils_shouldSpreadAdditionalProps_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../utils/shouldSpreadAdditionalProps.js */ "./node_modules/@mui/material/utils/shouldSpreadAdditionalProps.js");
+/* harmony import */ var _utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/capitalize.js */ "./node_modules/@mui/material/utils/capitalize.js");
+/* harmony import */ var _utils_createSimplePaletteValueFilter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/createSimplePaletteValueFilter.js */ "./node_modules/@mui/material/utils/createSimplePaletteValueFilter.js");
+/* harmony import */ var _SliderValueLabel_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./SliderValueLabel.js */ "./node_modules/@mui/material/Slider/SliderValueLabel.js");
+/* harmony import */ var _sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sliderClasses.js */ "./node_modules/@mui/material/Slider/sliderClasses.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+'use client';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Identity(x) {
+  return x;
+}
+const SliderRoot = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])('span', {
+  name: 'MuiSlider',
+  slot: 'Root',
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [styles.root, styles[`color${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(ownerState.color)}`], ownerState.size !== 'medium' && styles[`size${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(ownerState.size)}`], ownerState.marked && styles.marked, ownerState.orientation === 'vertical' && styles.vertical, ownerState.track === 'inverted' && styles.trackInverted, ownerState.track === false && styles.trackFalse];
+  }
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__["default"])(({
+  theme
+}) => ({
+  borderRadius: 12,
+  boxSizing: 'content-box',
+  display: 'inline-block',
+  position: 'relative',
+  cursor: 'pointer',
+  touchAction: 'none',
+  WebkitTapHighlightColor: 'transparent',
+  '@media print': {
+    colorAdjust: 'exact'
+  },
+  [`&.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].disabled}`]: {
+    pointerEvents: 'none',
+    cursor: 'default',
+    color: (theme.vars || theme).palette.grey[400]
+  },
+  [`&.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].dragging}`]: {
+    [`& .${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].thumb}, & .${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].track}`]: {
+      transition: 'none'
+    }
+  },
+  variants: [...Object.entries(theme.palette).filter((0,_utils_createSimplePaletteValueFilter_js__WEBPACK_IMPORTED_MODULE_7__["default"])()).map(([color]) => ({
+    props: {
+      color
+    },
+    style: {
+      color: (theme.vars || theme).palette[color].main
+    }
+  })), {
+    props: {
+      orientation: 'horizontal'
+    },
+    style: {
+      height: 4,
+      width: '100%',
+      padding: '13px 0',
+      // The primary input mechanism of the device includes a pointing device of limited accuracy.
+      '@media (pointer: coarse)': {
+        // Reach 42px touch target, about ~8mm on screen.
+        padding: '20px 0'
+      }
+    }
+  }, {
+    props: {
+      orientation: 'horizontal',
+      size: 'small'
+    },
+    style: {
+      height: 2
+    }
+  }, {
+    props: {
+      orientation: 'horizontal',
+      marked: true
+    },
+    style: {
+      marginBottom: 20
+    }
+  }, {
+    props: {
+      orientation: 'vertical'
+    },
+    style: {
+      height: '100%',
+      width: 4,
+      padding: '0 13px',
+      // The primary input mechanism of the device includes a pointing device of limited accuracy.
+      '@media (pointer: coarse)': {
+        // Reach 42px touch target, about ~8mm on screen.
+        padding: '0 20px'
+      }
+    }
+  }, {
+    props: {
+      orientation: 'vertical',
+      size: 'small'
+    },
+    style: {
+      width: 2
+    }
+  }, {
+    props: {
+      orientation: 'vertical',
+      marked: true
+    },
+    style: {
+      marginRight: 44
+    }
+  }]
+})));
+const SliderRail = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])('span', {
+  name: 'MuiSlider',
+  slot: 'Rail',
+  overridesResolver: (props, styles) => styles.rail
+})({
+  display: 'block',
+  position: 'absolute',
+  borderRadius: 'inherit',
+  backgroundColor: 'currentColor',
+  opacity: 0.38,
+  variants: [{
+    props: {
+      orientation: 'horizontal'
+    },
+    style: {
+      width: '100%',
+      height: 'inherit',
+      top: '50%',
+      transform: 'translateY(-50%)'
+    }
+  }, {
+    props: {
+      orientation: 'vertical'
+    },
+    style: {
+      height: '100%',
+      width: 'inherit',
+      left: '50%',
+      transform: 'translateX(-50%)'
+    }
+  }, {
+    props: {
+      track: 'inverted'
+    },
+    style: {
+      opacity: 1
+    }
+  }]
+});
+const SliderTrack = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])('span', {
+  name: 'MuiSlider',
+  slot: 'Track',
+  overridesResolver: (props, styles) => styles.track
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__["default"])(({
+  theme
+}) => {
+  return {
+    display: 'block',
+    position: 'absolute',
+    borderRadius: 'inherit',
+    border: '1px solid currentColor',
+    backgroundColor: 'currentColor',
+    transition: theme.transitions.create(['left', 'width', 'bottom', 'height'], {
+      duration: theme.transitions.duration.shortest
+    }),
+    variants: [{
+      props: {
+        size: 'small'
+      },
+      style: {
+        border: 'none'
+      }
+    }, {
+      props: {
+        orientation: 'horizontal'
+      },
+      style: {
+        height: 'inherit',
+        top: '50%',
+        transform: 'translateY(-50%)'
+      }
+    }, {
+      props: {
+        orientation: 'vertical'
+      },
+      style: {
+        width: 'inherit',
+        left: '50%',
+        transform: 'translateX(-50%)'
+      }
+    }, {
+      props: {
+        track: false
+      },
+      style: {
+        display: 'none'
+      }
+    }, ...Object.entries(theme.palette).filter((0,_utils_createSimplePaletteValueFilter_js__WEBPACK_IMPORTED_MODULE_7__["default"])()).map(([color]) => ({
+      props: {
+        color,
+        track: 'inverted'
+      },
+      style: {
+        ...(theme.vars ? {
+          backgroundColor: theme.vars.palette.Slider[`${color}Track`],
+          borderColor: theme.vars.palette.Slider[`${color}Track`]
+        } : {
+          backgroundColor: (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__.lighten)(theme.palette[color].main, 0.62),
+          borderColor: (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__.lighten)(theme.palette[color].main, 0.62),
+          ...theme.applyStyles('dark', {
+            backgroundColor: (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__.darken)(theme.palette[color].main, 0.5)
+          }),
+          ...theme.applyStyles('dark', {
+            borderColor: (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__.darken)(theme.palette[color].main, 0.5)
+          })
+        })
+      }
+    }))]
+  };
+}));
+const SliderThumb = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])('span', {
+  name: 'MuiSlider',
+  slot: 'Thumb',
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [styles.thumb, styles[`thumbColor${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(ownerState.color)}`], ownerState.size !== 'medium' && styles[`thumbSize${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(ownerState.size)}`]];
+  }
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__["default"])(({
+  theme
+}) => ({
+  position: 'absolute',
+  width: 20,
+  height: 20,
+  boxSizing: 'border-box',
+  borderRadius: '50%',
+  outline: 0,
+  backgroundColor: 'currentColor',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: theme.transitions.create(['box-shadow', 'left', 'bottom'], {
+    duration: theme.transitions.duration.shortest
+  }),
+  '&::before': {
+    position: 'absolute',
+    content: '""',
+    borderRadius: 'inherit',
+    width: '100%',
+    height: '100%',
+    boxShadow: (theme.vars || theme).shadows[2]
+  },
+  '&::after': {
+    position: 'absolute',
+    content: '""',
+    borderRadius: '50%',
+    // 42px is the hit target
+    width: 42,
+    height: 42,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)'
+  },
+  [`&.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].disabled}`]: {
+    '&:hover': {
+      boxShadow: 'none'
+    }
+  },
+  variants: [{
+    props: {
+      size: 'small'
+    },
+    style: {
+      width: 12,
+      height: 12,
+      '&::before': {
+        boxShadow: 'none'
+      }
+    }
+  }, {
+    props: {
+      orientation: 'horizontal'
+    },
+    style: {
+      top: '50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  }, {
+    props: {
+      orientation: 'vertical'
+    },
+    style: {
+      left: '50%',
+      transform: 'translate(-50%, 50%)'
+    }
+  }, ...Object.entries(theme.palette).filter((0,_utils_createSimplePaletteValueFilter_js__WEBPACK_IMPORTED_MODULE_7__["default"])()).map(([color]) => ({
+    props: {
+      color
+    },
+    style: {
+      [`&:hover, &.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].focusVisible}`]: {
+        ...(theme.vars ? {
+          boxShadow: `0px 0px 0px 8px rgba(${theme.vars.palette[color].mainChannel} / 0.16)`
+        } : {
+          boxShadow: `0px 0px 0px 8px ${(0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__.alpha)(theme.palette[color].main, 0.16)}`
+        }),
+        '@media (hover: none)': {
+          boxShadow: 'none'
+        }
+      },
+      [`&.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].active}`]: {
+        ...(theme.vars ? {
+          boxShadow: `0px 0px 0px 14px rgba(${theme.vars.palette[color].mainChannel} / 0.16)`
+        } : {
+          boxShadow: `0px 0px 0px 14px ${(0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_8__.alpha)(theme.palette[color].main, 0.16)}`
+        })
+      }
+    }
+  }))]
+})));
+const SliderValueLabel = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_SliderValueLabel_js__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  name: 'MuiSlider',
+  slot: 'ValueLabel',
+  overridesResolver: (props, styles) => styles.valueLabel
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__["default"])(({
+  theme
+}) => ({
+  zIndex: 1,
+  whiteSpace: 'nowrap',
+  ...theme.typography.body2,
+  fontWeight: 500,
+  transition: theme.transitions.create(['transform'], {
+    duration: theme.transitions.duration.shortest
+  }),
+  position: 'absolute',
+  backgroundColor: (theme.vars || theme).palette.grey[600],
+  borderRadius: 2,
+  color: (theme.vars || theme).palette.common.white,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '0.25rem 0.75rem',
+  variants: [{
+    props: {
+      orientation: 'horizontal'
+    },
+    style: {
+      transform: 'translateY(-100%) scale(0)',
+      top: '-10px',
+      transformOrigin: 'bottom center',
+      '&::before': {
+        position: 'absolute',
+        content: '""',
+        width: 8,
+        height: 8,
+        transform: 'translate(-50%, 50%) rotate(45deg)',
+        backgroundColor: 'inherit',
+        bottom: 0,
+        left: '50%'
+      },
+      [`&.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].valueLabelOpen}`]: {
+        transform: 'translateY(-100%) scale(1)'
+      }
+    }
+  }, {
+    props: {
+      orientation: 'vertical'
+    },
+    style: {
+      transform: 'translateY(-50%) scale(0)',
+      right: '30px',
+      top: '50%',
+      transformOrigin: 'right center',
+      '&::before': {
+        position: 'absolute',
+        content: '""',
+        width: 8,
+        height: 8,
+        transform: 'translate(-50%, -50%) rotate(45deg)',
+        backgroundColor: 'inherit',
+        right: -8,
+        top: '50%'
+      },
+      [`&.${_sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__["default"].valueLabelOpen}`]: {
+        transform: 'translateY(-50%) scale(1)'
+      }
+    }
+  }, {
+    props: {
+      size: 'small'
+    },
+    style: {
+      fontSize: theme.typography.pxToRem(12),
+      padding: '0.25rem 0.5rem'
+    }
+  }, {
+    props: {
+      orientation: 'vertical',
+      size: 'small'
+    },
+    style: {
+      right: '20px'
+    }
+  }]
+})));
+ true ? SliderValueLabel.propTypes /* remove-proptypes */ = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * @ignore
+   */
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().element).isRequired,
+  /**
+   * @ignore
+   */
+  index: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number).isRequired,
+  /**
+   * @ignore
+   */
+  open: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool).isRequired,
+  /**
+   * @ignore
+   */
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().node)
+} : 0;
+
+const SliderMark = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])('span', {
+  name: 'MuiSlider',
+  slot: 'Mark',
+  shouldForwardProp: prop => (0,_styles_slotShouldForwardProp_js__WEBPACK_IMPORTED_MODULE_11__["default"])(prop) && prop !== 'markActive',
+  overridesResolver: (props, styles) => {
+    const {
+      markActive
+    } = props;
+    return [styles.mark, markActive && styles.markActive];
+  }
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__["default"])(({
+  theme
+}) => ({
+  position: 'absolute',
+  width: 2,
+  height: 2,
+  borderRadius: 1,
+  backgroundColor: 'currentColor',
+  variants: [{
+    props: {
+      orientation: 'horizontal'
+    },
+    style: {
+      top: '50%',
+      transform: 'translate(-1px, -50%)'
+    }
+  }, {
+    props: {
+      orientation: 'vertical'
+    },
+    style: {
+      left: '50%',
+      transform: 'translate(-50%, 1px)'
+    }
+  }, {
+    props: {
+      markActive: true
+    },
+    style: {
+      backgroundColor: (theme.vars || theme).palette.background.paper,
+      opacity: 0.8
+    }
+  }]
+})));
+const SliderMarkLabel = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_3__["default"])('span', {
+  name: 'MuiSlider',
+  slot: 'MarkLabel',
+  shouldForwardProp: prop => (0,_styles_slotShouldForwardProp_js__WEBPACK_IMPORTED_MODULE_11__["default"])(prop) && prop !== 'markLabelActive',
+  overridesResolver: (props, styles) => styles.markLabel
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_5__["default"])(({
+  theme
+}) => ({
+  ...theme.typography.body2,
+  color: (theme.vars || theme).palette.text.secondary,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  variants: [{
+    props: {
+      orientation: 'horizontal'
+    },
+    style: {
+      top: 30,
+      transform: 'translateX(-50%)',
+      '@media (pointer: coarse)': {
+        top: 40
+      }
+    }
+  }, {
+    props: {
+      orientation: 'vertical'
+    },
+    style: {
+      left: 36,
+      transform: 'translateY(50%)',
+      '@media (pointer: coarse)': {
+        left: 44
+      }
+    }
+  }, {
+    props: {
+      markLabelActive: true
+    },
+    style: {
+      color: (theme.vars || theme).palette.text.primary
+    }
+  }]
+})));
+const useUtilityClasses = ownerState => {
+  const {
+    disabled,
+    dragging,
+    marked,
+    orientation,
+    track,
+    classes,
+    color,
+    size
+  } = ownerState;
+  const slots = {
+    root: ['root', disabled && 'disabled', dragging && 'dragging', marked && 'marked', orientation === 'vertical' && 'vertical', track === 'inverted' && 'trackInverted', track === false && 'trackFalse', color && `color${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(color)}`, size && `size${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(size)}`],
+    rail: ['rail'],
+    track: ['track'],
+    mark: ['mark'],
+    markActive: ['markActive'],
+    markLabel: ['markLabel'],
+    markLabelActive: ['markLabelActive'],
+    valueLabel: ['valueLabel'],
+    thumb: ['thumb', disabled && 'disabled', size && `thumbSize${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(size)}`, color && `thumbColor${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_4__["default"])(color)}`],
+    active: ['active'],
+    disabled: ['disabled'],
+    focusVisible: ['focusVisible']
+  };
+  return (0,_mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_12__["default"])(slots, _sliderClasses_js__WEBPACK_IMPORTED_MODULE_6__.getSliderUtilityClass, classes);
+};
+const Forward = ({
+  children
+}) => children;
+const Slider = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function Slider(inputProps, ref) {
+  const props = (0,_DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_13__.useDefaultProps)({
+    props: inputProps,
+    name: 'MuiSlider'
+  });
+  const isRtl = (0,_mui_system_RtlProvider__WEBPACK_IMPORTED_MODULE_14__.useRtl)();
+  const {
+    'aria-label': ariaLabel,
+    'aria-valuetext': ariaValuetext,
+    'aria-labelledby': ariaLabelledby,
+    // eslint-disable-next-line react/prop-types
+    component = 'span',
+    components = {},
+    componentsProps = {},
+    color = 'primary',
+    classes: classesProp,
+    className,
+    disableSwap = false,
+    disabled = false,
+    getAriaLabel,
+    getAriaValueText,
+    marks: marksProp = false,
+    max = 100,
+    min = 0,
+    name,
+    onChange,
+    onChangeCommitted,
+    orientation = 'horizontal',
+    shiftStep = 10,
+    size = 'medium',
+    step = 1,
+    scale = Identity,
+    slotProps,
+    slots,
+    tabIndex,
+    track = 'normal',
+    value: valueProp,
+    valueLabelDisplay = 'off',
+    valueLabelFormat = Identity,
+    ...other
+  } = props;
+  const ownerState = {
+    ...props,
+    isRtl,
+    max,
+    min,
+    classes: classesProp,
+    disabled,
+    disableSwap,
+    orientation,
+    marks: marksProp,
+    color,
+    size,
+    step,
+    shiftStep,
+    scale,
+    track,
+    valueLabelDisplay,
+    valueLabelFormat
+  };
+  const {
+    axisProps,
+    getRootProps,
+    getHiddenInputProps,
+    getThumbProps,
+    open,
+    active,
+    axis,
+    focusedThumbIndex,
+    range,
+    dragging,
+    marks,
+    values,
+    trackOffset,
+    trackLeap,
+    getThumbStyle
+  } = (0,_useSlider_js__WEBPACK_IMPORTED_MODULE_15__.useSlider)({
+    ...ownerState,
+    rootRef: ref
+  });
+  ownerState.marked = marks.length > 0 && marks.some(mark => mark.label);
+  ownerState.dragging = dragging;
+  ownerState.focusedThumbIndex = focusedThumbIndex;
+  const classes = useUtilityClasses(ownerState);
+
+  // support both `slots` and `components` for backward compatibility
+  const RootSlot = slots?.root ?? components.Root ?? SliderRoot;
+  const RailSlot = slots?.rail ?? components.Rail ?? SliderRail;
+  const TrackSlot = slots?.track ?? components.Track ?? SliderTrack;
+  const ThumbSlot = slots?.thumb ?? components.Thumb ?? SliderThumb;
+  const ValueLabelSlot = slots?.valueLabel ?? components.ValueLabel ?? SliderValueLabel;
+  const MarkSlot = slots?.mark ?? components.Mark ?? SliderMark;
+  const MarkLabelSlot = slots?.markLabel ?? components.MarkLabel ?? SliderMarkLabel;
+  const InputSlot = slots?.input ?? components.Input ?? 'input';
+  const rootSlotProps = slotProps?.root ?? componentsProps.root;
+  const railSlotProps = slotProps?.rail ?? componentsProps.rail;
+  const trackSlotProps = slotProps?.track ?? componentsProps.track;
+  const thumbSlotProps = slotProps?.thumb ?? componentsProps.thumb;
+  const valueLabelSlotProps = slotProps?.valueLabel ?? componentsProps.valueLabel;
+  const markSlotProps = slotProps?.mark ?? componentsProps.mark;
+  const markLabelSlotProps = slotProps?.markLabel ?? componentsProps.markLabel;
+  const inputSlotProps = slotProps?.input ?? componentsProps.input;
+  const rootProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: RootSlot,
+    getSlotProps: getRootProps,
+    externalSlotProps: rootSlotProps,
+    externalForwardedProps: other,
+    additionalProps: {
+      ...((0,_utils_shouldSpreadAdditionalProps_js__WEBPACK_IMPORTED_MODULE_17__["default"])(RootSlot) && {
+        as: component
+      })
+    },
+    ownerState: {
+      ...ownerState,
+      ...rootSlotProps?.ownerState
+    },
+    className: [classes.root, className]
+  });
+  const railProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: RailSlot,
+    externalSlotProps: railSlotProps,
+    ownerState,
+    className: classes.rail
+  });
+  const trackProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: TrackSlot,
+    externalSlotProps: trackSlotProps,
+    additionalProps: {
+      style: {
+        ...axisProps[axis].offset(trackOffset),
+        ...axisProps[axis].leap(trackLeap)
+      }
+    },
+    ownerState: {
+      ...ownerState,
+      ...trackSlotProps?.ownerState
+    },
+    className: classes.track
+  });
+  const thumbProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: ThumbSlot,
+    getSlotProps: getThumbProps,
+    externalSlotProps: thumbSlotProps,
+    ownerState: {
+      ...ownerState,
+      ...thumbSlotProps?.ownerState
+    },
+    className: classes.thumb
+  });
+  const valueLabelProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: ValueLabelSlot,
+    externalSlotProps: valueLabelSlotProps,
+    ownerState: {
+      ...ownerState,
+      ...valueLabelSlotProps?.ownerState
+    },
+    className: classes.valueLabel
+  });
+  const markProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: MarkSlot,
+    externalSlotProps: markSlotProps,
+    ownerState,
+    className: classes.mark
+  });
+  const markLabelProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: MarkLabelSlot,
+    externalSlotProps: markLabelSlotProps,
+    ownerState,
+    className: classes.markLabel
+  });
+  const inputSliderProps = (0,_mui_utils_useSlotProps__WEBPACK_IMPORTED_MODULE_16__["default"])({
+    elementType: InputSlot,
+    getSlotProps: getHiddenInputProps,
+    externalSlotProps: inputSlotProps,
+    ownerState
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(RootSlot, {
+    ...rootProps,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(RailSlot, {
+      ...railProps
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(TrackSlot, {
+      ...trackProps
+    }), marks.filter(mark => mark.value >= min && mark.value <= max).map((mark, index) => {
+      const percent = (0,_useSlider_js__WEBPACK_IMPORTED_MODULE_15__.valueToPercent)(mark.value, min, max);
+      const style = axisProps[axis].offset(percent);
+      let markActive;
+      if (track === false) {
+        markActive = values.includes(mark.value);
+      } else {
+        markActive = track === 'normal' && (range ? mark.value >= values[0] && mark.value <= values[values.length - 1] : mark.value <= values[0]) || track === 'inverted' && (range ? mark.value <= values[0] || mark.value >= values[values.length - 1] : mark.value >= values[0]);
+      }
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(MarkSlot, {
+          "data-index": index,
+          ...markProps,
+          ...(!(0,_utils_isHostComponent_js__WEBPACK_IMPORTED_MODULE_18__["default"])(MarkSlot) && {
+            markActive
+          }),
+          style: {
+            ...style,
+            ...markProps.style
+          },
+          className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(markProps.className, markActive && classes.markActive)
+        }), mark.label != null ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(MarkLabelSlot, {
+          "aria-hidden": true,
+          "data-index": index,
+          ...markLabelProps,
+          ...(!(0,_utils_isHostComponent_js__WEBPACK_IMPORTED_MODULE_18__["default"])(MarkLabelSlot) && {
+            markLabelActive: markActive
+          }),
+          style: {
+            ...style,
+            ...markLabelProps.style
+          },
+          className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.markLabel, markLabelProps.className, markActive && classes.markLabelActive),
+          children: mark.label
+        }) : null]
+      }, index);
+    }), values.map((value, index) => {
+      const percent = (0,_useSlider_js__WEBPACK_IMPORTED_MODULE_15__.valueToPercent)(value, min, max);
+      const style = axisProps[axis].offset(percent);
+      const ValueLabelComponent = valueLabelDisplay === 'off' ? Forward : ValueLabelSlot;
+      return /*#__PURE__*/ /* TODO v6: Change component structure. It will help in avoiding the complicated React.cloneElement API added in SliderValueLabel component. Should be: Thumb -> Input, ValueLabel. Follow Joy UI's Slider structure. */(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(ValueLabelComponent, {
+        ...(!(0,_utils_isHostComponent_js__WEBPACK_IMPORTED_MODULE_18__["default"])(ValueLabelComponent) && {
+          valueLabelFormat,
+          valueLabelDisplay,
+          value: typeof valueLabelFormat === 'function' ? valueLabelFormat(scale(value), index) : valueLabelFormat,
+          index,
+          open: open === index || active === index || valueLabelDisplay === 'on',
+          disabled
+        }),
+        ...valueLabelProps,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(ThumbSlot, {
+          "data-index": index,
+          ...thumbProps,
+          className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.thumb, thumbProps.className, active === index && classes.active, focusedThumbIndex === index && classes.focusVisible),
+          style: {
+            ...style,
+            ...getThumbStyle(index),
+            ...thumbProps.style
+          },
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(InputSlot, {
+            "data-index": index,
+            "aria-label": getAriaLabel ? getAriaLabel(index) : ariaLabel,
+            "aria-valuenow": scale(value),
+            "aria-labelledby": ariaLabelledby,
+            "aria-valuetext": getAriaValueText ? getAriaValueText(scale(value), index) : ariaValuetext,
+            value: values[index],
+            ...inputSliderProps
+          })
+        })
+      }, index);
+    })]
+  });
+});
+ true ? Slider.propTypes /* remove-proptypes */ = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * The label of the slider.
+   */
+  'aria-label': (0,_mui_utils_chainPropTypes__WEBPACK_IMPORTED_MODULE_19__["default"])((prop_types__WEBPACK_IMPORTED_MODULE_10___default().string), props => {
+    const range = Array.isArray(props.value || props.defaultValue);
+    if (range && props['aria-label'] != null) {
+      return new Error('MUI: You need to use the `getAriaLabel` prop instead of `aria-label` when using a range slider.');
+    }
+    return null;
+  }),
+  /**
+   * The id of the element containing a label for the slider.
+   */
+  'aria-labelledby': (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string),
+  /**
+   * A string value that provides a user-friendly name for the current value of the slider.
+   */
+  'aria-valuetext': (0,_mui_utils_chainPropTypes__WEBPACK_IMPORTED_MODULE_19__["default"])((prop_types__WEBPACK_IMPORTED_MODULE_10___default().string), props => {
+    const range = Array.isArray(props.value || props.defaultValue);
+    if (range && props['aria-valuetext'] != null) {
+      return new Error('MUI: You need to use the `getAriaValueText` prop instead of `aria-valuetext` when using a range slider.');
+    }
+    return null;
+  }),
+  /**
+   * @ignore
+   */
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().node),
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object),
+  /**
+   * @ignore
+   */
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string),
+  /**
+   * The color of the component.
+   * It supports both default and custom theme colors, which can be added as shown in the
+   * [palette customization guide](https://mui.com/material-ui/customization/palette/#custom-colors).
+   * @default 'primary'
+   */
+  color: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['primary', 'secondary', 'error', 'info', 'success', 'warning']), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string)]),
+  /**
+   * The components used for each slot inside.
+   *
+   * @deprecated use the `slots` prop instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   *
+   * @default {}
+   */
+  components: prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+    Input: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    Mark: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    MarkLabel: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    Rail: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    Root: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    Thumb: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    Track: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    ValueLabel: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType)
+  }),
+  /**
+   * The extra props for the slot components.
+   * You can override the existing props or add new ones.
+   *
+   * @deprecated use the `slotProps` prop instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   *
+   * @default {}
+   */
+  componentsProps: prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+    input: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    mark: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    markLabel: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    rail: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    root: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    thumb: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    track: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    valueLabel: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+      children: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().element),
+      className: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string),
+      open: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool),
+      style: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object),
+      value: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().node),
+      valueLabelDisplay: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['auto', 'off', 'on'])
+    })])
+  }),
+  /**
+   * The default value. Use when the component is not controlled.
+   */
+  defaultValue: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_10___default().arrayOf((prop_types__WEBPACK_IMPORTED_MODULE_10___default().number)), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number)]),
+  /**
+   * If `true`, the component is disabled.
+   * @default false
+   */
+  disabled: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool),
+  /**
+   * If `true`, the active thumb doesn't swap when moving pointer over a thumb while dragging another thumb.
+   * @default false
+   */
+  disableSwap: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool),
+  /**
+   * Accepts a function which returns a string value that provides a user-friendly name for the thumb labels of the slider.
+   * This is important for screen reader users.
+   * @param {number} index The thumb label's index to format.
+   * @returns {string}
+   */
+  getAriaLabel: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().func),
+  /**
+   * Accepts a function which returns a string value that provides a user-friendly name for the current value of the slider.
+   * This is important for screen reader users.
+   * @param {number} value The thumb label's value to format.
+   * @param {number} index The thumb label's index to format.
+   * @returns {string}
+   */
+  getAriaValueText: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().func),
+  /**
+   * Marks indicate predetermined values to which the user can move the slider.
+   * If `true` the marks are spaced according the value of the `step` prop.
+   * If an array, it should contain objects with `value` and an optional `label` keys.
+   * @default false
+   */
+  marks: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_10___default().arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+    label: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().node),
+    value: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number).isRequired
+  })), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool)]),
+  /**
+   * The maximum allowed value of the slider.
+   * Should not be equal to min.
+   * @default 100
+   */
+  max: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number),
+  /**
+   * The minimum allowed value of the slider.
+   * Should not be equal to max.
+   * @default 0
+   */
+  min: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number),
+  /**
+   * Name attribute of the hidden `input` element.
+   */
+  name: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string),
+  /**
+   * Callback function that is fired when the slider's value changed.
+   *
+   * @param {Event} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (any).
+   * **Warning**: This is a generic event not a change event.
+   * @param {number | number[]} value The new value.
+   * @param {number} activeThumb Index of the currently moved thumb.
+   */
+  onChange: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().func),
+  /**
+   * Callback function that is fired when the `mouseup` is triggered.
+   *
+   * @param {React.SyntheticEvent | Event} event The event source of the callback. **Warning**: This is a generic event not a change event.
+   * @param {number | number[]} value The new value.
+   */
+  onChangeCommitted: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().func),
+  /**
+   * The component orientation.
+   * @default 'horizontal'
+   */
+  orientation: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['horizontal', 'vertical']),
+  /**
+   * A transformation function, to change the scale of the slider.
+   * @param {any} x
+   * @returns {any}
+   * @default function Identity(x) {
+   *   return x;
+   * }
+   */
+  scale: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().func),
+  /**
+   * The granularity with which the slider can step through values when using Page Up/Page Down or Shift + Arrow Up/Arrow Down.
+   * @default 10
+   */
+  shiftStep: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number),
+  /**
+   * The size of the slider.
+   * @default 'medium'
+   */
+  size: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['small', 'medium']), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string)]),
+  /**
+   * The props used for each slot inside the Slider.
+   * @default {}
+   */
+  slotProps: prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+    input: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    mark: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    markLabel: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    rail: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    root: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    thumb: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    track: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+    valueLabel: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+      children: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().element),
+      className: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string),
+      open: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool),
+      style: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object),
+      value: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().node),
+      valueLabelDisplay: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['auto', 'off', 'on'])
+    })])
+  }),
+  /**
+   * The components used for each slot inside the Slider.
+   * Either a string to use a HTML element or a component.
+   * @default {}
+   */
+  slots: prop_types__WEBPACK_IMPORTED_MODULE_10___default().shape({
+    input: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    mark: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    markLabel: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    rail: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    root: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    thumb: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    track: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType),
+    valueLabel: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().elementType)
+  }),
+  /**
+   * The granularity with which the slider can step through values. (A "discrete" slider.)
+   * The `min` prop serves as the origin for the valid values.
+   * We recommend (max - min) to be evenly divisible by the step.
+   *
+   * When step is `null`, the thumb can only be slid onto marks provided with the `marks` prop.
+   * @default 1
+   */
+  step: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_10___default().arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().bool)])), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().object)]),
+  /**
+   * Tab index attribute of the hidden `input` element.
+   */
+  tabIndex: (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number),
+  /**
+   * The track presentation:
+   *
+   * - `normal` the track will render a bar representing the slider value.
+   * - `inverted` the track will render a bar representing the remaining slider value.
+   * - `false` the track will render without a bar.
+   * @default 'normal'
+   */
+  track: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['inverted', 'normal', false]),
+  /**
+   * The value of the slider.
+   * For ranged sliders, provide an array with two values.
+   */
+  value: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_10___default().arrayOf((prop_types__WEBPACK_IMPORTED_MODULE_10___default().number)), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().number)]),
+  /**
+   * Controls when the value label is displayed:
+   *
+   * - `auto` the value label will display when the thumb is hovered or focused.
+   * - `on` will display persistently.
+   * - `off` will never display.
+   * @default 'off'
+   */
+  valueLabelDisplay: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOf(['auto', 'off', 'on']),
+  /**
+   * The format function the value label's value.
+   *
+   * When a function is provided, it should have the following signature:
+   *
+   * - {number} value The value label's value to format
+   * - {number} index The value label's index to format
+   * @param {any} x
+   * @returns {any}
+   * @default function Identity(x) {
+   *   return x;
+   * }
+   */
+  valueLabelFormat: prop_types__WEBPACK_IMPORTED_MODULE_10___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_10___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_10___default().string)])
+} : 0;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Slider);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/Slider/SliderValueLabel.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@mui/material/Slider/SliderValueLabel.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SliderValueLabel)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var _sliderClasses_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sliderClasses.js */ "./node_modules/@mui/material/Slider/sliderClasses.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+'use client';
+
+
+
+
+
+
+const useValueLabelClasses = props => {
+  const {
+    open
+  } = props;
+  const utilityClasses = {
+    offset: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(open && _sliderClasses_js__WEBPACK_IMPORTED_MODULE_3__["default"].valueLabelOpen),
+    circle: _sliderClasses_js__WEBPACK_IMPORTED_MODULE_3__["default"].valueLabelCircle,
+    label: _sliderClasses_js__WEBPACK_IMPORTED_MODULE_3__["default"].valueLabelLabel
+  };
+  return utilityClasses;
+};
+
+/**
+ * @ignore - internal component.
+ */
+function SliderValueLabel(props) {
+  const {
+    children,
+    className,
+    value
+  } = props;
+  const classes = useValueLabelClasses(props);
+  if (!children) {
+    return null;
+  }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.cloneElement(children, {
+    className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(children.props.className)
+  }, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [children.props.children, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.offset, className),
+      "aria-hidden": true,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: classes.circle,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: classes.label,
+          children: value
+        })
+      })
+    })]
+  }));
+}
+ true ? SliderValueLabel.propTypes = {
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().element).isRequired,
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().string),
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_4___default().node)
+} : 0;
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/Slider/sliderClasses.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@mui/material/Slider/sliderClasses.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getSliderUtilityClass: () => (/* binding */ getSliderUtilityClass)
+/* harmony export */ });
+/* harmony import */ var _mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils/generateUtilityClasses */ "./node_modules/@mui/utils/esm/generateUtilityClasses/generateUtilityClasses.js");
+/* harmony import */ var _mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/generateUtilityClass */ "./node_modules/@mui/utils/esm/generateUtilityClass/generateUtilityClass.js");
+
+
+function getSliderUtilityClass(slot) {
+  return (0,_mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__["default"])('MuiSlider', slot);
+}
+const sliderClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('MuiSlider', ['root', 'active', 'colorPrimary', 'colorSecondary', 'colorError', 'colorInfo', 'colorSuccess', 'colorWarning', 'disabled', 'dragging', 'focusVisible', 'mark', 'markActive', 'marked', 'markLabel', 'markLabelActive', 'rail', 'sizeSmall', 'thumb', 'thumbColorPrimary', 'thumbColorSecondary', 'thumbColorError', 'thumbColorSuccess', 'thumbColorInfo', 'thumbColorWarning', 'track', 'trackInverted', 'trackFalse', 'thumbSizeSmall', 'valueLabel', 'valueLabelOpen', 'valueLabelCircle', 'valueLabelLabel', 'vertical']);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (sliderClasses);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/Slider/useSlider.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@mui/material/Slider/useSlider.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Identity: () => (/* binding */ Identity),
+/* harmony export */   useSlider: () => (/* binding */ useSlider),
+/* harmony export */   valueToPercent: () => (/* binding */ valueToPercent)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/ownerDocument/ownerDocument.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/useControlled/useControlled.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/clamp/clamp.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/useForkRef/useForkRef.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/isFocusVisible/isFocusVisible.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/useEnhancedEffect/useEnhancedEffect.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/useEventCallback/useEventCallback.js");
+/* harmony import */ var _mui_utils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @mui/utils */ "./node_modules/@mui/utils/esm/visuallyHidden/visuallyHidden.js");
+/* harmony import */ var _mui_utils_extractEventHandlers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/utils/extractEventHandlers */ "./node_modules/@mui/utils/esm/extractEventHandlers/extractEventHandlers.js");
+/* harmony import */ var _utils_areArraysEqual_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/areArraysEqual.js */ "./node_modules/@mui/material/utils/areArraysEqual.js");
+'use client';
+
+
+
+
+
+const INTENTIONAL_DRAG_COUNT_THRESHOLD = 2;
+function getNewValue(currentValue, step, direction, min, max) {
+  return direction === 1 ? Math.min(currentValue + step, max) : Math.max(currentValue - step, min);
+}
+function asc(a, b) {
+  return a - b;
+}
+function findClosest(values, currentValue) {
+  const {
+    index: closestIndex
+  } = values.reduce((acc, value, index) => {
+    const distance = Math.abs(currentValue - value);
+    if (acc === null || distance < acc.distance || distance === acc.distance) {
+      return {
+        distance,
+        index
+      };
+    }
+    return acc;
+  }, null) ?? {};
+  return closestIndex;
+}
+function trackFinger(event, touchId) {
+  // The event is TouchEvent
+  if (touchId.current !== undefined && event.changedTouches) {
+    const touchEvent = event;
+    for (let i = 0; i < touchEvent.changedTouches.length; i += 1) {
+      const touch = touchEvent.changedTouches[i];
+      if (touch.identifier === touchId.current) {
+        return {
+          x: touch.clientX,
+          y: touch.clientY
+        };
+      }
+    }
+    return false;
+  }
+
+  // The event is MouseEvent
+  return {
+    x: event.clientX,
+    y: event.clientY
+  };
+}
+function valueToPercent(value, min, max) {
+  return (value - min) * 100 / (max - min);
+}
+function percentToValue(percent, min, max) {
+  return (max - min) * percent + min;
+}
+function getDecimalPrecision(num) {
+  // This handles the case when num is very small (0.00000001), js will turn this into 1e-8.
+  // When num is bigger than 1 or less than -1 it won't get converted to this notation so it's fine.
+  if (Math.abs(num) < 1) {
+    const parts = num.toExponential().split('e-');
+    const matissaDecimalPart = parts[0].split('.')[1];
+    return (matissaDecimalPart ? matissaDecimalPart.length : 0) + parseInt(parts[1], 10);
+  }
+  const decimalPart = num.toString().split('.')[1];
+  return decimalPart ? decimalPart.length : 0;
+}
+function roundValueToStep(value, step, min) {
+  const nearest = Math.round((value - min) / step) * step + min;
+  return Number(nearest.toFixed(getDecimalPrecision(step)));
+}
+function setValueIndex({
+  values,
+  newValue,
+  index
+}) {
+  const output = values.slice();
+  output[index] = newValue;
+  return output.sort(asc);
+}
+function focusThumb({
+  sliderRef,
+  activeIndex,
+  setActive
+}) {
+  const doc = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_1__["default"])(sliderRef.current);
+  if (!sliderRef.current?.contains(doc.activeElement) || Number(doc?.activeElement?.getAttribute('data-index')) !== activeIndex) {
+    sliderRef.current?.querySelector(`[type="range"][data-index="${activeIndex}"]`).focus();
+  }
+  if (setActive) {
+    setActive(activeIndex);
+  }
+}
+function areValuesEqual(newValue, oldValue) {
+  if (typeof newValue === 'number' && typeof oldValue === 'number') {
+    return newValue === oldValue;
+  }
+  if (typeof newValue === 'object' && typeof oldValue === 'object') {
+    return (0,_utils_areArraysEqual_js__WEBPACK_IMPORTED_MODULE_2__["default"])(newValue, oldValue);
+  }
+  return false;
+}
+const axisProps = {
+  horizontal: {
+    offset: percent => ({
+      left: `${percent}%`
+    }),
+    leap: percent => ({
+      width: `${percent}%`
+    })
+  },
+  'horizontal-reverse': {
+    offset: percent => ({
+      right: `${percent}%`
+    }),
+    leap: percent => ({
+      width: `${percent}%`
+    })
+  },
+  vertical: {
+    offset: percent => ({
+      bottom: `${percent}%`
+    }),
+    leap: percent => ({
+      height: `${percent}%`
+    })
+  }
+};
+const Identity = x => x;
+
+// TODO: remove support for Safari < 13.
+// https://caniuse.com/#search=touch-action
+//
+// Safari, on iOS, supports touch action since v13.
+// Over 80% of the iOS phones are compatible
+// in August 2020.
+// Utilizing the CSS.supports method to check if touch-action is supported.
+// Since CSS.supports is supported on all but Edge@12 and IE and touch-action
+// is supported on both Edge@12 and IE if CSS.supports is not available that means that
+// touch-action will be supported
+let cachedSupportsTouchActionNone;
+function doesSupportTouchActionNone() {
+  if (cachedSupportsTouchActionNone === undefined) {
+    if (typeof CSS !== 'undefined' && typeof CSS.supports === 'function') {
+      cachedSupportsTouchActionNone = CSS.supports('touch-action', 'none');
+    } else {
+      cachedSupportsTouchActionNone = true;
+    }
+  }
+  return cachedSupportsTouchActionNone;
+}
+/**
+ *
+ * Demos:
+ *
+ * - [Slider](https://mui.com/base-ui/react-slider/#hook)
+ *
+ * API:
+ *
+ * - [useSlider API](https://mui.com/base-ui/react-slider/hooks-api/#use-slider)
+ */
+function useSlider(parameters) {
+  const {
+    'aria-labelledby': ariaLabelledby,
+    defaultValue,
+    disabled = false,
+    disableSwap = false,
+    isRtl = false,
+    marks: marksProp = false,
+    max = 100,
+    min = 0,
+    name,
+    onChange,
+    onChangeCommitted,
+    orientation = 'horizontal',
+    rootRef: ref,
+    scale = Identity,
+    step = 1,
+    shiftStep = 10,
+    tabIndex,
+    value: valueProp
+  } = parameters;
+  const touchId = react__WEBPACK_IMPORTED_MODULE_0__.useRef(undefined);
+  // We can't use the :active browser pseudo-classes.
+  // - The active state isn't triggered when clicking on the rail.
+  // - The active state isn't transferred when inversing a range slider.
+  const [active, setActive] = react__WEBPACK_IMPORTED_MODULE_0__.useState(-1);
+  const [open, setOpen] = react__WEBPACK_IMPORTED_MODULE_0__.useState(-1);
+  const [dragging, setDragging] = react__WEBPACK_IMPORTED_MODULE_0__.useState(false);
+  const moveCount = react__WEBPACK_IMPORTED_MODULE_0__.useRef(0);
+  // lastChangedValue is updated whenever onChange is triggered.
+  const lastChangedValue = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  const [valueDerived, setValueState] = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_3__["default"])({
+    controlled: valueProp,
+    default: defaultValue ?? min,
+    name: 'Slider'
+  });
+  const handleChange = onChange && ((event, value, thumbIndex) => {
+    // Redefine target to allow name and value to be read.
+    // This allows seamless integration with the most popular form libraries.
+    // https://github.com/mui/material-ui/issues/13485#issuecomment-676048492
+    // Clone the event to not override `target` of the original event.
+    const nativeEvent = event.nativeEvent || event;
+    // @ts-ignore The nativeEvent is function, not object
+    const clonedEvent = new nativeEvent.constructor(nativeEvent.type, nativeEvent);
+    Object.defineProperty(clonedEvent, 'target', {
+      writable: true,
+      value: {
+        value,
+        name
+      }
+    });
+    lastChangedValue.current = value;
+    onChange(clonedEvent, value, thumbIndex);
+  });
+  const range = Array.isArray(valueDerived);
+  let values = range ? valueDerived.slice().sort(asc) : [valueDerived];
+  values = values.map(value => value == null ? min : (0,_mui_utils__WEBPACK_IMPORTED_MODULE_4__["default"])(value, min, max));
+  const marks = marksProp === true && step !== null ? [...Array(Math.floor((max - min) / step) + 1)].map((_, index) => ({
+    value: min + step * index
+  })) : marksProp || [];
+  const marksValues = marks.map(mark => mark.value);
+  const [focusedThumbIndex, setFocusedThumbIndex] = react__WEBPACK_IMPORTED_MODULE_0__.useState(-1);
+  const sliderRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  const handleRef = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_5__["default"])(ref, sliderRef);
+  const createHandleHiddenInputFocus = otherHandlers => event => {
+    const index = Number(event.currentTarget.getAttribute('data-index'));
+    if ((0,_mui_utils__WEBPACK_IMPORTED_MODULE_6__["default"])(event.target)) {
+      setFocusedThumbIndex(index);
+    }
+    setOpen(index);
+    otherHandlers?.onFocus?.(event);
+  };
+  const createHandleHiddenInputBlur = otherHandlers => event => {
+    if (!(0,_mui_utils__WEBPACK_IMPORTED_MODULE_6__["default"])(event.target)) {
+      setFocusedThumbIndex(-1);
+    }
+    setOpen(-1);
+    otherHandlers?.onBlur?.(event);
+  };
+  const changeValue = (event, valueInput) => {
+    const index = Number(event.currentTarget.getAttribute('data-index'));
+    const value = values[index];
+    const marksIndex = marksValues.indexOf(value);
+    let newValue = valueInput;
+    if (marks && step == null) {
+      const maxMarksValue = marksValues[marksValues.length - 1];
+      if (newValue >= maxMarksValue) {
+        newValue = maxMarksValue;
+      } else if (newValue <= marksValues[0]) {
+        newValue = marksValues[0];
+      } else {
+        newValue = newValue < value ? marksValues[marksIndex - 1] : marksValues[marksIndex + 1];
+      }
+    }
+    newValue = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_4__["default"])(newValue, min, max);
+    if (range) {
+      // Bound the new value to the thumb's neighbours.
+      if (disableSwap) {
+        newValue = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_4__["default"])(newValue, values[index - 1] || -Infinity, values[index + 1] || Infinity);
+      }
+      const previousValue = newValue;
+      newValue = setValueIndex({
+        values,
+        newValue,
+        index
+      });
+      let activeIndex = index;
+
+      // Potentially swap the index if needed.
+      if (!disableSwap) {
+        activeIndex = newValue.indexOf(previousValue);
+      }
+      focusThumb({
+        sliderRef,
+        activeIndex
+      });
+    }
+    setValueState(newValue);
+    setFocusedThumbIndex(index);
+    if (handleChange && !areValuesEqual(newValue, valueDerived)) {
+      handleChange(event, newValue, index);
+    }
+    if (onChangeCommitted) {
+      onChangeCommitted(event, lastChangedValue.current ?? newValue);
+    }
+  };
+  const createHandleHiddenInputKeyDown = otherHandlers => event => {
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key)) {
+      event.preventDefault();
+      const index = Number(event.currentTarget.getAttribute('data-index'));
+      const value = values[index];
+      let newValue = null;
+      // Keys actions that change the value by more than the most granular `step`
+      // value are only applied if the step not `null`.
+      // When step is `null`, the `marks` prop is used instead to define valid values.
+      if (step != null) {
+        const stepSize = event.shiftKey ? shiftStep : step;
+        switch (event.key) {
+          case 'ArrowUp':
+            newValue = getNewValue(value, stepSize, 1, min, max);
+            break;
+          case 'ArrowRight':
+            newValue = getNewValue(value, stepSize, isRtl ? -1 : 1, min, max);
+            break;
+          case 'ArrowDown':
+            newValue = getNewValue(value, stepSize, -1, min, max);
+            break;
+          case 'ArrowLeft':
+            newValue = getNewValue(value, stepSize, isRtl ? 1 : -1, min, max);
+            break;
+          case 'PageUp':
+            newValue = getNewValue(value, shiftStep, 1, min, max);
+            break;
+          case 'PageDown':
+            newValue = getNewValue(value, shiftStep, -1, min, max);
+            break;
+          case 'Home':
+            newValue = min;
+            break;
+          case 'End':
+            newValue = max;
+            break;
+          default:
+            break;
+        }
+      } else if (marks) {
+        const maxMarksValue = marksValues[marksValues.length - 1];
+        const currentMarkIndex = marksValues.indexOf(value);
+        const decrementKeys = [isRtl ? 'ArrowRight' : 'ArrowLeft', 'ArrowDown', 'PageDown', 'Home'];
+        const incrementKeys = [isRtl ? 'ArrowLeft' : 'ArrowRight', 'ArrowUp', 'PageUp', 'End'];
+        if (decrementKeys.includes(event.key)) {
+          if (currentMarkIndex === 0) {
+            newValue = marksValues[0];
+          } else {
+            newValue = marksValues[currentMarkIndex - 1];
+          }
+        } else if (incrementKeys.includes(event.key)) {
+          if (currentMarkIndex === marksValues.length - 1) {
+            newValue = maxMarksValue;
+          } else {
+            newValue = marksValues[currentMarkIndex + 1];
+          }
+        }
+      }
+      if (newValue != null) {
+        changeValue(event, newValue);
+      }
+    }
+    otherHandlers?.onKeyDown?.(event);
+  };
+  (0,_mui_utils__WEBPACK_IMPORTED_MODULE_7__["default"])(() => {
+    if (disabled && sliderRef.current.contains(document.activeElement)) {
+      // This is necessary because Firefox and Safari will keep focus
+      // on a disabled element:
+      // https://codesandbox.io/p/sandbox/mui-pr-22247-forked-h151h?file=/src/App.js
+      // @ts-ignore
+      document.activeElement?.blur();
+    }
+  }, [disabled]);
+  if (disabled && active !== -1) {
+    setActive(-1);
+  }
+  if (disabled && focusedThumbIndex !== -1) {
+    setFocusedThumbIndex(-1);
+  }
+  const createHandleHiddenInputChange = otherHandlers => event => {
+    otherHandlers.onChange?.(event);
+    // this handles value change by Pointer or Touch events
+    // @ts-ignore
+    changeValue(event, event.target.valueAsNumber);
+  };
+  const previousIndex = react__WEBPACK_IMPORTED_MODULE_0__.useRef(undefined);
+  let axis = orientation;
+  if (isRtl && orientation === 'horizontal') {
+    axis += '-reverse';
+  }
+  const getFingerNewValue = ({
+    finger,
+    move = false
+  }) => {
+    const {
+      current: slider
+    } = sliderRef;
+    const {
+      width,
+      height,
+      bottom,
+      left
+    } = slider.getBoundingClientRect();
+    let percent;
+    if (axis.startsWith('vertical')) {
+      percent = (bottom - finger.y) / height;
+    } else {
+      percent = (finger.x - left) / width;
+    }
+    if (axis.includes('-reverse')) {
+      percent = 1 - percent;
+    }
+    let newValue;
+    newValue = percentToValue(percent, min, max);
+    if (step) {
+      newValue = roundValueToStep(newValue, step, min);
+    } else {
+      const closestIndex = findClosest(marksValues, newValue);
+      newValue = marksValues[closestIndex];
+    }
+    newValue = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_4__["default"])(newValue, min, max);
+    let activeIndex = 0;
+    if (range) {
+      if (!move) {
+        activeIndex = findClosest(values, newValue);
+      } else {
+        activeIndex = previousIndex.current;
+      }
+
+      // Bound the new value to the thumb's neighbours.
+      if (disableSwap) {
+        newValue = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_4__["default"])(newValue, values[activeIndex - 1] || -Infinity, values[activeIndex + 1] || Infinity);
+      }
+      const previousValue = newValue;
+      newValue = setValueIndex({
+        values,
+        newValue,
+        index: activeIndex
+      });
+
+      // Potentially swap the index if needed.
+      if (!(disableSwap && move)) {
+        activeIndex = newValue.indexOf(previousValue);
+        previousIndex.current = activeIndex;
+      }
+    }
+    return {
+      newValue,
+      activeIndex
+    };
+  };
+  const handleTouchMove = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_8__["default"])(nativeEvent => {
+    const finger = trackFinger(nativeEvent, touchId);
+    if (!finger) {
+      return;
+    }
+    moveCount.current += 1;
+
+    // Cancel move in case some other element consumed a mouseup event and it was not fired.
+    // @ts-ignore buttons doesn't not exists on touch event
+    if (nativeEvent.type === 'mousemove' && nativeEvent.buttons === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      handleTouchEnd(nativeEvent);
+      return;
+    }
+    const {
+      newValue,
+      activeIndex
+    } = getFingerNewValue({
+      finger,
+      move: true
+    });
+    focusThumb({
+      sliderRef,
+      activeIndex,
+      setActive
+    });
+    setValueState(newValue);
+    if (!dragging && moveCount.current > INTENTIONAL_DRAG_COUNT_THRESHOLD) {
+      setDragging(true);
+    }
+    if (handleChange && !areValuesEqual(newValue, valueDerived)) {
+      handleChange(nativeEvent, newValue, activeIndex);
+    }
+  });
+  const handleTouchEnd = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_8__["default"])(nativeEvent => {
+    const finger = trackFinger(nativeEvent, touchId);
+    setDragging(false);
+    if (!finger) {
+      return;
+    }
+    const {
+      newValue
+    } = getFingerNewValue({
+      finger,
+      move: true
+    });
+    setActive(-1);
+    if (nativeEvent.type === 'touchend') {
+      setOpen(-1);
+    }
+    if (onChangeCommitted) {
+      onChangeCommitted(nativeEvent, lastChangedValue.current ?? newValue);
+    }
+    touchId.current = undefined;
+
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    stopListening();
+  });
+  const handleTouchStart = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_8__["default"])(nativeEvent => {
+    if (disabled) {
+      return;
+    }
+    // If touch-action: none; is not supported we need to prevent the scroll manually.
+    if (!doesSupportTouchActionNone()) {
+      nativeEvent.preventDefault();
+    }
+    const touch = nativeEvent.changedTouches[0];
+    if (touch != null) {
+      // A number that uniquely identifies the current finger in the touch session.
+      touchId.current = touch.identifier;
+    }
+    const finger = trackFinger(nativeEvent, touchId);
+    if (finger !== false) {
+      const {
+        newValue,
+        activeIndex
+      } = getFingerNewValue({
+        finger
+      });
+      focusThumb({
+        sliderRef,
+        activeIndex,
+        setActive
+      });
+      setValueState(newValue);
+      if (handleChange && !areValuesEqual(newValue, valueDerived)) {
+        handleChange(nativeEvent, newValue, activeIndex);
+      }
+    }
+    moveCount.current = 0;
+    const doc = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_1__["default"])(sliderRef.current);
+    doc.addEventListener('touchmove', handleTouchMove, {
+      passive: true
+    });
+    doc.addEventListener('touchend', handleTouchEnd, {
+      passive: true
+    });
+  });
+  const stopListening = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(() => {
+    const doc = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_1__["default"])(sliderRef.current);
+    doc.removeEventListener('mousemove', handleTouchMove);
+    doc.removeEventListener('mouseup', handleTouchEnd);
+    doc.removeEventListener('touchmove', handleTouchMove);
+    doc.removeEventListener('touchend', handleTouchEnd);
+  }, [handleTouchEnd, handleTouchMove]);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
+    const {
+      current: slider
+    } = sliderRef;
+    slider.addEventListener('touchstart', handleTouchStart, {
+      passive: doesSupportTouchActionNone()
+    });
+    return () => {
+      slider.removeEventListener('touchstart', handleTouchStart);
+      stopListening();
+    };
+  }, [stopListening, handleTouchStart]);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
+    if (disabled) {
+      stopListening();
+    }
+  }, [disabled, stopListening]);
+  const createHandleMouseDown = otherHandlers => event => {
+    otherHandlers.onMouseDown?.(event);
+    if (disabled) {
+      return;
+    }
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    // Only handle left clicks
+    if (event.button !== 0) {
+      return;
+    }
+
+    // Avoid text selection
+    event.preventDefault();
+    const finger = trackFinger(event, touchId);
+    if (finger !== false) {
+      const {
+        newValue,
+        activeIndex
+      } = getFingerNewValue({
+        finger
+      });
+      focusThumb({
+        sliderRef,
+        activeIndex,
+        setActive
+      });
+      setValueState(newValue);
+      if (handleChange && !areValuesEqual(newValue, valueDerived)) {
+        handleChange(event, newValue, activeIndex);
+      }
+    }
+    moveCount.current = 0;
+    const doc = (0,_mui_utils__WEBPACK_IMPORTED_MODULE_1__["default"])(sliderRef.current);
+    doc.addEventListener('mousemove', handleTouchMove, {
+      passive: true
+    });
+    doc.addEventListener('mouseup', handleTouchEnd);
+  };
+  const trackOffset = valueToPercent(range ? values[0] : min, min, max);
+  const trackLeap = valueToPercent(values[values.length - 1], min, max) - trackOffset;
+  const getRootProps = (externalProps = {}) => {
+    const externalHandlers = (0,_mui_utils_extractEventHandlers__WEBPACK_IMPORTED_MODULE_9__["default"])(externalProps);
+    const ownEventHandlers = {
+      onMouseDown: createHandleMouseDown(externalHandlers || {})
+    };
+    const mergedEventHandlers = {
+      ...externalHandlers,
+      ...ownEventHandlers
+    };
+    return {
+      ...externalProps,
+      ref: handleRef,
+      ...mergedEventHandlers
+    };
+  };
+  const createHandleMouseOver = otherHandlers => event => {
+    otherHandlers.onMouseOver?.(event);
+    const index = Number(event.currentTarget.getAttribute('data-index'));
+    setOpen(index);
+  };
+  const createHandleMouseLeave = otherHandlers => event => {
+    otherHandlers.onMouseLeave?.(event);
+    setOpen(-1);
+  };
+  const getThumbProps = (externalProps = {}) => {
+    const externalHandlers = (0,_mui_utils_extractEventHandlers__WEBPACK_IMPORTED_MODULE_9__["default"])(externalProps);
+    const ownEventHandlers = {
+      onMouseOver: createHandleMouseOver(externalHandlers || {}),
+      onMouseLeave: createHandleMouseLeave(externalHandlers || {})
+    };
+    return {
+      ...externalProps,
+      ...externalHandlers,
+      ...ownEventHandlers
+    };
+  };
+  const getThumbStyle = index => {
+    return {
+      // So the non active thumb doesn't show its label on hover.
+      pointerEvents: active !== -1 && active !== index ? 'none' : undefined
+    };
+  };
+  let cssWritingMode;
+  if (orientation === 'vertical') {
+    cssWritingMode = isRtl ? 'vertical-rl' : 'vertical-lr';
+  }
+  const getHiddenInputProps = (externalProps = {}) => {
+    const externalHandlers = (0,_mui_utils_extractEventHandlers__WEBPACK_IMPORTED_MODULE_9__["default"])(externalProps);
+    const ownEventHandlers = {
+      onChange: createHandleHiddenInputChange(externalHandlers || {}),
+      onFocus: createHandleHiddenInputFocus(externalHandlers || {}),
+      onBlur: createHandleHiddenInputBlur(externalHandlers || {}),
+      onKeyDown: createHandleHiddenInputKeyDown(externalHandlers || {})
+    };
+    const mergedEventHandlers = {
+      ...externalHandlers,
+      ...ownEventHandlers
+    };
+    return {
+      tabIndex,
+      'aria-labelledby': ariaLabelledby,
+      'aria-orientation': orientation,
+      'aria-valuemax': scale(max),
+      'aria-valuemin': scale(min),
+      name,
+      type: 'range',
+      min: parameters.min,
+      max: parameters.max,
+      step: parameters.step === null && parameters.marks ? 'any' : parameters.step ?? undefined,
+      disabled,
+      ...externalProps,
+      ...mergedEventHandlers,
+      style: {
+        ..._mui_utils__WEBPACK_IMPORTED_MODULE_10__["default"],
+        direction: isRtl ? 'rtl' : 'ltr',
+        // So that VoiceOver's focus indicator matches the thumb's dimensions
+        width: '100%',
+        height: '100%',
+        writingMode: cssWritingMode
+      }
+    };
+  };
+  return {
+    active,
+    axis: axis,
+    axisProps,
+    dragging,
+    focusedThumbIndex,
+    getHiddenInputProps,
+    getRootProps,
+    getThumbProps,
+    marks: marks,
+    open,
+    range,
+    rootRef: handleRef,
+    trackLeap,
+    trackOffset,
+    values,
+    getThumbStyle
+  };
+}
+
+/***/ }),
+
 /***/ "./node_modules/@mui/material/SvgIcon/SvgIcon.js":
 /*!*******************************************************!*\
   !*** ./node_modules/@mui/material/SvgIcon/SvgIcon.js ***!
@@ -17406,6 +19615,511 @@ function getTabsUtilityClass(slot) {
 }
 const tabsClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('MuiTabs', ['root', 'vertical', 'list', 'flexContainer', 'flexContainerVertical', 'centered', 'scroller', 'fixed', 'scrollableX', 'scrollableY', 'hideScrollbar', 'scrollButtons', 'scrollButtonsHideMobile', 'indicator']);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tabsClasses);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/TextField/TextField.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/@mui/material/TextField/TextField.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var _mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/utils/composeClasses */ "./node_modules/@mui/utils/esm/composeClasses/composeClasses.js");
+/* harmony import */ var _mui_utils_useId__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @mui/utils/useId */ "./node_modules/@mui/utils/esm/useId/useId.js");
+/* harmony import */ var _mui_utils_refType__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @mui/utils/refType */ "./node_modules/@mui/utils/esm/refType/refType.js");
+/* harmony import */ var _zero_styled_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../zero-styled/index.js */ "./node_modules/@mui/material/styles/styled.js");
+/* harmony import */ var _DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../DefaultPropsProvider/index.js */ "./node_modules/@mui/material/DefaultPropsProvider/DefaultPropsProvider.js");
+/* harmony import */ var _Input_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Input/index.js */ "./node_modules/@mui/material/Input/Input.js");
+/* harmony import */ var _FilledInput_index_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FilledInput/index.js */ "./node_modules/@mui/material/FilledInput/FilledInput.js");
+/* harmony import */ var _OutlinedInput_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../OutlinedInput/index.js */ "./node_modules/@mui/material/OutlinedInput/OutlinedInput.js");
+/* harmony import */ var _InputLabel_index_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../InputLabel/index.js */ "./node_modules/@mui/material/InputLabel/InputLabel.js");
+/* harmony import */ var _FormControl_index_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../FormControl/index.js */ "./node_modules/@mui/material/FormControl/FormControl.js");
+/* harmony import */ var _FormHelperText_index_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../FormHelperText/index.js */ "./node_modules/@mui/material/FormHelperText/FormHelperText.js");
+/* harmony import */ var _Select_index_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Select/index.js */ "./node_modules/@mui/material/Select/Select.js");
+/* harmony import */ var _textFieldClasses_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./textFieldClasses.js */ "./node_modules/@mui/material/TextField/textFieldClasses.js");
+/* harmony import */ var _utils_useSlot_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/useSlot.js */ "./node_modules/@mui/material/utils/useSlot.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+'use client';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const variantComponent = {
+  standard: _Input_index_js__WEBPACK_IMPORTED_MODULE_3__["default"],
+  filled: _FilledInput_index_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+  outlined: _OutlinedInput_index_js__WEBPACK_IMPORTED_MODULE_5__["default"]
+};
+const useUtilityClasses = ownerState => {
+  const {
+    classes
+  } = ownerState;
+  const slots = {
+    root: ['root']
+  };
+  return (0,_mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_6__["default"])(slots, _textFieldClasses_js__WEBPACK_IMPORTED_MODULE_7__.getTextFieldUtilityClass, classes);
+};
+const TextFieldRoot = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_8__["default"])(_FormControl_index_js__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  name: 'MuiTextField',
+  slot: 'Root',
+  overridesResolver: (props, styles) => styles.root
+})({});
+
+/**
+ * The `TextField` is a convenience wrapper for the most common cases (80%).
+ * It cannot be all things to all people, otherwise the API would grow out of control.
+ *
+ * ## Advanced Configuration
+ *
+ * It's important to understand that the text field is a simple abstraction
+ * on top of the following components:
+ *
+ * - [FormControl](/material-ui/api/form-control/)
+ * - [InputLabel](/material-ui/api/input-label/)
+ * - [FilledInput](/material-ui/api/filled-input/)
+ * - [OutlinedInput](/material-ui/api/outlined-input/)
+ * - [Input](/material-ui/api/input/)
+ * - [FormHelperText](/material-ui/api/form-helper-text/)
+ *
+ * If you wish to alter the props applied to the `input` element, you can do so as follows:
+ *
+ * ```jsx
+ * const inputProps = {
+ *   step: 300,
+ * };
+ *
+ * return <TextField id="time" type="time" inputProps={inputProps} />;
+ * ```
+ *
+ * For advanced cases, please look at the source of TextField by clicking on the
+ * "Edit this page" button above. Consider either:
+ *
+ * - using the upper case props for passing values directly to the components
+ * - using the underlying components directly as shown in the demos
+ */
+const TextField = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function TextField(inProps, ref) {
+  const props = (0,_DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_10__.useDefaultProps)({
+    props: inProps,
+    name: 'MuiTextField'
+  });
+  const {
+    autoComplete,
+    autoFocus = false,
+    children,
+    className,
+    color = 'primary',
+    defaultValue,
+    disabled = false,
+    error = false,
+    FormHelperTextProps: FormHelperTextPropsProp,
+    fullWidth = false,
+    helperText,
+    id: idOverride,
+    InputLabelProps: InputLabelPropsProp,
+    inputProps: inputPropsProp,
+    InputProps: InputPropsProp,
+    inputRef,
+    label,
+    maxRows,
+    minRows,
+    multiline = false,
+    name,
+    onBlur,
+    onChange,
+    onFocus,
+    placeholder,
+    required = false,
+    rows,
+    select = false,
+    SelectProps: SelectPropsProp,
+    slots = {},
+    slotProps = {},
+    type,
+    value,
+    variant = 'outlined',
+    ...other
+  } = props;
+  const ownerState = {
+    ...props,
+    autoFocus,
+    color,
+    disabled,
+    error,
+    fullWidth,
+    multiline,
+    required,
+    select,
+    variant
+  };
+  const classes = useUtilityClasses(ownerState);
+  if (true) {
+    if (select && !children) {
+      console.error('MUI: `children` must be passed when using the `TextField` component with `select`.');
+    }
+  }
+  const id = (0,_mui_utils_useId__WEBPACK_IMPORTED_MODULE_11__["default"])(idOverride);
+  const helperTextId = helperText && id ? `${id}-helper-text` : undefined;
+  const inputLabelId = label && id ? `${id}-label` : undefined;
+  const InputComponent = variantComponent[variant];
+  const externalForwardedProps = {
+    slots,
+    slotProps: {
+      input: InputPropsProp,
+      inputLabel: InputLabelPropsProp,
+      htmlInput: inputPropsProp,
+      formHelperText: FormHelperTextPropsProp,
+      select: SelectPropsProp,
+      ...slotProps
+    }
+  };
+  const inputAdditionalProps = {};
+  const inputLabelSlotProps = externalForwardedProps.slotProps.inputLabel;
+  if (variant === 'outlined') {
+    if (inputLabelSlotProps && typeof inputLabelSlotProps.shrink !== 'undefined') {
+      inputAdditionalProps.notched = inputLabelSlotProps.shrink;
+    }
+    inputAdditionalProps.label = label;
+  }
+  if (select) {
+    // unset defaults from textbox inputs
+    if (!SelectPropsProp || !SelectPropsProp.native) {
+      inputAdditionalProps.id = undefined;
+    }
+    inputAdditionalProps['aria-describedby'] = undefined;
+  }
+  const [InputSlot, inputProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_12__["default"])('input', {
+    elementType: InputComponent,
+    externalForwardedProps,
+    additionalProps: inputAdditionalProps,
+    ownerState
+  });
+  const [InputLabelSlot, inputLabelProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_12__["default"])('inputLabel', {
+    elementType: _InputLabel_index_js__WEBPACK_IMPORTED_MODULE_13__["default"],
+    externalForwardedProps,
+    ownerState
+  });
+  const [HtmlInputSlot, htmlInputProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_12__["default"])('htmlInput', {
+    elementType: 'input',
+    externalForwardedProps,
+    ownerState
+  });
+  const [FormHelperTextSlot, formHelperTextProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_12__["default"])('formHelperText', {
+    elementType: _FormHelperText_index_js__WEBPACK_IMPORTED_MODULE_14__["default"],
+    externalForwardedProps,
+    ownerState
+  });
+  const [SelectSlot, selectProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_12__["default"])('select', {
+    elementType: _Select_index_js__WEBPACK_IMPORTED_MODULE_15__["default"],
+    externalForwardedProps,
+    ownerState
+  });
+  const InputElement = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(InputSlot, {
+    "aria-describedby": helperTextId,
+    autoComplete: autoComplete,
+    autoFocus: autoFocus,
+    defaultValue: defaultValue,
+    fullWidth: fullWidth,
+    multiline: multiline,
+    name: name,
+    rows: rows,
+    maxRows: maxRows,
+    minRows: minRows,
+    type: type,
+    value: value,
+    id: id,
+    inputRef: inputRef,
+    onBlur: onBlur,
+    onChange: onChange,
+    onFocus: onFocus,
+    placeholder: placeholder,
+    inputProps: htmlInputProps,
+    slots: {
+      input: slots.htmlInput ? HtmlInputSlot : undefined
+    },
+    ...inputProps
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(TextFieldRoot, {
+    className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.root, className),
+    disabled: disabled,
+    error: error,
+    fullWidth: fullWidth,
+    ref: ref,
+    required: required,
+    color: color,
+    variant: variant,
+    ownerState: ownerState,
+    ...other,
+    children: [label != null && label !== '' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(InputLabelSlot, {
+      htmlFor: id,
+      id: inputLabelId,
+      ...inputLabelProps,
+      children: label
+    }), select ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(SelectSlot, {
+      "aria-describedby": helperTextId,
+      id: id,
+      labelId: inputLabelId,
+      value: value,
+      input: InputElement,
+      ...selectProps,
+      children: children
+    }) : InputElement, helperText && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(FormHelperTextSlot, {
+      id: helperTextId,
+      ...formHelperTextProps,
+      children: helperText
+    })]
+  });
+});
+ true ? TextField.propTypes /* remove-proptypes */ = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * This prop helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it [following the specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill).
+   */
+  autoComplete: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string),
+  /**
+   * If `true`, the `input` element is focused during the first mount.
+   * @default false
+   */
+  autoFocus: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * @ignore
+   */
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().node),
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
+  /**
+   * @ignore
+   */
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string),
+  /**
+   * The color of the component.
+   * It supports both default and custom theme colors, which can be added as shown in the
+   * [palette customization guide](https://mui.com/material-ui/customization/palette/#custom-colors).
+   * @default 'primary'
+   */
+  color: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOf(['primary', 'secondary', 'error', 'info', 'success', 'warning']), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string)]),
+  /**
+   * The default value. Use when the component is not controlled.
+   */
+  defaultValue: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().any),
+  /**
+   * If `true`, the component is disabled.
+   * @default false
+   */
+  disabled: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * If `true`, the label is displayed in an error state.
+   * @default false
+   */
+  error: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * Props applied to the [`FormHelperText`](https://mui.com/material-ui/api/form-helper-text/) element.
+   * @deprecated Use `slotProps.formHelperText` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  FormHelperTextProps: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
+  /**
+   * If `true`, the input will take up the full width of its container.
+   * @default false
+   */
+  fullWidth: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * The helper text content.
+   */
+  helperText: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().node),
+  /**
+   * The id of the `input` element.
+   * Use this prop to make `label` and `helperText` accessible for screen readers.
+   */
+  id: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string),
+  /**
+   * Props applied to the [`InputLabel`](https://mui.com/material-ui/api/input-label/) element.
+   * Pointer events like `onClick` are enabled if and only if `shrink` is `true`.
+   * @deprecated Use `slotProps.inputLabel` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  InputLabelProps: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   * @deprecated Use `slotProps.htmlInput` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  inputProps: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
+  /**
+   * Props applied to the Input element.
+   * It will be a [`FilledInput`](https://mui.com/material-ui/api/filled-input/),
+   * [`OutlinedInput`](https://mui.com/material-ui/api/outlined-input/) or [`Input`](https://mui.com/material-ui/api/input/)
+   * component depending on the `variant` prop value.
+   * @deprecated Use `slotProps.input` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  InputProps: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _mui_utils_refType__WEBPACK_IMPORTED_MODULE_17__["default"],
+  /**
+   * The label content.
+   */
+  label: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().node),
+  /**
+   * If `dense` or `normal`, will adjust vertical spacing of this and contained components.
+   * @default 'none'
+   */
+  margin: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOf(['dense', 'none', 'normal']),
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  maxRows: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().number), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string)]),
+  /**
+   * Minimum number of rows to display when multiline option is set to true.
+   */
+  minRows: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().number), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string)]),
+  /**
+   * If `true`, a `textarea` element is rendered instead of an input.
+   * @default false
+   */
+  multiline: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string),
+  /**
+   * @ignore
+   */
+  onBlur: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func),
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func),
+  /**
+   * @ignore
+   */
+  onFocus: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func),
+  /**
+   * The short hint displayed in the `input` before the user enters a value.
+   */
+  placeholder: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string),
+  /**
+   * If `true`, the label is displayed as required and the `input` element is required.
+   * @default false
+   */
+  required: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().number), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string)]),
+  /**
+   * Render a [`Select`](https://mui.com/material-ui/api/select/) element while passing the Input element to `Select` as `input` parameter.
+   * If this option is set you must pass the options of the select as children.
+   * @default false
+   */
+  select: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool),
+  /**
+   * Props applied to the [`Select`](https://mui.com/material-ui/api/select/) element.
+   * @deprecated Use `slotProps.select` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  SelectProps: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
+  /**
+   * The size of the component.
+   * @default 'medium'
+   */
+  size: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOf(['medium', 'small']), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string)]),
+  /**
+   * The props used for each slot inside.
+   * @default {}
+   */
+  slotProps: prop_types__WEBPACK_IMPORTED_MODULE_16___default().shape({
+    formHelperText: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object)]),
+    htmlInput: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object)]),
+    input: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object)]),
+    inputLabel: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object)]),
+    select: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object)])
+  }),
+  /**
+   * The components used for each slot inside.
+   * @default {}
+   */
+  slots: prop_types__WEBPACK_IMPORTED_MODULE_16___default().shape({
+    formHelperText: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().elementType),
+    htmlInput: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().elementType),
+    input: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().elementType),
+    inputLabel: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().elementType),
+    select: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().elementType)
+  }),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_16___default().arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().bool)])), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object)]),
+  /**
+   * Type of the `input` element. It should be [a valid HTML5 input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types).
+   */
+  type: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().string),
+  /**
+   * The value of the `input` element, required for a controlled component.
+   */
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().any),
+  /**
+   * The variant to use.
+   * @default 'outlined'
+   */
+  variant: prop_types__WEBPACK_IMPORTED_MODULE_16___default().oneOf(['filled', 'outlined', 'standard'])
+} : 0;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TextField);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/TextField/textFieldClasses.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@mui/material/TextField/textFieldClasses.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getTextFieldUtilityClass: () => (/* binding */ getTextFieldUtilityClass)
+/* harmony export */ });
+/* harmony import */ var _mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils/generateUtilityClasses */ "./node_modules/@mui/utils/esm/generateUtilityClasses/generateUtilityClasses.js");
+/* harmony import */ var _mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/generateUtilityClass */ "./node_modules/@mui/utils/esm/generateUtilityClass/generateUtilityClass.js");
+
+
+function getTextFieldUtilityClass(slot) {
+  return (0,_mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__["default"])('MuiTextField', slot);
+}
+const textFieldClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('MuiTextField', ['root']);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (textFieldClasses);
 
 /***/ }),
 
@@ -21587,6 +24301,24 @@ function createControlledPromise() {
 
 /***/ }),
 
+/***/ "./node_modules/@mui/material/utils/areArraysEqual.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@mui/material/utils/areArraysEqual.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function areArraysEqual(array1, array2, itemComparer = (a, b) => a === b) {
+  return array1.length === array2.length && array1.every((value, index) => itemComparer(value, array2[index]));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (areArraysEqual);
+
+/***/ }),
+
 /***/ "./node_modules/@mui/material/utils/capitalize.js":
 /*!********************************************************!*\
   !*** ./node_modules/@mui/material/utils/capitalize.js ***!
@@ -21890,6 +24622,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mui_utils_ownerWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/ownerWindow */ "./node_modules/@mui/utils/esm/ownerWindow/ownerWindow.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_mui_utils_ownerWindow__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/utils/shouldSpreadAdditionalProps.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@mui/material/utils/shouldSpreadAdditionalProps.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _isHostComponent_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isHostComponent.js */ "./node_modules/@mui/material/utils/isHostComponent.js");
+
+const shouldSpreadAdditionalProps = Slot => {
+  return !Slot || !(0,_isHostComponent_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Slot);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (shouldSpreadAdditionalProps);
 
 /***/ }),
 
@@ -28659,6 +31411,32 @@ function useTimeout() {
   (0,_useOnMount_useOnMount_js__WEBPACK_IMPORTED_MODULE_1__["default"])(timeout.disposeEffect);
   return timeout;
 }
+
+/***/ }),
+
+/***/ "./node_modules/@mui/utils/esm/visuallyHidden/visuallyHidden.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@mui/utils/esm/visuallyHidden/visuallyHidden.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const visuallyHidden = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: '1px',
+  margin: '-1px',
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: '1px'
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (visuallyHidden);
 
 /***/ }),
 
@@ -37267,7 +40045,7 @@ function validate(uuid) {
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"cmk/posts-by-tabs","version":"0.1.0","title":"Posts by Tabs","category":"widgets","icon":"smiley","description":"Display posts in multiple template formats using tabs.","example":{},"supports":{"html":false,"innerBlocks":true,"align":["wide","full","left","center","right"],"alignWide":true,"background":{"backgroundImage":true,"backgroundSize":true}},"providesContext":{"cmk/selectedTab":"selectedTab"},"allowedBlocks":[],"attributes":{"title":{"type":"string","default":""},"subtitle":{"type":"string","default":""},"tabs":{"type":"array","default":[],"items":{"type":"object","properties":{"template":{"type":"string","default":""},"title":{"type":"string","default":""},"subtitle":{"type":"string","default":""},"content":{"type":"string","source":"html","default":""},"hideTab":{"type":"boolean","default":false},"showNavigation":{"type":"boolean","default":false},"showPagination":{"type":"boolean","default":false},"showLoadMore":{"type":"boolean","default":false},"showExcerpt":{"type":"boolean","default":false},"showTitle":{"type":"boolean","default":false},"showSubtitle":{"type":"boolean","default":false},"showDate":{"type":"boolean","default":false},"showAuthor":{"type":"boolean","default":false},"showCategory":{"type":"boolean","default":false},"showTags":{"type":"boolean","default":false}}}},"posts":{"type":"array","default":[]},"postType":{"type":"string","default":"post"},"taxonomy":{"type":"string","default":"category"},"terms":{"type":"array","default":[],"items":{"type":"number"}},"metaFields":{"type":"object","default":{"relation":{"type":"string","default":"AND"},"fields":{"type":"array","default":[],"items":{"type":"object","properties":{"key":{"type":"string","default":""},"value":{"type":"string","default":""},"compare":{"type":"string","default":""},"type":{"type":"string","default":"CHAR"},"isUserValue":{"type":"boolean","default":false},"isDateToday":{"type":"boolean","default":false}}}}}},"numberOfItems":{"type":"number","default":5},"order":{"type":"string","default":"desc"},"orderBy":{"type":"string","default":"date"},"blockId":{"type":"string"}},"textdomain":"cmk-posts-by-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./output.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"cmk/posts-by-tabs","version":"0.1.0","title":"Posts by Tabs","category":"widgets","icon":"smiley","description":"Display posts in multiple template formats using tabs.","example":{},"supports":{"html":false,"innerBlocks":true,"align":["wide","full","left","center","right"],"alignWide":true,"background":{"backgroundImage":true,"backgroundSize":true}},"providesContext":{"cmk/selectedTab":"selectedTab"},"allowedBlocks":[],"attributes":{"title":{"type":"string","default":""},"subtitle":{"type":"string","default":""},"tabs":{"type":"array","default":[],"items":{"type":"object","properties":{"template":{"type":"string","default":""},"title":{"type":"string","default":""},"subtitle":{"type":"string","default":""},"content":{"type":"string","source":"html","default":""},"hideTab":{"type":"boolean","default":false},"showNavigation":{"type":"boolean","default":false},"showPagination":{"type":"boolean","default":false},"showLoadMore":{"type":"boolean","default":false},"showExcerpt":{"type":"boolean","default":false},"showTitle":{"type":"boolean","default":false},"showSubtitle":{"type":"boolean","default":false},"showDate":{"type":"boolean","default":false},"showAuthor":{"type":"boolean","default":false},"showCategory":{"type":"boolean","default":false},"showTags":{"type":"boolean","default":false}}}},"posts":{"type":"array","default":[]},"postType":{"type":"string","default":"post"},"taxonomy":{"type":"string","default":"category"},"terms":{"type":"array","default":[],"items":{"type":"number"}},"metaFields":{"type":"object","default":{"relation":{"type":"string","default":"AND"},"fields":{"type":"array","default":[],"items":{"type":"object","properties":{"key":{"type":"string","default":""},"value":{"type":"string","default":""},"compare":{"type":"string","default":""},"type":{"type":"string","default":"CHAR"},"isUserValue":{"type":"boolean","default":false},"isDateToday":{"type":"boolean","default":false}}}}}},"numberOfItems":{"type":"number","default":5},"maxNumPages":{"type":"number","default":1},"order":{"type":"string","default":"desc"},"orderBy":{"type":"string","default":"date"},"blockId":{"type":"string"}},"textdomain":"cmk-posts-by-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./output.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 
@@ -37426,12 +40204,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_PostsByTabs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor/PostsByTabs */ "./src/posts-by-tabs/editor/PostsByTabs.jsx");
-/* harmony import */ var _editor_QueryFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor/QueryFields */ "./src/posts-by-tabs/editor/QueryFields.jsx");
-/* harmony import */ var _editor_TabFields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor/TabFields */ "./src/posts-by-tabs/editor/TabFields.jsx");
-/* harmony import */ var _editor_Background__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor/Background */ "./src/posts-by-tabs/editor/Background.jsx");
+/* harmony import */ var _editor_PostsByTabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./editor/PostsByTabs */ "./src/posts-by-tabs/editor/PostsByTabs.jsx");
+/* harmony import */ var _editor_QueryFields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor/QueryFields */ "./src/posts-by-tabs/editor/QueryFields.jsx");
+/* harmony import */ var _editor_TabFields__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor/TabFields */ "./src/posts-by-tabs/editor/TabFields.jsx");
+/* harmony import */ var _editor_Background__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor/Background */ "./src/posts-by-tabs/editor/Background.jsx");
+/* harmony import */ var _mui_material_TextField__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/TextField */ "./node_modules/@mui/material/TextField/TextField.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -37481,30 +40261,38 @@ function Edit({
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Bloc title'),
         initialOpen: true,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          placeholder: "Title",
-          value: attributes.title || '',
-          onChange: value => setAttributes({
-            title: value
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          className: "py-2",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_TextField__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Title'),
+            value: attributes.title || '',
+            onChange: value => setAttributes({
+              title: value
+            }),
+            variant: "standard"
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          placeholder: "Subtitle",
-          value: attributes.subtitle || '',
-          onChange: value => setAttributes({
-            subtitle: value
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          className: "py-2",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_TextField__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Subtitle'),
+            value: attributes.subtitle || '',
+            onChange: value => setAttributes({
+              subtitle: value
+            }),
+            variant: "standard"
           })
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Query settings'),
-        initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_QueryFields__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        initialOpen: true,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_QueryFields__WEBPACK_IMPORTED_MODULE_6__["default"], {
           attributes: attributes,
           setAttributes: setAttributes
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tabs'),
         initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_TabFields__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_TabFields__WEBPACK_IMPORTED_MODULE_7__["default"], {
           attributes: attributes,
           setAttributes: setAttributes,
           handleTabValueChange: handleTabValueChange,
@@ -37513,12 +40301,12 @@ function Edit({
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Bloc background'),
         initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_Background__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_Background__WEBPACK_IMPORTED_MODULE_8__["default"], {
           attributes: attributes,
           setAttributes: setAttributes
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_PostsByTabs__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_PostsByTabs__WEBPACK_IMPORTED_MODULE_9__["default"], {
       templates: templates,
       attributes: attributes,
       setAttributes: setAttributes,
@@ -37673,8 +40461,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _mui_material_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Button */ "./node_modules/@mui/material/Button/Button.js");
 /* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
+/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -37738,57 +40528,170 @@ const compares = [{
   value: 'NOT EXISTS'
 }];
 const metaCache = {};
+function metaFieldReducer(state, action) {
+  switch (action.type) {
+    case 'SET_KEY':
+      return {
+        ...state,
+        key: action.payload,
+        value: '',
+        compare: state.compare || '=',
+        type: 'CHAR'
+      };
+    case 'SET_VALUE':
+      return {
+        ...state,
+        value: action.payload
+      };
+    case 'SET_TYPE':
+      let defaultValue = '';
+      switch (action.payload) {
+        case 'NUMERIC':
+          defaultValue = state.value && !isNaN(state.value) ? state.value : '0';
+          break;
+        case 'DATE':
+          defaultValue = state.value && isValidDate(state.value) ? state.value : wpDate();
+          break;
+        case 'BOOLEAN':
+          defaultValue = !!state.value;
+          break;
+        default:
+          defaultValue = state.value || '';
+      }
+      return {
+        ...state,
+        type: action.payload,
+        value: defaultValue
+      };
+    case 'TOGGLE_USER_VALUE':
+      return {
+        ...state,
+        isUserValue: action.payload,
+        value: action.payload ? '' : '',
+        isDateToday: action.payload ? false : state.isDateToday
+      };
+    case 'SET_TODAY':
+      return {
+        ...state,
+        isDateToday: action.payload,
+        value: action.payload ? wpDate() : '',
+        isUserValue: action.payload ? false : state.isUserValue
+      };
+    case 'SET_COMPARE':
+      return {
+        ...state,
+        compare: action.payload
+      };
+    case 'SYNC_WITH_PROPS':
+      return {
+        ...action.payload
+      };
+    default:
+      return state;
+  }
+}
 function useMetaFields(postType) {
-  const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const [metaFields, setMetaFields] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
-  const [availableValues, setAvailableValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)({});
-  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [state, dispatch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useReducer)((state, action) => {
+    switch (action.type) {
+      case 'FETCH_START':
+        return {
+          ...state,
+          isLoading: true,
+          error: null
+        };
+      case 'FETCH_SUCCESS':
+        return {
+          isLoading: false,
+          metaFields: action.metaFields,
+          availableValues: action.availableValues,
+          error: null
+        };
+      case 'FETCH_ERROR':
+        return {
+          ...state,
+          isLoading: false,
+          error: action.error
+        };
+      case 'USE_CACHE':
+        return {
+          isLoading: false,
+          metaFields: action.metaFields,
+          availableValues: action.availableValues,
+          error: null
+        };
+      default:
+        return state;
+    }
+  }, {
+    isLoading: false,
+    metaFields: [],
+    availableValues: {},
+    error: null
+  });
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (!postType) return;
+
+    // Use cache if available
     if (metaCache[postType]) {
-      setMetaFields(metaCache[postType].metaFields);
-      setAvailableValues(metaCache[postType].availableValues);
+      dispatch({
+        type: 'USE_CACHE',
+        metaFields: metaCache[postType].metaFields,
+        availableValues: metaCache[postType].availableValues
+      });
       return;
     }
-    setIsLoading(true);
-    setError(null);
+
+    // Start fetch
+    dispatch({
+      type: 'FETCH_START'
+    });
     wp.apiFetch({
       path: `/posts-by-tabs/v1/meta/${postType}`
     }).then(metas => {
+      // Check if valid response
+      if (!metas || typeof metas !== 'object') {
+        throw new Error('Invalid meta fields response');
+      }
       const metaArray = [];
       const metaValues = {};
       Object.keys(metas).forEach(meta => {
+        // Skip private fields
         if (!meta.startsWith('_')) {
           const metaLabel = meta.split('_').join(' ');
           metaArray.push({
             label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
             value: meta
           });
-          metaValues[meta] = metas[meta].map(val => ({
+
+          // Ensure values are always properly formatted
+          metaValues[meta] = Array.isArray(metas[meta]) ? metas[meta].map(val => ({
             label: String(val),
             value: String(val)
-          }));
+          })) : [];
         }
       });
-      setMetaFields(metaArray);
-      setAvailableValues(metaValues);
+
+      // Cache the results
       metaCache[postType] = {
         metaFields: metaArray,
         availableValues: metaValues
       };
+
+      // Update state
+      dispatch({
+        type: 'FETCH_SUCCESS',
+        metaFields: metaArray,
+        availableValues: metaValues
+      });
     }).catch(error => {
       console.error(`Error fetching meta fields for ${postType}:`, error);
-      setError(error);
-    }).finally(() => {
-      setIsLoading(false);
+      dispatch({
+        type: 'FETCH_ERROR',
+        error
+      });
     });
   }, [postType]);
-  return {
-    isLoading,
-    metaFields,
-    availableValues,
-    error
-  };
+  return state;
 }
 function MetaField(props) {
   const {
@@ -37797,21 +40700,51 @@ function MetaField(props) {
     metaField,
     index
   } = props;
+  const initialState = {
+    key: metaField?.key || '',
+    value: metaField?.value || '',
+    type: metaField?.type || 'CHAR',
+    compare: metaField?.compare || '=',
+    isUserValue: metaField?.isUserValue || false,
+    isDateToday: metaField?.isDateToday || false
+  };
+  const [state, dispatch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useReducer)(metaFieldReducer, initialState);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    if (metaField && (metaField.key !== state.key || metaField.value !== state.value || metaField.type !== state.type || metaField.compare !== state.compare || metaField.isUserValue !== state.isUserValue || metaField.isDateToday !== state.isDateToday)) {
+      dispatch({
+        type: 'SYNC_WITH_PROPS',
+        payload: {
+          key: metaField.key || '',
+          value: metaField.value || '',
+          type: metaField.type || 'CHAR',
+          compare: metaField.compare || '=',
+          isUserValue: !!metaField.isUserValue,
+          isDateToday: !!metaField.isDateToday
+        }
+      });
+    }
+  }, [metaField]);
   const {
     isLoading,
     metaFields,
     availableValues
   } = useMetaFields(attributes.postType);
-  const handleMetaFieldValueChange = (value, key, index) => {
+  const updateMetaField = () => {
     const updatedMetaFields = {
       ...attributes.metaFields,
       fields: [...attributes.metaFields.fields]
     };
-    updatedMetaFields.fields[index][key] = value;
+    updatedMetaFields.fields[index] = {
+      ...updatedMetaFields.fields[index],
+      ...state
+    };
     setAttributes({
       metaFields: updatedMetaFields
     });
   };
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    updateMetaField();
+  }, [state]);
   const handleRemoveMetaField = index => {
     const updatedMetaFields = {
       ...attributes.metaFields,
@@ -37824,6 +40757,7 @@ function MetaField(props) {
   };
   if (isLoading) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: "bg-gray-100 p-2 mb-2 rounded-[2px]",
       children: "Initializing meta fields..."
     });
   }
@@ -37831,54 +40765,83 @@ function MetaField(props) {
     switch (type) {
       case 'CHAR':
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('My string value'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom string value'),
           value: value || '',
-          onChange: newValue => handleMetaFieldValueChange(newValue, 'value', index)
+          onChange: newValue => dispatch({
+            type: 'SET_VALUE',
+            payload: newValue
+          })
         });
       case 'NUMERIC':
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('My number value'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom numeric value'),
           type: "number",
-          value: value || 0,
-          onChange: newValue => handleMetaFieldValueChange(newValue, 'value', index)
+          value: value === '' ? '' : value || 0,
+          onChange: newValue => dispatch({
+            type: 'SET_VALUE',
+            payload: newValue
+          })
         });
       case 'DATE':
         let dateValue;
         try {
           if (!value) {
-            dateValue = wpDate();
+            dateValue = new Date();
           } else if (typeof value === 'string') {
-            dateValue = wpDate(value);
+            dateValue = new Date(value);
             if (isNaN(dateValue.getTime())) {
-              dateValue = wpDate();
+              dateValue = new Date();
             }
           } else {
-            dateValue = wpDate(value);
+            dateValue = new Date(value);
           }
         } catch (e) {
           console.error("Error parsing date:", e);
-          dateValue = wpDate();
+          dateValue = new Date();
         }
-        console.log(dateValue);
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.DatePicker, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('My date value'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom date value'),
           currentDate: dateValue,
-          onChange: newValue => handleMetaFieldValueChange(wpDate(newValue), 'value', index)
+          onChange: newDate => {
+            const formattedDate = wpDate(newDate);
+            dispatch({
+              type: 'SET_VALUE',
+              payload: formattedDate
+            });
+          }
         });
       case 'BOOLEAN':
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CheckboxControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('My boolean value'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom boolean value'),
           checked: !!value,
-          onChange: newValue => handleMetaFieldValueChange(newValue, 'value', index)
+          onChange: newValue => dispatch({
+            type: 'SET_VALUE',
+            payload: newValue
+          })
         });
       default:
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('My string value'),
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom value'),
           value: value || '',
-          onChange: newValue => handleMetaFieldValueChange(newValue, 'value', index)
+          onChange: newValue => dispatch({
+            type: 'SET_VALUE',
+            payload: newValue
+          })
         });
     }
   }
+  const getValueOptions = () => {
+    if (!state.key || !availableValues[state.key] || !Array.isArray(availableValues[state.key])) {
+      return [{
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select meta value'),
+        value: ''
+      }];
+    }
+    return [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select meta value'),
+      value: ''
+    }, ...availableValues[state.key]];
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_4__["default"], {
     className: "p-2 mb-4",
     elevation: 2,
@@ -37899,67 +40862,83 @@ function MetaField(props) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
       className: "mb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-        label: "Key",
-        value: metaField?.key || '',
-        options: metaFields,
-        onChange: value => {
-          handleMetaFieldValueChange(value, 'key', index);
-          handleMetaFieldValueChange('', 'value', index);
-        }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-        label: "Type",
-        value: metaField?.type || 'CHAR',
-        options: types,
-        onChange: value => {
-          handleMetaFieldValueChange(value, 'type', index);
-        }
-      }), metaField?.isUserValue ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        className: "bg-gray-100 p-2 mb-2",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta key'),
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select meta key'),
+          value: ''
+        }, ...metaFields],
+        value: state.key || '',
+        onChange: value => dispatch({
+          type: 'SET_KEY',
+          payload: value
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta value type'),
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select meta value type'),
+          value: ''
+        }, ...types],
+        value: state.type || 'CHAR',
+        onChange: value => dispatch({
+          type: 'SET_TYPE',
+          payload: value
+        })
+      }), state.isUserValue || state.type === 'DATE' && state.isDateToday ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "bg-gray-100 p-2 mb-2 rounded-[2px]",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
           className: "block font-bold my-2",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Choose a TYPE to change the input field')
-        }), freeFieldByType(metaField?.type, metaField?.value)]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-        label: "Value",
-        value: metaField?.value || '',
-        options: metaField?.key && availableValues[metaField.key] && Array.isArray(availableValues[metaField.key]) ? [{
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select a value'),
-          value: ''
-        }, ...availableValues[metaField.key]] : [{
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select a value'),
-          value: ''
-        }],
-        onChange: value => handleMetaFieldValueChange(value, 'value', index)
+          children: state.isDateToday ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Using today\'s date:') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Custom value input:')
+        }), state.isDateToday ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "px-2 py-1 bg-white border border-gray-300 rounded",
+          children: wpDate()
+        }) : freeFieldByType(state.type, state.value)]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta value'),
+        options: getValueOptions(),
+        value: state.value || '',
+        onChange: value => dispatch({
+          type: 'SET_VALUE',
+          payload: value
+        })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "bg-gray-100 p-2 mb-2 rounded-[2px]",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CheckboxControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No, enter my value'),
-          checked: metaField?.isUserValue,
-          onChange: value => handleMetaFieldValueChange(value, 'isUserValue', index)
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enter custom value'),
+          checked: !!state.isUserValue,
+          onChange: value => dispatch({
+            type: 'TOGGLE_USER_VALUE',
+            payload: value
+          })
         })
-      }), metaField?.type === 'DATE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      }), state.type === 'DATE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "bg-gray-100 p-2 mb-2 rounded-[2px]",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CheckboxControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Today'),
-          checked: metaField?.isDateToday,
-          onChange: value => {
-            handleMetaFieldValueChange(value, 'isDateToday', index);
-            if (value) {
-              handleMetaFieldValueChange(wpDate(value), 'value', index);
-            }
-          }
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Use today\'s date'),
+          checked: !!state.isDateToday,
+          onChange: value => dispatch({
+            type: 'SET_TODAY',
+            payload: value
+          })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-        label: "Compare",
-        value: metaField?.compare || '',
-        options: compares,
-        onChange: value => {
-          handleMetaFieldValueChange(value, 'compare', index);
-        }
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Compare'),
+        value: state.compare || '=',
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select comparison'),
+          value: ''
+        }, ...compares],
+        onChange: value => dispatch({
+          type: 'SET_COMPARE',
+          payload: value
+        })
       })]
     })]
   });
+}
+function isValidDate(dateString) {
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
 }
 function wpDate(date = new Date()) {
   if (!(date instanceof Date)) {
@@ -38081,16 +41060,118 @@ function MetaFields(props) {
 
 /***/ }),
 
-/***/ "./src/posts-by-tabs/editor/MultipleSelectChip.jsx":
-/*!*********************************************************!*\
-  !*** ./src/posts-by-tabs/editor/MultipleSelectChip.jsx ***!
-  \*********************************************************/
+/***/ "./src/posts-by-tabs/editor/MuiInputSlider.jsx":
+/*!*****************************************************!*\
+  !*** ./src/posts-by-tabs/editor/MuiInputSlider.jsx ***!
+  \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ MultipleSelectChip)
+/* harmony export */   "default": () => (/* binding */ MuiInputSlider)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _mui_material_InputLabel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/InputLabel */ "./node_modules/@mui/material/InputLabel/InputLabel.js");
+/* harmony import */ var _mui_material_Slider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Slider */ "./node_modules/@mui/material/Slider/Slider.js");
+/* harmony import */ var _mui_material_Input__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Input */ "./node_modules/@mui/material/Input/Input.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+
+
+
+
+function MuiInputSlider(props) {
+  const {
+    min = 0,
+    max = 100,
+    step = 1,
+    value = 30,
+    onChange,
+    label = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select')
+  } = props;
+  const [currentValue, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(value);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    setValue(currentValue);
+  }, [currentValue]);
+  const handleSliderChange = (event, newValue) => {
+    setValue(newValue);
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
+  const handleInputChange = event => {
+    setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    if (onChange) {
+      onChange(event.target.value);
+    }
+  };
+  const handleBlur = () => {
+    if (currentValue < min) {
+      setValue(min);
+    } else if (currentValue > max) {
+      setValue(max);
+    }
+  };
+  const id = crypto.randomUUID();
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: "p-2",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_InputLabel__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      id: id,
+      children: label
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      className: "flex gap-2 items-center",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Slider__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        value: typeof value === 'number' ? value : 0,
+        onChange: handleSliderChange,
+        "aria-labelledby": id,
+        color: "primary",
+        size: 'small',
+        min: min,
+        max: max,
+        step: step,
+        defaultValue: currentValue,
+        valueLabelDisplay: "auto"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        value: currentValue,
+        size: 'small',
+        onChange: handleInputChange,
+        onBlur: handleBlur,
+        inputProps: {
+          step: step,
+          min: min,
+          max: max,
+          type: 'number',
+          'aria-labelledby': {
+            id
+          }
+        }
+      })]
+    })]
+  });
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/editor/MuiMultipleSelect.jsx":
+/*!********************************************************!*\
+  !*** ./src/posts-by-tabs/editor/MuiMultipleSelect.jsx ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MuiMultipleSelect)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -38127,7 +41208,7 @@ const MenuProps = {
     }
   }
 };
-function MultipleSelectChip(props) {
+function MuiMultipleSelect(props) {
   const {
     terms = [],
     selectedTerms = [],
@@ -38155,20 +41236,21 @@ function MultipleSelectChip(props) {
       fontWeight: selectedValues.indexOf(termId) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium
     };
   }
+  const id = crypto.randomUUID();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: "py-2",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_FormControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
       sx: {
         width: '100%',
         mb: 2
       },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_InputLabel__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        id: "terms-multiple-chip-label",
+        id: `${id}-label`,
         children: label
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Select__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        labelId: "terms-multiple-chip-label",
-        id: "terms-multiple-chip",
+        labelId: `${id}-label`,
+        id: id,
         multiple: true,
-        size: "small",
         value: selectedValues,
         onChange: handleChange,
         input: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_OutlinedInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -38191,6 +41273,79 @@ function MultipleSelectChip(props) {
           style: getStyles(term.value, selectedValues, theme),
           children: term.label
         }, term.value))
+      })]
+    })
+  });
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/editor/MuiSelect.jsx":
+/*!************************************************!*\
+  !*** ./src/posts-by-tabs/editor/MuiSelect.jsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MuiSelect)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _mui_material_InputLabel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/InputLabel */ "./node_modules/@mui/material/InputLabel/InputLabel.js");
+/* harmony import */ var _mui_material_MenuItem__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/MenuItem */ "./node_modules/@mui/material/MenuItem/MenuItem.js");
+/* harmony import */ var _mui_material_FormControl__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/FormControl */ "./node_modules/@mui/material/FormControl/FormControl.js");
+/* harmony import */ var _mui_material_Select__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Select */ "./node_modules/@mui/material/Select/Select.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+
+
+
+
+function MuiSelect(props) {
+  const {
+    options = [],
+    value = '',
+    onChange,
+    label = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Select')
+  } = props;
+  const [selectedValue, setSelectedValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(value);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    setSelectedValue(selectedValue);
+  }, [selectedValue]);
+  const handleChange = event => {
+    setSelectedValue(event.target.value);
+    if (onChange) {
+      onChange(event.target.value);
+    }
+  };
+  const id = crypto.randomUUID();
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    className: "py-2",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_mui_material_FormControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      fullWidth: true,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_InputLabel__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        id: id,
+        children: label
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Select__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        labelId: id,
+        id: `select-${id}`,
+        value: selectedValue,
+        label: label,
+        onChange: handleChange,
+        children: options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_MenuItem__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          value: option.value,
+          children: option.label
+        }, option.value))
       })]
     })
   });
@@ -38421,10 +41576,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _MetaFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MetaFields */ "./src/posts-by-tabs/editor/MetaFields.jsx");
-/* harmony import */ var _MultipleSelectChip__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MultipleSelectChip */ "./src/posts-by-tabs/editor/MultipleSelectChip.jsx");
+/* harmony import */ var _MetaFields__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./MetaFields */ "./src/posts-by-tabs/editor/MetaFields.jsx");
+/* harmony import */ var _MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MuiMultipleSelect */ "./src/posts-by-tabs/editor/MuiMultipleSelect.jsx");
+/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
+/* harmony import */ var _MuiInputSlider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MuiInputSlider */ "./src/posts-by-tabs/editor/MuiInputSlider.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
 
 
 
@@ -38438,6 +41597,7 @@ function QueryFields(props) {
   } = props;
   const {
     numberOfItems,
+    maxNumPages,
     order,
     orderBy
   } = attributes;
@@ -38540,7 +41700,7 @@ function QueryFields(props) {
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
     children: isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Post Type'),
         value: attributes.postType || 'post',
         options: [{
@@ -38554,7 +41714,7 @@ function QueryFields(props) {
             terms: null
           });
         }
-      }), taxonomies.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+      }), taxonomies.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Taxonomy'),
         value: selectedTaxonomy,
         options: [{
@@ -38571,7 +41731,7 @@ function QueryFields(props) {
             terms: null
           });
         }
-      }), selectedTaxonomy && terms.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MultipleSelectChip__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), selectedTaxonomy && terms.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
         terms: terms,
         selectedTerms: attributes.terms || [],
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select terms'),
@@ -38580,29 +41740,65 @@ function QueryFields(props) {
             terms: newTerms
           });
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.QueryControls, {
-        numberOfItems: numberOfItems,
-        onNumberOfItemsChange: value => updateQuery({
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        value: numberOfItems,
+        onChange: value => updateQuery({
           numberOfItems: value
-        })
+        }),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Posts per page'),
+        min: 1,
+        max: 100,
+        step: 1
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        value: maxNumPages,
+        onChange: value => updateQuery({
+          maxNumPages: value
+        }),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Number of pages'),
+        min: 1,
+        max: 100,
+        step: 1
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "py-2"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta settings'),
         initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MetaFields__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MetaFields__WEBPACK_IMPORTED_MODULE_7__["default"], {
           attributes: attributes,
           setAttributes: setAttributes
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "py-2 "
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.QueryControls, {
-        orderBy: orderBy,
-        onOrderByChange: value => updateQuery({
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Order by'),
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Date'),
+          value: 'date'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Title'),
+          value: 'title'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta value'),
+          value: 'meta_value'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta value number'),
+          value: 'meta_value_num'
+        }],
+        value: orderBy,
+        onChange: value => updateQuery({
           orderBy: value
-        }),
-        order: order,
-        onOrderChange: value => updateQuery({
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Order'),
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Ascending'),
+          value: 'asc'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Descending'),
+          value: 'desc'
+        }],
+        value: order,
+        onChange: value => updateQuery({
           order: value
         })
       })]
@@ -39260,7 +42456,6 @@ function Post({
   }
   const topTextString = (0,_EventDates__WEBPACK_IMPORTED_MODULE_2__.eventDatesString)(post);
   const bottomTextString = bottomText(post);
-  console.log('Post', bottomTextString);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("article", {
     ref: cardRef,
     className: "basis-[320px] w-320px h-[320px] min-h-[320px] p-[30px] relative flex items-center justify-center overflow-hidden",
@@ -39352,7 +42547,6 @@ function bottomText(post) {
       metaInfo = metaInfo.filter(item => item !== undefined);
       metaInfo = metaInfo.join(', ');
     }
-    console.log('Meta info', metaInfo);
     return metaInfo;
   }
   if (post.type === 'lieu') {
