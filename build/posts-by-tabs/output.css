@@ -19,6 +19,7 @@
     --color-slate-500: oklch(0.554 0.046 257.417);
     --color-slate-900: oklch(0.208 0.042 265.755);
     --color-gray-100: oklch(0.967 0.003 264.542);
+    --color-gray-300: oklch(0.872 0.01 258.338);
     --color-gray-600: oklch(0.446 0.03 256.802);
     --color-black: #000;
     --color-white: #fff;
@@ -546,6 +547,9 @@
   .border-solid {
     --tw-border-style: solid;
     border-style: solid;
+  }
+  .border-gray-300 {
+    border-color: var(--color-gray-300);
   }
   .border-red-700 {
     border-color: var(--color-red-700);

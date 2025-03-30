@@ -166,6 +166,10 @@
 			"type": "number",
 			"default": 5
 		},
+		"maxNumPages": {
+			"type": "number",
+			"default": 1
+		},
 		"order": {
 			"type": "string",
 			"default": "desc"

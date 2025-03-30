@@ -3,7 +3,6 @@ import {
     QueryControls,
     SelectControl,
     Spinner,
-    FormTokenField,
     PanelBody
 } from '@wordpress/components';
 import { 
@@ -11,11 +10,13 @@ import {
     useEffect
 } from '@wordpress/element';
 import MetaFields from './MetaFields';
-import MultipleSelectChip from './MultipleSelectChip';
+import MuiMultipleSelect from './MuiMultipleSelect';
+import MuiSelect from './MuiSelect';
+import MuiInputSlider from './MuiInputSlider';
 
 export default function QueryFields(props) {
     const { attributes, setAttributes } = props;
-    const { numberOfItems, order, orderBy } = attributes;
+    const { numberOfItems, maxNumPages, order, orderBy } = attributes;
 
     const [postTypes, setPostTypes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -127,45 +128,46 @@ export default function QueryFields(props) {
                 <Spinner />
             ) : (
                 <>
-                    <SelectControl
-                        label={__('Post Type')}
-                        value={attributes.postType || 'post'}
-                        options={[
-                            { label: __('Select post type'), value: '' },
-                            ...postTypes
-                        ]}
-                        onChange={(newPostType) => {
-                            updateQuery({ 
-                                postType: newPostType,
-                                taxonomy: '',
-                                terms: null
-                            });
-                        }}
+                    <MuiSelect
+                    label={__('Post Type')}
+                    value={attributes.postType || 'post'}
+                    options={[
+                        { label: __('Select post type'), value: '' },
+                        ...postTypes
+                    ]}
+                    onChange={(newPostType) => {
+                        updateQuery({ 
+                            postType: newPostType,
+                            taxonomy: '',
+                            terms: null
+                        });
+                    }}
                     />
                     
                     {taxonomies.length > 0 && (
-                        <SelectControl
-                            label={__('Taxonomy')}
-                            value={selectedTaxonomy}
-                            options={[
-                                { label: __('Select taxonomy'), value: '' },
-                                ...taxonomies.map(tax => ({
-                                    label: tax.label,
-                                    value: tax.value
-                                }))
-                            ]}
-                            onChange={(newTaxonomy) => {
-                                setSelectedTaxonomy(newTaxonomy);
-                                updateQuery({ 
-                                    taxonomy: newTaxonomy,
-                                    terms: null
-                                });
-                            }}
+                        <MuiSelect
+                        label={__('Taxonomy')}
+                        value={selectedTaxonomy}
+                        options={[
+                            { label: __('Select taxonomy'), value: '' },
+                            ...taxonomies.map(tax => ({
+                                label: tax.label,
+                                value: tax.value
+                            }))
+                        ]}
+                        onChange={(newTaxonomy) => {
+                            setSelectedTaxonomy(newTaxonomy);
+                            updateQuery({ 
+                                taxonomy: newTaxonomy,
+                                terms: null
+                            });
+                        }}
                         />
+
                     )}
 
                     {selectedTaxonomy && terms.length > 0 && (
-                        <MultipleSelectChip
+                        <MuiMultipleSelect
                         terms={terms}
                         selectedTerms={attributes.terms || []}
                         label={__('Select terms')}
@@ -175,9 +177,26 @@ export default function QueryFields(props) {
                         />
                     )}
 
-                    <QueryControls
-                        numberOfItems={numberOfItems}
-                        onNumberOfItemsChange={(value) => updateQuery({ numberOfItems: value })}
+                    <MuiInputSlider
+                    value={numberOfItems}
+                    onChange={
+                        (value) => updateQuery({ numberOfItems: value })
+                    }
+                    label={__('Posts per page')}
+                    min={1}
+                    max={100}
+                    step={1}
+                    />
+
+                    <MuiInputSlider
+                    value={maxNumPages}
+                    onChange={
+                        (value) => updateQuery({ maxNumPages: value })
+                    }
+                    label={__('Number of pages')}
+                    min={1}
+                    max={100}
+                    step={1}
                     />
 
                     <div className="py-2" />
@@ -187,15 +206,29 @@ export default function QueryFields(props) {
                     </PanelBody>
 
                     <div className="py-2 " />
-                    
-                    <QueryControls
-                        orderBy={orderBy}
-                        onOrderByChange={(value) => updateQuery({ orderBy: value })}
-                        order={order}
-                        onOrderChange={(value) => updateQuery({ order: value })}
+
+                    <MuiSelect
+                        label={__('Order by')}
+                        options={[
+                            { label: __('Date'), value: 'date' },
+                            { label: __('Title'), value: 'title' },
+                            { label: __('Meta value'), value: 'meta_value' },
+                            { label: __('Meta value number'), value: 'meta_value_num' }
+                        ]}
+                        value={orderBy}
+                        onChange={(value) => updateQuery({ orderBy: value })}
                     />
 
-                    
+                    <MuiSelect
+                        label={__('Order')}
+                        options={[
+                            { label: __('Ascending'), value: 'asc' },
+                            { label: __('Descending'), value: 'desc' }
+                        ]}
+                        value={order}
+                        onChange={(value) => updateQuery({ order: value })}
+                    />
+    
                 </>
             )}
         </>
