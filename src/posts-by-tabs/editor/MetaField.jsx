@@ -1,10 +1,9 @@
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState, useReducer } from '@wordpress/element';
-import { SelectControl, DatePicker, TextControl, CheckboxControl } from '@wordpress/components';
+import { useEffect, useReducer } from '@wordpress/element';
+import { DatePicker, TextControl, CheckboxControl } from '@wordpress/components';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import MuiSelect from './MuiSelect';
-
 
 const types = [
     {
@@ -188,7 +187,6 @@ function useMetaFields(postType) {
     useEffect(() => {
         if (!postType) return;
 
-        // Use cache if available
         if (metaCache[postType]) {
             dispatch({
                 type: 'USE_CACHE',
@@ -198,12 +196,11 @@ function useMetaFields(postType) {
             return;
         }
 
-        // Start fetch
         dispatch({ type: 'FETCH_START' });
         
         wp.apiFetch({ path: `/posts-by-tabs/v1/meta/${postType}` })
             .then((metas) => {
-                // Check if valid response
+ 
                 if (!metas || typeof metas !== 'object') {
                     throw new Error('Invalid meta fields response');
                 }
@@ -212,7 +209,7 @@ function useMetaFields(postType) {
                 const metaValues = {};
 
                 Object.keys(metas).forEach((meta) => {
-                    // Skip private fields
+
                     if (!meta.startsWith('_')) {
                         const metaLabel = meta.split('_').join(' ');
                         metaArray.push({
@@ -220,7 +217,6 @@ function useMetaFields(postType) {
                             value: meta
                         });
 
-                        // Ensure values are always properly formatted
                         metaValues[meta] = Array.isArray(metas[meta]) ? 
                             metas[meta].map(val => ({
                                 label: String(val),
@@ -229,13 +225,11 @@ function useMetaFields(postType) {
                     }
                 });
 
-                // Cache the results
                 metaCache[postType] = {
                     metaFields: metaArray,
                     availableValues: metaValues
                 };
 
-                // Update state
                 dispatch({
                     type: 'FETCH_SUCCESS',
                     metaFields: metaArray,
@@ -440,8 +434,8 @@ export default function MetaField(props) {
                 />
 
                 {state.isUserValue || (state.type === 'DATE' && state.isDateToday) ? (
-                    <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">
-                        <span className="block font-bold my-2">
+                    <div className="bg-gray-50 p-2 mb-2 rounded-[2px]">
+                        <span className="block font-bold mb-2">
                             {state.isDateToday ? __('Using today\'s date:') : __('Custom value input:')}
                         </span>
                         {state.isDateToday ? (
@@ -461,7 +455,7 @@ export default function MetaField(props) {
                     />
                 )}
 
-                <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">
+                <div className="p-2 mb-2 rounded-[2px]">
                     <CheckboxControl 
                       label={__('Enter custom value')} 
                       checked={!!state.isUserValue} 
@@ -470,7 +464,7 @@ export default function MetaField(props) {
                 </div>
             
                 {state.type === 'DATE' && (
-                    <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">
+                    <div className="p-2 mb-2 rounded-[2px]">
                         <CheckboxControl 
                           label={__('Use today\'s date')} 
                           checked={!!state.isDateToday} 
@@ -479,6 +473,7 @@ export default function MetaField(props) {
                     </div>
                 )}
 
+                <div className="py-2" />
                 <MuiSelect
                     label={__('Compare')}
                     value={state.compare || '='}

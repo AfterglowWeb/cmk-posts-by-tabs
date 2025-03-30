@@ -49,8 +49,8 @@ export default function MuiInputSlider(props) {
     const id = crypto.randomUUID();
 
     return (
-        <div className="p-2">
-            <InputLabel id={id}>{label}</InputLabel>
+        <div className="px-4">
+            <InputLabel size="small" sx={{mb:2}} id={id}>{label}</InputLabel>
             <div className="flex gap-2 items-center">
                 <Slider
                 value={typeof value === 'number' ? value : 0}

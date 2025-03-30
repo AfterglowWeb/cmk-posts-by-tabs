@@ -1,7 +1,5 @@
 import { __ } from '@wordpress/i18n';
 import { 
-    QueryControls,
-    SelectControl,
     Spinner,
     PanelBody
 } from '@wordpress/components';
@@ -13,6 +11,7 @@ import MetaFields from './MetaFields';
 import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
 import MuiInputSlider from './MuiInputSlider';
+import { useMetaKeys } from '../utils/fetchMetaKeys';
 
 export default function QueryFields(props) {
     const { attributes, setAttributes } = props;
@@ -24,6 +23,7 @@ export default function QueryFields(props) {
     const [taxonomies, setTaxonomies] = useState([]);
     const [selectedTaxonomy, setSelectedTaxonomy] = useState(attributes.taxonomy || '');
     const [terms, setTerms] = useState([]);
+    const [metaKey, setMetaKey] = useState(attributes.metaKey || '');
 
     useEffect(() => {
         setIsLoading(true);
@@ -122,6 +122,7 @@ export default function QueryFields(props) {
         setAttributes({...attributes, ...newAttributes});
     };
 
+
     return (
         <>
             {isLoading ? (
@@ -177,6 +178,39 @@ export default function QueryFields(props) {
                         />
                     )}
 
+                    <MuiSelect
+                        label={__('Order by')}
+                        options={[
+                            { label: __('Date'), value: 'date' },
+                            { label: __('Title'), value: 'title' },
+                            { label: __('Meta value'), value: 'meta_value' },
+                            { label: __('Meta value number'), value: 'meta_value_num' }
+                        ]}
+                        value={orderBy}
+                        onChange={(value) => updateQuery({ orderBy: value })}
+                    />
+
+                    { (orderBy === 'meta_value' || orderBy === 'meta_value_num') &&
+                        <MetaKeySelector
+                        postType={attributes.postType}
+                        value={metaKey || ''}
+                        onChange={(value) => {
+                            setMetaKey(value);
+                            updateQuery({ metaKey: value });
+                        }}
+                        />
+                    }
+
+                    <MuiSelect
+                        label={__('Order')}
+                        options={[
+                            { label: __('Ascending'), value: 'asc' },
+                            { label: __('Descending'), value: 'desc' }
+                        ]}
+                        value={order}
+                        onChange={(value) => updateQuery({ order: value })}
+                    />
+
                     <MuiInputSlider
                     value={numberOfItems}
                     onChange={
@@ -205,32 +239,29 @@ export default function QueryFields(props) {
                         <MetaFields attributes={attributes} setAttributes={setAttributes}  />
                     </PanelBody>
 
-                    <div className="py-2 " />
-
-                    <MuiSelect
-                        label={__('Order by')}
-                        options={[
-                            { label: __('Date'), value: 'date' },
-                            { label: __('Title'), value: 'title' },
-                            { label: __('Meta value'), value: 'meta_value' },
-                            { label: __('Meta value number'), value: 'meta_value_num' }
-                        ]}
-                        value={orderBy}
-                        onChange={(value) => updateQuery({ orderBy: value })}
-                    />
-
-                    <MuiSelect
-                        label={__('Order')}
-                        options={[
-                            { label: __('Ascending'), value: 'asc' },
-                            { label: __('Descending'), value: 'desc' }
-                        ]}
-                        value={order}
-                        onChange={(value) => updateQuery({ order: value })}
-                    />
     
                 </>
             )}
         </>
+    );
+}
+
+
+function MetaKeySelector({ postType, onChange, value }) {
+    const { metaKeys, isLoading, error } = useMetaKeys(postType);
+    
+    if (isLoading) return <Spinner />;
+    if (error) return <div>Error loading meta keys</div>;
+    
+    return (
+        <MuiSelect
+            label={__('Meta key')}
+            options={[
+                { label: __('Select meta key'), value: '' },
+                ...metaKeys
+            ]}
+            value={value || ''}
+            onChange={onChange}
+        />
     );
 }
