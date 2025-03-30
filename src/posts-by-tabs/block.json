@@ -120,6 +120,10 @@
 				"type": "number"
 			}
 		},
+		"metaKey": {
+			"type": "string",
+			"default": ""
+		},
 		"metaFields": {
 			"type": "object",
 			"default": {

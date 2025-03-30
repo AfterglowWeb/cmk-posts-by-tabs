@@ -63,12 +63,13 @@ export default function MuiMultipleSelect(props) {
   const id = crypto.randomUUID();
 
   return (
-    <div className="py-2">
-      <FormControl sx={{ width: '100%', mb: 2 }}>
-        <InputLabel id={`${id}-label`}>{label}</InputLabel>
+    <div className="mb-4">
+      <FormControl sx={{ width: '100%' }}>
+        <InputLabel id={`${id}-label`} size='small'>{label}</InputLabel>
         <Select
           labelId={`${id}-label`}
           id={id}
+          size="small"
           multiple
           value={selectedValues}
           onChange={handleChange}

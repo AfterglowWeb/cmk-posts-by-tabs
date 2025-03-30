@@ -1,8 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import { SelectControl } from '@wordpress/components';
 import Button from '@mui/material/Button';
 import MetaField from './MetaField';
+import MuiSelect from './MuiSelect';
 
 const relations = [
     {
@@ -61,30 +61,29 @@ export default function MetaFields(props) {
     };
 
     return (
-    <>
-    <div className="py-2">
-    <SelectControl
-        label="Relation"
-        value={attributes.metaFields.relation || 'AND'}
-        options={relations}
-        onChange={(value) => handleRelationChange(value)}
-    />
+    <div>
+        <div className="py-2" />
+        <MuiSelect
+            label={__('Relation')}
+            value={attributes.metaFields.relation || 'AND'}
+            options={relations}
+            onChange={(value) => handleRelationChange(value)}
+        />
+        {Array.isArray(attributes.metaFields.fields) && attributes.metaFields.fields.map( ( metaField, index ) => {
+            return (
+            <MetaField attributes={attributes} setAttributes={setAttributes} metaField={metaField} index={index} key={index} />
+            )
+        })}
+        <div className="flex gap-4 py-2">
+            <Button 
+            variant="contained" 
+            size="small" 
+            color="secondary"
+            sx={{textTransform:"none"}}
+            onClick={handleAddMetaField} >
+                { __( 'Add a meta query' ) }
+            </Button>
+        </div>
     </div>
-    {Array.isArray(attributes.metaFields.fields) && attributes.metaFields.fields.map( ( metaField, index ) => {
-        return (
-        <MetaField attributes={attributes} setAttributes={setAttributes} metaField={metaField} index={index} key={index} />
-        )
-    })}
-    <div className="flex gap-4 py-2">
-        <Button 
-        variant="contained" 
-        size="small" 
-        color="secondary"
-        sx={{textTransform:"none"}}
-        onClick={handleAddMetaField} >
-            { __( 'Add a meta query' ) }
-        </Button>
-    </div>
-    </>
 );
 }

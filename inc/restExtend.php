@@ -31,6 +31,10 @@ class restExtend {
                     'post_type' => [
                         'default' => 'evenement',
                         'sanitize_callback' => 'sanitize_text_field',
+                    ],
+                    'keys_only' => [
+                        'default' => false,
+                        'sanitize_callback' => 'rest_sanitize_boolean',
                     ]
                 ],
             ]);
@@ -152,6 +156,7 @@ class restExtend {
     public static function get_metafields_rest(\WP_REST_Request $request): \WP_REST_Response
     {
         $post_type = $request->get_param('post_type');
+        $keys_only = $request->get_param('keys_only');
         $meta_fields = array();
         $posts = get_posts( array( 
             'post_type' => $post_type, 
@@ -180,6 +185,14 @@ class restExtend {
         $meta_fields = array_map( function( $values ) {
             return array_values(array_unique( array_filter( $values ) ));
         }, $meta_fields );
+
+        if ($keys_only) {
+            $keys_array = [];
+            foreach ($meta_fields as $key => $values) {
+                $keys_array[$key] = [];
+            }
+            return new \WP_REST_Response($keys_array);
+        }
 
         return new \WP_REST_Response( $meta_fields, 200 );
     }

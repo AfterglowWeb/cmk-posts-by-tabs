@@ -1,13 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 
 import PostsByTabs from './editor/PostsByTabs';
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
 import Background from './editor/Background';
-import TextField from '@mui/material/TextField';
 
 export default function Edit({attributes, setAttributes, clientId}) {
 
@@ -55,23 +54,16 @@ export default function Edit({attributes, setAttributes, clientId}) {
 			<InspectorControls>
 				
 				<PanelBody title={__('Bloc title')} initialOpen={true}>
-					
-					<div className="py-2">
-						<TextField 
-						label={__('Title')} 
+					<TextControl
+						placeholder="Title"
 						value={attributes.title || ''}
 						onChange={(value) => setAttributes({ title: value })}
-						variant="standard" />
-					</div>
-
-					<div className="py-2">
-						<TextField 
-						label={__('Subtitle')} 
+					/>
+					<TextControl
+						placeholder="Subtitle"
 						value={attributes.subtitle || ''}
 						onChange={(value) => setAttributes({ subtitle: value })}
-						variant="standard" />
-					</div>
-					
+					/>
 				</PanelBody>
 				
 				<PanelBody title={__('Query settings')} initialOpen={true}>

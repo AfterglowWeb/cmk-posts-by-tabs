@@ -32,15 +32,18 @@ export default function MuiSelect(props) {
   const id = crypto.randomUUID();
 
   return(
-  <div className="py-2">
+  <div className="mb-4">
     <FormControl fullWidth>
-        <InputLabel id={id}>{label}</InputLabel>
+        <InputLabel 
+        size='small'
+        id={id}>{label}</InputLabel>
         <Select
         labelId={id}
         id={`select-${id}`}
         value={selectedValue}
         label={label}
         onChange={handleChange}
+        size="small"
         >
             {options.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
