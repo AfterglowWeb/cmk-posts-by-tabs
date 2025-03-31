@@ -1,10 +1,11 @@
 import { __ } from '@wordpress/i18n';
 import { RichText } from '@wordpress/block-editor';
 import { memo, useEffect } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
 import Post from '../posts/Post';
-import EventsCalendar from '../posts/calendar/EventsCalendar';
+import EventsCalendar from './EventsCalendar';
+import PostsGrid from './PostsGrid';
 
 function CustomTabPanel({children, selectedTab, value, index}) {
   return (
@@ -91,6 +92,7 @@ export default function TabContent({
   handleTabValueChange,
   clientId,
   posts,
+  calendarPosts
 }) {
 
   useEffect(() => {
@@ -101,7 +103,7 @@ export default function TabContent({
     };
   }, []);
 
-  const template = tab?.template || 'posts-grid';
+  const template = tab?.template || 'grid';
 
   const content = editingContent !== null && editingContent.index === index 
     ? editingContent.content 
@@ -136,24 +138,8 @@ export default function TabContent({
           />
         </div>   
       </div>
-      {template === 'posts-grid' && <PostsGrid posts={posts} />}
-      {template === 'calendar' && <EventsCalendar posts={posts} options={tab} />}
+      {template === 'grid' && <PostsGrid posts={posts} />}
+      {template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
     </CustomTabPanel>
   );
 }
-
-function PostsGrid (props) {
-  const { posts } = props;
-  
-  if (!Array.isArray(posts) || posts.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="py-4 flex flex-wrap gap-0">
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
-    </div>
-  );
-};

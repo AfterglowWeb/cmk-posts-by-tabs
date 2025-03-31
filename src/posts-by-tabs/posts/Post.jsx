@@ -4,7 +4,7 @@ import PostCategories from './PostCategories';
 import Tooltip from '@mui/material/Tooltip';
 import PostTop from './PostTop';
 import PostBottom from './PostBottom';
-import { eventDatesString } from './calendar/EventDates';
+import { eventDatesString } from './EventDates';
 
 export default function Post({post}) {
 

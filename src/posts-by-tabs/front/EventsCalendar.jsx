@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import SmallCard from './SmallCard';
-import XSmallCard from './XSmallCard';
+import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import CalendarViewDayOutlinedIcon from '@mui/icons-material/CalendarViewDayOutlined';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
@@ -22,38 +21,60 @@ import { format, parse, startOfWeek, addDays, startOfMonth, endOfMonth, eachDayO
 import { fr } from 'date-fns/locale';
 import { Tooltip } from '@mui/material';
 
+import SmallCard from '../posts/SmallCard';
+import XSmallCard from '../posts/XSmallCard';
 
 export default function EventsCalendar(props) {
-  const { posts, options } = props.block;
-  const [calendarView, setCalendarView] = useState(options?.default_view || 'week');
+  const { posts, tab } = props;
+  const { options } = tab;
+
+  const { start_key, end_key, default_view, has_day_view, has_week_view, has_month_view } = options?.calendar;
+  const [calendarView, setCalendarView] = useState(default_view || 'week');
   const [currentDate, setCurrentDate] = useState(new Date());
 
   if (!posts) {
     return null;
   }
 
-  const filteredPosts = afgTheme?.postId 
-    ? posts.filter(post => post.id !== afgTheme.postId) 
-    : posts;
-
   const groupEventsByDate = () => {
     const grouped = {};
     
-    filteredPosts.forEach(post => {
+    posts.forEach(post => {
 
-      if (!post.fields.start) return;
+      let start = null;
+      let end = null;
+      if(post[start_key]) {
+        start = post[start_key]
+      }
+
+      if(post.acf["start_key"]) {
+        start = post.acf[start_key]
+      }
+
+      if(post[end_key]) {
+        end = post[end_key]
+      }
+
+      if(post.acf["end_key"]) {
+        end = post.acf[end_key]
+      }
+
+
+      if (!start) {
+        return;
+      }
       
       let startDate;
       try {
-        startDate = parse(post.fields.start, 'dd/MM/yyyy', new Date());
+        startDate = parse(start, 'dd/MM/yyyy', new Date());
       } catch (error) {
         return;
       }
       
       let endDate = startDate;
-      if (post.fields.end) {
+      if (end) {
         try {
-          endDate = parse(post.fields.end, 'dd/MM/yyyy', new Date());
+          endDate = parse(end, 'dd/MM/yyyy', new Date());
         } catch (error) {
         }
       }
@@ -428,6 +449,7 @@ export default function EventsCalendar(props) {
             </Box>
             <Box className="flex justify-end items-center gap-3 mb-5">
               
+              {has_day_view && (
               <Tooltip title={__('Day view', 'posts-by-tabs')} placement="top">
               <Fab 
                 color={calendarView === 'day' ? 'secondary' : 'primary'} 
@@ -439,7 +461,9 @@ export default function EventsCalendar(props) {
                 <CalendarViewDayOutlinedIcon />
               </Fab>
               </Tooltip>
+              )}
 
+              {has_week_view && (
               <Tooltip title={__('Week view', 'posts-by-tabs')} placement="top">
               <Fab 
                 color={calendarView === 'week' ? 'secondary' : 'primary'} 
@@ -451,7 +475,9 @@ export default function EventsCalendar(props) {
                 <CalendarViewWeekIcon />
               </Fab>
               </Tooltip>
+              )}
 
+              {has_month_view && (
               <Tooltip title={__('Month view', 'posts-by-tabs')} placement="top">
               <Fab 
                 color={calendarView === 'month' ? 'secondary' : 'primary'} 
@@ -463,6 +489,7 @@ export default function EventsCalendar(props) {
                 <CalendarViewMonthIcon />
               </Fab>
               </Tooltip>
+              )}
 
             </Box>
           </Box>

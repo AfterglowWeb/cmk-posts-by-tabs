@@ -79,12 +79,10 @@ class restExtend {
                         'default' => 'datedebut',
                         'sanitize_callback' => 'sanitize_text_field',
                     ],
-                    'options' => [
-                        'default' => [],
-                        'sanitize_callback' => function($param) {
-                            return is_array($param) ? $param : [];
-                        }
-                    ],
+                    'has_calendar' => [
+                        'default' => false,
+                        'sanitize_callback' => 'rest_sanitize_boolean',
+                    ]
                 ],
             ]);
 
@@ -108,6 +106,12 @@ class restExtend {
             'orderby' => $request->get_param('orderby'),
             'meta_key' => $request->get_param('meta_key'),
         );
+
+        $response = [
+            'posts' => array(),
+            'total' => 0,
+            'calendarPosts' => array(),
+        ];
 
         $terms = $request->get_param('terms');
         if(!empty($terms)) {
@@ -143,9 +147,9 @@ class restExtend {
 
         $data = array();
         if (empty($posts)) {
-            return new \WP_REST_Response( $args, 200 );
+            return new \WP_REST_Response( $response, 200 );
         }
-
+        
         $postController = new \WP_REST_Posts_Controller($args['post_type']);
         foreach ($posts as $post) {
             $prepared = $postController->prepare_item_for_response( $post, $request );
@@ -154,16 +158,17 @@ class restExtend {
             $data[] = $postPrepared;
         }
 
-        $options = $request->get_param('options');
-        
-        if (isset($options['calendar']) && $options['calendar'] === true) {
-            $data = apply_filters('cmk_posts_by_tabs_calendar', $data, array(
+        if (true === $request->get_param('has_calendar')) {
+            $response['calendar_posts'] = apply_filters('cmk_posts_by_tabs_calendar', $data, array(
                 'start_key' => $options['calendar']['start_key'] ?? 'start',
                 'end_key' => $options['calendar']['end_key'] ?? 'end',
             ));
         }
-       
-        return new \WP_REST_Response( $data, 200 );
+
+        $response['posts'] = $data;
+        $response['total_posts'] = $query->found_posts;
+
+        return new \WP_REST_Response( $response, 200 );
 
     }
 

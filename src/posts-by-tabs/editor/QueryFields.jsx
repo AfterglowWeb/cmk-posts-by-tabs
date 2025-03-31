@@ -11,11 +11,11 @@ import MetaFields from './MetaFields';
 import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
 import MuiInputSlider from './MuiInputSlider';
-import { useMetaKeys } from '../utils/fetchMetaKeys';
+import MetaKeySelector from './MetaKeySelector';
 
 export default function QueryFields(props) {
     const { attributes, setAttributes } = props;
-    const { numberOfItems, maxNumPages, order, orderBy } = attributes;
+    const { numberOfItems, maxNumPages, order, orderBy, paginationType } = attributes;
 
     const [postTypes, setPostTypes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -196,6 +196,7 @@ export default function QueryFields(props) {
                         <MetaKeySelector
                         postType={attributes.postType}
                         value={metaKey || ''}
+                        label={__('Meta key')}
                         onChange={(value) => {
                             setMetaKey(value);
                             updateQuery({ metaKey: value });
@@ -245,25 +246,5 @@ export default function QueryFields(props) {
                 </>
             )}
         </>
-    );
-}
-
-
-function MetaKeySelector({ postType, onChange, value }) {
-    const { metaKeys, isLoading, error } = useMetaKeys(postType);
-    
-    if (isLoading) return <Spinner />;
-    if (error) return <div>Error loading meta keys</div>;
-    
-    return (
-        <MuiSelect
-            label={__('Meta key')}
-            options={[
-                { label: __('Select meta key'), value: '' },
-                ...metaKeys
-            ]}
-            value={value || ''}
-            onChange={onChange}
-        />
     );
 }

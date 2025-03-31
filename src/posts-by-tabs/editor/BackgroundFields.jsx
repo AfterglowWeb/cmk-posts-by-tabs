@@ -11,7 +11,7 @@ import {
 } from '@wordpress/element';
 import Button from '@mui/material/Button';
 
-export default function Background({attributes, setAttributes}) {
+export default function BackgroundFields({attributes, setAttributes}) {
 
     useEffect(() => {
 

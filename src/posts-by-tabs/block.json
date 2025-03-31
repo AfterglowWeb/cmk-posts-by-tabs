@@ -54,10 +54,6 @@
 					"source": "html",
 					"default": ""
 					},
-					"hideTab": {
-					"type": "boolean",
-					"default": false
-					},
 					"showNavigation": {
 					"type": "boolean",
 					"default": false
@@ -97,6 +93,155 @@
 					"showTags": {
 					"type": "boolean",
 					"default": false
+					},
+					"options": {
+						"type": "object",
+						"default": {
+							"grid": {
+								"type": "object",
+								"default": {
+									"free_flow": {
+										"type": "boolean",
+										"default": false
+									},
+									"cols_desktop": {
+										"type": "number",
+										"default": 3
+									},
+									"cols_tablet": {
+										"type": "number",
+										"default": 2
+									},
+									"cols_mobile": {
+										"type": "number",
+										"default": 1
+									},
+									"gap_desktop": {
+										"type": "number",
+										"default": 4
+									},
+									"gap_mobile": {
+										"type": "number",
+										"default": 4
+									},
+									"gap_tablet": {
+										"type": "number",
+										"default": 4
+									}
+								}
+							},
+							"row": {
+								"type": "object",
+								"default": {
+									"infinite_scroll": {
+										"type": "boolean",
+										"default": false
+									},
+									"free_flow": {
+										"type": "boolean",
+										"default": false
+									},
+									"cols_desktop": {
+										"type": "number",
+										"default": 3
+									},
+									"cols_tablet": {
+										"type": "number",
+										"default": 2
+									},
+									"cols_mobile": {
+										"type": "number",
+										"default": 1
+									},
+									"gap_desktop": {
+										"type": "number",
+										"default": 4
+									},
+									"gap_mobile": {
+										"type": "number",
+										"default": 4
+									},
+									"gap_tablet": {
+										"type": "number",
+										"default": 4
+									}
+								}
+							},
+							"calendar": {
+								"type": "object",
+								"default": {
+									"start_key": {
+										"type": "string",
+										"default": "start"
+									},
+									"end_key": {
+										"type": "string",
+										"default": "end"
+									},
+									"default_view": {
+										"type": "string",
+										"default": "week"
+									},
+									"show_days": {
+										"type": "boolean",
+										"default": false
+									},
+									"show_weeks": {
+										"type": "boolean",
+										"default": false
+									},
+									"show_months": {
+										"type": "boolean",
+										"default": false
+									}
+								}
+							},
+							"slider": {
+								"type": "object",
+								"default": {
+									"slidesPerView": {
+										"type": "number",
+										"default": 1
+									},
+									"spaceBetween": {
+										"type": "number",
+										"default": 0
+									},
+									"effect": {
+										"type": "string",
+										"default": "slide"
+									},
+									"autoplay": {
+										"type": "boolean",
+										"default": false
+									},
+									"delay": {
+										"type": "number",
+										"default": 3000
+									},
+									"speed": {
+										"type": "number",
+										"default": 500
+									},
+									"loop": {
+										"type": "boolean",
+										"default": false
+									},
+									"hideScrollBar": {
+										"type": "boolean",
+										"default": false
+									},
+									"hideNavigation": {
+										"type": "boolean",
+										"default": false
+									},
+									"hidePagination": {
+										"type": "boolean",
+										"default": false
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -173,6 +318,18 @@
 		"maxNumPages": {
 			"type": "number",
 			"default": 1
+		},
+		"paginationEnabled": {
+			"type": "boolean",
+			"default": false
+		},
+		"paginationType": {
+			"type": "string",
+			"default": "page"
+		},
+		"offset": {
+			"type": "number",
+			"default": 0
 		},
 		"order": {
 			"type": "string",

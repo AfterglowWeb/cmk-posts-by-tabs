@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import MuiInputSlider from './MuiInputSlider';
 import TabTemplateOptions from './TabTemplateOptions';
+import MuiSelect from './MuiSelect';
 
 export default function TabFields(props) {
     
@@ -27,10 +28,47 @@ export default function TabFields(props) {
             meta_1: '',
             meta_2: '',
             content: '',
-            mediaId: 0,
-            mediaUrl: '',
-            mediaType: '',
-            mediaAlt: '',
+            options: {
+                grid:{
+                    free_flow: false,
+                    cols_desktop: 3,
+                    cols_tablet: 2,
+                    cols_mobile: 1,
+                    gap_desktop: 0,
+                    gap_tablet: 0,
+                    gap_mobile: 0
+                },
+                row:{
+                    infinite_scroll: false,
+                    free_flow: false,
+                    cols_desktop: 3,
+                    cols_tablet: 2,
+                    cols_mobile: 1,
+                    gap_desktop: 0,
+                    gap_tablet: 0,
+                    gap_mobile: 0
+                },
+                calendar:{
+                    start_key: 'start',
+                    end_key: 'end',
+                    default_view: 'week',
+                    show_days: false,
+                    show_weeks: false,
+                    show_months: true,
+                },
+                slider:{
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                    effect: 'slide',
+                    autoplay: false,
+                    delay: 3000,
+                    speed: 500,
+                    loop: false,
+                    hideScrollBar: false,
+                    hideNavigation: false,
+                    hidePagination: false,
+                }
+            },
         } );
         setAttributes( { tabs } );
     };
@@ -41,23 +79,6 @@ export default function TabFields(props) {
         setAttributes( { tabs } );
     };
 
-    const removeTabMedia = ( index ) => {
-        const tabs = [ ...attributes.tabs ];
-        tabs[ index ].mediaId = 0;
-        tabs[ index ].mediaUrl = '';
-        tabs[ index ].mediaType = '';
-        tabs[ index ].mediaAlt = '';
-        setAttributes( { tabs } );
-    }
-
-    const onSelectTabMedia = (media , index) => {
-        const tabs = [ ...attributes.tabs ];
-        tabs[ index ].mediaId = media.id;
-        tabs[ index ].mediaUrl =  media.url;
-        tabs[ index ].mediaType = media.type;
-        tabs[ index ].mediaAlt = media.alt;
-        setAttributes( { tabs } );
-    }
 
     return (
     <>
@@ -76,69 +97,37 @@ export default function TabFields(props) {
                 </Button>
             </div>
             <div className="mb-2">
-                <PanelBody title={__('Textes')} initialOpen={true}>
-                    <SelectControl
-                        label="Template"
-                        value={ tab?.template || '' }
-                        options={templates}
-                        onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
-                    />
+                <PanelBody title={__('Titles')} initialOpen={true}>
                     <TextControl
-                        placeholder="Titre"
+                        placeholder={__('Title')}
                         value={ tab?.title || '' }
                         onChange={ ( value ) => {handleTabValueChange(value, 'title', index)} }
                     />
                     <TextControl
-                        placeholder="Sous-titre"
+                        placeholder={__('Subtitle')}
                         value={ tab?.subtitle }
                         onChange={ ( value ) => {handleTabValueChange(value, 'subtitle', index)} }
                     />
                     <TextControl
-                        placeholder="Donnée 1"
+                        placeholder={__('Data 1')}
                         value={ tab?.meta_1 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_1', index)} }
                     />
                     <TextControl
-                        placeholder="Donnée 2"
+                        placeholder={__('Data 2')}
                         value={ tab?.meta_2 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_2', index)} }
                     />
+                </PanelBody>
+                <PanelBody title={__('Template options')} initialOpen={true}>
+                    <MuiSelect
+                        label={__('Template')}
+                        value={ tab?.template || '' }
+                        options={templates}
+                        onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
+                    />
                     <TabTemplateOptions tab={tab} index={index} handleTabValueChange={handleTabValueChange} />
                 </PanelBody>
-            </div>
-            <div className="mb-2">
-                <PanelBody title={__('Image')} initialOpen={false}>
-                    <MediaUploadCheck>
-                        <MediaUpload
-                            onSelect={ ( media ) => {onSelectTabMedia(media, index)} }
-                            allowedTypes={ ['image'] }
-                            value={ tab?.mediaId }
-                            render={ ( { open } ) => (
-                                <Button color="secondary" className="mb-2 bg-slate-50 aspect-video" onClick={ open }>
-                                    {tab?.mediaUrl ? 
-                                        <img src={tab?.mediaUrl} alt={tab?.title || ''} className="w-full h-full object-cover"/>
-                                        :
-                                        __('Sélectionner une image')
-                                    }
-                                </Button>
-                            ) }
-                        />
-                    </MediaUploadCheck>
-                    {tab?.mediaId != 0 && 
-                    <div className="mt-2">
-                        <MediaUploadCheck>
-                            <Button 
-                            color="secondary"
-                            variant="outlined" 
-                            size="small" 
-                            sx={{textTransform:"none"}} 
-                            onClick={() => {removeTabMedia(index)}}>{__('Supprimer l\'image')}</Button>
-                        </MediaUploadCheck>
-                    </div>
-                    }
-                </PanelBody>
-            </div>
-            <div className="mb-2">	
             </div>
         </Paper>
         )
