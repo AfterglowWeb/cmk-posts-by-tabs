@@ -1,6 +1,5 @@
 import { createRoot } from '@wordpress/element';
-import FrontendTabs from './components/FrontendTabs';
-import ThemePalette from './components/ThemePalette';
+import ThemePalette from './front/ThemePalette';
 import { ParallaxProvider } from 'react-scroll-parallax';
 
 function initializeReactComponents() {
@@ -14,7 +13,6 @@ function initializeReactComponents() {
         root.render(
           <ThemePalette>
             <ParallaxProvider>
-              <FrontendTabs blockData={complexTabsData} />
             </ParallaxProvider>
           </ThemePalette>
         )

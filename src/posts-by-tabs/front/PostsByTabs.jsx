@@ -7,20 +7,12 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { ParallaxProvider } from 'react-scroll-parallax';
 
 import TabContent from './TabContent';
-import SectionBackground from '../components/SectionBackground';
+import SectionBackground from './SectionBackground';
+import { fetchPosts } from '../utils/fetchPosts';
+import Pagination from './Pagination';
 
-function hasMetaQuery(attributes) {
-    if(
-        attributes.metaFields?.fields && 
-        attributes.metaFields?.fields.length > 0 
-        ) {
-            return true;
-    }
-    return false;
-} 
 
 export default function PostsByTabs(props) {
     const { attributes, setAttributes, handleTabValueChange, clientId, templates } = props;
@@ -30,82 +22,51 @@ export default function PostsByTabs(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [calendarPosts, setCalendarPosts] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPosts, setTotalPosts] = useState(0);
+    const activeTab = attributes.tabs ? attributes.tabs[selectedTab] : null;
+    const paginationType = activeTab?.options?.paginationType || 'buttons';
+    const postsPerPage = attributes.numberOfItems || 10;
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const getPosts = async () => {
             setIsLoading(true);
             setError(null);
       
             try {
-                let fetchedPosts;
-                const useMetaQuery = hasMetaQuery(attributes);
+
+                const fetchOptions = {
+                    headers: true,
+                    append: false 
+                };
                 
-                if (useMetaQuery) {
-                    const endpoint = '/posts-by-tabs/v1/posts';
-      
-                    const requestData = {
-                        post_type: attributes.postType || 'post',
-                        per_page: attributes.numberOfItems || 5,
-                        order: attributes.order || 'desc',
-                        orderby: attributes.orderBy || 'date',
-                        meta_query: attributes.metaFields,
-                    };
-     
-                    if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {
+                const result = await fetchPosts({
+                    ...attributes
+                }, fetchOptions);
 
-                        requestData.terms = {};
-                        requestData.terms[attributes.taxonomy] = attributes.terms;
-                    }
-
-                    fetchedPosts = await wp.apiFetch({ 
-                        path: endpoint,
-                        method: 'POST',
-                        data: requestData
-                    });
-
-                } else {
-
-                    var restEndpoint = `/wp/v2/${attributes.postType || 'posts'}`;
-                    if (attributes.postType === 'post') {
-                        restEndpoint = `/wp/v2/posts`;
-                    } else if (attributes.postType === 'page') {
-                        restEndpoint = `/wp/v2/pages`;
-                    }
-
-                    var queryPath = `${restEndpoint}?_embed&per_page=${attributes.numberOfItems || 5}`;
-                
-                    if (attributes.order) {
-                        queryPath += `&order=${attributes.order}`;
-                    }
-                    if (attributes.orderBy) {
-                        queryPath += `&orderby=${attributes.orderBy}`;
-                    }
-
-                    if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {
-                        if (attributes.taxonomy === 'category') {
-                            queryPath += `&categories=${attributes.terms.join(',')}`;
-                        } else {
-                            queryPath += `&${attributes.taxonomy}=${attributes.terms.join(',')}`;
-                        }
-                    }
-
-                    fetchedPosts = await wp.apiFetch({ path: queryPath });
+                if (result.headers && result.headers['x-wp-total']) {
+                    setTotalPosts(parseInt(result.headers['x-wp-total']));
                 }
 
-                setPosts(fetchedPosts);
-
-                setAttributes({ posts: fetchedPosts });
-
+                if (result.calendar_posts) {
+                    setCalendarPosts(result.calendar_posts);
+                }
+                
+                setPosts(result.posts || result);
             } catch (err) {
                 console.error("Error fetching posts:", err);
                 setError(err.message);
                 setPosts([]);
+                setTotalPosts(0);
+                setCalendarPosts([]);
             } finally {
                 setIsLoading(false);
             }
         };
         
-        fetchPosts();
+        getPosts();
     }, [
         attributes.postType,
         attributes.taxonomy,
@@ -113,17 +74,39 @@ export default function PostsByTabs(props) {
         attributes.numberOfItems,
         attributes.order,
         attributes.orderBy,
+        attributes.search,
+        attributes.offset,
         attributes.metaFields,
         attributes.metaFields?.fields,
         attributes.metaFields?.relation,
         attributes.metaFields?.fields?.length,
     ]);
 
+
     const handleTabChange = (event, value) => {
-		
         selectBlock(clientId);
         setSelectedTab(value);
-	  };
+	};
+
+    const handlePageChange = (page, newOffset, append = false) => {
+        
+        setCurrentPage(page);
+        setAttributes({
+            ...attributes,
+            offset: newOffset
+        });
+        
+        if (append) {
+            // We'll handle this in the useEffect by passing append option to fetchPosts
+        }
+        
+        if (!append) {
+            window.scrollTo({
+                top: document.getElementById(`block-${clientId}`).offsetTop - 50,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     const renderPostsStatus = () => {
         if (isLoading) {
@@ -205,12 +188,26 @@ export default function PostsByTabs(props) {
                             clientId={clientId}
                             templates={templates}
                             posts={posts}
+                            calendarPosts={calendarPosts}
                         />
                     ))}
+
+                    {activeTab && activeTab.options?.paginationEnabled && (
+                        <Pagination
+                            posts={posts}
+                            totalPosts={totalPosts}
+                            offset={attributes.offset || 0}
+                            postsPerPage={postsPerPage}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                            paginationType={paginationType}
+                            isLoading={isLoading}
+                            template={activeTab.template}
+                        />
+                    )}
                 </Box>
             </Container>
         </div>
 
-        
     );
 }

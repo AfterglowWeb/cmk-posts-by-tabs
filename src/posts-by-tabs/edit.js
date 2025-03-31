@@ -3,10 +3,11 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
-import PostsByTabs from './editor/PostsByTabs';
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
-import Background from './editor/Background';
+import BackgroundFields from './editor/BackgroundFields';
+
+import PostsByTabs from './front/PostsByTabs';
 
 export default function Edit({attributes, setAttributes, clientId}) {
 
@@ -53,7 +54,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 		<>
 			<InspectorControls>
 				
-				<PanelBody title={__('Bloc title')} initialOpen={true}>
+				<PanelBody title={__('Block title')} initialOpen={true}>
 					<TextControl
 						placeholder="Title"
 						value={attributes.title || ''}
@@ -66,7 +67,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 					/>
 				</PanelBody>
 				
-				<PanelBody title={__('Query settings')} initialOpen={true}>
+				<PanelBody title={__('Query settings')} initialOpen={false}>
 					<QueryFields attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 
@@ -74,8 +75,8 @@ export default function Edit({attributes, setAttributes, clientId}) {
 					<TabFields attributes={attributes} setAttributes={setAttributes} handleTabValueChange={handleTabValueChange} templates={templates}  />
 				</PanelBody>
 
-				<PanelBody title={__('Bloc background')} initialOpen={false}>
-					<Background attributes={attributes} setAttributes={setAttributes} />
+				<PanelBody title={__('Block background')} initialOpen={false}>
+					<BackgroundFields attributes={attributes} setAttributes={setAttributes} />
 				</PanelBody>
 			</InspectorControls>
 			

@@ -1,5 +1,5 @@
 import React from 'react';
-import Post from './Post';
+import Post from '../posts/Post';
 
 export default function PostsGrid (props) {
   const { posts } = props;

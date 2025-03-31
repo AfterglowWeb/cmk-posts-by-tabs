@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { CheckboxControl } from '@wordpress/components';
 import MuiInputSlider from './MuiInputSlider';
 import MuiSelect from './MuiSelect';
+import MetaKeySelector from './MetaKeySelector';
 
 export default function TabTemplateOptions(props) {
 
@@ -14,10 +15,200 @@ export default function TabTemplateOptions(props) {
 
 }
 
-
 function optionFields(props) {
+    const { tab } = props;
+    if (!tab) {
+        return null;
+    }
+    const {template} = tab;
 
+    switch (template) {
+        case 'grid':
+        case 'row':
+            return <GridFields {...props} />;
+        case 'calendar':
+            return <CalendarFields {...props} />;
+        case 'slider':
+            return <SliderFields {...props} />;
+        case 'map':
+            return (
+                <>
+                </>
+            );
+        default:
+            return null;
+    }
+}
+
+function GridFields(props) {
     const { tab, index, handleTabValueChange } = props;
+    if (!tab) {
+        return null;
+    }
+    
+    const {
+        template, 
+        options
+    } = tab;
+
+    const isGridBased = ['grid', 'row'].includes(template);
+    if (!isGridBased) { 
+        return null;
+    }
+
+    const optionsKey = template === 'grid' ? 'grid' : template;
+    const gridOptions = options?.[optionsKey] || {};
+    
+    const { 
+        free_flow = false,
+        cols_desktop = 3,
+        cols_tablet = 2,
+        cols_mobile = 1,
+        gap_desktop = 16,
+        gap_tablet = 16,
+        gap_mobile = 16
+    } = gridOptions;
+    
+    return (
+        <>
+            <h3 className="text-base font-semibold mb-2">{__('Layout Settings')}</h3>
+            
+            <CheckboxControl
+                label={__('Free-flow layout')}
+                checked={free_flow}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options, 
+                        [optionsKey]: {
+                            ...gridOptions, 
+                            free_flow: value
+                        }
+                    },
+                    'options', 
+                    index
+                )}
+            />
+            
+            <MuiInputSlider
+                label={__('Columns (Desktop)')}
+                min={1}
+                max={12}
+                step={1}
+                value={cols_desktop}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options, 
+                        [optionsKey]: {
+                            ...gridOptions, 
+                            cols_desktop: value
+                        }
+                    },
+                    'options', 
+                    index
+                )}
+            />
+            
+            <MuiInputSlider
+                label={__('Columns (Tablet)')}
+                min={1}
+                max={12}
+                step={1}
+                value={cols_tablet}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options, 
+                        [optionsKey]: {
+                            ...gridOptions, 
+                            cols_tablet: value
+                        }
+                    },
+                    'options', 
+                    index
+                )}
+            />
+            
+            <MuiInputSlider
+                label={__('Columns (Mobile)')}
+                min={1}
+                max={12}
+                step={1}
+                value={cols_mobile}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options, 
+                        [optionsKey]: {
+                            ...gridOptions, 
+                            cols_mobile: value
+                        }
+                    },
+                    'options', 
+                    index
+                )}
+            />
+
+            <MuiInputSlider
+                label={__('Gap between items (Desktop)')}
+                min={0}
+                max={48}
+                step={4}
+                value={gap_desktop}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options, 
+                        [optionsKey]: {
+                            ...gridOptions, 
+                            gap_desktop: value
+                        }
+                    },
+                    'options', 
+                    index
+                )}
+            />
+
+            <MuiInputSlider
+                label={__('Gap between items (Tablet)')}
+                min={0}
+                max={48}
+                step={4}
+                value={gap_tablet}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options, 
+                        [optionsKey]: {
+                            ...gridOptions, 
+                            gap_tablet: value
+                        }
+                    },
+                    'options', 
+                    index
+                )}
+            />
+
+            <MuiInputSlider
+                label={__('Gap between items (Mobile)')}
+                min={0}
+                max={48}
+                step={4}
+                value={gap_mobile}
+                onChange={(value) => handleTabValueChange(
+                    {
+                        ...options,
+                        [optionsKey]: {
+                            ...gridOptions,
+                            gap_mobile: value
+                        }
+                    },
+                    'options',
+                    index
+                )}
+            />
+            
+        </>
+    );
+}
+
+function CalendarFields(props) {
+    const { tab, index, handleTabValueChange, postType } = props;
     if (!tab) {
         return null;
     }
@@ -26,142 +217,194 @@ function optionFields(props) {
         options
     } = tab;
 
-
-    switch (template) {
-        case 'posts-grid':
-            const { grid_col_number, grid_is_free } = options;
-            return (
-                <>
-                <MuiInputSlider
-                label={__('Number of cols')}
-                min={1}
-                max={9}
-                step={1}
-                value={grid_col_number || 3}
-                onChange={(value) => handleTabValueChange(
-                    {...options, grid_col_number: value},
-                    'options', 
-                    index)}
-                />
-                <CheckboxControl
-                    label={__('Free cols')}
-                    checked={grid_is_free || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, grid_is_free: value},
-                        'options', 
-                        index)}
-                />
-                </>
-            );
-        case 'calendar':
-            const { calendar_default_view, calendar_has_day_view, calendar_has_week_view, calendar_has_month_view } = options;
-            return (
-                <>
-                <MuiSelect
-                    label={__('Default view')}
-                    value={calendar_default_view || ''}
-                    options={[
-                        { label: __('Day'), value: 'day' },
-                        { label: __('Week'), value: 'week' },
-                        { label: __('Month'), value: 'month' },
-                    ]}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, calendar_default_view: value},
-                        'options', 
-                        index)}
-                />
-                <CheckboxControl
-                    label={__('Day view')}
-                    checked={calendar_has_day_view || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, calendar_has_day_view: value},
-                        'options', 
-                        index)}
-                />
-                <CheckboxControl
-                    label={__('Week view')}
-                    checked={calendar_has_week_view || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, calendar_has_week_view: value},
-                        'options', 
-                        index)}
-                />
-                <CheckboxControl
-                    label={__('Month view')}
-                    checked={calendar_has_month_view || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, calendar_has_month_view: value},
-                        'options', 
-                        index)}
-                />
-                </>
-            );
-        case 'posts-slider':
-            const { slider_col_number, slider_is_free } = options;
-            return (
-                <>
-                <MuiInputSlider
-                label={__('Number of cols')}
-                min={1}
-                max={9}
-                step={1}
-                value={slider_col_number || 3}
-                onChange={(value) => handleTabValueChange(
-                    {...options, slider_col_number: value},
-                    'options', 
-                    index)}
-                />
-                <CheckboxControl
-                    label={__('Free cols')}
-                    checked={slider_is_free || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, slider_is_free: value},
-                        'options', 
-                        index)}
-                />
-                </>
-            );
-
-        case 'posts-grid-simple-row':
-            const { grid_simple_row_col_number, grid_simple_row_is_free } = options;
-            return (
-                <>
-                <MuiInputSlider
-                label={__('Number of cols')}
-                min={1}
-                max={9}
-                step={1}
-                value={grid_simple_row_col_number || 3}
-                onChange={(value) => handleTabValueChange(
-                    {...options, grid_simple_row_col_number: value},
-                    'options', 
-                    index)}
-                />
-                <CheckboxControl
-                    label={__('Free cols')}
-                    checked={grid_simple_row_is_free || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, grid_simple_row_is_free: value},
-                        'options', 
-                        index)}
-                />
-                </>
-            );
-        case 'events-map':
-            const { map_is_free } = options;
-            return (
-                <>
-                <CheckboxControl
-                    label={__('Free cols')}
-                    checked={map_is_free || false}
-                    onChange={(value) => handleTabValueChange(
-                        {...options, map_is_free: value},
-                        'options', 
-                        index)}
-                />
-                </>
-            );
-        default:
-            return null;
+    if (template !== 'calendar') {
+        return null;
     }
+
+    const calendar = options?.calendar || {};
+    const { start_key, end_key, default_view, has_day_view, has_week_view, has_month_view } = options?.calendar;
+    
+    return (
+        <>
+        <MetaKeySelector 
+        postType={postType} 
+        onChange={(value) => handleTabValueChange(
+            {...options, calendar: {...calendar, start_key: value}},
+            'options',
+            index)}
+        label={__('Start key')}
+        value={start_key || ''} 
+        />
+        <MetaKeySelector 
+        postType={postType} 
+        onChange={(value) => handleTabValueChange(
+            {...options, calendar: {...calendar, end_key: value}},
+            'options',
+            index)}
+        label={__('End key')}
+        value={end_key || ''} 
+        />
+        <MuiSelect
+            label={__('Default view')}
+            value={default_view || ''}
+            options={[
+                { label: __('Day'), value: 'day' },
+                { label: __('Week'), value: 'week' },
+                { label: __('Month'), value: 'month' },
+            ]}
+            onChange={(value) => handleTabValueChange(
+                {...options, calendar: {...calendar, default_view: value}},
+                'options', 
+                index)}
+        />
+        <CheckboxControl
+            label={__('Day view')}
+            checked={has_day_view || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, calendar: {...calendar, has_day_view: value}},
+                'options', 
+                index)}
+        />
+        <CheckboxControl
+            label={__('Week view')}
+            checked={has_week_view || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, calendar: {...calendar, has_week_view: value}},
+                'options', 
+                index)}
+        />
+        <CheckboxControl
+            label={__('Month view')}
+            checked={has_month_view || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, calendar: {...calendar, has_month_view: value}},
+                'options', 
+                index)}
+        />
+        </>
+    );
+}
+
+function SliderFields(props) {
+    const { 
+        tab, index, handleTabValueChange 
+    } = props;
+    if (!tab) {
+        return null;
+    }
+    const {
+        template, 
+        options
+    } = tab;
+    if (template !== 'slider') {
+        return null;
+    }
+    const {
+        slidesPerView,
+        spaceBetween,
+        effect,
+        autoplay,
+        delay,
+        speed,
+        hideScrollBar,
+        hideNavigation,
+        hidePagination,
+    } = options?.slider;
+
+
+    return (
+        <>
+        <MuiInputSlider
+            label={__('Slides per view')}
+            min={1}
+            max={9}
+            step={1}
+            value={slidesPerView || 3}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, slidesPerView: value}},
+                'options', 
+                index)}
+        />
+        <MuiInputSlider
+            label={__('Space between')}
+            min={0}
+            max={100}
+            step={1}
+            value={spaceBetween || 0}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, spaceBetween: value}},
+                'options', 
+                index)}
+        />
+        <MuiSelect
+            label={__('Effect')}
+            value={effect || ''}
+            options={[
+                { label: __('Slide'), value: 'slide' },
+                { label: __('Fade'), value: 'fade' },
+                { label: __('Cube'), value: 'cube' },
+                { label: __('Coverflow'), value: 'coverflow' },
+                { label: __('Flip'), value: 'flip' },
+            ]}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, effect: value}},
+                'options', 
+                index)}
+        />
+        <CheckboxControl
+            label={__('Autoplay')}
+            checked={autoplay || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, autoplay: value}},
+                'options', 
+                index)}
+        />
+        <MuiInputSlider
+            label={__('Delay')}
+            min={0}
+            max={10000}
+            step={100}
+            value={delay || 3000}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, delay: value}},
+                'options', 
+                index)}
+        />
+        <MuiInputSlider
+            label={__('Speed')}
+            min={0}
+            max={10000}
+            step={100}
+            value={speed || 300}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, speed: value}},
+                'options', 
+                index)}
+        />
+        <CheckboxControl
+            label={__('Hide scroll bar')}
+            checked={hideScrollBar || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, hideScrollBar: value}},
+                'options', 
+                index)}
+        />
+        <CheckboxControl
+            label={__('Hide navigation')}
+            checked={hideNavigation || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, hideNavigation: value}},
+                'options', 
+                index)} 
+        />
+        <CheckboxControl
+            label={__('Hide pagination')}
+            checked={hidePagination || false}
+            onChange={(value) => handleTabValueChange(
+                {...options, slider: {...slider, hidePagination: value}},
+                'options', 
+                index)}
+        />
+        </>
+    );
 }
