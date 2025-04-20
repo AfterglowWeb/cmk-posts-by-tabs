@@ -22,7 +22,6 @@ export default function PostsByTabs(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [calendarPosts, setCalendarPosts] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0);
@@ -50,17 +49,15 @@ export default function PostsByTabs(props) {
                     setTotalPosts(parseInt(result.headers['x-wp-total']));
                 }
 
-                if (result.calendar_posts) {
-                    setCalendarPosts(result.calendar_posts);
+                if (result.posts) {
+                    setPosts(result.posts);
                 }
-                
-                setPosts(result.posts || result);
+
             } catch (err) {
                 console.error("Error fetching posts:", err);
                 setError(err.message);
                 setPosts([]);
                 setTotalPosts(0);
-                setCalendarPosts([]);
             } finally {
                 setIsLoading(false);
             }
@@ -188,7 +185,6 @@ export default function PostsByTabs(props) {
                             clientId={clientId}
                             templates={templates}
                             posts={posts}
-                            calendarPosts={calendarPosts}
                         />
                     ))}
 

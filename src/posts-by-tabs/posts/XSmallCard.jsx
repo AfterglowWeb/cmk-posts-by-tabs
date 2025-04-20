@@ -18,23 +18,22 @@ if(!post) {
       <CardMedia
             component="img"
             sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 0 }}
-            image={post.featured_image}
-            alt={`Lire ${post.title}`}
-
+            image={post._embedded['wp:featuredmedia'][0].source_url}
+            alt={post._embedded['wp:featuredmedia'][0].alt_text}
       />
       <CardContent sx={{ flex: 1, height:'40px', color:'white', p:0, position: 'relative', zIndex: 1, backgroundColor: 'rgba(0,0,0,0.3)', maxWidth: '100%' }}>
         
         <Box  sx={{ p: 1, width: '100%' }}>
-          {post.title && 
-          <Tooltip title={post.title} placement="top">
+          {post.title?.rendered && 
+          <Tooltip title={post.title.rendered} placement="top">
               <h3 className={`text-[12px] font-semibold mb-0 leading-none font-sans overflow-hidden w-full max-w-full`}>
-                <a href={post.url} title={`${post.title}`} className="block decoration-none truncate overflow-hidden">
-                  {post.title}
+                <a href={post.link} title={post.title.rendered} className="block decoration-none truncate overflow-hidden">
+                  {post.title.rendered}
                 </a>
               </h3>
           </Tooltip>
           }
-          <PostCategories post={post} className="flex gap-1 items-center w-full max-w-full" />
+          <PostCategories post={post} taxonomy={'event-type'} className="flex gap-1 items-center w-full max-w-full" />
         </Box>
       </CardContent>
     </Card>

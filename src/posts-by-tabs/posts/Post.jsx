@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Box from '@mui/material/Box';
-import PostCategories from './PostCategories';
+import {PostTerms} from './PostCategories';
 import Tooltip from '@mui/material/Tooltip';
 import PostTop from './PostTop';
 import PostBottom from './PostBottom';
@@ -55,7 +55,7 @@ export default function Post({post}) {
                 style={{height: '100%', width: '100%', objectFit: 'cover'}}
                 className="absolute inset-0 block"
             />}
-            <Tooltip title={ post.title.rendered } placement="bottom-start">
+            <Tooltip title={ post.title?.rendered || '' } placement="bottom-start">
             <Box 
             component={'figcaption'}
             sx={{
@@ -85,7 +85,7 @@ export default function Post({post}) {
             >
                 <PostTop text={topTextString} />
                 <div className="max-w-[180px] mx-auto">
-                    <PostCategories post={post} />
+                    <PostTerms post={post} taxonomy={'event-type'} />
                     <a href={post.link} 
                     title={post.title.rendered} 
                     className="block text-center no-underline w-full">

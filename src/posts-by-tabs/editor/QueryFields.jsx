@@ -12,45 +12,18 @@ import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
 import MuiInputSlider from './MuiInputSlider';
 import MetaKeySelector from './MetaKeySelector';
+import PostTypeSelector from './PostTypeSelector'
 
 export default function QueryFields(props) {
     const { attributes, setAttributes } = props;
     const { numberOfItems, maxNumPages, order, orderBy, paginationType } = attributes;
 
-    const [postTypes, setPostTypes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    
+    const [postType, setPostType] = useState(attributes.postType || 'post');
     const [taxonomies, setTaxonomies] = useState([]);
     const [selectedTaxonomy, setSelectedTaxonomy] = useState(attributes.taxonomy || '');
     const [terms, setTerms] = useState([]);
     const [metaKey, setMetaKey] = useState(attributes.metaKey || '');
-
-    useEffect(() => {
-        setIsLoading(true);
-        wp.apiFetch({ path: '/wp/v2/types' }).then((types) => {
-            const availableTypes = [];
-            Object.keys(types).forEach((type) => {
-
-                if (!type.startsWith('wp_') && 
-                    type !== 'attachment' && 
-                    type !== 'nav_menu_item' &&
-                    type !== 'rm_content_editor') {
-                    
-                    availableTypes.push({
-                        label: types[type].name,
-                        value: type
-                    });
-                }
-            });
-    
-            setPostTypes(availableTypes);
-            setIsLoading(false);
-            
-            if (!attributes.postType) {
-                setAttributes({ postType: 'post' });
-            }
-        });
-    }, []);
 
 
     useEffect(() => {
@@ -139,6 +112,19 @@ export default function QueryFields(props) {
                         ...postTypes
                     ]}
                     onChange={(newPostType) => {
+                        updateQuery({ 
+                            postType: newPostType,
+                            taxonomy: '',
+                            terms: null
+                        });
+                    }}
+                    />
+
+                    <PostTypeSelector
+                    label={__('Post Type')}
+                    value={attributes.postType || 'post'}
+                    onChange={(newPostType) => {
+                        setPostType(newPostType)
                         updateQuery({ 
                             postType: newPostType,
                             taxonomy: '',

@@ -1,10 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import { SelectControl, TextControl, PanelBody, CheckboxControl } from '@wordpress/components';
-import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { TextControl, PanelBody } from '@wordpress/components';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import MuiInputSlider from './MuiInputSlider';
 import TabTemplateOptions from './TabTemplateOptions';
 import MuiSelect from './MuiSelect';
 
@@ -126,7 +124,7 @@ export default function TabFields(props) {
                         options={templates}
                         onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
                     />
-                    <TabTemplateOptions tab={tab} index={index} handleTabValueChange={handleTabValueChange} />
+                    <TabTemplateOptions tab={tab} postType={attributes.postType} index={index} handleTabValueChange={handleTabValueChange} />
                 </PanelBody>
             </div>
         </Paper>
