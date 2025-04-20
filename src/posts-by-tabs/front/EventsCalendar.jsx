@@ -38,7 +38,7 @@ export default function EventsCalendar(props) {
 
   const groupEventsByDate = () => {
     const grouped = {};
-    
+
     posts.forEach(post => {
 
       let start = null;
@@ -47,7 +47,7 @@ export default function EventsCalendar(props) {
         start = post[start_key]
       }
 
-      if(post.acf["start_key"]) {
+      if(post.acf[start_key]) {
         start = post.acf[start_key]
       }
 
@@ -55,7 +55,7 @@ export default function EventsCalendar(props) {
         end = post[end_key]
       }
 
-      if(post.acf["end_key"]) {
+      if(post.acf[end_key]) {
         end = post.acf[end_key]
       }
 
@@ -66,7 +66,7 @@ export default function EventsCalendar(props) {
       
       let startDate;
       try {
-        startDate = parse(start, 'dd/MM/yyyy', new Date());
+        startDate = parse(start, 'yyyy-MM-dd', new Date());
       } catch (error) {
         return;
       }
@@ -74,7 +74,7 @@ export default function EventsCalendar(props) {
       let endDate = startDate;
       if (end) {
         try {
-          endDate = parse(end, 'dd/MM/yyyy', new Date());
+          endDate = parse(end, 'yyyy-MM-dd', new Date());
         } catch (error) {
         }
       }
@@ -168,7 +168,7 @@ export default function EventsCalendar(props) {
   };
 
   const renderWeekView = () => {
-    const startDay = startOfWeek(currentDate, { weekStartsOn: 1 }); // Week starts on Monday
+    const startDay = startOfWeek(currentDate, { weekStartsOn: 1 });
     const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(startDay, i));
     
     return (

@@ -78,10 +78,6 @@ class restExtend {
                     'meta_key' => [
                         'default' => 'datedebut',
                         'sanitize_callback' => 'sanitize_text_field',
-                    ],
-                    'has_calendar' => [
-                        'default' => false,
-                        'sanitize_callback' => 'rest_sanitize_boolean',
                     ]
                 ],
             ]);
@@ -145,27 +141,23 @@ class restExtend {
         
         wp_reset_postdata();
 
-        $data = array();
+        $posts_prepared = array();
         if (empty($posts)) {
             return new \WP_REST_Response( $response, 200 );
         }
         
-        $postController = new \WP_REST_Posts_Controller($args['post_type']);
+        $post_controller = new \WP_REST_Posts_Controller($args['post_type']);
         foreach ($posts as $post) {
-            $prepared = $postController->prepare_item_for_response( $post, $request );
-            $postPrepared = $postController->prepare_response_for_collection( $prepared );
-            $postPrepared['acf'] = apply_filters( 'rest_prepare_acf_fields', get_fields($post->ID), $post, $request);
-            $data[] = $postPrepared;
+            $prepared = $post_controller->prepare_item_for_response( $post, $request );
+            $post_prepared = $post_controller->prepare_response_for_collection( $prepared );
+            $post_prepared['featured_media'] = get_the_post_thumbnail_url($post->ID, 'full');
+            $post_prepared['acf'] = apply_filters( 'rest_prepare_acf_fields', get_fields($post->ID), $post, $request);
+            $posts_prepared[] = $post_prepared;
         }
 
-        if (true === $request->get_param('has_calendar')) {
-            $response['calendar_posts'] = apply_filters('cmk_posts_by_tabs_calendar', $data, array(
-                'start_key' => $options['calendar']['start_key'] ?? 'start',
-                'end_key' => $options['calendar']['end_key'] ?? 'end',
-            ));
-        }
+        apply_filters( 'cmk_posts_by_tabs_posts_prepared', $posts_prepared, $args );
 
-        $response['posts'] = $data;
+        $response['posts'] = $posts_prepared;
         $response['total_posts'] = $query->found_posts;
 
         return new \WP_REST_Response( $response, 200 );

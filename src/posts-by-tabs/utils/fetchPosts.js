@@ -42,10 +42,7 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
         meta_query: attributes.metaFields,
         search: attributes.search || '',
         offset: attributes.offset || 0,
-        meta_key: attributes.metaKey || '',
-        has_calendar: attributes.tabs.map(tab => tab.template).includes('calendar'),
-        start_key: attributes.startKey || '',
-        end_key: attributes.endKey || '',
+        meta_key: attributes.metaKey || ''
     };
     
     if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {

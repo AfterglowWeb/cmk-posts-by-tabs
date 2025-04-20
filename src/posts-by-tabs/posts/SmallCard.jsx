@@ -16,29 +16,29 @@ export default function SmallCard({post, compact = false, hideImage = false}) {
 if(!post) {
   return null;
 }
-
+console.log('post', post);
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', position: 'relative', overflow: 'hidden', p: 0, borderRadius: '2px' }}>
-      <CardMedia
+      {post.featured_media && <CardMedia
             component="img"
             sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 0 }}
-            image={post.featured_image}
-            alt={`Lire ${post.title}`}
-
-      />
+            image={post.featured_media}
+            alt={post.title?.rendered || ''}
+            loading="lazy"
+      />}
       <CardContent sx={{ flex: 1, height:'100%', minHeight:'150px', color:'white', display:'flex', flexDirection:'column', justifyContent:'space-between', p:0, position: 'relative', zIndex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }}>
         
         <Box  sx={{ p: 1 }}>
-          {post.title && 
+          {post.title?.rendered && 
               <h3 className={`font-semibold ${compact ? 'text-md' : 'text-xl'} mb-0 leading-none`}>
-                <a href={post.url} title={post.title} className="no-decoaration">
-                  {post.title}
+                <a href={post.link} title={post.title.rendered} className="no-decoration">
+                  {post.title.rendered}
                 </a>
               </h3>
           }
-          {post.subtitle && 
+          {post.acf?.subtitle && 
               <p className={`${compact && 'hidden'} text-sm text-slate-500 mb-0 leading-none`}>
-                  {post.subtitle}
+                  {post.acf.subtitle}
               </p>
           }
         </Box>
@@ -47,15 +47,15 @@ if(!post) {
           <EventDates post={post} className="px-2"/>
           <Box sx={{ display: 'flex', alignItems: 'center', p: 1, gap: 1 }}> 
               <PostDate post={post} className="w-1/2" />
-              <PostCategories post={post} className="w-1/2" />
+              <PostCategories post={post} taxonomy={'event-type'} className="w-1/2" />
           </Box>
         </Box>
       </CardContent>
       
       {compact ?
       <Fab
-          href={post.url} 
-          title={`Lire ${post.title}`}
+          href={post.link} 
+          title={`Lire ${post.title?.rendered || ''}`}
           color="secondary" 
           size="small"
           sx={{position:'absolute',top:'50%', right:'4px', transform:'translateY(-50%)', zIndex:10, textTransform:'none'}}
@@ -63,15 +63,15 @@ if(!post) {
         <RemoveRedEyeOutlinedIcon />
       </Fab> :
       <Button 
-          href={post.url} 
-          title={`Lire ${post.title}`}
+          href={post.link} 
+          title={`Lire ${post.title?.rendered || ''}`}
           variant="contained" 
           color="secondary" 
           size="small" 
           startIcon={<RemoveRedEyeOutlinedIcon sx={{ height: 25, width: 25 }} />}
           sx={{position:'absolute',top:'50%', right:'8px', transform:'translateY(-50%)', zIndex:10, textTransform:'none'}}
           >
-          Voir
+          {__('Voir', 'posts-by-tabs')}
       </Button>}
     </Card>
   );

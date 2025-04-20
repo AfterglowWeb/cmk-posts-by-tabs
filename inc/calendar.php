@@ -16,7 +16,7 @@ class calendar {
 	}
 
 	public function __construct() {
-		add_filter( 'cmk_posts_by_tabs_calendar', array( $this, 'group_events_by_date' ), 10, 2 );
+		add_filter( 'cmk_posts_by_tabs_posts_prepared', array( $this, 'group_events_by_date' ), 10, 2 );
 	}
 
 	public function group_events_by_date($posts, $options) {
