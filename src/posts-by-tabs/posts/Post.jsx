@@ -5,6 +5,8 @@ import Tooltip from '@mui/material/Tooltip';
 import PostTop from './PostTop';
 import PostBottom from './PostBottom';
 import { eventDatesString } from './EventDates';
+import sanitizeHtml from '../utils/sanitizeHtml';
+import SubEvent from './SubEvent';
 
 export default function Post({post}) {
 
@@ -46,16 +48,18 @@ export default function Post({post}) {
     return (
         <article 
         ref={cardRef} 
+        onClick={() => {document.location.href = post.link;}}
         className="basis-[320px] w-320px h-[320px] min-h-[320px] p-[30px] relative flex items-center justify-center overflow-hidden"
         >
-            {post._embedded && post._embedded['wp:featuredmedia'] &&
+            {post.featured_media &&
             <img
-                src={post._embedded['wp:featuredmedia'][0].source_url}
-                alt={post._embedded['wp:featuredmedia'][0].alt_text}
+                src={post.featured_media}
+                alt={post.title?.rendered || ''}
+                loading="lazy"
                 style={{height: '100%', width: '100%', objectFit: 'cover'}}
                 className="absolute inset-0 block"
             />}
-            <Tooltip title={ post.title?.rendered || '' } placement="bottom-start">
+            <Tooltip title={ <span dangerouslySetInnerHTML={{__html:sanitizeHtml(post.title?.rendered)}} />} placement="bottom-center">
             <Box 
             component={'figcaption'}
             sx={{
@@ -99,12 +103,7 @@ export default function Post({post}) {
             </Box>
             </Tooltip>
             
-            {post.acf?.sub_event && 
-                <div 
-                className="absolute top-[80px] right-0 bg-primary font-narrow-700 text-xs max-w-[220px]">
-                    {post.acf.sub_event}
-                </div>
-            } 
+            <SubEvent post={post} />
         </article>
     );
 }

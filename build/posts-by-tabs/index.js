@@ -2902,30 +2902,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/@mui/icons-material/esm/RemoveRedEyeOutlined.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/@mui/icons-material/esm/RemoveRedEyeOutlined.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/createSvgIcon.js */ "./node_modules/@mui/material/utils/createSvgIcon.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-"use client";
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-  d: "M12 6.5c3.79 0 7.17 2.13 8.82 5.5-1.65 3.37-5.02 5.5-8.82 5.5S4.83 15.37 3.18 12C4.83 8.63 8.21 6.5 12 6.5m0-2C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5m0 5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5m0-2c-2.48 0-4.5 2.02-4.5 4.5s2.02 4.5 4.5 4.5 4.5-2.02 4.5-4.5-2.02-4.5-4.5-4.5"
-}), 'RemoveRedEyeOutlined'));
-
-/***/ }),
-
 /***/ "./node_modules/@mui/icons-material/esm/Today.js":
 /*!*******************************************************!*\
   !*** ./node_modules/@mui/icons-material/esm/Today.js ***!
@@ -36977,123 +36953,6 @@ function withinMaxClamp(min, value, max) {
 
 /***/ }),
 
-/***/ "./node_modules/bezier-easing/src/index.js":
-/*!*************************************************!*\
-  !*** ./node_modules/bezier-easing/src/index.js ***!
-  \*************************************************/
-/***/ ((module) => {
-
-/**
- * https://github.com/gre/bezier-easing
- * BezierEasing - use bezier curve for transition easing function
- * by Gaëtan Renaudeau 2014 - 2015 – MIT License
- */
-
-// These values are established by empiricism with tests (tradeoff: performance VS precision)
-var NEWTON_ITERATIONS = 4;
-var NEWTON_MIN_SLOPE = 0.001;
-var SUBDIVISION_PRECISION = 0.0000001;
-var SUBDIVISION_MAX_ITERATIONS = 10;
-
-var kSplineTableSize = 11;
-var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
-
-var float32ArraySupported = typeof Float32Array === 'function';
-
-function A (aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
-function B (aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
-function C (aA1)      { return 3.0 * aA1; }
-
-// Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
-function calcBezier (aT, aA1, aA2) { return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT; }
-
-// Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
-function getSlope (aT, aA1, aA2) { return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1); }
-
-function binarySubdivide (aX, aA, aB, mX1, mX2) {
-  var currentX, currentT, i = 0;
-  do {
-    currentT = aA + (aB - aA) / 2.0;
-    currentX = calcBezier(currentT, mX1, mX2) - aX;
-    if (currentX > 0.0) {
-      aB = currentT;
-    } else {
-      aA = currentT;
-    }
-  } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
-  return currentT;
-}
-
-function newtonRaphsonIterate (aX, aGuessT, mX1, mX2) {
- for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
-   var currentSlope = getSlope(aGuessT, mX1, mX2);
-   if (currentSlope === 0.0) {
-     return aGuessT;
-   }
-   var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
-   aGuessT -= currentX / currentSlope;
- }
- return aGuessT;
-}
-
-function LinearEasing (x) {
-  return x;
-}
-
-module.exports = function bezier (mX1, mY1, mX2, mY2) {
-  if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) {
-    throw new Error('bezier x values must be in [0, 1] range');
-  }
-
-  if (mX1 === mY1 && mX2 === mY2) {
-    return LinearEasing;
-  }
-
-  // Precompute samples table
-  var sampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
-  for (var i = 0; i < kSplineTableSize; ++i) {
-    sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
-  }
-
-  function getTForX (aX) {
-    var intervalStart = 0.0;
-    var currentSample = 1;
-    var lastSample = kSplineTableSize - 1;
-
-    for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
-      intervalStart += kSampleStepSize;
-    }
-    --currentSample;
-
-    // Interpolate to provide an initial guess for t
-    var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
-    var guessForT = intervalStart + dist * kSampleStepSize;
-
-    var initialSlope = getSlope(guessForT, mX1, mX2);
-    if (initialSlope >= NEWTON_MIN_SLOPE) {
-      return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
-    } else if (initialSlope === 0.0) {
-      return guessForT;
-    } else {
-      return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
-    }
-  }
-
-  return function BezierEasing (x) {
-    // Because JavaScript number are imprecise, we should guarantee the extremes are right.
-    if (x === 0) {
-      return 0;
-    }
-    if (x === 1) {
-      return 1;
-    }
-    return calcBezier(getTForX(x), mY1, mY2);
-  };
-};
-
-
-/***/ }),
-
 /***/ "./node_modules/clsx/dist/clsx.mjs":
 /*!*****************************************!*\
   !*** ./node_modules/clsx/dist/clsx.mjs ***!
@@ -45652,6 +45511,1359 @@ function isConstructor(constructor) {
 
 /***/ }),
 
+/***/ "./node_modules/dompurify/dist/purify.es.mjs":
+/*!***************************************************!*\
+  !*** ./node_modules/dompurify/dist/purify.es.mjs ***!
+  \***************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ purify)
+/* harmony export */ });
+/*! @license DOMPurify 3.2.4 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.2.4/LICENSE */
+
+const {
+  entries,
+  setPrototypeOf,
+  isFrozen,
+  getPrototypeOf,
+  getOwnPropertyDescriptor
+} = Object;
+let {
+  freeze,
+  seal,
+  create
+} = Object; // eslint-disable-line import/no-mutable-exports
+let {
+  apply,
+  construct
+} = typeof Reflect !== 'undefined' && Reflect;
+if (!freeze) {
+  freeze = function freeze(x) {
+    return x;
+  };
+}
+if (!seal) {
+  seal = function seal(x) {
+    return x;
+  };
+}
+if (!apply) {
+  apply = function apply(fun, thisValue, args) {
+    return fun.apply(thisValue, args);
+  };
+}
+if (!construct) {
+  construct = function construct(Func, args) {
+    return new Func(...args);
+  };
+}
+const arrayForEach = unapply(Array.prototype.forEach);
+const arrayLastIndexOf = unapply(Array.prototype.lastIndexOf);
+const arrayPop = unapply(Array.prototype.pop);
+const arrayPush = unapply(Array.prototype.push);
+const arraySplice = unapply(Array.prototype.splice);
+const stringToLowerCase = unapply(String.prototype.toLowerCase);
+const stringToString = unapply(String.prototype.toString);
+const stringMatch = unapply(String.prototype.match);
+const stringReplace = unapply(String.prototype.replace);
+const stringIndexOf = unapply(String.prototype.indexOf);
+const stringTrim = unapply(String.prototype.trim);
+const objectHasOwnProperty = unapply(Object.prototype.hasOwnProperty);
+const regExpTest = unapply(RegExp.prototype.test);
+const typeErrorCreate = unconstruct(TypeError);
+/**
+ * Creates a new function that calls the given function with a specified thisArg and arguments.
+ *
+ * @param func - The function to be wrapped and called.
+ * @returns A new function that calls the given function with a specified thisArg and arguments.
+ */
+function unapply(func) {
+  return function (thisArg) {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+    return apply(func, thisArg, args);
+  };
+}
+/**
+ * Creates a new function that constructs an instance of the given constructor function with the provided arguments.
+ *
+ * @param func - The constructor function to be wrapped and called.
+ * @returns A new function that constructs an instance of the given constructor function with the provided arguments.
+ */
+function unconstruct(func) {
+  return function () {
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    return construct(func, args);
+  };
+}
+/**
+ * Add properties to a lookup table
+ *
+ * @param set - The set to which elements will be added.
+ * @param array - The array containing elements to be added to the set.
+ * @param transformCaseFunc - An optional function to transform the case of each element before adding to the set.
+ * @returns The modified set with added elements.
+ */
+function addToSet(set, array) {
+  let transformCaseFunc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : stringToLowerCase;
+  if (setPrototypeOf) {
+    // Make 'in' and truthy checks like Boolean(set.constructor)
+    // independent of any properties defined on Object.prototype.
+    // Prevent prototype setters from intercepting set as a this value.
+    setPrototypeOf(set, null);
+  }
+  let l = array.length;
+  while (l--) {
+    let element = array[l];
+    if (typeof element === 'string') {
+      const lcElement = transformCaseFunc(element);
+      if (lcElement !== element) {
+        // Config presets (e.g. tags.js, attrs.js) are immutable.
+        if (!isFrozen(array)) {
+          array[l] = lcElement;
+        }
+        element = lcElement;
+      }
+    }
+    set[element] = true;
+  }
+  return set;
+}
+/**
+ * Clean up an array to harden against CSPP
+ *
+ * @param array - The array to be cleaned.
+ * @returns The cleaned version of the array
+ */
+function cleanArray(array) {
+  for (let index = 0; index < array.length; index++) {
+    const isPropertyExist = objectHasOwnProperty(array, index);
+    if (!isPropertyExist) {
+      array[index] = null;
+    }
+  }
+  return array;
+}
+/**
+ * Shallow clone an object
+ *
+ * @param object - The object to be cloned.
+ * @returns A new object that copies the original.
+ */
+function clone(object) {
+  const newObject = create(null);
+  for (const [property, value] of entries(object)) {
+    const isPropertyExist = objectHasOwnProperty(object, property);
+    if (isPropertyExist) {
+      if (Array.isArray(value)) {
+        newObject[property] = cleanArray(value);
+      } else if (value && typeof value === 'object' && value.constructor === Object) {
+        newObject[property] = clone(value);
+      } else {
+        newObject[property] = value;
+      }
+    }
+  }
+  return newObject;
+}
+/**
+ * This method automatically checks if the prop is function or getter and behaves accordingly.
+ *
+ * @param object - The object to look up the getter function in its prototype chain.
+ * @param prop - The property name for which to find the getter function.
+ * @returns The getter function found in the prototype chain or a fallback function.
+ */
+function lookupGetter(object, prop) {
+  while (object !== null) {
+    const desc = getOwnPropertyDescriptor(object, prop);
+    if (desc) {
+      if (desc.get) {
+        return unapply(desc.get);
+      }
+      if (typeof desc.value === 'function') {
+        return unapply(desc.value);
+      }
+    }
+    object = getPrototypeOf(object);
+  }
+  function fallbackValue() {
+    return null;
+  }
+  return fallbackValue;
+}
+
+const html$1 = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'shadow', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
+const svg$1 = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'view', 'vkern']);
+const svgFilters = freeze(['feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feDropShadow', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence']);
+// List of SVG elements that are disallowed by default.
+// We still need to know them so that we can do namespace
+// checks properly in case one wants to add them to
+// allow-list.
+const svgDisallowed = freeze(['animate', 'color-profile', 'cursor', 'discard', 'font-face', 'font-face-format', 'font-face-name', 'font-face-src', 'font-face-uri', 'foreignobject', 'hatch', 'hatchpath', 'mesh', 'meshgradient', 'meshpatch', 'meshrow', 'missing-glyph', 'script', 'set', 'solidcolor', 'unknown', 'use']);
+const mathMl$1 = freeze(['math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mglyph', 'mi', 'mlabeledtr', 'mmultiscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow', 'ms', 'mspace', 'msqrt', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd', 'mtext', 'mtr', 'munder', 'munderover', 'mprescripts']);
+// Similarly to SVG, we want to know all MathML elements,
+// even those that we disallow by default.
+const mathMlDisallowed = freeze(['maction', 'maligngroup', 'malignmark', 'mlongdiv', 'mscarries', 'mscarry', 'msgroup', 'mstack', 'msline', 'msrow', 'semantics', 'annotation', 'annotation-xml', 'mprescripts', 'none']);
+const text = freeze(['#text']);
+
+const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns', 'slot']);
+const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
+const mathMl = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnsalign', 'columnlines', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lspace', 'lquote', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
+const xml = freeze(['xlink:href', 'xml:id', 'xlink:title', 'xml:space', 'xmlns:xlink']);
+
+// eslint-disable-next-line unicorn/better-regex
+const MUSTACHE_EXPR = seal(/\{\{[\w\W]*|[\w\W]*\}\}/gm); // Specify template detection regex for SAFE_FOR_TEMPLATES mode
+const ERB_EXPR = seal(/<%[\w\W]*|[\w\W]*%>/gm);
+const TMPLIT_EXPR = seal(/\$\{[\w\W]*/gm); // eslint-disable-line unicorn/better-regex
+const DATA_ATTR = seal(/^data-[\-\w.\u00B7-\uFFFF]+$/); // eslint-disable-line no-useless-escape
+const ARIA_ATTR = seal(/^aria-[\-\w]+$/); // eslint-disable-line no-useless-escape
+const IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // eslint-disable-line no-useless-escape
+);
+const IS_SCRIPT_OR_DATA = seal(/^(?:\w+script|data):/i);
+const ATTR_WHITESPACE = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g // eslint-disable-line no-control-regex
+);
+const DOCTYPE_NAME = seal(/^html$/i);
+const CUSTOM_ELEMENT = seal(/^[a-z][.\w]*(-[.\w]+)+$/i);
+
+var EXPRESSIONS = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  ARIA_ATTR: ARIA_ATTR,
+  ATTR_WHITESPACE: ATTR_WHITESPACE,
+  CUSTOM_ELEMENT: CUSTOM_ELEMENT,
+  DATA_ATTR: DATA_ATTR,
+  DOCTYPE_NAME: DOCTYPE_NAME,
+  ERB_EXPR: ERB_EXPR,
+  IS_ALLOWED_URI: IS_ALLOWED_URI,
+  IS_SCRIPT_OR_DATA: IS_SCRIPT_OR_DATA,
+  MUSTACHE_EXPR: MUSTACHE_EXPR,
+  TMPLIT_EXPR: TMPLIT_EXPR
+});
+
+/* eslint-disable @typescript-eslint/indent */
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+const NODE_TYPE = {
+  element: 1,
+  attribute: 2,
+  text: 3,
+  cdataSection: 4,
+  entityReference: 5,
+  // Deprecated
+  entityNode: 6,
+  // Deprecated
+  progressingInstruction: 7,
+  comment: 8,
+  document: 9,
+  documentType: 10,
+  documentFragment: 11,
+  notation: 12 // Deprecated
+};
+const getGlobal = function getGlobal() {
+  return typeof window === 'undefined' ? null : window;
+};
+/**
+ * Creates a no-op policy for internal use only.
+ * Don't export this function outside this module!
+ * @param trustedTypes The policy factory.
+ * @param purifyHostElement The Script element used to load DOMPurify (to determine policy name suffix).
+ * @return The policy created (or null, if Trusted Types
+ * are not supported or creating the policy failed).
+ */
+const _createTrustedTypesPolicy = function _createTrustedTypesPolicy(trustedTypes, purifyHostElement) {
+  if (typeof trustedTypes !== 'object' || typeof trustedTypes.createPolicy !== 'function') {
+    return null;
+  }
+  // Allow the callers to control the unique policy name
+  // by adding a data-tt-policy-suffix to the script element with the DOMPurify.
+  // Policy creation with duplicate names throws in Trusted Types.
+  let suffix = null;
+  const ATTR_NAME = 'data-tt-policy-suffix';
+  if (purifyHostElement && purifyHostElement.hasAttribute(ATTR_NAME)) {
+    suffix = purifyHostElement.getAttribute(ATTR_NAME);
+  }
+  const policyName = 'dompurify' + (suffix ? '#' + suffix : '');
+  try {
+    return trustedTypes.createPolicy(policyName, {
+      createHTML(html) {
+        return html;
+      },
+      createScriptURL(scriptUrl) {
+        return scriptUrl;
+      }
+    });
+  } catch (_) {
+    // Policy creation failed (most likely another DOMPurify script has
+    // already run). Skip creating the policy, as this will only cause errors
+    // if TT are enforced.
+    console.warn('TrustedTypes policy ' + policyName + ' could not be created.');
+    return null;
+  }
+};
+const _createHooksMap = function _createHooksMap() {
+  return {
+    afterSanitizeAttributes: [],
+    afterSanitizeElements: [],
+    afterSanitizeShadowDOM: [],
+    beforeSanitizeAttributes: [],
+    beforeSanitizeElements: [],
+    beforeSanitizeShadowDOM: [],
+    uponSanitizeAttribute: [],
+    uponSanitizeElement: [],
+    uponSanitizeShadowNode: []
+  };
+};
+function createDOMPurify() {
+  let window = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : getGlobal();
+  const DOMPurify = root => createDOMPurify(root);
+  DOMPurify.version = '3.2.4';
+  DOMPurify.removed = [];
+  if (!window || !window.document || window.document.nodeType !== NODE_TYPE.document || !window.Element) {
+    // Not running in a browser, provide a factory function
+    // so that you can pass your own Window
+    DOMPurify.isSupported = false;
+    return DOMPurify;
+  }
+  let {
+    document
+  } = window;
+  const originalDocument = document;
+  const currentScript = originalDocument.currentScript;
+  const {
+    DocumentFragment,
+    HTMLTemplateElement,
+    Node,
+    Element,
+    NodeFilter,
+    NamedNodeMap = window.NamedNodeMap || window.MozNamedAttrMap,
+    HTMLFormElement,
+    DOMParser,
+    trustedTypes
+  } = window;
+  const ElementPrototype = Element.prototype;
+  const cloneNode = lookupGetter(ElementPrototype, 'cloneNode');
+  const remove = lookupGetter(ElementPrototype, 'remove');
+  const getNextSibling = lookupGetter(ElementPrototype, 'nextSibling');
+  const getChildNodes = lookupGetter(ElementPrototype, 'childNodes');
+  const getParentNode = lookupGetter(ElementPrototype, 'parentNode');
+  // As per issue #47, the web-components registry is inherited by a
+  // new document created via createHTMLDocument. As per the spec
+  // (http://w3c.github.io/webcomponents/spec/custom/#creating-and-passing-registries)
+  // a new empty registry is used when creating a template contents owner
+  // document, so we use that as our parent document to ensure nothing
+  // is inherited.
+  if (typeof HTMLTemplateElement === 'function') {
+    const template = document.createElement('template');
+    if (template.content && template.content.ownerDocument) {
+      document = template.content.ownerDocument;
+    }
+  }
+  let trustedTypesPolicy;
+  let emptyHTML = '';
+  const {
+    implementation,
+    createNodeIterator,
+    createDocumentFragment,
+    getElementsByTagName
+  } = document;
+  const {
+    importNode
+  } = originalDocument;
+  let hooks = _createHooksMap();
+  /**
+   * Expose whether this browser supports running the full DOMPurify.
+   */
+  DOMPurify.isSupported = typeof entries === 'function' && typeof getParentNode === 'function' && implementation && implementation.createHTMLDocument !== undefined;
+  const {
+    MUSTACHE_EXPR,
+    ERB_EXPR,
+    TMPLIT_EXPR,
+    DATA_ATTR,
+    ARIA_ATTR,
+    IS_SCRIPT_OR_DATA,
+    ATTR_WHITESPACE,
+    CUSTOM_ELEMENT
+  } = EXPRESSIONS;
+  let {
+    IS_ALLOWED_URI: IS_ALLOWED_URI$1
+  } = EXPRESSIONS;
+  /**
+   * We consider the elements and attributes below to be safe. Ideally
+   * don't add any new ones but feel free to remove unwanted ones.
+   */
+  /* allowed element names */
+  let ALLOWED_TAGS = null;
+  const DEFAULT_ALLOWED_TAGS = addToSet({}, [...html$1, ...svg$1, ...svgFilters, ...mathMl$1, ...text]);
+  /* Allowed attribute names */
+  let ALLOWED_ATTR = null;
+  const DEFAULT_ALLOWED_ATTR = addToSet({}, [...html, ...svg, ...mathMl, ...xml]);
+  /*
+   * Configure how DOMPurify should handle custom elements and their attributes as well as customized built-in elements.
+   * @property {RegExp|Function|null} tagNameCheck one of [null, regexPattern, predicate]. Default: `null` (disallow any custom elements)
+   * @property {RegExp|Function|null} attributeNameCheck one of [null, regexPattern, predicate]. Default: `null` (disallow any attributes not on the allow list)
+   * @property {boolean} allowCustomizedBuiltInElements allow custom elements derived from built-ins if they pass CUSTOM_ELEMENT_HANDLING.tagNameCheck. Default: `false`.
+   */
+  let CUSTOM_ELEMENT_HANDLING = Object.seal(create(null, {
+    tagNameCheck: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: null
+    },
+    attributeNameCheck: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: null
+    },
+    allowCustomizedBuiltInElements: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: false
+    }
+  }));
+  /* Explicitly forbidden tags (overrides ALLOWED_TAGS/ADD_TAGS) */
+  let FORBID_TAGS = null;
+  /* Explicitly forbidden attributes (overrides ALLOWED_ATTR/ADD_ATTR) */
+  let FORBID_ATTR = null;
+  /* Decide if ARIA attributes are okay */
+  let ALLOW_ARIA_ATTR = true;
+  /* Decide if custom data attributes are okay */
+  let ALLOW_DATA_ATTR = true;
+  /* Decide if unknown protocols are okay */
+  let ALLOW_UNKNOWN_PROTOCOLS = false;
+  /* Decide if self-closing tags in attributes are allowed.
+   * Usually removed due to a mXSS issue in jQuery 3.0 */
+  let ALLOW_SELF_CLOSE_IN_ATTR = true;
+  /* Output should be safe for common template engines.
+   * This means, DOMPurify removes data attributes, mustaches and ERB
+   */
+  let SAFE_FOR_TEMPLATES = false;
+  /* Output should be safe even for XML used within HTML and alike.
+   * This means, DOMPurify removes comments when containing risky content.
+   */
+  let SAFE_FOR_XML = true;
+  /* Decide if document with <html>... should be returned */
+  let WHOLE_DOCUMENT = false;
+  /* Track whether config is already set on this instance of DOMPurify. */
+  let SET_CONFIG = false;
+  /* Decide if all elements (e.g. style, script) must be children of
+   * document.body. By default, browsers might move them to document.head */
+  let FORCE_BODY = false;
+  /* Decide if a DOM `HTMLBodyElement` should be returned, instead of a html
+   * string (or a TrustedHTML object if Trusted Types are supported).
+   * If `WHOLE_DOCUMENT` is enabled a `HTMLHtmlElement` will be returned instead
+   */
+  let RETURN_DOM = false;
+  /* Decide if a DOM `DocumentFragment` should be returned, instead of a html
+   * string  (or a TrustedHTML object if Trusted Types are supported) */
+  let RETURN_DOM_FRAGMENT = false;
+  /* Try to return a Trusted Type object instead of a string, return a string in
+   * case Trusted Types are not supported  */
+  let RETURN_TRUSTED_TYPE = false;
+  /* Output should be free from DOM clobbering attacks?
+   * This sanitizes markups named with colliding, clobberable built-in DOM APIs.
+   */
+  let SANITIZE_DOM = true;
+  /* Achieve full DOM Clobbering protection by isolating the namespace of named
+   * properties and JS variables, mitigating attacks that abuse the HTML/DOM spec rules.
+   *
+   * HTML/DOM spec rules that enable DOM Clobbering:
+   *   - Named Access on Window (§7.3.3)
+   *   - DOM Tree Accessors (§3.1.5)
+   *   - Form Element Parent-Child Relations (§4.10.3)
+   *   - Iframe srcdoc / Nested WindowProxies (§4.8.5)
+   *   - HTMLCollection (§4.2.10.2)
+   *
+   * Namespace isolation is implemented by prefixing `id` and `name` attributes
+   * with a constant string, i.e., `user-content-`
+   */
+  let SANITIZE_NAMED_PROPS = false;
+  const SANITIZE_NAMED_PROPS_PREFIX = 'user-content-';
+  /* Keep element content when removing element? */
+  let KEEP_CONTENT = true;
+  /* If a `Node` is passed to sanitize(), then performs sanitization in-place instead
+   * of importing it into a new Document and returning a sanitized copy */
+  let IN_PLACE = false;
+  /* Allow usage of profiles like html, svg and mathMl */
+  let USE_PROFILES = {};
+  /* Tags to ignore content of when KEEP_CONTENT is true */
+  let FORBID_CONTENTS = null;
+  const DEFAULT_FORBID_CONTENTS = addToSet({}, ['annotation-xml', 'audio', 'colgroup', 'desc', 'foreignobject', 'head', 'iframe', 'math', 'mi', 'mn', 'mo', 'ms', 'mtext', 'noembed', 'noframes', 'noscript', 'plaintext', 'script', 'style', 'svg', 'template', 'thead', 'title', 'video', 'xmp']);
+  /* Tags that are safe for data: URIs */
+  let DATA_URI_TAGS = null;
+  const DEFAULT_DATA_URI_TAGS = addToSet({}, ['audio', 'video', 'img', 'source', 'image', 'track']);
+  /* Attributes safe for values like "javascript:" */
+  let URI_SAFE_ATTRIBUTES = null;
+  const DEFAULT_URI_SAFE_ATTRIBUTES = addToSet({}, ['alt', 'class', 'for', 'id', 'label', 'name', 'pattern', 'placeholder', 'role', 'summary', 'title', 'value', 'style', 'xmlns']);
+  const MATHML_NAMESPACE = 'http://www.w3.org/1998/Math/MathML';
+  const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+  const HTML_NAMESPACE = 'http://www.w3.org/1999/xhtml';
+  /* Document namespace */
+  let NAMESPACE = HTML_NAMESPACE;
+  let IS_EMPTY_INPUT = false;
+  /* Allowed XHTML+XML namespaces */
+  let ALLOWED_NAMESPACES = null;
+  const DEFAULT_ALLOWED_NAMESPACES = addToSet({}, [MATHML_NAMESPACE, SVG_NAMESPACE, HTML_NAMESPACE], stringToString);
+  let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, ['mi', 'mo', 'mn', 'ms', 'mtext']);
+  let HTML_INTEGRATION_POINTS = addToSet({}, ['annotation-xml']);
+  // Certain elements are allowed in both SVG and HTML
+  // namespace. We need to specify them explicitly
+  // so that they don't get erroneously deleted from
+  // HTML namespace.
+  const COMMON_SVG_AND_HTML_ELEMENTS = addToSet({}, ['title', 'style', 'font', 'a', 'script']);
+  /* Parsing of strict XHTML documents */
+  let PARSER_MEDIA_TYPE = null;
+  const SUPPORTED_PARSER_MEDIA_TYPES = ['application/xhtml+xml', 'text/html'];
+  const DEFAULT_PARSER_MEDIA_TYPE = 'text/html';
+  let transformCaseFunc = null;
+  /* Keep a reference to config to pass to hooks */
+  let CONFIG = null;
+  /* Ideally, do not touch anything below this line */
+  /* ______________________________________________ */
+  const formElement = document.createElement('form');
+  const isRegexOrFunction = function isRegexOrFunction(testValue) {
+    return testValue instanceof RegExp || testValue instanceof Function;
+  };
+  /**
+   * _parseConfig
+   *
+   * @param cfg optional config literal
+   */
+  // eslint-disable-next-line complexity
+  const _parseConfig = function _parseConfig() {
+    let cfg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    if (CONFIG && CONFIG === cfg) {
+      return;
+    }
+    /* Shield configuration object from tampering */
+    if (!cfg || typeof cfg !== 'object') {
+      cfg = {};
+    }
+    /* Shield configuration object from prototype pollution */
+    cfg = clone(cfg);
+    PARSER_MEDIA_TYPE =
+    // eslint-disable-next-line unicorn/prefer-includes
+    SUPPORTED_PARSER_MEDIA_TYPES.indexOf(cfg.PARSER_MEDIA_TYPE) === -1 ? DEFAULT_PARSER_MEDIA_TYPE : cfg.PARSER_MEDIA_TYPE;
+    // HTML tags and attributes are not case-sensitive, converting to lowercase. Keeping XHTML as is.
+    transformCaseFunc = PARSER_MEDIA_TYPE === 'application/xhtml+xml' ? stringToString : stringToLowerCase;
+    /* Set configuration parameters */
+    ALLOWED_TAGS = objectHasOwnProperty(cfg, 'ALLOWED_TAGS') ? addToSet({}, cfg.ALLOWED_TAGS, transformCaseFunc) : DEFAULT_ALLOWED_TAGS;
+    ALLOWED_ATTR = objectHasOwnProperty(cfg, 'ALLOWED_ATTR') ? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunc) : DEFAULT_ALLOWED_ATTR;
+    ALLOWED_NAMESPACES = objectHasOwnProperty(cfg, 'ALLOWED_NAMESPACES') ? addToSet({}, cfg.ALLOWED_NAMESPACES, stringToString) : DEFAULT_ALLOWED_NAMESPACES;
+    URI_SAFE_ATTRIBUTES = objectHasOwnProperty(cfg, 'ADD_URI_SAFE_ATTR') ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), cfg.ADD_URI_SAFE_ATTR, transformCaseFunc) : DEFAULT_URI_SAFE_ATTRIBUTES;
+    DATA_URI_TAGS = objectHasOwnProperty(cfg, 'ADD_DATA_URI_TAGS') ? addToSet(clone(DEFAULT_DATA_URI_TAGS), cfg.ADD_DATA_URI_TAGS, transformCaseFunc) : DEFAULT_DATA_URI_TAGS;
+    FORBID_CONTENTS = objectHasOwnProperty(cfg, 'FORBID_CONTENTS') ? addToSet({}, cfg.FORBID_CONTENTS, transformCaseFunc) : DEFAULT_FORBID_CONTENTS;
+    FORBID_TAGS = objectHasOwnProperty(cfg, 'FORBID_TAGS') ? addToSet({}, cfg.FORBID_TAGS, transformCaseFunc) : {};
+    FORBID_ATTR = objectHasOwnProperty(cfg, 'FORBID_ATTR') ? addToSet({}, cfg.FORBID_ATTR, transformCaseFunc) : {};
+    USE_PROFILES = objectHasOwnProperty(cfg, 'USE_PROFILES') ? cfg.USE_PROFILES : false;
+    ALLOW_ARIA_ATTR = cfg.ALLOW_ARIA_ATTR !== false; // Default true
+    ALLOW_DATA_ATTR = cfg.ALLOW_DATA_ATTR !== false; // Default true
+    ALLOW_UNKNOWN_PROTOCOLS = cfg.ALLOW_UNKNOWN_PROTOCOLS || false; // Default false
+    ALLOW_SELF_CLOSE_IN_ATTR = cfg.ALLOW_SELF_CLOSE_IN_ATTR !== false; // Default true
+    SAFE_FOR_TEMPLATES = cfg.SAFE_FOR_TEMPLATES || false; // Default false
+    SAFE_FOR_XML = cfg.SAFE_FOR_XML !== false; // Default true
+    WHOLE_DOCUMENT = cfg.WHOLE_DOCUMENT || false; // Default false
+    RETURN_DOM = cfg.RETURN_DOM || false; // Default false
+    RETURN_DOM_FRAGMENT = cfg.RETURN_DOM_FRAGMENT || false; // Default false
+    RETURN_TRUSTED_TYPE = cfg.RETURN_TRUSTED_TYPE || false; // Default false
+    FORCE_BODY = cfg.FORCE_BODY || false; // Default false
+    SANITIZE_DOM = cfg.SANITIZE_DOM !== false; // Default true
+    SANITIZE_NAMED_PROPS = cfg.SANITIZE_NAMED_PROPS || false; // Default false
+    KEEP_CONTENT = cfg.KEEP_CONTENT !== false; // Default true
+    IN_PLACE = cfg.IN_PLACE || false; // Default false
+    IS_ALLOWED_URI$1 = cfg.ALLOWED_URI_REGEXP || IS_ALLOWED_URI;
+    NAMESPACE = cfg.NAMESPACE || HTML_NAMESPACE;
+    MATHML_TEXT_INTEGRATION_POINTS = cfg.MATHML_TEXT_INTEGRATION_POINTS || MATHML_TEXT_INTEGRATION_POINTS;
+    HTML_INTEGRATION_POINTS = cfg.HTML_INTEGRATION_POINTS || HTML_INTEGRATION_POINTS;
+    CUSTOM_ELEMENT_HANDLING = cfg.CUSTOM_ELEMENT_HANDLING || {};
+    if (cfg.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck)) {
+      CUSTOM_ELEMENT_HANDLING.tagNameCheck = cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck;
+    }
+    if (cfg.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(cfg.CUSTOM_ELEMENT_HANDLING.attributeNameCheck)) {
+      CUSTOM_ELEMENT_HANDLING.attributeNameCheck = cfg.CUSTOM_ELEMENT_HANDLING.attributeNameCheck;
+    }
+    if (cfg.CUSTOM_ELEMENT_HANDLING && typeof cfg.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements === 'boolean') {
+      CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements = cfg.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements;
+    }
+    if (SAFE_FOR_TEMPLATES) {
+      ALLOW_DATA_ATTR = false;
+    }
+    if (RETURN_DOM_FRAGMENT) {
+      RETURN_DOM = true;
+    }
+    /* Parse profile info */
+    if (USE_PROFILES) {
+      ALLOWED_TAGS = addToSet({}, text);
+      ALLOWED_ATTR = [];
+      if (USE_PROFILES.html === true) {
+        addToSet(ALLOWED_TAGS, html$1);
+        addToSet(ALLOWED_ATTR, html);
+      }
+      if (USE_PROFILES.svg === true) {
+        addToSet(ALLOWED_TAGS, svg$1);
+        addToSet(ALLOWED_ATTR, svg);
+        addToSet(ALLOWED_ATTR, xml);
+      }
+      if (USE_PROFILES.svgFilters === true) {
+        addToSet(ALLOWED_TAGS, svgFilters);
+        addToSet(ALLOWED_ATTR, svg);
+        addToSet(ALLOWED_ATTR, xml);
+      }
+      if (USE_PROFILES.mathMl === true) {
+        addToSet(ALLOWED_TAGS, mathMl$1);
+        addToSet(ALLOWED_ATTR, mathMl);
+        addToSet(ALLOWED_ATTR, xml);
+      }
+    }
+    /* Merge configuration parameters */
+    if (cfg.ADD_TAGS) {
+      if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
+        ALLOWED_TAGS = clone(ALLOWED_TAGS);
+      }
+      addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
+    }
+    if (cfg.ADD_ATTR) {
+      if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
+        ALLOWED_ATTR = clone(ALLOWED_ATTR);
+      }
+      addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
+    }
+    if (cfg.ADD_URI_SAFE_ATTR) {
+      addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR, transformCaseFunc);
+    }
+    if (cfg.FORBID_CONTENTS) {
+      if (FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS) {
+        FORBID_CONTENTS = clone(FORBID_CONTENTS);
+      }
+      addToSet(FORBID_CONTENTS, cfg.FORBID_CONTENTS, transformCaseFunc);
+    }
+    /* Add #text in case KEEP_CONTENT is set to true */
+    if (KEEP_CONTENT) {
+      ALLOWED_TAGS['#text'] = true;
+    }
+    /* Add html, head and body to ALLOWED_TAGS in case WHOLE_DOCUMENT is true */
+    if (WHOLE_DOCUMENT) {
+      addToSet(ALLOWED_TAGS, ['html', 'head', 'body']);
+    }
+    /* Add tbody to ALLOWED_TAGS in case tables are permitted, see #286, #365 */
+    if (ALLOWED_TAGS.table) {
+      addToSet(ALLOWED_TAGS, ['tbody']);
+      delete FORBID_TAGS.tbody;
+    }
+    if (cfg.TRUSTED_TYPES_POLICY) {
+      if (typeof cfg.TRUSTED_TYPES_POLICY.createHTML !== 'function') {
+        throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.');
+      }
+      if (typeof cfg.TRUSTED_TYPES_POLICY.createScriptURL !== 'function') {
+        throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.');
+      }
+      // Overwrite existing TrustedTypes policy.
+      trustedTypesPolicy = cfg.TRUSTED_TYPES_POLICY;
+      // Sign local variables required by `sanitize`.
+      emptyHTML = trustedTypesPolicy.createHTML('');
+    } else {
+      // Uninitialized policy, attempt to initialize the internal dompurify policy.
+      if (trustedTypesPolicy === undefined) {
+        trustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, currentScript);
+      }
+      // If creating the internal policy succeeded sign internal variables.
+      if (trustedTypesPolicy !== null && typeof emptyHTML === 'string') {
+        emptyHTML = trustedTypesPolicy.createHTML('');
+      }
+    }
+    // Prevent further manipulation of configuration.
+    // Not available in IE8, Safari 5, etc.
+    if (freeze) {
+      freeze(cfg);
+    }
+    CONFIG = cfg;
+  };
+  /* Keep track of all possible SVG and MathML tags
+   * so that we can perform the namespace checks
+   * correctly. */
+  const ALL_SVG_TAGS = addToSet({}, [...svg$1, ...svgFilters, ...svgDisallowed]);
+  const ALL_MATHML_TAGS = addToSet({}, [...mathMl$1, ...mathMlDisallowed]);
+  /**
+   * @param element a DOM element whose namespace is being checked
+   * @returns Return false if the element has a
+   *  namespace that a spec-compliant parser would never
+   *  return. Return true otherwise.
+   */
+  const _checkValidNamespace = function _checkValidNamespace(element) {
+    let parent = getParentNode(element);
+    // In JSDOM, if we're inside shadow DOM, then parentNode
+    // can be null. We just simulate parent in this case.
+    if (!parent || !parent.tagName) {
+      parent = {
+        namespaceURI: NAMESPACE,
+        tagName: 'template'
+      };
+    }
+    const tagName = stringToLowerCase(element.tagName);
+    const parentTagName = stringToLowerCase(parent.tagName);
+    if (!ALLOWED_NAMESPACES[element.namespaceURI]) {
+      return false;
+    }
+    if (element.namespaceURI === SVG_NAMESPACE) {
+      // The only way to switch from HTML namespace to SVG
+      // is via <svg>. If it happens via any other tag, then
+      // it should be killed.
+      if (parent.namespaceURI === HTML_NAMESPACE) {
+        return tagName === 'svg';
+      }
+      // The only way to switch from MathML to SVG is via`
+      // svg if parent is either <annotation-xml> or MathML
+      // text integration points.
+      if (parent.namespaceURI === MATHML_NAMESPACE) {
+        return tagName === 'svg' && (parentTagName === 'annotation-xml' || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]);
+      }
+      // We only allow elements that are defined in SVG
+      // spec. All others are disallowed in SVG namespace.
+      return Boolean(ALL_SVG_TAGS[tagName]);
+    }
+    if (element.namespaceURI === MATHML_NAMESPACE) {
+      // The only way to switch from HTML namespace to MathML
+      // is via <math>. If it happens via any other tag, then
+      // it should be killed.
+      if (parent.namespaceURI === HTML_NAMESPACE) {
+        return tagName === 'math';
+      }
+      // The only way to switch from SVG to MathML is via
+      // <math> and HTML integration points
+      if (parent.namespaceURI === SVG_NAMESPACE) {
+        return tagName === 'math' && HTML_INTEGRATION_POINTS[parentTagName];
+      }
+      // We only allow elements that are defined in MathML
+      // spec. All others are disallowed in MathML namespace.
+      return Boolean(ALL_MATHML_TAGS[tagName]);
+    }
+    if (element.namespaceURI === HTML_NAMESPACE) {
+      // The only way to switch from SVG to HTML is via
+      // HTML integration points, and from MathML to HTML
+      // is via MathML text integration points
+      if (parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName]) {
+        return false;
+      }
+      if (parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) {
+        return false;
+      }
+      // We disallow tags that are specific for MathML
+      // or SVG and should never appear in HTML namespace
+      return !ALL_MATHML_TAGS[tagName] && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]);
+    }
+    // For XHTML and XML documents that support custom namespaces
+    if (PARSER_MEDIA_TYPE === 'application/xhtml+xml' && ALLOWED_NAMESPACES[element.namespaceURI]) {
+      return true;
+    }
+    // The code should never reach this place (this means
+    // that the element somehow got namespace that is not
+    // HTML, SVG, MathML or allowed via ALLOWED_NAMESPACES).
+    // Return false just in case.
+    return false;
+  };
+  /**
+   * _forceRemove
+   *
+   * @param node a DOM node
+   */
+  const _forceRemove = function _forceRemove(node) {
+    arrayPush(DOMPurify.removed, {
+      element: node
+    });
+    try {
+      // eslint-disable-next-line unicorn/prefer-dom-node-remove
+      getParentNode(node).removeChild(node);
+    } catch (_) {
+      remove(node);
+    }
+  };
+  /**
+   * _removeAttribute
+   *
+   * @param name an Attribute name
+   * @param element a DOM node
+   */
+  const _removeAttribute = function _removeAttribute(name, element) {
+    try {
+      arrayPush(DOMPurify.removed, {
+        attribute: element.getAttributeNode(name),
+        from: element
+      });
+    } catch (_) {
+      arrayPush(DOMPurify.removed, {
+        attribute: null,
+        from: element
+      });
+    }
+    element.removeAttribute(name);
+    // We void attribute values for unremovable "is" attributes
+    if (name === 'is') {
+      if (RETURN_DOM || RETURN_DOM_FRAGMENT) {
+        try {
+          _forceRemove(element);
+        } catch (_) {}
+      } else {
+        try {
+          element.setAttribute(name, '');
+        } catch (_) {}
+      }
+    }
+  };
+  /**
+   * _initDocument
+   *
+   * @param dirty - a string of dirty markup
+   * @return a DOM, filled with the dirty markup
+   */
+  const _initDocument = function _initDocument(dirty) {
+    /* Create a HTML document */
+    let doc = null;
+    let leadingWhitespace = null;
+    if (FORCE_BODY) {
+      dirty = '<remove></remove>' + dirty;
+    } else {
+      /* If FORCE_BODY isn't used, leading whitespace needs to be preserved manually */
+      const matches = stringMatch(dirty, /^[\r\n\t ]+/);
+      leadingWhitespace = matches && matches[0];
+    }
+    if (PARSER_MEDIA_TYPE === 'application/xhtml+xml' && NAMESPACE === HTML_NAMESPACE) {
+      // Root of XHTML doc must contain xmlns declaration (see https://www.w3.org/TR/xhtml1/normative.html#strict)
+      dirty = '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' + dirty + '</body></html>';
+    }
+    const dirtyPayload = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
+    /*
+     * Use the DOMParser API by default, fallback later if needs be
+     * DOMParser not work for svg when has multiple root element.
+     */
+    if (NAMESPACE === HTML_NAMESPACE) {
+      try {
+        doc = new DOMParser().parseFromString(dirtyPayload, PARSER_MEDIA_TYPE);
+      } catch (_) {}
+    }
+    /* Use createHTMLDocument in case DOMParser is not available */
+    if (!doc || !doc.documentElement) {
+      doc = implementation.createDocument(NAMESPACE, 'template', null);
+      try {
+        doc.documentElement.innerHTML = IS_EMPTY_INPUT ? emptyHTML : dirtyPayload;
+      } catch (_) {
+        // Syntax error if dirtyPayload is invalid xml
+      }
+    }
+    const body = doc.body || doc.documentElement;
+    if (dirty && leadingWhitespace) {
+      body.insertBefore(document.createTextNode(leadingWhitespace), body.childNodes[0] || null);
+    }
+    /* Work on whole document or just its body */
+    if (NAMESPACE === HTML_NAMESPACE) {
+      return getElementsByTagName.call(doc, WHOLE_DOCUMENT ? 'html' : 'body')[0];
+    }
+    return WHOLE_DOCUMENT ? doc.documentElement : body;
+  };
+  /**
+   * Creates a NodeIterator object that you can use to traverse filtered lists of nodes or elements in a document.
+   *
+   * @param root The root element or node to start traversing on.
+   * @return The created NodeIterator
+   */
+  const _createNodeIterator = function _createNodeIterator(root) {
+    return createNodeIterator.call(root.ownerDocument || root, root,
+    // eslint-disable-next-line no-bitwise
+    NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT | NodeFilter.SHOW_PROCESSING_INSTRUCTION | NodeFilter.SHOW_CDATA_SECTION, null);
+  };
+  /**
+   * _isClobbered
+   *
+   * @param element element to check for clobbering attacks
+   * @return true if clobbered, false if safe
+   */
+  const _isClobbered = function _isClobbered(element) {
+    return element instanceof HTMLFormElement && (typeof element.nodeName !== 'string' || typeof element.textContent !== 'string' || typeof element.removeChild !== 'function' || !(element.attributes instanceof NamedNodeMap) || typeof element.removeAttribute !== 'function' || typeof element.setAttribute !== 'function' || typeof element.namespaceURI !== 'string' || typeof element.insertBefore !== 'function' || typeof element.hasChildNodes !== 'function');
+  };
+  /**
+   * Checks whether the given object is a DOM node.
+   *
+   * @param value object to check whether it's a DOM node
+   * @return true is object is a DOM node
+   */
+  const _isNode = function _isNode(value) {
+    return typeof Node === 'function' && value instanceof Node;
+  };
+  function _executeHooks(hooks, currentNode, data) {
+    arrayForEach(hooks, hook => {
+      hook.call(DOMPurify, currentNode, data, CONFIG);
+    });
+  }
+  /**
+   * _sanitizeElements
+   *
+   * @protect nodeName
+   * @protect textContent
+   * @protect removeChild
+   * @param currentNode to check for permission to exist
+   * @return true if node was killed, false if left alive
+   */
+  const _sanitizeElements = function _sanitizeElements(currentNode) {
+    let content = null;
+    /* Execute a hook if present */
+    _executeHooks(hooks.beforeSanitizeElements, currentNode, null);
+    /* Check if element is clobbered or can clobber */
+    if (_isClobbered(currentNode)) {
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Now let's check the element's type and name */
+    const tagName = transformCaseFunc(currentNode.nodeName);
+    /* Execute a hook if present */
+    _executeHooks(hooks.uponSanitizeElement, currentNode, {
+      tagName,
+      allowedTags: ALLOWED_TAGS
+    });
+    /* Detect mXSS attempts abusing namespace confusion */
+    if (currentNode.hasChildNodes() && !_isNode(currentNode.firstElementChild) && regExpTest(/<[/\w]/g, currentNode.innerHTML) && regExpTest(/<[/\w]/g, currentNode.textContent)) {
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Remove any occurrence of processing instructions */
+    if (currentNode.nodeType === NODE_TYPE.progressingInstruction) {
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Remove any kind of possibly harmful comments */
+    if (SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(/<[/\w]/g, currentNode.data)) {
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Remove element if anything forbids its presence */
+    if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+      /* Check if we have a custom element to handle */
+      if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
+        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
+          return false;
+        }
+        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)) {
+          return false;
+        }
+      }
+      /* Keep content except for bad-listed elements */
+      if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
+        const parentNode = getParentNode(currentNode) || currentNode.parentNode;
+        const childNodes = getChildNodes(currentNode) || currentNode.childNodes;
+        if (childNodes && parentNode) {
+          const childCount = childNodes.length;
+          for (let i = childCount - 1; i >= 0; --i) {
+            const childClone = cloneNode(childNodes[i], true);
+            childClone.__removalCount = (currentNode.__removalCount || 0) + 1;
+            parentNode.insertBefore(childClone, getNextSibling(currentNode));
+          }
+        }
+      }
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Check whether element has a valid namespace */
+    if (currentNode instanceof Element && !_checkValidNamespace(currentNode)) {
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Make sure that older browsers don't get fallback-tag mXSS */
+    if ((tagName === 'noscript' || tagName === 'noembed' || tagName === 'noframes') && regExpTest(/<\/no(script|embed|frames)/i, currentNode.innerHTML)) {
+      _forceRemove(currentNode);
+      return true;
+    }
+    /* Sanitize element content to be template-safe */
+    if (SAFE_FOR_TEMPLATES && currentNode.nodeType === NODE_TYPE.text) {
+      /* Get the element's text content */
+      content = currentNode.textContent;
+      arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], expr => {
+        content = stringReplace(content, expr, ' ');
+      });
+      if (currentNode.textContent !== content) {
+        arrayPush(DOMPurify.removed, {
+          element: currentNode.cloneNode()
+        });
+        currentNode.textContent = content;
+      }
+    }
+    /* Execute a hook if present */
+    _executeHooks(hooks.afterSanitizeElements, currentNode, null);
+    return false;
+  };
+  /**
+   * _isValidAttribute
+   *
+   * @param lcTag Lowercase tag name of containing element.
+   * @param lcName Lowercase attribute name.
+   * @param value Attribute value.
+   * @return Returns true if `value` is valid, otherwise false.
+   */
+  // eslint-disable-next-line complexity
+  const _isValidAttribute = function _isValidAttribute(lcTag, lcName, value) {
+    /* Make sure attribute cannot clobber */
+    if (SANITIZE_DOM && (lcName === 'id' || lcName === 'name') && (value in document || value in formElement)) {
+      return false;
+    }
+    /* Allow valid data-* attributes: At least one character after "-"
+        (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
+        XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
+        We don't need to check the value; it's always URI safe. */
+    if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR, lcName)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
+      if (
+      // First condition does a very basic check if a) it's basically a valid custom element tagname AND
+      // b) if the tagName passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
+      // and c) if the attribute name passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.attributeNameCheck
+      _isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName)) ||
+      // Alternative, second condition checks if it's an `is`-attribute, AND
+      // the value passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
+      lcName === 'is' && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(value))) ; else {
+        return false;
+      }
+      /* Check value is safe. First, is attr inert? If so, is safe */
+    } else if (URI_SAFE_ATTRIBUTES[lcName]) ; else if (regExpTest(IS_ALLOWED_URI$1, stringReplace(value, ATTR_WHITESPACE, ''))) ; else if ((lcName === 'src' || lcName === 'xlink:href' || lcName === 'href') && lcTag !== 'script' && stringIndexOf(value, 'data:') === 0 && DATA_URI_TAGS[lcTag]) ; else if (ALLOW_UNKNOWN_PROTOCOLS && !regExpTest(IS_SCRIPT_OR_DATA, stringReplace(value, ATTR_WHITESPACE, ''))) ; else if (value) {
+      return false;
+    } else ;
+    return true;
+  };
+  /**
+   * _isBasicCustomElement
+   * checks if at least one dash is included in tagName, and it's not the first char
+   * for more sophisticated checking see https://github.com/sindresorhus/validate-element-name
+   *
+   * @param tagName name of the tag of the node to sanitize
+   * @returns Returns true if the tag name meets the basic criteria for a custom element, otherwise false.
+   */
+  const _isBasicCustomElement = function _isBasicCustomElement(tagName) {
+    return tagName !== 'annotation-xml' && stringMatch(tagName, CUSTOM_ELEMENT);
+  };
+  /**
+   * _sanitizeAttributes
+   *
+   * @protect attributes
+   * @protect nodeName
+   * @protect removeAttribute
+   * @protect setAttribute
+   *
+   * @param currentNode to sanitize
+   */
+  const _sanitizeAttributes = function _sanitizeAttributes(currentNode) {
+    /* Execute a hook if present */
+    _executeHooks(hooks.beforeSanitizeAttributes, currentNode, null);
+    const {
+      attributes
+    } = currentNode;
+    /* Check if we have attributes; if not we might have a text node */
+    if (!attributes || _isClobbered(currentNode)) {
+      return;
+    }
+    const hookEvent = {
+      attrName: '',
+      attrValue: '',
+      keepAttr: true,
+      allowedAttributes: ALLOWED_ATTR,
+      forceKeepAttr: undefined
+    };
+    let l = attributes.length;
+    /* Go backwards over all attributes; safely remove bad ones */
+    while (l--) {
+      const attr = attributes[l];
+      const {
+        name,
+        namespaceURI,
+        value: attrValue
+      } = attr;
+      const lcName = transformCaseFunc(name);
+      let value = name === 'value' ? attrValue : stringTrim(attrValue);
+      /* Execute a hook if present */
+      hookEvent.attrName = lcName;
+      hookEvent.attrValue = value;
+      hookEvent.keepAttr = true;
+      hookEvent.forceKeepAttr = undefined; // Allows developers to see this is a property they can set
+      _executeHooks(hooks.uponSanitizeAttribute, currentNode, hookEvent);
+      value = hookEvent.attrValue;
+      /* Full DOM Clobbering protection via namespace isolation,
+       * Prefix id and name attributes with `user-content-`
+       */
+      if (SANITIZE_NAMED_PROPS && (lcName === 'id' || lcName === 'name')) {
+        // Remove the attribute with this value
+        _removeAttribute(name, currentNode);
+        // Prefix the value and later re-create the attribute with the sanitized value
+        value = SANITIZE_NAMED_PROPS_PREFIX + value;
+      }
+      /* Work around a security issue with comments inside attributes */
+      if (SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title)/i, value)) {
+        _removeAttribute(name, currentNode);
+        continue;
+      }
+      /* Did the hooks approve of the attribute? */
+      if (hookEvent.forceKeepAttr) {
+        continue;
+      }
+      /* Remove attribute */
+      _removeAttribute(name, currentNode);
+      /* Did the hooks approve of the attribute? */
+      if (!hookEvent.keepAttr) {
+        continue;
+      }
+      /* Work around a security issue in jQuery 3.0 */
+      if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) {
+        _removeAttribute(name, currentNode);
+        continue;
+      }
+      /* Sanitize attribute content to be template-safe */
+      if (SAFE_FOR_TEMPLATES) {
+        arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], expr => {
+          value = stringReplace(value, expr, ' ');
+        });
+      }
+      /* Is `value` valid for this attribute? */
+      const lcTag = transformCaseFunc(currentNode.nodeName);
+      if (!_isValidAttribute(lcTag, lcName, value)) {
+        continue;
+      }
+      /* Handle attributes that require Trusted Types */
+      if (trustedTypesPolicy && typeof trustedTypes === 'object' && typeof trustedTypes.getAttributeType === 'function') {
+        if (namespaceURI) ; else {
+          switch (trustedTypes.getAttributeType(lcTag, lcName)) {
+            case 'TrustedHTML':
+              {
+                value = trustedTypesPolicy.createHTML(value);
+                break;
+              }
+            case 'TrustedScriptURL':
+              {
+                value = trustedTypesPolicy.createScriptURL(value);
+                break;
+              }
+          }
+        }
+      }
+      /* Handle invalid data-* attribute set by try-catching it */
+      try {
+        if (namespaceURI) {
+          currentNode.setAttributeNS(namespaceURI, name, value);
+        } else {
+          /* Fallback to setAttribute() for browser-unrecognized namespaces e.g. "x-schema". */
+          currentNode.setAttribute(name, value);
+        }
+        if (_isClobbered(currentNode)) {
+          _forceRemove(currentNode);
+        } else {
+          arrayPop(DOMPurify.removed);
+        }
+      } catch (_) {}
+    }
+    /* Execute a hook if present */
+    _executeHooks(hooks.afterSanitizeAttributes, currentNode, null);
+  };
+  /**
+   * _sanitizeShadowDOM
+   *
+   * @param fragment to iterate over recursively
+   */
+  const _sanitizeShadowDOM = function _sanitizeShadowDOM(fragment) {
+    let shadowNode = null;
+    const shadowIterator = _createNodeIterator(fragment);
+    /* Execute a hook if present */
+    _executeHooks(hooks.beforeSanitizeShadowDOM, fragment, null);
+    while (shadowNode = shadowIterator.nextNode()) {
+      /* Execute a hook if present */
+      _executeHooks(hooks.uponSanitizeShadowNode, shadowNode, null);
+      /* Sanitize tags and elements */
+      _sanitizeElements(shadowNode);
+      /* Check attributes next */
+      _sanitizeAttributes(shadowNode);
+      /* Deep shadow DOM detected */
+      if (shadowNode.content instanceof DocumentFragment) {
+        _sanitizeShadowDOM(shadowNode.content);
+      }
+    }
+    /* Execute a hook if present */
+    _executeHooks(hooks.afterSanitizeShadowDOM, fragment, null);
+  };
+  // eslint-disable-next-line complexity
+  DOMPurify.sanitize = function (dirty) {
+    let cfg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    let body = null;
+    let importedNode = null;
+    let currentNode = null;
+    let returnNode = null;
+    /* Make sure we have a string to sanitize.
+      DO NOT return early, as this will return the wrong type if
+      the user has requested a DOM object rather than a string */
+    IS_EMPTY_INPUT = !dirty;
+    if (IS_EMPTY_INPUT) {
+      dirty = '<!-->';
+    }
+    /* Stringify, in case dirty is an object */
+    if (typeof dirty !== 'string' && !_isNode(dirty)) {
+      if (typeof dirty.toString === 'function') {
+        dirty = dirty.toString();
+        if (typeof dirty !== 'string') {
+          throw typeErrorCreate('dirty is not a string, aborting');
+        }
+      } else {
+        throw typeErrorCreate('toString is not a function');
+      }
+    }
+    /* Return dirty HTML if DOMPurify cannot run */
+    if (!DOMPurify.isSupported) {
+      return dirty;
+    }
+    /* Assign config vars */
+    if (!SET_CONFIG) {
+      _parseConfig(cfg);
+    }
+    /* Clean up removed elements */
+    DOMPurify.removed = [];
+    /* Check if dirty is correctly typed for IN_PLACE */
+    if (typeof dirty === 'string') {
+      IN_PLACE = false;
+    }
+    if (IN_PLACE) {
+      /* Do some early pre-sanitization to avoid unsafe root nodes */
+      if (dirty.nodeName) {
+        const tagName = transformCaseFunc(dirty.nodeName);
+        if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+          throw typeErrorCreate('root node is forbidden and cannot be sanitized in-place');
+        }
+      }
+    } else if (dirty instanceof Node) {
+      /* If dirty is a DOM element, append to an empty document to avoid
+         elements being stripped by the parser */
+      body = _initDocument('<!---->');
+      importedNode = body.ownerDocument.importNode(dirty, true);
+      if (importedNode.nodeType === NODE_TYPE.element && importedNode.nodeName === 'BODY') {
+        /* Node is already a body, use as is */
+        body = importedNode;
+      } else if (importedNode.nodeName === 'HTML') {
+        body = importedNode;
+      } else {
+        // eslint-disable-next-line unicorn/prefer-dom-node-append
+        body.appendChild(importedNode);
+      }
+    } else {
+      /* Exit directly if we have nothing to do */
+      if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT &&
+      // eslint-disable-next-line unicorn/prefer-includes
+      dirty.indexOf('<') === -1) {
+        return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
+      }
+      /* Initialize the document to work on */
+      body = _initDocument(dirty);
+      /* Check we have a DOM node from the data */
+      if (!body) {
+        return RETURN_DOM ? null : RETURN_TRUSTED_TYPE ? emptyHTML : '';
+      }
+    }
+    /* Remove first element node (ours) if FORCE_BODY is set */
+    if (body && FORCE_BODY) {
+      _forceRemove(body.firstChild);
+    }
+    /* Get node iterator */
+    const nodeIterator = _createNodeIterator(IN_PLACE ? dirty : body);
+    /* Now start iterating over the created document */
+    while (currentNode = nodeIterator.nextNode()) {
+      /* Sanitize tags and elements */
+      _sanitizeElements(currentNode);
+      /* Check attributes next */
+      _sanitizeAttributes(currentNode);
+      /* Shadow DOM detected, sanitize it */
+      if (currentNode.content instanceof DocumentFragment) {
+        _sanitizeShadowDOM(currentNode.content);
+      }
+    }
+    /* If we sanitized `dirty` in-place, return it. */
+    if (IN_PLACE) {
+      return dirty;
+    }
+    /* Return sanitized string or DOM */
+    if (RETURN_DOM) {
+      if (RETURN_DOM_FRAGMENT) {
+        returnNode = createDocumentFragment.call(body.ownerDocument);
+        while (body.firstChild) {
+          // eslint-disable-next-line unicorn/prefer-dom-node-append
+          returnNode.appendChild(body.firstChild);
+        }
+      } else {
+        returnNode = body;
+      }
+      if (ALLOWED_ATTR.shadowroot || ALLOWED_ATTR.shadowrootmode) {
+        /*
+          AdoptNode() is not used because internal state is not reset
+          (e.g. the past names map of a HTMLFormElement), this is safe
+          in theory but we would rather not risk another attack vector.
+          The state that is cloned by importNode() is explicitly defined
+          by the specs.
+        */
+        returnNode = importNode.call(originalDocument, returnNode, true);
+      }
+      return returnNode;
+    }
+    let serializedHTML = WHOLE_DOCUMENT ? body.outerHTML : body.innerHTML;
+    /* Serialize doctype if allowed */
+    if (WHOLE_DOCUMENT && ALLOWED_TAGS['!doctype'] && body.ownerDocument && body.ownerDocument.doctype && body.ownerDocument.doctype.name && regExpTest(DOCTYPE_NAME, body.ownerDocument.doctype.name)) {
+      serializedHTML = '<!DOCTYPE ' + body.ownerDocument.doctype.name + '>\n' + serializedHTML;
+    }
+    /* Sanitize final string template-safe */
+    if (SAFE_FOR_TEMPLATES) {
+      arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], expr => {
+        serializedHTML = stringReplace(serializedHTML, expr, ' ');
+      });
+    }
+    return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
+  };
+  DOMPurify.setConfig = function () {
+    let cfg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    _parseConfig(cfg);
+    SET_CONFIG = true;
+  };
+  DOMPurify.clearConfig = function () {
+    CONFIG = null;
+    SET_CONFIG = false;
+  };
+  DOMPurify.isValidAttribute = function (tag, attr, value) {
+    /* Initialize shared config vars if necessary. */
+    if (!CONFIG) {
+      _parseConfig({});
+    }
+    const lcTag = transformCaseFunc(tag);
+    const lcName = transformCaseFunc(attr);
+    return _isValidAttribute(lcTag, lcName, value);
+  };
+  DOMPurify.addHook = function (entryPoint, hookFunction) {
+    if (typeof hookFunction !== 'function') {
+      return;
+    }
+    arrayPush(hooks[entryPoint], hookFunction);
+  };
+  DOMPurify.removeHook = function (entryPoint, hookFunction) {
+    if (hookFunction !== undefined) {
+      const index = arrayLastIndexOf(hooks[entryPoint], hookFunction);
+      return index === -1 ? undefined : arraySplice(hooks[entryPoint], index, 1)[0];
+    }
+    return arrayPop(hooks[entryPoint]);
+  };
+  DOMPurify.removeHooks = function (entryPoint) {
+    hooks[entryPoint] = [];
+  };
+  DOMPurify.removeAllHooks = function () {
+    hooks = _createHooksMap();
+  };
+  return DOMPurify;
+}
+var purify = createDOMPurify();
+
+
+//# sourceMappingURL=purify.es.mjs.map
+
+
+/***/ }),
+
 /***/ "./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js":
 /*!**********************************************************************************!*\
   !*** ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js ***!
@@ -45863,1433 +47075,6 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 	return to;
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/parallax-controller/dist/parallax-controller.esm.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/parallax-controller/dist/parallax-controller.esm.js ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   EasingPreset: () => (/* binding */ EasingPreset),
-/* harmony export */   Element: () => (/* binding */ Element),
-/* harmony export */   Limits: () => (/* binding */ Limits),
-/* harmony export */   ParallaxController: () => (/* binding */ ParallaxController),
-/* harmony export */   Rect: () => (/* binding */ Rect),
-/* harmony export */   RotationUnits: () => (/* binding */ RotationUnits),
-/* harmony export */   ScaleUnits: () => (/* binding */ ScaleUnits),
-/* harmony export */   Scroll: () => (/* binding */ Scroll),
-/* harmony export */   ScrollAxis: () => (/* binding */ ScrollAxis),
-/* harmony export */   Units: () => (/* binding */ Units),
-/* harmony export */   ValidCSSEffects: () => (/* binding */ ValidCSSEffects),
-/* harmony export */   View: () => (/* binding */ View),
-/* harmony export */   createId: () => (/* binding */ createId),
-/* harmony export */   getProgressAmount: () => (/* binding */ getProgressAmount),
-/* harmony export */   isElementInView: () => (/* binding */ isElementInView),
-/* harmony export */   parseElementTransitionEffects: () => (/* binding */ parseElementTransitionEffects),
-/* harmony export */   parseValueAndUnit: () => (/* binding */ parseValueAndUnit),
-/* harmony export */   resetStyles: () => (/* binding */ resetStyles),
-/* harmony export */   scaleBetween: () => (/* binding */ scaleBetween),
-/* harmony export */   scaleEffectByProgress: () => (/* binding */ scaleEffectByProgress),
-/* harmony export */   setElementStyles: () => (/* binding */ setElementStyles),
-/* harmony export */   testForPassiveScroll: () => (/* binding */ testForPassiveScroll)
-/* harmony export */ });
-/* harmony import */ var bezier_easing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bezier-easing */ "./node_modules/bezier-easing/src/index.js");
-/* harmony import */ var bezier_easing__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bezier_easing__WEBPACK_IMPORTED_MODULE_0__);
-
-
-var Limits = function Limits(properties) {
-  this.startX = properties.startX;
-  this.startY = properties.startY;
-  this.endX = properties.endX;
-  this.endY = properties.endY; // Used to calculate the progress of the element
-
-  this.totalX = this.endX - this.startX;
-  this.totalY = this.endY - this.startY; // Used to scale translate effects
-
-  this.startMultiplierX = properties.startMultiplierX || 1;
-  this.endMultiplierX = properties.endMultiplierX || 1;
-  this.startMultiplierY = properties.startMultiplierY || 1;
-  this.endMultiplierY = properties.endMultiplierY || 1;
-};
-
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-var ValidCSSEffects;
-
-(function (ValidCSSEffects) {
-  ValidCSSEffects["speed"] = "speed";
-  ValidCSSEffects["translateX"] = "translateX";
-  ValidCSSEffects["translateY"] = "translateY";
-  ValidCSSEffects["rotate"] = "rotate";
-  ValidCSSEffects["rotateX"] = "rotateX";
-  ValidCSSEffects["rotateY"] = "rotateY";
-  ValidCSSEffects["rotateZ"] = "rotateZ";
-  ValidCSSEffects["scale"] = "scale";
-  ValidCSSEffects["scaleX"] = "scaleX";
-  ValidCSSEffects["scaleY"] = "scaleY";
-  ValidCSSEffects["scaleZ"] = "scaleZ";
-  ValidCSSEffects["opacity"] = "opacity";
-})(ValidCSSEffects || (ValidCSSEffects = {}));
-
-var Units;
-
-(function (Units) {
-  Units["px"] = "px";
-  Units["%"] = "%";
-  Units["vh"] = "vh";
-  Units["vw"] = "vw";
-})(Units || (Units = {}));
-
-var RotationUnits;
-
-(function (RotationUnits) {
-  RotationUnits["deg"] = "deg";
-  RotationUnits["turn"] = "turn";
-  RotationUnits["rad"] = "rad";
-})(RotationUnits || (RotationUnits = {}));
-
-var ScaleUnits;
-
-(function (ScaleUnits) {
-  ScaleUnits[""] = "";
-})(ScaleUnits || (ScaleUnits = {}));
-
-var ScrollAxis;
-
-(function (ScrollAxis) {
-  ScrollAxis["vertical"] = "vertical";
-  ScrollAxis["horizontal"] = "horizontal";
-})(ScrollAxis || (ScrollAxis = {}));
-
-var EasingPreset;
-
-(function (EasingPreset) {
-  EasingPreset["ease"] = "ease";
-  EasingPreset["easeIn"] = "easeIn";
-  EasingPreset["easeOut"] = "easeOut";
-  EasingPreset["easeInOut"] = "easeInOut";
-  EasingPreset["easeInQuad"] = "easeInQuad";
-  EasingPreset["easeInCubic"] = "easeInCubic";
-  EasingPreset["easeInQuart"] = "easeInQuart";
-  EasingPreset["easeInQuint"] = "easeInQuint";
-  EasingPreset["easeInSine"] = "easeInSine";
-  EasingPreset["easeInExpo"] = "easeInExpo";
-  EasingPreset["easeInCirc"] = "easeInCirc";
-  EasingPreset["easeOutQuad"] = "easeOutQuad";
-  EasingPreset["easeOutCubic"] = "easeOutCubic";
-  EasingPreset["easeOutQuart"] = "easeOutQuart";
-  EasingPreset["easeOutQuint"] = "easeOutQuint";
-  EasingPreset["easeOutSine"] = "easeOutSine";
-  EasingPreset["easeOutExpo"] = "easeOutExpo";
-  EasingPreset["easeOutCirc"] = "easeOutCirc";
-  EasingPreset["easeInOutQuad"] = "easeInOutQuad";
-  EasingPreset["easeInOutCubic"] = "easeInOutCubic";
-  EasingPreset["easeInOutQuart"] = "easeInOutQuart";
-  EasingPreset["easeInOutQuint"] = "easeInOutQuint";
-  EasingPreset["easeInOutSine"] = "easeInOutSine";
-  EasingPreset["easeInOutExpo"] = "easeInOutExpo";
-  EasingPreset["easeInOutCirc"] = "easeInOutCirc";
-  EasingPreset["easeInBack"] = "easeInBack";
-  EasingPreset["easeOutBack"] = "easeOutBack";
-  EasingPreset["easeInOutBack"] = "easeInOutBack";
-})(EasingPreset || (EasingPreset = {}));
-
-/**
- * Creates a unique id to distinguish parallax elements.
- */
-var id = 0;
-function createId() {
-  ++id;
-  return id;
-}
-
-var Rect = /*#__PURE__*/function () {
-  function Rect(options) {
-    var rect = options.el.getBoundingClientRect(); // rect is based on viewport -- must adjust for relative scroll container
-
-    if (options.view.scrollContainer) {
-      var scrollRect = options.view.scrollContainer.getBoundingClientRect();
-      rect = _extends({}, rect, {
-        top: rect.top - scrollRect.top,
-        right: rect.right - scrollRect.left,
-        bottom: rect.bottom - scrollRect.top,
-        left: rect.left - scrollRect.left
-      });
-    }
-
-    this.height = options.el.offsetHeight;
-    this.width = options.el.offsetWidth;
-    this.left = rect.left;
-    this.right = rect.right;
-    this.top = rect.top;
-    this.bottom = rect.bottom;
-
-    if (options.rootMargin) {
-      this._setRectWithRootMargin(options.rootMargin);
-    }
-  }
-  /**
-   * Apply root margin to all properties
-   */
-
-
-  var _proto = Rect.prototype;
-
-  _proto._setRectWithRootMargin = function _setRectWithRootMargin(rootMargin) {
-    var totalRootY = rootMargin.top + rootMargin.bottom;
-    var totalRootX = rootMargin.left + rootMargin.right;
-    this.top -= rootMargin.top;
-    this.right += rootMargin.right;
-    this.bottom += rootMargin.bottom;
-    this.left -= rootMargin.left;
-    this.height += totalRootY;
-    this.width += totalRootX;
-  };
-
-  return Rect;
-}();
-
-var VALID_UNITS = [ScaleUnits[''], Units.px, Units['%'], Units['vh'], Units['vw'], RotationUnits.deg, RotationUnits.turn, RotationUnits.rad];
-/**
- * Determines the unit of a string and parses the value
- */
-
-function parseValueAndUnit(str, defaultUnit) {
-  if (defaultUnit === void 0) {
-    defaultUnit = Units['%'];
-  }
-
-  var out = {
-    value: 0,
-    unit: defaultUnit
-  };
-  if (typeof str === 'undefined') return out;
-  var isValid = typeof str === 'number' || typeof str === 'string';
-
-  if (!isValid) {
-    throw new Error('Invalid value provided. Must provide a value as a string or number');
-  }
-
-  str = String(str);
-  out.value = parseFloat(str); // @ts-ignore
-
-  out.unit = str.match(/[\d.\-+]*\s*(.*)/)[1] || defaultUnit; // @ts-expect-error
-
-  var isValidUnit = VALID_UNITS.includes(out.unit);
-
-  if (!isValidUnit) {
-    throw new Error('Invalid unit provided.');
-  }
-
-  return out;
-}
-
-var easingPresets = {
-  ease: [0.25, 0.1, 0.25, 1.0],
-  easeIn: [0.42, 0.0, 1.0, 1.0],
-  easeOut: [0.0, 0.0, 0.58, 1.0],
-  easeInOut: [0.42, 0.0, 0.58, 1.0],
-
-  /* Ease IN curves */
-  easeInQuad: [0.55, 0.085, 0.68, 0.53],
-  easeInCubic: [0.55, 0.055, 0.675, 0.19],
-  easeInQuart: [0.895, 0.03, 0.685, 0.22],
-  easeInQuint: [0.755, 0.05, 0.855, 0.06],
-  easeInSine: [0.47, 0.0, 0.745, 0.715],
-  easeInExpo: [0.95, 0.05, 0.795, 0.035],
-  easeInCirc: [0.6, 0.04, 0.98, 0.335],
-
-  /* Ease Out Curves */
-  easeOutQuad: [0.25, 0.46, 0.45, 0.94],
-  easeOutCubic: [0.215, 0.61, 0.355, 1.0],
-  easeOutQuart: [0.165, 0.84, 0.44, 1.0],
-  easeOutQuint: [0.23, 1.0, 0.32, 1.0],
-  easeOutSine: [0.39, 0.575, 0.565, 1.0],
-  easeOutExpo: [0.19, 1.0, 0.22, 1.0],
-  easeOutCirc: [0.075, 0.82, 0.165, 1.0],
-
-  /* Ease IN Out Curves */
-  easeInOutQuad: [0.455, 0.03, 0.515, 0.955],
-  easeInOutCubic: [0.645, 0.045, 0.355, 1.0],
-  easeInOutQuart: [0.77, 0.0, 0.175, 1.0],
-  easeInOutQuint: [0.86, 0.0, 0.07, 1.0],
-  easeInOutSine: [0.445, 0.05, 0.55, 0.95],
-  easeInOutExpo: [1.0, 0.0, 0.0, 1.0],
-  easeInOutCirc: [0.785, 0.135, 0.15, 0.86],
-
-  /* Ease Bounce Curves */
-  easeInBack: [0.6, -0.28, 0.735, 0.045],
-  easeOutBack: [0.175, 0.885, 0.32, 1.275],
-  easeInOutBack: [0.68, -0.55, 0.265, 1.55]
-};
-
-function createEasingFunction(easing) {
-  if (Array.isArray(easing)) {
-    return bezier_easing__WEBPACK_IMPORTED_MODULE_0___default()(easing[0], easing[1], easing[2], easing[3]);
-  }
-
-  if (typeof easing === 'string' && typeof easingPresets[easing] !== 'undefined') {
-    var params = easingPresets[easing];
-    return bezier_easing__WEBPACK_IMPORTED_MODULE_0___default()(params[0], params[1], params[2], params[3]);
-  }
-
-  return;
-}
-
-var PARALLAX_EFFECTS = /*#__PURE__*/Object.values(ValidCSSEffects);
-var MAP_EFFECT_TO_DEFAULT_UNIT = {
-  speed: 'px',
-  translateX: '%',
-  translateY: '%',
-  rotate: 'deg',
-  rotateX: 'deg',
-  rotateY: 'deg',
-  rotateZ: 'deg',
-  scale: '',
-  scaleX: '',
-  scaleY: '',
-  scaleZ: '',
-  opacity: ''
-};
-/**
- * Takes a parallax element effects and parses the properties to get the start and end values and units.
- */
-
-function parseElementTransitionEffects(props, scrollAxis) {
-  var parsedEffects = {};
-  PARALLAX_EFFECTS.forEach(function (key) {
-    var defaultValue = MAP_EFFECT_TO_DEFAULT_UNIT[key]; // If the provided type is a number, this must be the speed prop
-    // in which case we need to construct the proper translate config
-
-    if (typeof (props == null ? void 0 : props[key]) === 'number') {
-      var value = props == null ? void 0 : props[key];
-      var startSpeed = (value || 0) * 10 + "px";
-      var endSpeed = (value || 0) * -10 + "px";
-      var startParsed = parseValueAndUnit(startSpeed);
-      var endParsed = parseValueAndUnit(endSpeed);
-      var speedConfig = {
-        start: startParsed.value,
-        end: endParsed.value,
-        unit: startParsed.unit
-      }; // Manually set translate y value
-
-      if (scrollAxis === ScrollAxis.vertical) {
-        parsedEffects.translateY = speedConfig;
-      } // Manually set translate y value
-
-
-      if (scrollAxis === ScrollAxis.horizontal) {
-        parsedEffects.translateX = speedConfig;
-      }
-    } // The rest are standard effect being parsed
-
-
-    if (Array.isArray(props == null ? void 0 : props[key])) {
-      var _value = props == null ? void 0 : props[key];
-
-      if (typeof _value[0] !== 'undefined' && typeof _value[1] !== 'undefined') {
-        var _startParsed = parseValueAndUnit(_value == null ? void 0 : _value[0], defaultValue);
-
-        var _endParsed = parseValueAndUnit(_value == null ? void 0 : _value[1], defaultValue);
-
-        var easing = createEasingFunction(_value == null ? void 0 : _value[2]);
-        parsedEffects[key] = {
-          start: _startParsed.value,
-          end: _endParsed.value,
-          unit: _startParsed.unit,
-          easing: easing
-        };
-
-        if (_startParsed.unit !== _endParsed.unit) {
-          throw new Error('Must provide matching units for the min and max offset values of each axis.');
-        }
-      }
-    }
-  });
-  return parsedEffects;
-}
-
-/**
- * Returns the percent (0 - 100) moved based on position in the viewport
- */
-function getProgressAmount(
-/*
- * The start value from cache
- */
-start,
-/*
- * total dist the element has to move to be 100% complete (view width/height + element width/height)
- */
-totalDist,
-/*
- * Current scroll value
- */
-currentScroll,
-/*
- * an optional easing function to apply
- */
-easing) {
-  // adjust cached value
-  var startAdjustedScroll = currentScroll - start; // Amount the element has moved based on current and total distance to move
-
-  var amount = startAdjustedScroll / totalDist; // Apply bezier easing if provided
-
-  if (easing) {
-    amount = easing(amount);
-  }
-
-  return amount;
-}
-
-/**
- * Takes two values (start, end) and returns whether the current scroll is within range
- * @param {number} start - start of scroll (x/y)
- * @param {number} end - end of scroll (x/y)
- * @param {number} scroll - current scroll (x/y)
- * @return {boolean} isInView
- */
-function isElementInView(start, end, scroll) {
-  var isInView = scroll >= start && scroll <= end;
-  return isInView;
-}
-
-// Scale between AKA normalize
-function scaleBetween(value, newMin, newMax, oldMin, oldMax) {
-  return (newMax - newMin) * (value - oldMin) / (oldMax - oldMin) + newMin;
-}
-
-/**
- * Scales a start and end value of an effect based on percent moved and easing function
- */
-
-function scaleEffectByProgress(effect, progress) {
-  var value = scaleBetween(typeof effect.easing === 'function' ? effect.easing(progress) : progress, (effect == null ? void 0 : effect.start) || 0, (effect == null ? void 0 : effect.end) || 0, 0, 1);
-  return {
-    value: value,
-    unit: effect == null ? void 0 : effect.unit
-  };
-}
-
-var TRANSFORM_EFFECTS = /*#__PURE__*/Object.values(ValidCSSEffects).filter(function (v) {
-  return v !== 'opacity';
-});
-function setWillChangeStyles(el, effects) {
-  var keys = Object.keys(effects);
-  var hasOpacity = keys.includes('opacity');
-  var willChange = "transform" + (hasOpacity ? ',opacity' : '');
-  el.style.willChange = willChange;
-}
-function setElementStyles(effects, progress, el) {
-  if (!el) return;
-  var transform = getTransformStyles(effects, progress);
-  var opacity = getOpacityStyles(effects, progress);
-  el.style.transform = transform;
-  el.style.opacity = opacity;
-}
-function getOpacityStyles(effects, progress) {
-  var scaledOpacity = effects['opacity'] && scaleEffectByProgress(effects['opacity'], progress);
-
-  if (typeof scaledOpacity === 'undefined' || typeof scaledOpacity.value === 'undefined' || typeof scaledOpacity.unit === 'undefined') {
-    return '';
-  }
-
-  var styleStr = "" + scaledOpacity.value;
-  return styleStr;
-}
-function getTransformStyles(effects, progress) {
-  var transform = TRANSFORM_EFFECTS.reduce(function (acc, key) {
-    var scaledEffect = // @ts-expect-error
-    effects[key] && scaleEffectByProgress(effects[key], progress);
-
-    if (typeof scaledEffect === 'undefined' || typeof scaledEffect.value === 'undefined' || typeof scaledEffect.unit === 'undefined') {
-      return acc;
-    }
-
-    var styleStr = key + "(" + scaledEffect.value + scaledEffect.unit + ")";
-    return acc + styleStr;
-  }, '');
-  return transform;
-}
-/**
- * Takes a parallax element and removes parallax offset styles.
- * @param {object} element
- */
-
-function resetStyles(element) {
-  var el = element.el;
-  if (!el) return;
-  el.style.transform = '';
-  el.style.opacity = '';
-}
-
-function createLimitsForRelativeElements(rect, view, scroll, shouldAlwaysCompleteAnimation) {
-  var startY = rect.top - view.height;
-  var startX = rect.left - view.width;
-  var endY = rect.bottom;
-  var endX = rect.right; // add scroll
-
-  startX += scroll.x;
-  endX += scroll.x;
-  startY += scroll.y;
-  endY += scroll.y;
-
-  if (shouldAlwaysCompleteAnimation) {
-    if (scroll.y + rect.top < view.height) {
-      startY = 0;
-    }
-
-    if (scroll.x + rect.left < view.width) {
-      startX = 0;
-    }
-
-    if (endY > view.scrollHeight - view.height) {
-      endY = view.scrollHeight - view.height;
-    }
-
-    if (endX > view.scrollWidth - view.width) {
-      endX = view.scrollWidth - view.width;
-    }
-  }
-
-  var limits = new Limits({
-    startX: startX,
-    startY: startY,
-    endX: endX,
-    endY: endY
-  });
-  return limits;
-}
-
-function getTranslateScalar(startTranslatePx, endTranslatePx, totalDist) {
-  var slow = endTranslatePx > startTranslatePx; // calculating necessary scale to increase translations
-
-  var totalAbsOff = (Math.abs(startTranslatePx) + Math.abs(endTranslatePx)) * (slow ? -1 : 1);
-  var totalDistTrue = totalDist + totalAbsOff; // Determine multiple to scale by, only values greater than 1
-
-  var scale = Math.max(totalDist / totalDistTrue, 1);
-  return scale;
-}
-
-/**
- * Return the start and end pixel values for an elements translations
- */
-function getStartEndValueInPx(translate, elementSize) {
-  var start = translate.start,
-      end = translate.end,
-      unit = translate.unit;
-
-  if (unit === '%') {
-    var scale = elementSize / 100;
-    start = start * scale;
-    end = end * scale;
-  }
-
-  if (unit === 'vw') {
-    var startScale = start / 100;
-    var endScale = end / 100;
-    start = window.innerWidth * startScale;
-    end = window.innerWidth * endScale;
-  }
-
-  if (unit === 'vh') {
-    var _startScale = start / 100;
-
-    var _endScale = end / 100;
-
-    start = window.innerHeight * _startScale;
-    end = window.innerHeight * _endScale;
-  }
-
-  return {
-    start: start,
-    end: end
-  };
-}
-
-var DEFAULT_VALUE = {
-  start: 0,
-  end: 0,
-  unit: ''
-};
-function createLimitsWithTranslationsForRelativeElements(rect, view, effects, scroll, scrollAxis, shouldAlwaysCompleteAnimation) {
-  // get start and end accounting for percent effects
-  var translateX = effects.translateX || DEFAULT_VALUE;
-  var translateY = effects.translateY || DEFAULT_VALUE;
-
-  var _getStartEndValueInPx = getStartEndValueInPx(translateX, rect.width),
-      startTranslateXPx = _getStartEndValueInPx.start,
-      endTranslateXPx = _getStartEndValueInPx.end;
-
-  var _getStartEndValueInPx2 = getStartEndValueInPx(translateY, rect.height),
-      startTranslateYPx = _getStartEndValueInPx2.start,
-      endTranslateYPx = _getStartEndValueInPx2.end; // default starting values
-
-
-  var startY = rect.top - view.height;
-  var startX = rect.left - view.width;
-  var endY = rect.bottom;
-  var endX = rect.right;
-  var startMultiplierY = 1;
-  var endMultiplierY = 1;
-
-  if (scrollAxis === ScrollAxis.vertical) {
-    startMultiplierY = getTranslateScalar(startTranslateYPx, endTranslateYPx, view.height + rect.height);
-    endMultiplierY = startMultiplierY;
-  }
-
-  var startMultiplierX = 1;
-  var endMultiplierX = 1;
-
-  if (scrollAxis === ScrollAxis.horizontal) {
-    startMultiplierX = getTranslateScalar(startTranslateXPx, endTranslateXPx, view.width + rect.width);
-    endMultiplierX = startMultiplierX;
-  } // Apply the scale to initial values
-
-
-  if (startTranslateYPx < 0) {
-    startY = startY + startTranslateYPx * startMultiplierY;
-  }
-
-  if (endTranslateYPx > 0) {
-    endY = endY + endTranslateYPx * endMultiplierY;
-  }
-
-  if (startTranslateXPx < 0) {
-    startX = startX + startTranslateXPx * startMultiplierX;
-  }
-
-  if (endTranslateXPx > 0) {
-    endX = endX + endTranslateXPx * endMultiplierX;
-  } // add scroll
-
-
-  startX += scroll.x;
-  endX += scroll.x;
-  startY += scroll.y;
-  endY += scroll.y; // NOTE: please refactor and isolate this :(
-
-  if (shouldAlwaysCompleteAnimation) {
-    var topBeginsInView = scroll.y + rect.top < view.height;
-    var leftBeginsInView = scroll.x + rect.left < view.width;
-    var bottomEndsInView = scroll.y + rect.bottom > view.scrollHeight - view.height;
-    var rightEndsInView = scroll.x + rect.right > view.scrollWidth - view.height;
-
-    if (topBeginsInView && bottomEndsInView) {
-      startMultiplierY = 1;
-      endMultiplierY = 1;
-      startY = 0;
-      endY = view.scrollHeight - view.height;
-    }
-
-    if (leftBeginsInView && rightEndsInView) {
-      startMultiplierX = 1;
-      endMultiplierX = 1;
-      startX = 0;
-      endX = view.scrollWidth - view.width;
-    }
-
-    if (!topBeginsInView && bottomEndsInView) {
-      startY = rect.top - view.height + scroll.y;
-      endY = view.scrollHeight - view.height;
-      var totalDist = endY - startY;
-      startMultiplierY = getTranslateScalar(startTranslateYPx, endTranslateYPx, totalDist);
-      endMultiplierY = 1;
-
-      if (startTranslateYPx < 0) {
-        startY = startY + startTranslateYPx * startMultiplierY;
-      }
-    }
-
-    if (!leftBeginsInView && rightEndsInView) {
-      startX = rect.left - view.width + scroll.x;
-      endX = view.scrollWidth - view.width;
-
-      var _totalDist = endX - startX;
-
-      startMultiplierX = getTranslateScalar(startTranslateXPx, endTranslateXPx, _totalDist);
-      endMultiplierX = 1;
-
-      if (startTranslateXPx < 0) {
-        startX = startX + startTranslateXPx * startMultiplierX;
-      }
-    }
-
-    if (topBeginsInView && !bottomEndsInView) {
-      startY = 0;
-      endY = rect.bottom + scroll.y;
-
-      var _totalDist2 = endY - startY;
-
-      startMultiplierY = 1;
-      endMultiplierY = getTranslateScalar(startTranslateYPx, endTranslateYPx, _totalDist2);
-
-      if (endTranslateYPx > 0) {
-        endY = endY + endTranslateYPx * endMultiplierY;
-      }
-    }
-
-    if (leftBeginsInView && !rightEndsInView) {
-      startX = 0;
-      endX = rect.right + scroll.x;
-
-      var _totalDist3 = endX - startX;
-
-      startMultiplierX = 1;
-      endMultiplierX = getTranslateScalar(startTranslateXPx, endTranslateXPx, _totalDist3);
-
-      if (endTranslateXPx > 0) {
-        endX = endX + endTranslateXPx * endMultiplierX;
-      }
-    }
-  }
-
-  var limits = new Limits({
-    startX: startX,
-    startY: startY,
-    endX: endX,
-    endY: endY,
-    startMultiplierX: startMultiplierX,
-    endMultiplierX: endMultiplierX,
-    startMultiplierY: startMultiplierY,
-    endMultiplierY: endMultiplierY
-  });
-  return limits;
-}
-
-function scaleTranslateEffectsForSlowerScroll(effects, limits) {
-  var effectsCopy = _extends({}, effects);
-
-  if (effectsCopy.translateX) {
-    effectsCopy.translateX = _extends({}, effects.translateX, {
-      start: effectsCopy.translateX.start * limits.startMultiplierX,
-      end: effectsCopy.translateX.end * limits.endMultiplierX
-    });
-  }
-
-  if (effectsCopy.translateY) {
-    effectsCopy.translateY = _extends({}, effects.translateY, {
-      start: effectsCopy.translateY.start * limits.startMultiplierY,
-      end: effectsCopy.translateY.end * limits.endMultiplierY
-    });
-  }
-
-  return effectsCopy;
-}
-
-function getShouldScaleTranslateEffects(props, effects, scrollAxis) {
-  if (props.rootMargin || props.targetElement || props.shouldDisableScalingTranslations) {
-    return false;
-  }
-
-  if (!!effects.translateX && scrollAxis === ScrollAxis.horizontal || !!effects.translateY && scrollAxis === ScrollAxis.vertical) {
-    return true;
-  }
-
-  return false;
-}
-
-var clamp = function clamp(num, min, max) {
-  return Math.min(Math.max(num, min), max);
-};
-
-var Element = /*#__PURE__*/function () {
-  function Element(options) {
-    this.el = options.el;
-    this.props = options.props;
-    this.scrollAxis = options.scrollAxis;
-    this.disabledParallaxController = options.disabledParallaxController || false;
-    this.id = createId();
-    this.effects = parseElementTransitionEffects(this.props, this.scrollAxis);
-    this.isInView = null;
-    this.progress = 0;
-
-    this._setElementEasing(options.props.easing);
-
-    setWillChangeStyles(options.el, this.effects);
-  }
-
-  var _proto = Element.prototype;
-
-  _proto.updateProps = function updateProps(nextProps) {
-    this.props = _extends({}, this.props, nextProps);
-    this.effects = parseElementTransitionEffects(nextProps, this.scrollAxis);
-
-    this._setElementEasing(nextProps.easing);
-
-    return this;
-  };
-
-  _proto.setCachedAttributes = function setCachedAttributes(view, scroll) {
-    // NOTE: Must reset styles before getting the rect, as it might impact the natural position
-    resetStyles(this);
-    this.rect = new Rect({
-      el: this.props.targetElement || this.el,
-      rootMargin: this.props.rootMargin,
-      view: view
-    });
-    var shouldScaleTranslateEffects = getShouldScaleTranslateEffects(this.props, this.effects, this.scrollAxis);
-
-    if (typeof this.props.startScroll === 'number' && typeof this.props.endScroll === 'number') {
-      this.limits = new Limits({
-        startX: this.props.startScroll,
-        startY: this.props.startScroll,
-        endX: this.props.endScroll,
-        endY: this.props.endScroll
-      }); // Undo the reset -- place it back at current position with styles
-
-      this._setElementStyles();
-
-      return this;
-    }
-
-    if (shouldScaleTranslateEffects) {
-      this.limits = createLimitsWithTranslationsForRelativeElements(this.rect, view, this.effects, scroll, this.scrollAxis, this.props.shouldAlwaysCompleteAnimation);
-      this.scaledEffects = scaleTranslateEffectsForSlowerScroll(this.effects, this.limits);
-    } else {
-      this.limits = createLimitsForRelativeElements(this.rect, view, scroll, this.props.shouldAlwaysCompleteAnimation);
-    } // Undo the reset -- place it back at current position with styles
-
-
-    this._setElementStyles();
-
-    return this;
-  };
-
-  _proto._updateElementIsInView = function _updateElementIsInView(nextIsInView) {
-    // NOTE: Check if this is the first change to make sure onExit isn't called
-    var isFirstChange = this.isInView === null;
-
-    if (nextIsInView !== this.isInView) {
-      if (nextIsInView) {
-        this.props.onEnter && this.props.onEnter(this);
-      } else if (!isFirstChange) {
-        this._setFinalProgress();
-
-        this._setElementStyles();
-
-        this.props.onExit && this.props.onExit(this);
-      }
-    }
-
-    this.isInView = nextIsInView;
-  };
-
-  _proto._setFinalProgress = function _setFinalProgress() {
-    var finalProgress = clamp(Math.round(this.progress), 0, 1);
-
-    this._updateElementProgress(finalProgress);
-  };
-
-  _proto._setElementStyles = function _setElementStyles() {
-    if (this.props.disabled || this.disabledParallaxController) return;
-    var effects = this.scaledEffects || this.effects;
-    setElementStyles(effects, this.progress, this.el);
-  };
-
-  _proto._updateElementProgress = function _updateElementProgress(nextProgress) {
-    this.progress = nextProgress;
-    this.props.onProgressChange && this.props.onProgressChange(this.progress);
-    this.props.onChange && this.props.onChange(this);
-  };
-
-  _proto._setElementEasing = function _setElementEasing(easing) {
-    this.easing = createEasingFunction(easing);
-  };
-
-  _proto.updateElementOptions = function updateElementOptions(options) {
-    this.scrollAxis = options.scrollAxis;
-    this.disabledParallaxController = options.disabledParallaxController || false;
-  };
-
-  _proto.updatePosition = function updatePosition(scroll) {
-    if (!this.limits) return this;
-    var isVertical = this.scrollAxis === ScrollAxis.vertical;
-    var isFirstChange = this.isInView === null; // based on scroll axis
-
-    var start = isVertical ? this.limits.startY : this.limits.startX;
-    var end = isVertical ? this.limits.endY : this.limits.endX;
-    var total = isVertical ? this.limits.totalY : this.limits.totalX;
-    var s = isVertical ? scroll.y : scroll.x; // check if in view
-
-    var nextIsInView = isElementInView(start, end, s);
-
-    this._updateElementIsInView(nextIsInView); // set the progress if in view or this is the first change
-
-
-    if (nextIsInView) {
-      var nextProgress = getProgressAmount(start, total, s, this.easing);
-
-      this._updateElementProgress(nextProgress);
-
-      this._setElementStyles();
-    } else if (isFirstChange) {
-      // NOTE: this._updateElementProgress -- dont use this because it will trigger onChange
-      this.progress = clamp(Math.round(getProgressAmount(start, total, s, this.easing)), 0, 1);
-
-      this._setElementStyles();
-    }
-
-    return this;
-  };
-
-  return Element;
-}();
-
-var View = /*#__PURE__*/function () {
-  function View(config) {
-    this.scrollContainer = config.scrollContainer;
-    this.width = config.width;
-    this.height = config.height;
-    this.scrollHeight = config.scrollHeight;
-    this.scrollWidth = config.scrollWidth;
-  }
-
-  var _proto = View.prototype;
-
-  _proto.hasChanged = function hasChanged(params) {
-    if (params.width !== this.width || params.height !== this.height || params.scrollWidth !== this.scrollWidth || params.scrollHeight !== this.scrollHeight) {
-      return true;
-    }
-
-    return false;
-  };
-
-  _proto.setSize = function setSize(params) {
-    this.width = params.width;
-    this.height = params.height;
-    this.scrollHeight = params.scrollHeight;
-    this.scrollWidth = params.scrollWidth;
-    return this;
-  };
-
-  return View;
-}();
-
-var Scroll = /*#__PURE__*/function () {
-  function Scroll(x, y) {
-    this.x = x;
-    this.y = y;
-    this.dx = 0;
-    this.dy = 0;
-  }
-
-  var _proto = Scroll.prototype;
-
-  _proto.setScroll = function setScroll(x, y) {
-    this.dx = x - this.x;
-    this.dy = y - this.y;
-    this.x = x;
-    this.y = y;
-    return this;
-  };
-
-  return Scroll;
-}();
-
-function testForPassiveScroll() {
-  var supportsPassiveOption = false;
-
-  try {
-    var opts = Object.defineProperty({}, 'passive', {
-      get: function get() {
-        supportsPassiveOption = true;
-        return true;
-      }
-    }); // @ts-expect-error
-
-    window.addEventListener('test', null, opts); // @ts-expect-error
-
-    window.removeEventListener('test', null, opts);
-  } catch (e) {}
-
-  return supportsPassiveOption;
-}
-
-/**
- * -------------------------------------------------------
- * Parallax Controller
- * -------------------------------------------------------
- *
- * The global controller for setting up and managing a scroll view of elements.
- *
- */
-
-var ParallaxController = /*#__PURE__*/function () {
-  function ParallaxController(_ref) {
-    var _ref$scrollAxis = _ref.scrollAxis,
-        scrollAxis = _ref$scrollAxis === void 0 ? ScrollAxis.vertical : _ref$scrollAxis,
-        scrollContainer = _ref.scrollContainer,
-        _ref$disabled = _ref.disabled,
-        disabled = _ref$disabled === void 0 ? false : _ref$disabled;
-    this.disabled = disabled;
-    this.scrollAxis = scrollAxis; // All parallax elements to be updated
-
-    this.elements = [];
-    this._hasScrollContainer = !!scrollContainer;
-    this.viewEl = scrollContainer != null ? scrollContainer : window; // Scroll and View
-
-    var _this$_getScrollPosit = this._getScrollPosition(),
-        x = _this$_getScrollPosit[0],
-        y = _this$_getScrollPosit[1];
-
-    this.scroll = new Scroll(x, y);
-    this.view = new View({
-      width: 0,
-      height: 0,
-      scrollWidth: 0,
-      scrollHeight: 0,
-      scrollContainer: this._hasScrollContainer ? scrollContainer : undefined
-    }); // Ticking
-
-    this._ticking = false; // Passive support
-
-    this._supportsPassive = testForPassiveScroll(); // Bind methods to class
-
-    this._bindAllMethods(); // If this is initialized disabled, don't do anything below.
-
-
-    if (this.disabled) return;
-
-    this._addListeners(this.viewEl);
-
-    this._addResizeObserver();
-
-    this._setViewSize();
-  }
-  /**
-   * Static method to instantiate the ParallaxController.
-   * @returns {Class} ParallaxController
-   */
-
-
-  ParallaxController.init = function init(options) {
-    var hasWindow = typeof window !== 'undefined';
-
-    if (!hasWindow) {
-      throw new Error('Looks like ParallaxController.init() was called on the server. This method must be called on the client.');
-    }
-
-    return new ParallaxController(options);
-  };
-
-  var _proto = ParallaxController.prototype;
-
-  _proto._bindAllMethods = function _bindAllMethods() {
-    var _this = this;
-
-    ['_addListeners', '_removeListeners', '_getScrollPosition', '_handleScroll', '_handleUpdateCache', '_updateAllElements', '_updateElementPosition', '_setViewSize', '_addResizeObserver', '_checkIfViewHasChanged', '_getViewParams', 'getElements', 'createElement', 'removeElementById', 'resetElementStyles', 'updateElementPropsById', 'update', 'updateScrollContainer', 'destroy'].forEach(function (method) {
-      // @ts-expect-error
-      _this[method] = _this[method].bind(_this);
-    });
-  };
-
-  _proto._addListeners = function _addListeners(el) {
-    el.addEventListener('scroll', this._handleScroll, this._supportsPassive ? {
-      passive: true
-    } : false);
-    window.addEventListener('resize', this._handleUpdateCache, false);
-    window.addEventListener('blur', this._handleUpdateCache, false);
-    window.addEventListener('focus', this._handleUpdateCache, false);
-    window.addEventListener('load', this._handleUpdateCache, false);
-  };
-
-  _proto._removeListeners = function _removeListeners(el) {
-    var _this$_resizeObserver;
-
-    el.removeEventListener('scroll', this._handleScroll, false);
-    window.removeEventListener('resize', this._handleUpdateCache, false);
-    window.removeEventListener('blur', this._handleUpdateCache, false);
-    window.removeEventListener('focus', this._handleUpdateCache, false);
-    window.removeEventListener('load', this._handleUpdateCache, false);
-    (_this$_resizeObserver = this._resizeObserver) == null ? void 0 : _this$_resizeObserver.disconnect();
-  };
-
-  _proto._addResizeObserver = function _addResizeObserver() {
-    var _this2 = this;
-
-    try {
-      var observedEl = this._hasScrollContainer ? this.viewEl : document.documentElement;
-      this._resizeObserver = new ResizeObserver(function () {
-        return _this2.update();
-      });
-
-      this._resizeObserver.observe(observedEl);
-    } catch (e) {
-      console.warn('Failed to create the resize observer in the ParallaxContoller');
-    }
-  };
-
-  _proto._getScrollPosition = function _getScrollPosition() {
-    // Save current scroll
-    // Supports IE 9 and up.
-    var nx = this._hasScrollContainer ? // @ts-expect-error
-    this.viewEl.scrollLeft : window.pageXOffset;
-    var ny = this._hasScrollContainer ? // @ts-expect-error
-    this.viewEl.scrollTop : window.pageYOffset;
-    return [nx, ny];
-  }
-  /**
-   * Window scroll handler sets scroll position
-   * and then calls '_updateAllElements()'.
-   */
-  ;
-
-  _proto._handleScroll = function _handleScroll() {
-    var _this$elements;
-
-    var _this$_getScrollPosit2 = this._getScrollPosition(),
-        nx = _this$_getScrollPosit2[0],
-        ny = _this$_getScrollPosit2[1];
-
-    this.scroll.setScroll(nx, ny); // Only called if the last animation request has been
-    // completed and there are parallax elements to update
-
-    if (!this._ticking && ((_this$elements = this.elements) == null ? void 0 : _this$elements.length) > 0) {
-      this._ticking = true; // @ts-ignore
-
-      window.requestAnimationFrame(this._updateAllElements);
-    }
-  }
-  /**
-   * Window resize handler. Sets the new window inner height
-   * then updates parallax element attributes and positions.
-   */
-  ;
-
-  _proto._handleUpdateCache = function _handleUpdateCache() {
-    this._setViewSize();
-
-    this._updateAllElements({
-      updateCache: true
-    });
-  }
-  /**
-   * Update element positions.
-   * Determines if the element is in view based on the cached
-   * attributes, if so set the elements parallax styles.
-   */
-  ;
-
-  _proto._updateAllElements = function _updateAllElements(_temp) {
-    var _this3 = this;
-
-    var _ref2 = _temp === void 0 ? {} : _temp,
-        updateCache = _ref2.updateCache;
-
-    if (this.elements) {
-      this.elements.forEach(function (element) {
-        if (updateCache) {
-          element.setCachedAttributes(_this3.view, _this3.scroll);
-        }
-
-        _this3._updateElementPosition(element);
-      });
-    } // reset ticking so more animations can be called
-
-
-    this._ticking = false;
-  }
-  /**
-   * Update element positions.
-   * Determines if the element is in view based on the cached
-   * attributes, if so set the elements parallax styles.
-   */
-  ;
-
-  _proto._updateElementPosition = function _updateElementPosition(element) {
-    if (element.props.disabled || this.disabled) return;
-    element.updatePosition(this.scroll);
-  }
-  /**
-   * Gets the params to set in the View from the scroll container or the window
-   */
-  ;
-
-  _proto._getViewParams = function _getViewParams() {
-    if (this._hasScrollContainer) {
-      // @ts-expect-error
-      var _width = this.viewEl.offsetWidth; // @ts-expect-error
-
-      var _height = this.viewEl.offsetHeight; // @ts-expect-error
-
-      var _scrollHeight = this.viewEl.scrollHeight; // @ts-expect-error
-
-      var _scrollWidth = this.viewEl.scrollWidth;
-      return this.view.setSize({
-        width: _width,
-        height: _height,
-        scrollHeight: _scrollHeight,
-        scrollWidth: _scrollWidth
-      });
-    }
-
-    var html = document.documentElement;
-    var width = window.innerWidth || html.clientWidth;
-    var height = window.innerHeight || html.clientHeight;
-    var scrollHeight = html.scrollHeight;
-    var scrollWidth = html.scrollWidth;
-    return {
-      width: width,
-      height: height,
-      scrollHeight: scrollHeight,
-      scrollWidth: scrollWidth
-    };
-  }
-  /**
-   * Cache the view attributes
-   */
-  ;
-
-  _proto._setViewSize = function _setViewSize() {
-    return this.view.setSize(this._getViewParams());
-  }
-  /**
-   * Checks if any of the cached attributes of the view have changed.
-   * @returns boolean
-   */
-  ;
-
-  _proto._checkIfViewHasChanged = function _checkIfViewHasChanged() {
-    return this.view.hasChanged(this._getViewParams());
-  }
-  /**
-   * -------------------------------------------------------
-   * Public methods
-   * -------------------------------------------------------
-   */
-
-  /**
-   * Returns all the parallax elements in the controller
-   */
-  ;
-
-  _proto.getElements = function getElements() {
-    return this.elements;
-  }
-  /**
-   * Creates and returns new parallax element with provided options to be managed by the controller.
-   */
-  ;
-
-  _proto.createElement = function createElement(options) {
-    var newElement = new Element(_extends({}, options, {
-      scrollAxis: this.scrollAxis,
-      disabledParallaxController: this.disabled
-    }));
-    newElement.setCachedAttributes(this.view, this.scroll);
-    this.elements = this.elements ? [].concat(this.elements, [newElement]) : [newElement];
-
-    this._updateElementPosition(newElement); // NOTE: This checks if the view has changed then update the controller and all elements if it has
-    // This shouldn't always be necessary with a resize observer watching the view element
-    // but there seems to be cases where the resize observer does not catch and update.
-
-
-    if (this._checkIfViewHasChanged()) {
-      this.update();
-    }
-
-    return newElement;
-  }
-  /**
-   * Remove an element by id
-   */
-  ;
-
-  _proto.removeElementById = function removeElementById(id) {
-    if (!this.elements) return;
-    this.elements = this.elements.filter(function (el) {
-      return el.id !== id;
-    });
-  }
-  /**
-   * Updates an existing parallax element object with new options.
-   */
-  ;
-
-  _proto.updateElementPropsById = function updateElementPropsById(id, props) {
-    if (this.elements) {
-      this.elements = this.elements.map(function (el) {
-        if (el.id === id) {
-          return el.updateProps(props);
-        }
-
-        return el;
-      });
-    }
-
-    this.update();
-  }
-  /**
-   * Remove a target elements parallax styles
-   */
-  ;
-
-  _proto.resetElementStyles = function resetElementStyles(element) {
-    resetStyles(element);
-  }
-  /**
-   * Updates all cached attributes on parallax elements.
-   */
-  ;
-
-  _proto.update = function update() {
-    // Save the latest scroll position because window.scroll
-    // may be called and the handle scroll event may not be called.
-    var _this$_getScrollPosit3 = this._getScrollPosition(),
-        nx = _this$_getScrollPosit3[0],
-        ny = _this$_getScrollPosit3[1];
-
-    this.scroll.setScroll(nx, ny);
-
-    this._setViewSize();
-
-    this._updateAllElements({
-      updateCache: true
-    });
-  }
-  /**
-   * Updates the scroll container of the parallax controller
-   */
-  ;
-
-  _proto.updateScrollContainer = function updateScrollContainer(el) {
-    // remove existing listeners with current el first
-    this._removeListeners(this.viewEl);
-
-    this.viewEl = el;
-    this._hasScrollContainer = !!el;
-    this.view = new View({
-      width: 0,
-      height: 0,
-      scrollWidth: 0,
-      scrollHeight: 0,
-      scrollContainer: el
-    });
-
-    this._setViewSize();
-
-    this._addListeners(this.viewEl);
-
-    this._updateAllElements({
-      updateCache: true
-    });
-  };
-
-  _proto.disableParallaxController = function disableParallaxController() {
-    this.disabled = true; // remove listeners
-
-    this._removeListeners(this.viewEl); // reset all styles
-
-
-    if (this.elements) {
-      this.elements.forEach(function (element) {
-        return resetStyles(element);
-      });
-    }
-  };
-
-  _proto.enableParallaxController = function enableParallaxController() {
-    var _this4 = this;
-
-    this.disabled = false;
-
-    if (this.elements) {
-      this.elements.forEach(function (element) {
-        return element.updateElementOptions({
-          disabledParallaxController: false,
-          scrollAxis: _this4.scrollAxis
-        });
-      });
-    } // add back listeners
-
-
-    this._addListeners(this.viewEl);
-
-    this._addResizeObserver();
-
-    this._setViewSize();
-  }
-  /**
-   * Disable all parallax elements
-   */
-  ;
-
-  _proto.disableAllElements = function disableAllElements() {
-    console.warn('deprecated: use disableParallaxController() instead');
-
-    if (this.elements) {
-      this.elements = this.elements.map(function (el) {
-        return el.updateProps({
-          disabled: true
-        });
-      });
-    }
-
-    this.update();
-  }
-  /**
-   * Enable all parallax elements
-   */
-  ;
-
-  _proto.enableAllElements = function enableAllElements() {
-    console.warn('deprecated: use enableParallaxController() instead');
-
-    if (this.elements) {
-      this.elements = this.elements.map(function (el) {
-        return el.updateProps({
-          disabled: false
-        });
-      });
-    }
-
-    this.update();
-  }
-  /**
-   * Removes all listeners and resets all styles on managed elements.
-   */
-  ;
-
-  _proto.destroy = function destroy() {
-    this._removeListeners(this.viewEl);
-
-    if (this.elements) {
-      this.elements.forEach(function (element) {
-        return resetStyles(element);
-      });
-    } // @ts-expect-error
-
-
-    this.elements = undefined;
-  };
-
-  return ParallaxController;
-}();
-
-
-//# sourceMappingURL=parallax-controller.esm.js.map
 
 
 /***/ }),
@@ -48292,425 +48077,6 @@ exports.typeOf = typeOf;
 if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "./node_modules/react-is/cjs/react-is.development.js");
 }
-
-
-/***/ }),
-
-/***/ "./node_modules/react-scroll-parallax/dist/react-scroll-parallax.esm.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/react-scroll-parallax/dist/react-scroll-parallax.esm.js ***!
-  \******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   EasingPreset: () => (/* reexport safe */ parallax_controller__WEBPACK_IMPORTED_MODULE_0__.EasingPreset),
-/* harmony export */   Parallax: () => (/* binding */ Parallax),
-/* harmony export */   ParallaxBanner: () => (/* binding */ ParallaxBanner),
-/* harmony export */   ParallaxBannerLayer: () => (/* binding */ ParallaxBannerLayer),
-/* harmony export */   ParallaxContext: () => (/* binding */ ParallaxContext),
-/* harmony export */   ParallaxProvider: () => (/* binding */ ParallaxProvider),
-/* harmony export */   useParallax: () => (/* binding */ useParallax),
-/* harmony export */   useParallaxController: () => (/* binding */ useParallaxController)
-/* harmony export */ });
-/* harmony import */ var parallax_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! parallax-controller */ "./node_modules/parallax-controller/dist/parallax-controller.esm.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function removeUndefinedObjectKeys(obj) {
-  Object.keys(obj).forEach(function (key) {
-    return obj[key] === undefined && delete obj[key];
-  });
-  return obj;
-}
-
-var _excluded = ["disabled", "easing", "endScroll", "onChange", "onEnter", "onExit", "onProgressChange", "opacity", "rootMargin", "rotate", "rotateX", "rotateY", "rotateZ", "scale", "scaleX", "scaleY", "scaleZ", "shouldAlwaysCompleteAnimation", "shouldDisableScalingTranslations", "speed", "startScroll", "targetElement", "translateX", "translateY"];
-function getIsolatedParallaxProps(props) {
-  var disabled = props.disabled,
-      easing = props.easing,
-      endScroll = props.endScroll,
-      onChange = props.onChange,
-      onEnter = props.onEnter,
-      onExit = props.onExit,
-      onProgressChange = props.onProgressChange,
-      opacity = props.opacity,
-      rootMargin = props.rootMargin,
-      rotate = props.rotate,
-      rotateX = props.rotateX,
-      rotateY = props.rotateY,
-      rotateZ = props.rotateZ,
-      scale = props.scale,
-      scaleX = props.scaleX,
-      scaleY = props.scaleY,
-      scaleZ = props.scaleZ,
-      shouldAlwaysCompleteAnimation = props.shouldAlwaysCompleteAnimation,
-      shouldDisableScalingTranslations = props.shouldDisableScalingTranslations,
-      speed = props.speed,
-      startScroll = props.startScroll,
-      targetElement = props.targetElement,
-      translateX = props.translateX,
-      translateY = props.translateY,
-      rest = _objectWithoutPropertiesLoose(props, _excluded);
-
-  var parallaxProps = removeUndefinedObjectKeys({
-    disabled: disabled,
-    easing: easing,
-    endScroll: endScroll,
-    onChange: onChange,
-    onEnter: onEnter,
-    onExit: onExit,
-    onProgressChange: onProgressChange,
-    opacity: opacity,
-    rootMargin: rootMargin,
-    rotate: rotate,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    scale: scale,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    scaleZ: scaleZ,
-    shouldAlwaysCompleteAnimation: shouldAlwaysCompleteAnimation,
-    shouldDisableScalingTranslations: shouldDisableScalingTranslations,
-    speed: speed,
-    startScroll: startScroll,
-    targetElement: targetElement,
-    translateX: translateX,
-    translateY: translateY
-  });
-  return {
-    parallaxProps: parallaxProps,
-    rest: rest
-  };
-}
-
-function useVerifyController(controller) {
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var isServer = typeof window === 'undefined'; // Make sure the provided controller is an instance of the Parallax Controller
-
-    var isInstance = controller instanceof parallax_controller__WEBPACK_IMPORTED_MODULE_0__.ParallaxController; // Throw if neither context or global is available
-
-    if (!isServer && !controller && !isInstance) {
-      throw new Error("Must wrap your application's <Parallax /> components in a <ParallaxProvider />.");
-    }
-  }, [controller]);
-}
-
-var ParallaxContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createContext(null);
-
-function useParallaxController() {
-  var parallaxController = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(ParallaxContext);
-  var isServer = typeof window === 'undefined';
-
-  if (isServer) {
-    return null;
-  }
-
-  if (!parallaxController) {
-    throw new Error('Could not find `react-scroll-parallax` context value. Please ensure the component is wrapped in a <ParallaxProvider>');
-  }
-
-  return parallaxController;
-}
-
-function useParallax(props) {
-  var controller = useParallaxController();
-  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-
-  var _getIsolatedParallaxP = getIsolatedParallaxProps(props),
-      parallaxProps = _getIsolatedParallaxP.parallaxProps;
-
-  useVerifyController(controller);
-
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
-      element = _useState[0],
-      setElement = _useState[1]; // create element
-
-
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var newElement;
-
-    if (ref.current instanceof HTMLElement) {
-      var options = {
-        el: ref.current,
-        props: parallaxProps
-      };
-      newElement = controller == null ? void 0 : controller.createElement(options);
-      setElement(newElement);
-    } else {
-      throw new Error('You must assign the ref returned by the useParallax() hook to an HTML Element.');
-    }
-
-    return function () {
-      if (newElement) {
-        controller == null ? void 0 : controller.removeElementById(newElement.id);
-      }
-    };
-  }, []); // update element
-
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    if (element) {
-      if (props.disabled) {
-        controller == null ? void 0 : controller.resetElementStyles(element);
-        controller == null ? void 0 : controller.updateElementPropsById(element.id, parallaxProps);
-      } else {
-        controller == null ? void 0 : controller.updateElementPropsById(element.id, parallaxProps);
-      }
-    }
-  }, [props.disabled, props.easing, props.endScroll, props.onChange, props.onEnter, props.onExit, props.onProgressChange, props.opacity, props.rootMargin, props.rotate, props.rotateX, props.rotateY, props.rotateZ, props.scale, props.scaleX, props.scaleY, props.scaleZ, props.shouldAlwaysCompleteAnimation, props.shouldDisableScalingTranslations, props.speed, props.startScroll, props.targetElement, props.translateX, props.translateY]);
-  return {
-    ref: ref,
-    controller: controller,
-    element: element
-  };
-}
-
-function Parallax(props) {
-  var _getIsolatedParallaxP = getIsolatedParallaxProps(props),
-      parallaxProps = _getIsolatedParallaxP.parallaxProps,
-      rest = _getIsolatedParallaxP.rest;
-
-  var _useParallax = useParallax(parallaxProps),
-      ref = _useParallax.ref;
-
-  return react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", Object.assign({
-    ref: ref
-  }, rest), props.children);
-}
-
-var FALLBACK_RECT = {
-  height: 0
-};
-function getExpandedStyle(layer) {
-  if (Array.isArray(layer.translateY)) {
-    var translateYStart = (0,parallax_controller__WEBPACK_IMPORTED_MODULE_0__.parseValueAndUnit)(layer.translateY[0]);
-    var translateYEnd = (0,parallax_controller__WEBPACK_IMPORTED_MODULE_0__.parseValueAndUnit)(layer.translateY[1]);
-
-    if (translateYStart.unit === 'px' && translateYEnd.unit === 'px') {
-      return {
-        top: Math.abs(translateYEnd.value) * -1 + "px",
-        bottom: Math.abs(translateYStart.value) * -1 + "px"
-      };
-    }
-
-    if (translateYStart.unit === '%' && translateYEnd.unit === '%') {
-      var _layer$targetElement$, _layer$targetElement;
-
-      var clientRect = (_layer$targetElement$ = (_layer$targetElement = layer.targetElement) == null ? void 0 : _layer$targetElement.getBoundingClientRect()) != null ? _layer$targetElement$ : FALLBACK_RECT;
-      var top = Math.abs(clientRect.height * 0.01 * translateYEnd.value) * -1;
-      var bottom = Math.abs(clientRect.height * 0.01 * translateYStart.value) * -1;
-      return {
-        top: top + "px",
-        bottom: bottom + "px"
-      };
-    }
-  }
-
-  if (layer.speed) {
-    var speed = layer.speed || 0;
-    var absSpeed = Math.abs(speed) * 10 * -1;
-    return {
-      top: absSpeed + "px",
-      bottom: absSpeed + "px"
-    };
-  }
-
-  return {};
-}
-
-function getImageStyle(layer) {
-  return layer.image ? {
-    backgroundImage: "url(" + layer.image + ")",
-    backgroundPosition: 'center',
-    backgroundSize: 'cover'
-  } : {};
-}
-
-var _excluded$1 = ["children", "disabled", "style", "expanded", "image", "testId"];
-var absoluteStyle = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0
-};
-var ParallaxBannerLayer = function ParallaxBannerLayer(props) {
-  var _getIsolatedParallaxP = getIsolatedParallaxProps(props),
-      parallaxProps = _getIsolatedParallaxP.parallaxProps,
-      rest = _getIsolatedParallaxP.rest;
-
-  var style = rest.style,
-      _rest$expanded = rest.expanded,
-      expanded = _rest$expanded === void 0 ? true : _rest$expanded,
-      testId = rest.testId,
-      divProps = _objectWithoutPropertiesLoose(rest, _excluded$1);
-
-  var imageStyle = getImageStyle(props);
-  var expandedStyle = expanded ? getExpandedStyle(props) : {};
-  var parallax = useParallax(_extends({
-    targetElement: props.targetElement,
-    shouldDisableScalingTranslations: true
-  }, parallaxProps));
-  return react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", Object.assign({
-    "data-testid": testId,
-    ref: parallax.ref,
-    style: _extends({}, imageStyle, absoluteStyle, expandedStyle, style)
-  }, divProps), rest.children);
-};
-
-var _excluded$2 = ["disabled", "style", "layers"];
-var containerStyle = {
-  position: 'relative',
-  overflow: 'hidden',
-  width: '100%'
-};
-var ParallaxBanner = function ParallaxBanner(props) {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      targetElement = _useState[0],
-      setTargetElement = _useState[1];
-
-  var containerRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    setTargetElement(containerRef.current);
-  }, []);
-
-  var rootStyle = props.style,
-      _props$layers = props.layers,
-      layers = _props$layers === void 0 ? [] : _props$layers,
-      rootRest = _objectWithoutPropertiesLoose(props, _excluded$2);
-
-  function renderLayers() {
-    if (targetElement) {
-      var shouldUseLayers = layers && layers.length > 0;
-
-      if (shouldUseLayers) {
-        return layers.map(function (layer, i) {
-          return react__WEBPACK_IMPORTED_MODULE_1___default().createElement(ParallaxBannerLayer, Object.assign({}, layer, {
-            targetElement: targetElement,
-            key: "layer-" + i,
-            testId: "layer-" + i
-          }));
-        });
-      }
-    }
-
-    return null;
-  }
-
-  function renderChildren() {
-    if (targetElement) {
-      return react__WEBPACK_IMPORTED_MODULE_1___default().Children.map(props.children, function (child) {
-        var item = child; // adds the targetElement prop to any ParallaxBannerLayer components
-
-        if ((item == null ? void 0 : item.type) === ParallaxBannerLayer) {
-          var clone = react__WEBPACK_IMPORTED_MODULE_1___default().cloneElement(item, {
-            targetElement: targetElement
-          });
-          return clone;
-        }
-
-        return child;
-      });
-    }
-
-    return null;
-  }
-
-  return react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", Object.assign({
-    ref: containerRef,
-    style: _extends({}, containerStyle, rootStyle)
-  }, rootRest), renderLayers(), renderChildren());
-};
-
-var createController = function createController(options) {
-  // Don't initialize on the server
-  var isServer = typeof window === 'undefined';
-
-  if (!isServer) {
-    // Must not be the server so kick it off...
-    return parallax_controller__WEBPACK_IMPORTED_MODULE_0__.ParallaxController.init(options);
-  }
-
-  return null;
-};
-
-function ParallaxProvider(props) {
-  var controller = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-
-  if (!controller.current) {
-    controller.current = createController({
-      scrollAxis: props.scrollAxis || parallax_controller__WEBPACK_IMPORTED_MODULE_0__.ScrollAxis.vertical,
-      scrollContainer: props.scrollContainer,
-      disabled: props.isDisabled
-    });
-  } // update scroll container
-
-
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    if (props.scrollContainer && controller.current) {
-      controller.current.updateScrollContainer(props.scrollContainer);
-    }
-  }, [props.scrollContainer, controller.current]); // disable/enable parallax
-
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    if (props.isDisabled && controller.current) {
-      controller.current.disableParallaxController();
-    }
-
-    if (!props.isDisabled && controller.current) {
-      controller.current.enableParallaxController();
-    }
-  }, [props.isDisabled, controller.current]); // remove the controller when unmounting
-
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    return function () {
-      (controller == null ? void 0 : controller.current) && (controller == null ? void 0 : controller.current.destroy());
-    };
-  }, []);
-  return react__WEBPACK_IMPORTED_MODULE_1___default().createElement(ParallaxContext.Provider, {
-    value: controller.current
-  }, props.children);
-}
-
-
-//# sourceMappingURL=react-scroll-parallax.esm.js.map
 
 
 /***/ }),
@@ -51154,8 +50520,7 @@ function Edit({
       templates: templates,
       attributes: attributes,
       setAttributes: setAttributes,
-      handleTabValueChange: handleTabValueChange,
-      clientId: clientId
+      isEditor: true
     })]
   });
 }
@@ -52317,10 +51682,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _MetaFields__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./MetaFields */ "./src/posts-by-tabs/editor/MetaFields.jsx");
 /* harmony import */ var _MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MuiMultipleSelect */ "./src/posts-by-tabs/editor/MuiMultipleSelect.jsx");
-/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
+/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
 /* harmony import */ var _MuiInputSlider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./MuiInputSlider */ "./src/posts-by-tabs/editor/MuiInputSlider.jsx");
 /* harmony import */ var _MetaKeySelector__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./MetaKeySelector */ "./src/posts-by-tabs/editor/MetaKeySelector.jsx");
-/* harmony import */ var _PostTypeSelector__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PostTypeSelector */ "./src/posts-by-tabs/editor/PostTypeSelector.jsx");
+/* harmony import */ var _PostTypeSelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PostTypeSelector */ "./src/posts-by-tabs/editor/PostTypeSelector.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 
@@ -52424,21 +51789,7 @@ function QueryFields(props) {
     children: isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "py-2"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Post Type'),
-        value: attributes.postType || 'post',
-        options: [{
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select post type'),
-          value: ''
-        }, ...postTypes],
-        onChange: newPostType => {
-          updateQuery({
-            postType: newPostType,
-            taxonomy: '',
-            terms: null
-          });
-        }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_PostTypeSelector__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_PostTypeSelector__WEBPACK_IMPORTED_MODULE_4__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Post Type'),
         value: attributes.postType || 'post',
         onChange: newPostType => {
@@ -52449,7 +51800,7 @@ function QueryFields(props) {
             terms: null
           });
         }
-      }), taxonomies.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), taxonomies.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Taxonomy'),
         value: selectedTaxonomy,
         options: [{
@@ -52475,7 +51826,7 @@ function QueryFields(props) {
             terms: newTerms
           });
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Order by'),
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Date'),
@@ -52504,7 +51855,7 @@ function QueryFields(props) {
             metaKey: value
           });
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Order'),
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Ascending'),
@@ -53919,26 +53270,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ PostsByTabs)
 /* harmony export */ });
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _mui_material_Container__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Container */ "./node_modules/@mui/material/Container/Container.js");
-/* harmony import */ var _mui_material_Tabs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/material/Tabs */ "./node_modules/@mui/material/Tabs/Tabs.js");
-/* harmony import */ var _mui_material_Tab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/material/Tab */ "./node_modules/@mui/material/Tab/Tab.js");
-/* harmony import */ var _TabContent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./TabContent */ "./src/posts-by-tabs/front/TabContent.jsx");
-/* harmony import */ var _utils_fetchPosts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/fetchPosts */ "./src/posts-by-tabs/utils/fetchPosts.js");
-/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Pagination */ "./src/posts-by-tabs/front/Pagination.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
-
-
-
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
+/* harmony import */ var _mui_material_Container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Container */ "./node_modules/@mui/material/Container/Container.js");
+/* harmony import */ var _mui_material_Tabs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Tabs */ "./node_modules/@mui/material/Tabs/Tabs.js");
+/* harmony import */ var _mui_material_Tab__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Tab */ "./node_modules/@mui/material/Tab/Tab.js");
+/* harmony import */ var _TabContent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TabContent */ "./src/posts-by-tabs/front/TabContent.jsx");
+/* harmony import */ var _utils_fetchPosts__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/fetchPosts */ "./src/posts-by-tabs/utils/fetchPosts.js");
+/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Pagination */ "./src/posts-by-tabs/front/Pagination.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
@@ -53950,57 +53294,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function PostsByTabs(props) {
-  const {
-    attributes,
-    setAttributes,
-    handleTabValueChange,
-    clientId,
-    templates
-  } = props;
-  const [selectedTab, setSelectedTab] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(0);
-  const [editingContent, setEditingContent] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
-  const {
-    selectBlock
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
-  const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
-  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
-  const [posts, setPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)([]);
-  const [currentPage, setCurrentPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(1);
-  const [totalPosts, setTotalPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(0);
+  let initialData = props.attributes || {};
+  const isEditor = props.isEditor || false;
+  const [selectedTab, setSelectedTab] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
+  const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [posts, setPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
+  const [attributes, setAttributesState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(initialData);
+  const [currentPage, setCurrentPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(1);
+  const [totalPosts, setTotalPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
   const activeTab = attributes.tabs ? attributes.tabs[selectedTab] : null;
   const paginationType = activeTab?.options?.paginationType || 'buttons';
   const postsPerPage = attributes.numberOfItems || 10;
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    const getPosts = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const fetchOptions = {
-          headers: true,
-          append: false
-        };
-        const result = await (0,_utils_fetchPosts__WEBPACK_IMPORTED_MODULE_5__.fetchPosts)({
-          ...attributes
-        }, fetchOptions);
-        if (result.headers && result.headers['x-wp-total']) {
-          setTotalPosts(parseInt(result.headers['x-wp-total']));
-        }
-        if (result.posts) {
-          setPosts(result.posts);
-        }
-      } catch (err) {
-        console.error("Error fetching posts:", err);
-        setError(err.message);
-        setPosts([]);
-        setTotalPosts(0);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getPosts();
-  }, [attributes.postType, attributes.taxonomy, attributes.terms, attributes.numberOfItems, attributes.order, attributes.orderBy, attributes.search, attributes.offset, attributes.metaFields, attributes.metaFields?.fields, attributes.metaFields?.relation, attributes.metaFields?.fields?.length]);
+  const clientId = props.clientId || initialData.clientId;
+  const {
+    templates = []
+  } = initialData;
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    getPosts(setIsLoading, setError, setPosts, setTotalPosts, attributes);
+  }, [getPosts, setIsLoading, setError, setPosts, setTotalPosts, attributes, attributes.postType, attributes.taxonomy, attributes.terms, attributes.numberOfItems, attributes.order, attributes.orderBy, attributes.search, attributes.offset, attributes.metaFields, attributes.metaFields?.fields, attributes.metaFields?.relation, attributes.metaFields?.fields?.length]);
+  const setAttributes = newAttrs => {
+    if (isEditor && props.setAttributes) {
+      props.setAttributes(newAttrs);
+    } else {
+      setAttributesState(prev => ({
+        ...prev,
+        ...newAttrs
+      }));
+    }
+  };
   const handleTabChange = (event, value) => {
-    selectBlock(clientId);
     setSelectedTab(value);
   };
   const handlePageChange = (page, newOffset, append = false) => {
@@ -54009,31 +53332,22 @@ function PostsByTabs(props) {
       ...attributes,
       offset: newOffset
     });
-    if (append) {
-      // We'll handle this in the useEffect by passing append option to fetchPosts
-    }
-    if (!append) {
-      window.scrollTo({
-        top: document.getElementById(`block-${clientId}`).offsetTop - 50,
-        behavior: 'smooth'
-      });
-    }
   };
   const renderPostsStatus = () => {
     if (isLoading) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "p-4 text-center",
         children: "Loading posts..."
       });
     }
     if (error) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "p-4 text-center text-red-600",
         children: ["Error: ", error]
       });
     }
     if (posts.length === 0) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "p-4 text-center",
         children: "No posts found matching your criteria."
       });
@@ -54049,27 +53363,25 @@ function PostsByTabs(props) {
       return 'lg';
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps)(),
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    id: `block-content-${clientId}`,
+    className: "posts-by-tabs-content",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_3__["default"], {
       sx: {
         position: 'relative'
       },
-      onClick: e => {
-        selectBlock(clientId);
-      },
       maxWidth: maxWidth(),
-      children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_4__["default"], {
         component: "h2",
         className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
         children: attributes.title
-      }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+      }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
         className: "font-bold text-xl text-[30px] mb-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
           children: attributes.subtitle
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_5__["default"], {
           value: selectedTab,
           onChange: handleTabChange,
           variant: "scrollable",
@@ -54078,22 +53390,20 @@ function PostsByTabs(props) {
           sx: {
             mb: 3
           },
-          children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_6__["default"], {
             label: tab.title,
             id: `tab-${index}`,
             "aria-controls": `tabpanel-${index}`
           }, index))
-        }), renderPostsStatus(), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_TabContent__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        }), renderPostsStatus(), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_TabContent__WEBPACK_IMPORTED_MODULE_7__["default"], {
           tab: tab,
           index: index,
           selectedTab: selectedTab,
-          editingContent: editingContent,
-          setEditingContent: setEditingContent,
-          handleTabValueChange: handleTabValueChange,
           clientId: clientId,
           templates: templates,
-          posts: posts
-        }, index)), activeTab && activeTab.options?.paginationEnabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          posts: posts,
+          isEditor: isEditor
+        }, index)), activeTab && activeTab.options?.paginationEnabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_8__["default"], {
           posts: posts,
           totalPosts: totalPosts,
           offset: attributes.offset || 0,
@@ -54108,6 +53418,33 @@ function PostsByTabs(props) {
     })
   });
 }
+async function getPosts(setIsLoading, setError, setPosts, setTotalPosts, attributes) {
+  setIsLoading(true);
+  setError(null);
+  try {
+    const fetchOptions = {
+      headers: true,
+      append: false
+    };
+    const result = await (0,_utils_fetchPosts__WEBPACK_IMPORTED_MODULE_9__.fetchPosts)({
+      ...attributes
+    }, fetchOptions);
+    if (result.headers && result.headers['x-wp-total']) {
+      setTotalPosts(parseInt(result.headers['x-wp-total']));
+    }
+    if (result.posts) {
+      setPosts(result.posts);
+    }
+  } catch (err) {
+    console.error("Error fetching posts:", err);
+    setError(err.message);
+    setPosts([]);
+    setTotalPosts(0);
+  } finally {
+    setIsLoading(false);
+  }
+}
+;
 
 /***/ }),
 
@@ -54161,21 +53498,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
-/* harmony import */ var _EventsCalendar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EventsCalendar */ "./src/posts-by-tabs/front/EventsCalendar.jsx");
-/* harmony import */ var _PostsGrid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PostsGrid */ "./src/posts-by-tabs/front/PostsGrid.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
-
-
-
-
+/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
+/* harmony import */ var _EventsCalendar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EventsCalendar */ "./src/posts-by-tabs/front/EventsCalendar.jsx");
+/* harmony import */ var _PostsGrid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PostsGrid */ "./src/posts-by-tabs/front/PostsGrid.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
@@ -54187,7 +53514,7 @@ function CustomTabPanel({
   value,
   index
 }) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
     role: "tabpanel",
     hidden: value !== selectedTab,
     id: `tabpanel-${value}`,
@@ -54197,124 +53524,62 @@ function CustomTabPanel({
         e.stopPropagation();
       }
     },
-    children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
       elevation: 0,
+      sx: {
+        borderRadius: '0px'
+      },
       children: children
     })
   });
 }
-const MemoizedRichText = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.memo)(function RichTextEditor({
-  content,
-  index,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange,
-  clientId
-}) {
+function TabContent(props) {
+  console.log('TabContent', props);
   const {
-    selectBlock
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    className: "rich-text-wrapper",
-    onClick: e => {
-      if (clientId) {
-        selectBlock(clientId);
-      }
-    },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
-      tagName: "p",
-      placeholder: "\xC9crivez ici.",
-      value: content,
-      allowedFormats: ['core/bold', 'core/italic'],
-      onChange: value => {
-        setEditingContent({
-          index: index,
-          content: value
-        });
-      },
-      onBlur: () => {
-        if (editingContent && editingContent.index === index) {
-          handleTabValueChange(editingContent.content, 'content', index);
-          setEditingContent(null);
-        }
-      }
-    })
-  });
-}, (prevProps, nextProps) => {
-  if (prevProps.content !== nextProps.content) {
-    return false;
-  }
-  const prevEditing = prevProps.editingContent?.index === prevProps.index;
-  const nextEditing = nextProps.editingContent?.index === nextProps.index;
-  if (prevEditing !== nextEditing) {
-    return false;
-  }
-  if (nextEditing) {
-    return false;
-  }
-  return true;
-});
-function TabContent({
-  tab,
-  index,
-  selectedTab,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange,
-  clientId,
-  posts,
-  calendarPosts
-}) {
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    return () => {
-      if (editingContent && editingContent.index === index) {
-        setEditingContent(null);
-      }
-    };
-  }, []);
-  const template = tab?.template || 'grid';
-  const content = editingContent !== null && editingContent.index === index ? editingContent.content : tab?.content || '';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(CustomTabPanel, {
+    tab,
+    index,
+    selectedTab,
+    posts
+  } = props;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(CustomTabPanel, {
     selectedTab: selectedTab,
     value: index,
     index: index,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h3", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("h3", {
       className: "flex justify-between pb-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
         className: "block",
-        children: [tab.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        children: [tab.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
           className: "block text-xl font-bold",
           children: tab.title
-        }), tab.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        }), tab.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
           className: "block text-2xl text-secondary font-regular",
           children: tab.subtitle
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
         className: "block",
-        children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
           className: "block text-xl font-regular",
           children: tab.meta_1
-        }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
           className: "block text-xl leading-2xl font-regular",
           children: tab.meta_2
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       className: "flex justify-start flex-wrap",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
         className: "w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(MemoizedRichText, {
-          content: content,
-          index: index,
-          editingContent: editingContent,
-          setEditingContent: setEditingContent,
-          handleTabValueChange: handleTabValueChange,
-          clientId: clientId
+        children: tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "tab-content-html",
+          dangerouslySetInnerHTML: {
+            __html: tab.content
+          }
         })
       })
-    }), template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_3__["default"], {
       posts: posts
-    }), template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_4__["default"], {
       posts: posts,
       tab: tab
     })]
@@ -54661,14 +53926,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
+/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
 /* harmony import */ var _mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Tooltip */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
-/* harmony import */ var _PostTop__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PostTop */ "./src/posts-by-tabs/posts/PostTop.jsx");
-/* harmony import */ var _PostBottom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PostBottom */ "./src/posts-by-tabs/posts/PostBottom.jsx");
+/* harmony import */ var _PostTop__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PostTop */ "./src/posts-by-tabs/posts/PostTop.jsx");
+/* harmony import */ var _PostBottom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PostBottom */ "./src/posts-by-tabs/posts/PostBottom.jsx");
 /* harmony import */ var _EventDates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EventDates */ "./src/posts-by-tabs/posts/EventDates.jsx");
+/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
+/* harmony import */ var _SubEvent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./SubEvent */ "./src/posts-by-tabs/posts/SubEvent.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
 
 
 
@@ -54709,10 +53978,14 @@ function Post({
   const bottomTextString = bottomText(post);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("article", {
     ref: cardRef,
+    onClick: () => {
+      document.location.href = post.link;
+    },
     className: "basis-[320px] w-320px h-[320px] min-h-[320px] p-[30px] relative flex items-center justify-center overflow-hidden",
-    children: [post._embedded && post._embedded['wp:featuredmedia'] && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
-      src: post._embedded['wp:featuredmedia'][0].source_url,
-      alt: post._embedded['wp:featuredmedia'][0].alt_text,
+    children: [post.featured_media && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+      src: post.featured_media,
+      alt: post.title?.rendered || '',
+      loading: "lazy",
       style: {
         height: '100%',
         width: '100%',
@@ -54720,9 +53993,13 @@ function Post({
       },
       className: "absolute inset-0 block"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      title: post.title?.rendered || '',
-      placement: "bottom-start",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        dangerouslySetInnerHTML: {
+          __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_4__["default"])(post.title?.rendered)
+        }
+      }),
+      placement: "bottom-center",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
         component: 'figcaption',
         sx: {
           '&, *': {
@@ -54748,11 +54025,11 @@ function Post({
           }
         },
         className: "h-[260px] w-[260px] border border-white cursor-pointer relative flex justify-center items-center z-10 font-title transition duration-500 bg-white/90 hover:bg-white/0 rounded-full shadow-lg",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostTop__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostTop__WEBPACK_IMPORTED_MODULE_6__["default"], {
           text: topTextString
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           className: "max-w-[180px] mx-auto",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_6__.PostTerms, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_7__.PostTerms, {
             post: post,
             taxonomy: 'event-type'
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
@@ -54766,7 +54043,7 @@ function Post({
               }
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostBottom__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostBottom__WEBPACK_IMPORTED_MODULE_8__["default"], {
           text: bottomTextString
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
           className: "post-cross block absolute top-[calc(50% - 20px)] left-[calc(50% - 20px)] w-[40px] h-[40px]",
@@ -54775,9 +54052,8 @@ function Post({
           }
         })]
       })
-    }), post.acf?.sub_event && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "absolute top-[80px] right-0 bg-primary font-narrow-700 text-xs max-w-[220px]",
-      children: post.acf.sub_event
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_SubEvent__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      post: post
     })]
   });
 }
@@ -54909,7 +54185,7 @@ function PostTerms(props) {
   if (!post) {
     return null;
   }
-  const taxonomies = post._embedded && post._embedded['wp:term'] ? post._embedded['wp:term'] : null;
+  const taxonomies = post.terms;
   if (!taxonomies) {
     return null;
   }
@@ -54917,21 +54193,21 @@ function PostTerms(props) {
   if (!terms || terms.length === 0) {
     return null;
   }
-  return terms.map((category, index) => {
+  return terms.map((term, index) => {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-        href: category.url,
-        title: category.name,
+        href: term.url,
+        title: term.name,
         className: "no-underline",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: `Catégorie ${category.name}`,
+          title: `Catégorie ${term.name}`,
           placement: "top-start",
-          children: category.name
+          children: term.name
         })
       }), index < terms.length - 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
         children: " \u2022 "
       })]
-    }, index + category.name);
+    }, index + term.name);
   });
 }
 
@@ -54950,9 +54226,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _mui_icons_material_Update__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/icons-material/Update */ "./node_modules/@mui/icons-material/esm/Update.js");
-/* harmony import */ var _mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material/Tooltip */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
+/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
+/* harmony import */ var _mui_icons_material_Update__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/icons-material/Update */ "./node_modules/@mui/icons-material/esm/Update.js");
+/* harmony import */ var _mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Tooltip */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
+/* harmony import */ var _utils_formatDateToFrench__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/formatDateToFrench */ "./src/posts-by-tabs/utils/formatDateToFrench.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -54978,13 +54255,15 @@ function PostDate(props) {
     }
     return false;
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: isModified() ? `Mis à jour le ${post.modified}` : `Publié le ${post.date}`,
+  const modified = isModified() ? (0,_utils_formatDateToFrench__WEBPACK_IMPORTED_MODULE_2__["default"])(post.modified) : '';
+  const date = (0,_utils_formatDateToFrench__WEBPACK_IMPORTED_MODULE_2__["default"])(post.date);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: isModified() ? `Mis à jour le ${modified}` : `Publié le ${date}`,
     placement: "top-start",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_4__["default"], {
       component: "p",
       className: `flex gap-1 items-center ${className}`,
-      children: [isModified() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_icons_material_Update__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      children: [isModified() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_icons_material_Update__WEBPACK_IMPORTED_MODULE_5__["default"], {
         color: "inherit",
         sx: {
           width: 18,
@@ -54992,7 +54271,7 @@ function PostDate(props) {
         }
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
         className: "block text-xs leading-none truncate ellipsis overflow-hidden",
-        children: isModified() ? `Màj. le ${post.modified}` : `Pub. le ${post.date}`
+        children: isModified() ? `Màj. le ${modified}` : `Pub. le ${date}`
       })]
     })
   });
@@ -55063,12 +54342,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mui_material_Card__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material/Card */ "./node_modules/@mui/material/Card/Card.js");
 /* harmony import */ var _mui_material_CardContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/CardContent */ "./node_modules/@mui/material/CardContent/CardContent.js");
 /* harmony import */ var _mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/CardMedia */ "./node_modules/@mui/material/CardMedia/CardMedia.js");
-/* harmony import */ var _mui_icons_material_RemoveRedEyeOutlined__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @mui/icons-material/RemoveRedEyeOutlined */ "./node_modules/@mui/icons-material/esm/RemoveRedEyeOutlined.js");
-/* harmony import */ var _mui_material_Button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @mui/material/Button */ "./node_modules/@mui/material/Button/Button.js");
-/* harmony import */ var _mui_material_Fab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/material/Fab */ "./node_modules/@mui/material/Fab/Fab.js");
-/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
-/* harmony import */ var _PostDate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PostDate */ "./src/posts-by-tabs/posts/PostDate.jsx");
-/* harmony import */ var _EventDates__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EventDates */ "./src/posts-by-tabs/posts/EventDates.jsx");
+/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _PostDate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PostDate */ "./src/posts-by-tabs/posts/PostDate.jsx");
+/* harmony import */ var _EventDates__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./EventDates */ "./src/posts-by-tabs/posts/EventDates.jsx");
+/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
+/* harmony import */ var _SubEvent__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./SubEvent */ "./src/posts-by-tabs/posts/SubEvent.jsx");
+/* harmony import */ var _mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Tooltip */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -55091,8 +54370,10 @@ function SmallCard({
   if (!post) {
     return null;
   }
-  console.log('post', post);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Card__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onClick: () => {
+      document.location.href = post.link;
+    },
     sx: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -55129,24 +54410,36 @@ function SmallCard({
         zIndex: 1,
         backgroundColor: 'rgba(0,0,0,0.3)'
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
         sx: {
           p: 1
         },
-        children: [post.title?.rendered && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
-          className: `font-semibold ${compact ? 'text-md' : 'text-xl'} mb-0 leading-none`,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-            href: post.link,
-            title: post.title.rendered,
-            className: "no-decoration",
-            children: post.title.rendered
-          })
-        }), post.acf?.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
-          className: `${compact && 'hidden'} text-sm text-slate-500 mb-0 leading-none`,
-          children: post.acf.subtitle
-        })]
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+            dangerouslySetInnerHTML: {
+              __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__["default"])(post.title?.rendered)
+            }
+          }),
+          placement: "top",
+          children: [post.title?.rendered && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
+            className: `font-semibold ${compact ? 'text-md' : 'text-xl'} mb-0 leading-none`,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+              href: post.link,
+              title: post.title.rendered,
+              className: "no-decoration",
+              dangerouslySetInnerHTML: {
+                __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__["default"])(post.title.rendered)
+              }
+            })
+          }), post.acf?.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+            className: `${compact && 'hidden'} font-regular text-sm text-white py-2 mb-0 leading-none`,
+            dangerouslySetInnerHTML: {
+              __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__["default"])(post.acf.subtitle)
+            }
+          })]
+        })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_EventDates__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_EventDates__WEBPACK_IMPORTED_MODULE_8__["default"], {
           post: post,
           className: "px-2"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -55156,52 +54449,61 @@ function SmallCard({
             p: 1,
             gap: 1
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostDate__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostDate__WEBPACK_IMPORTED_MODULE_9__["default"], {
             post: post,
             className: "w-1/2"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_10__["default"], {
             post: post,
             taxonomy: 'event-type',
             className: "w-1/2"
           })]
         })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_SubEvent__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        post: post
       })]
-    }), compact ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Fab__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      href: post.link,
-      title: `Lire ${post.title?.rendered || ''}`,
-      color: "secondary",
-      size: "small",
-      sx: {
-        position: 'absolute',
-        top: '50%',
-        right: '4px',
-        transform: 'translateY(-50%)',
-        zIndex: 10,
-        textTransform: 'none'
-      },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_icons_material_RemoveRedEyeOutlined__WEBPACK_IMPORTED_MODULE_10__["default"], {})
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
-      href: post.link,
-      title: `Lire ${post.title?.rendered || ''}`,
-      variant: "contained",
-      color: "secondary",
-      size: "small",
-      startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_icons_material_RemoveRedEyeOutlined__WEBPACK_IMPORTED_MODULE_10__["default"], {
-        sx: {
-          height: 25,
-          width: 25
-        }
-      }),
-      sx: {
-        position: 'absolute',
-        top: '50%',
-        right: '8px',
-        transform: 'translateY(-50%)',
-        zIndex: 10,
-        textTransform: 'none'
-      },
-      children: __('Voir', 'posts-by-tabs')
     })]
+  });
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/posts/SubEvent.jsx":
+/*!**********************************************!*\
+  !*** ./src/posts-by-tabs/posts/SubEvent.jsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SubEvent)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+function SubEvent({
+  post,
+  className = ''
+}) {
+  if (!post) {
+    return null;
+  }
+  if (!post.acf) {
+    return null;
+  }
+  if (!post.acf.sub_event) {
+    return null;
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+    className: `absolute top-[80px] right-0 bg-primary font-narrow-700 text-xs max-w-[220px] ${className}`,
+    dangerouslySetInnerHTML: {
+      __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_2__["default"])(post.acf.sub_event || '')
+    }
   });
 }
 
@@ -55225,9 +54527,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mui_material_CardContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/CardContent */ "./node_modules/@mui/material/CardContent/CardContent.js");
 /* harmony import */ var _mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/CardMedia */ "./node_modules/@mui/material/CardMedia/CardMedia.js");
 /* harmony import */ var _mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Tooltip */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
-/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 
@@ -55253,7 +54557,7 @@ function XSmallCard({
       p: 0,
       borderRadius: '2px'
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: [post.featured_media && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_3__["default"], {
       component: "img",
       sx: {
         width: '100%',
@@ -55264,8 +54568,9 @@ function XSmallCard({
         left: 0,
         zIndex: 0
       },
-      image: post._embedded['wp:featuredmedia'][0].source_url,
-      alt: post._embedded['wp:featuredmedia'][0].alt_text
+      image: post.featured_media,
+      loading: "lazy",
+      alt: post.title?.rendered || ''
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_CardContent__WEBPACK_IMPORTED_MODULE_4__["default"], {
       sx: {
         flex: 1,
@@ -55283,18 +54588,24 @@ function XSmallCard({
           width: '100%'
         },
         children: [post.title?.rendered && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_6__["default"], {
-          title: post.title.rendered,
+          title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+            dangerouslySetInnerHTML: {
+              __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__["default"])(post.title?.rendered)
+            }
+          }),
           placement: "top",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
             className: `text-[12px] font-semibold mb-0 leading-none font-sans overflow-hidden w-full max-w-full`,
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
               href: post.link,
               title: post.title.rendered,
-              className: "block decoration-none truncate overflow-hidden",
-              children: post.title.rendered
+              className: "block no-decoration truncate overflow-hidden",
+              dangerouslySetInnerHTML: {
+                __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__["default"])(post.title.rendered)
+              }
             })
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_8__["default"], {
           post: post,
           taxonomy: 'event-type',
           className: "flex gap-1 items-center w-full max-w-full"
@@ -55550,7 +54861,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
   }
   if (getHeaders) {
     const response = await wp.apiFetch({
-      path,
+      path: queryPath,
       parse: false
     });
     const posts = await response.json();
@@ -55563,10 +54874,64 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
     };
   } else {
     return await wp.apiFetch({
-      path
+      path: queryPath
     });
   }
 }
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/utils/formatDateToFrench.js":
+/*!*******************************************************!*\
+  !*** ./src/posts-by-tabs/utils/formatDateToFrench.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ formatDateToFrench)
+/* harmony export */ });
+function formatDateToFrench(dateString, options = {}) {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      ...options
+    }).format(date);
+  } catch (e) {
+    console.error('Error formatting date:', e);
+    return dateString;
+  }
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/utils/sanitizeHtml.js":
+/*!*************************************************!*\
+  !*** ./src/posts-by-tabs/utils/sanitizeHtml.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ sanitizeHtml)
+/* harmony export */ });
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dompurify */ "./node_modules/dompurify/dist/purify.es.mjs");
+
+function sanitizeHtml(html) {
+  return dompurify__WEBPACK_IMPORTED_MODULE_0__["default"].sanitize(html, {
+    USE_PROFILES: {
+      html: true
+    },
+    ALLOW_ARIA_ATTR: true
+  });
+}
+;
 
 /***/ }),
 
@@ -55600,17 +54965,6 @@ module.exports = window["wp"]["blocks"];
 
 "use strict";
 module.exports = window["wp"]["components"];
-
-/***/ }),
-
-/***/ "@wordpress/data":
-/*!******************************!*\
-  !*** external ["wp","data"] ***!
-  \******************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = window["wp"]["data"];
 
 /***/ }),
 
@@ -55759,27 +55113,23 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/posts-by-tabs/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./block.json */ "./src/posts-by-tabs/block.json");
-/* harmony import */ var _front_ThemePalette__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./front/ThemePalette */ "./src/posts-by-tabs/front/ThemePalette.jsx");
-/* harmony import */ var react_scroll_parallax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-scroll-parallax */ "./node_modules/react-scroll-parallax/dist/react-scroll-parallax.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/posts-by-tabs/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/posts-by-tabs/block.json");
+/* harmony import */ var _front_ThemePalette__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./front/ThemePalette */ "./src/posts-by-tabs/front/ThemePalette.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
 
 
 
-
-const EditWithTheme = props => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_front_ThemePalette__WEBPACK_IMPORTED_MODULE_3__["default"], {
-  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_scroll_parallax__WEBPACK_IMPORTED_MODULE_1__.ParallaxProvider, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_edit__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      ...props
-    })
+const EditWithTheme = props => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_front_ThemePalette__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_edit__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    ...props
   })
 });
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_5__.name, {
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_4__.name, {
   edit: EditWithTheme
 });
 })();

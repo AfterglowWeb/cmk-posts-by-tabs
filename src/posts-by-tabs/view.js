@@ -1,26 +1,27 @@
 import { createRoot } from '@wordpress/element';
 import ThemePalette from './front/ThemePalette';
-import { ParallaxProvider } from 'react-scroll-parallax';
+import PostsByTabs from './front/PostsByTabs';
 
-function initializeReactComponents() {
-  const complexTabsBlocks = document.querySelectorAll('.posts-by-tabs-block');
-  
-  complexTabsBlocks.forEach(blockElement => {
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const blockRoots = document.querySelectorAll('.posts-by-tabs-block');
 
-    if (complexTabsData) {
-      try {
-        const root = createRoot(blockElement);
-        root.render(
-          <ThemePalette>
-            <ParallaxProvider>
-            </ParallaxProvider>
-          </ThemePalette>
-        )
-      } catch (error) {
-        console.error('Error initializing Complex Tabs React component:', error);
-      }
+    if(!blockRoots) {
+        return;
     }
-  });
-}
-
-document.addEventListener('DOMContentLoaded', initializeReactComponents);
+    blockRoots.forEach(blockRoot => {
+        const dataScript = blockRoot.querySelector('.block-data');
+        if(!dataScript) {
+            return;
+        }
+        const attributes = JSON.parse(dataScript.textContent);
+        if(attributes && blockRoot) {
+            const root = createRoot(blockRoot);
+            root.render(
+                <ThemePalette>
+                    <PostsByTabs attributes={attributes} />
+                </ThemePalette>
+            )
+        }
+    });
+});

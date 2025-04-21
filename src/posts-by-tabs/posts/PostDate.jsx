@@ -1,8 +1,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import UpdateIcon from '@mui/icons-material/Update';
 import Tooltip from '@mui/material/Tooltip';
+import formatDateToFrench from '../utils/formatDateToFrench';
+
 export default function PostDate(props) {
 
     const {post, className} = props;
@@ -20,15 +21,19 @@ export default function PostDate(props) {
       }
       return false;
     }
+
+
+    const modified = isModified() ? formatDateToFrench(post.modified) : '';
+    const date = formatDateToFrench(post.date);
    
     return(
-    <Tooltip title={isModified() ? `Mis à jour le ${post.modified}`: `Publié le ${post.date}`} placement="top-start">
+    <Tooltip title={isModified() ? `Mis à jour le ${modified}`: `Publié le ${date}`} placement="top-start">
     <Box component="p" className={`flex gap-1 items-center ${className}`}>
         {isModified() && 
         <UpdateIcon color="inherit" sx={{width:18 , height:18}} /> 
         }
         <span className="block text-xs leading-none truncate ellipsis overflow-hidden">
-            {isModified() ? `Màj. le ${post.modified}`: `Pub. le ${post.date}`}
+            {isModified() ? `Màj. le ${modified}`: `Pub. le ${date}`}
         </span>
     </Box>
     </Tooltip>

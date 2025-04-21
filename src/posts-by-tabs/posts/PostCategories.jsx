@@ -25,7 +25,7 @@ export function PostTerms(props) {
     return null;
   }
 
-  const taxonomies =  post._embedded && post._embedded['wp:term'] ? post._embedded['wp:term'] : null;
+  const taxonomies =  post.terms;
   if(!taxonomies) {
     return null;
   }
@@ -35,12 +35,12 @@ export function PostTerms(props) {
   }
 
   return (
-    terms.map((category, index) => {
+    terms.map((term, index) => {
         return (
-          <Fragment key={index + category.name}>
-            <a href={category.url} title={category.name} className="no-underline">
-              <Tooltip title={`Catégorie ${category.name}`} placement="top-start">
-              {category.name}
+          <Fragment key={index + term.name}>
+            <a href={term.url} title={term.name} className="no-underline">
+              <Tooltip title={`Catégorie ${term.name}`} placement="top-start">
+              {term.name}
               </Tooltip>
             </a>
             {index < terms.length - 1 && <span> • </span>}

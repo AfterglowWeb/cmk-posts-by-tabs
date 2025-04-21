@@ -103,22 +103,6 @@ export default function QueryFields(props) {
             ) : (
                 <>
                     <div className="py-2" />
-                    
-                    <MuiSelect
-                    label={__('Post Type')}
-                    value={attributes.postType || 'post'}
-                    options={[
-                        { label: __('Select post type'), value: '' },
-                        ...postTypes
-                    ]}
-                    onChange={(newPostType) => {
-                        updateQuery({ 
-                            postType: newPostType,
-                            taxonomy: '',
-                            terms: null
-                        });
-                    }}
-                    />
 
                     <PostTypeSelector
                     label={__('Post Type')}

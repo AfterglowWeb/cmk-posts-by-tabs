@@ -1,9 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { RichText } from '@wordpress/block-editor';
-import { memo, useEffect } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
-import Post from '../posts/Post';
 import EventsCalendar from './EventsCalendar';
 import PostsGrid from './PostsGrid';
 
@@ -20,94 +16,19 @@ function CustomTabPanel({children, selectedTab, value, index}) {
         }
       }}
     >
-      {value === selectedTab && <Paper elevation={0}>{children}</Paper>}
+      {value === selectedTab && <Paper 
+      elevation={0}
+      sx={{borderRadius: '0px'}}
+      >{children}</Paper>}
     </div>
   );
 }
 
-const MemoizedRichText = memo(function RichTextEditor({
-  content,
-  index,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange,
-  clientId
-}) {
 
-  const { selectBlock } = useDispatch('core/block-editor');
+export default function TabContent(props) {
 
-  return (
-    <div 
-      className="rich-text-wrapper"
-      onClick={(e) => {
-        if (clientId) {
-          selectBlock(clientId);
-        }
-      }}
-    >
-      <RichText
-      tagName="p"
-      placeholder="Écrivez ici."
-      value={content}
-      allowedFormats={['core/bold', 'core/italic']}
-      onChange={(value) => {
-        setEditingContent({
-          index: index,
-          content: value
-        });
-      }}
-      onBlur={() => {
-        if (editingContent && editingContent.index === index) {
-          handleTabValueChange(editingContent.content, 'content', index);
-          setEditingContent(null);
-        }
-      }}
-      />
-    </div>
-  );
-}, (prevProps, nextProps) => {
-  if (prevProps.content !== nextProps.content) {
-    return false;
-  }
-  
-  const prevEditing = prevProps.editingContent?.index === prevProps.index;
-  const nextEditing = nextProps.editingContent?.index === nextProps.index;
-  if (prevEditing !== nextEditing) {
-    return false;
-  }
-  
-  if (nextEditing) {
-    return false;
-  }
-  
-  return true;
-});
-
-export default function TabContent({ 
-  tab, 
-  index, 
-  selectedTab,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange,
-  clientId,
-  posts,
-  calendarPosts
-}) {
-
-  useEffect(() => {
-    return () => {
-      if (editingContent && editingContent.index === index) {
-        setEditingContent(null);
-      }
-    };
-  }, []);
-
-  const template = tab?.template || 'grid';
-
-  const content = editingContent !== null && editingContent.index === index 
-    ? editingContent.content 
-    : tab?.content || '';
+  console.log('TabContent', props);
+  const { tab, index, selectedTab, posts } = props;
 
   return (
     <CustomTabPanel 
@@ -128,18 +49,14 @@ export default function TabContent({
     
       <div className="flex justify-start flex-wrap">
         <div className="w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between">
-          <MemoizedRichText
-            content={content}
-            index={index}
-            editingContent={editingContent}
-            setEditingContent={setEditingContent}
-            handleTabValueChange={handleTabValueChange}
-            clientId={clientId}
-          />
+        {tab.content && <div 
+        className="tab-content-html"
+        dangerouslySetInnerHTML={{ __html: tab.content }}
+      />}
         </div>   
       </div>
-      {template === 'grid' && <PostsGrid posts={posts} />}
-      {template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
+      {tab.template === 'grid' && <PostsGrid posts={posts} />}
+      {tab.template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
     </CustomTabPanel>
   );
 }
