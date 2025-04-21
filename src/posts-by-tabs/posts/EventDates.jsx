@@ -70,7 +70,7 @@ export function eventDatesString(post) {
   const endDate = datefin || datedebut;
   const {start, end} = formatDateRange({start: datedebut, end: endDate});
 
-  return (start && end) ? `${start} • ${end}` : (start ? start : null);
+  return (start && end) ? `${start} > ${end}` : (start ? start : null);
 }
 
 function formatDateToFrench(dateString, options = {}) {

@@ -1,7 +1,5 @@
-import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -9,16 +7,13 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import TabContent from './TabContent';
-import SectionBackground from './SectionBackground';
 import { fetchPosts } from '../utils/fetchPosts';
 import Pagination from './Pagination';
 
-
-export default function PostsByTabs(props) {
-    const { attributes, setAttributes, handleTabValueChange, clientId, templates } = props;
+export default function FrontPostsByTabs(props) {
+    const { attributes } = props;
+    const  {blockId} = attributes;
     const [selectedTab, setSelectedTab] = useState(0);
-    const [editingContent, setEditingContent] = useState(null);
-    const { selectBlock } = useDispatch('core/block-editor');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -28,6 +23,29 @@ export default function PostsByTabs(props) {
     const activeTab = attributes.tabs ? attributes.tabs[selectedTab] : null;
     const paginationType = activeTab?.options?.paginationType || 'buttons';
     const postsPerPage = attributes.numberOfItems || 10;
+
+    const templates = [
+		{
+			label: __('Posts Grid'),
+			value: 'grid',
+		},
+		{
+			label: __('Posts Slider'),
+			value: 'slider',
+		},
+		{
+			label: __('Posts Row'),
+			value: 'row',
+		},
+		{
+			label: __('Posts Map (events)'),
+			value: 'map',
+		},
+		{
+			label: __('Posts Calendar (events)'),
+			value: 'calendar',
+		}
+	];
 
     useEffect(() => {
         const getPosts = async () => {
@@ -81,17 +99,13 @@ export default function PostsByTabs(props) {
 
 
     const handleTabChange = (event, value) => {
-        selectBlock(clientId);
         setSelectedTab(value);
 	};
 
     const handlePageChange = (page, newOffset, append = false) => {
         
         setCurrentPage(page);
-        setAttributes({
-            ...attributes,
-            offset: newOffset
-        });
+      
         
         if (append) {
             // We'll handle this in the useEffect by passing append option to fetchPosts
@@ -99,7 +113,7 @@ export default function PostsByTabs(props) {
         
         if (!append) {
             window.scrollTo({
-                top: document.getElementById(`block-${clientId}`).offsetTop - 50,
+                top: document.getElementById(`block-${blockId}`).offsetTop - 50,
                 behavior: 'smooth'
             });
         }
@@ -133,12 +147,9 @@ export default function PostsByTabs(props) {
     
     return (
 
-        <div { ...useBlockProps() } >
+        <div className="wp-block-cmk-posts-by-tabs">
             <Container 
             sx={{position: 'relative'}}
-            onClick={(e) => {
-                selectBlock(clientId);
-            }}
             maxWidth={maxWidth()}
             >
                 {attributes.title && 
@@ -179,10 +190,10 @@ export default function PostsByTabs(props) {
                             tab={tab}
                             index={index}
                             selectedTab={selectedTab}
-                            editingContent={editingContent}
-                            setEditingContent={setEditingContent}
-                            handleTabValueChange={handleTabValueChange}
-                            clientId={clientId}
+                            editingContent={false}
+                            setEditingContent={null}
+                            handleTabValueChange={null}
+                            clientId={blockId}
                             templates={templates}
                             posts={posts}
                         />

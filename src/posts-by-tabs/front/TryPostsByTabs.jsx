@@ -1,7 +1,5 @@
-import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -9,62 +7,46 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import TabContent from './TabContent';
-import SectionBackground from './SectionBackground';
 import { fetchPosts } from '../utils/fetchPosts';
 import Pagination from './Pagination';
 
 
 export default function PostsByTabs(props) {
-    const { attributes, setAttributes, handleTabValueChange, clientId, templates } = props;
+
+    let initialData = props.attributes || {};
+    const isEditor = props.isEditor || false;
     const [selectedTab, setSelectedTab] = useState(0);
-    const [editingContent, setEditingContent] = useState(null);
-    const { selectBlock } = useDispatch('core/block-editor');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [posts, setPosts] = useState([]);
-
+    const [attributes, setAttributesState] = useState(initialData);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0);
+    
     const activeTab = attributes.tabs ? attributes.tabs[selectedTab] : null;
     const paginationType = activeTab?.options?.paginationType || 'buttons';
     const postsPerPage = attributes.numberOfItems || 10;
 
+    const clientId = props.clientId || initialData.clientId;
+    const {
+        templates  = [] 
+    } = initialData;
+
     useEffect(() => {
-        const getPosts = async () => {
-            setIsLoading(true);
-            setError(null);
-      
-            try {
-
-                const fetchOptions = {
-                    headers: true,
-                    append: false 
-                };
-                
-                const result = await fetchPosts({
-                    ...attributes
-                }, fetchOptions);
-
-                if (result.headers && result.headers['x-wp-total']) {
-                    setTotalPosts(parseInt(result.headers['x-wp-total']));
-                }
-
-                if (result.posts) {
-                    setPosts(result.posts);
-                }
-
-            } catch (err) {
-                console.error("Error fetching posts:", err);
-                setError(err.message);
-                setPosts([]);
-                setTotalPosts(0);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        
-        getPosts();
+        getPosts(
+            setIsLoading,
+            setError,
+            setPosts,
+            setTotalPosts,
+            attributes
+        );
     }, [
+        getPosts,
+        setIsLoading,
+        setError,
+        setPosts,
+        setTotalPosts,
+        attributes,
         attributes.postType,
         attributes.taxonomy,
         attributes.terms,
@@ -76,14 +58,21 @@ export default function PostsByTabs(props) {
         attributes.metaFields,
         attributes.metaFields?.fields,
         attributes.metaFields?.relation,
-        attributes.metaFields?.fields?.length,
+        attributes.metaFields?.fields?.length
     ]);
+
+    const setAttributes = (newAttrs) => {
+        if (isEditor && props.setAttributes) {
+            props.setAttributes(newAttrs);
+        } else {
+            setAttributesState(prev => ({...prev, ...newAttrs}));
+        }
+    };
 
 
     const handleTabChange = (event, value) => {
-        selectBlock(clientId);
         setSelectedTab(value);
-	};
+    };
 
     const handlePageChange = (page, newOffset, append = false) => {
         
@@ -92,17 +81,7 @@ export default function PostsByTabs(props) {
             ...attributes,
             offset: newOffset
         });
-        
-        if (append) {
-            // We'll handle this in the useEffect by passing append option to fetchPosts
-        }
-        
-        if (!append) {
-            window.scrollTo({
-                top: document.getElementById(`block-${clientId}`).offsetTop - 50,
-                behavior: 'smooth'
-            });
-        }
+       
     };
 
     const renderPostsStatus = () => {
@@ -133,12 +112,9 @@ export default function PostsByTabs(props) {
     
     return (
 
-        <div { ...useBlockProps() } >
+        <div id={`block-content-${clientId}`} className="posts-by-tabs-content">
             <Container 
             sx={{position: 'relative'}}
-            onClick={(e) => {
-                selectBlock(clientId);
-            }}
             maxWidth={maxWidth()}
             >
                 {attributes.title && 
@@ -179,12 +155,10 @@ export default function PostsByTabs(props) {
                             tab={tab}
                             index={index}
                             selectedTab={selectedTab}
-                            editingContent={editingContent}
-                            setEditingContent={setEditingContent}
-                            handleTabValueChange={handleTabValueChange}
                             clientId={clientId}
                             templates={templates}
                             posts={posts}
+                            isEditor={isEditor}
                         />
                     ))}
 
@@ -207,3 +181,43 @@ export default function PostsByTabs(props) {
 
     );
 }
+
+async function getPosts (
+    setIsLoading,
+    setError,
+    setPosts,
+    setTotalPosts,
+    attributes,
+) {
+
+    
+    setIsLoading(true);
+    setError(null);
+
+    try {
+        const fetchOptions = {
+            headers: true,
+            append: false 
+        };
+        
+        const result = await fetchPosts({
+            ...attributes
+        }, fetchOptions);
+
+        if (result.headers && result.headers['x-wp-total']) {
+            setTotalPosts(parseInt(result.headers['x-wp-total']));
+        }
+
+        if (result.posts) {
+            setPosts(result.posts);
+        }
+
+    } catch (err) {
+        console.error("Error fetching posts:", err);
+        setError(err.message);
+        setPosts([]);
+        setTotalPosts(0);
+    } finally {
+        setIsLoading(false);
+    }
+};

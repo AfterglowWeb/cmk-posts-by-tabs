@@ -21,7 +21,7 @@ function createSvg(text, fill) {
         id=${id}
         d="M128.5,16C66.4,16,16,66.4,16,128.5c0,0,0,0,0,0.1c0.4,0,0.7,0,1,0.1c0-0.1,0-0.1,0-0.2c0-29.8,11.6-57.8,32.7-78.8 c21.1-21,49-32.7,78.8-32.7s57.8,11.6,78.8,32.7c21,21.1,32.7,49.1,32.7,78.8c0,0.1,0,0.1,0,0.2c0.3-0.1,0.6-0.1,1-0.1 c0,0,0,0,0-0.1C241,66.4,190.6,16,128.5,16z"/>
         </defs>
-        <text><textPath xlink:href="#${id}" text-anchor="middle" startOffset="50%">${text}</textPath></text>
+        <text style="font-size: 12px;"><textPath xlink:href="#${id}" text-anchor="middle" startOffset="50%">${text}</textPath></text>
         </svg>`
     )
 }
