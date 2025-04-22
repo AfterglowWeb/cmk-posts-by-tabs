@@ -151,6 +151,7 @@ class restExtend {
             $prepared = $post_controller->prepare_item_for_response( $post, $request );
             $post_prepared = $post_controller->prepare_response_for_collection( $prepared );
             $post_prepared['featured_media'] = get_the_post_thumbnail_url($post->ID, 'full');
+            $post_prepared['terms'] = self::get_post_terms($post->ID);
             $post_prepared['acf'] = apply_filters( 'rest_prepare_acf_fields', get_fields($post->ID), $post, $request);
             $posts_prepared[] = $post_prepared;
         }
@@ -163,6 +164,29 @@ class restExtend {
         return new \WP_REST_Response( $response, 200 );
 
     }
+
+    private static function get_post_terms($post_id) : array
+    {
+        $taxonomies = get_object_taxonomies(get_post_type($post_id));
+        $terms = [];
+
+        foreach ($taxonomies as $taxonomy) {
+            $term_list = get_the_terms($post_id, $taxonomy);
+            if (is_wp_error($term_list) || empty($term_list)) {
+                continue;
+            }
+            foreach ($term_list as $term) {
+                $terms[$taxonomy][] = [
+                    'id' => $term->term_id,
+                    'name' => $term->name,
+                    'slug' => $term->slug,
+                ];
+            }
+        }
+        return $terms;
+
+    }
+
 
     public static function get_metafields_rest(\WP_REST_Request $request): \WP_REST_Response
     {

@@ -1,11 +1,8 @@
 import { __ } from '@wordpress/i18n';
-import { RichText } from '@wordpress/block-editor';
-import { memo, useEffect } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
 import Paper from '@mui/material/Paper';
-import Post from '../posts/Post';
 import EventsCalendar from './EventsCalendar';
 import PostsGrid from './PostsGrid';
+import sanitizeHtml from '../utils/sanitizeHtml';
 
 function CustomTabPanel({children, selectedTab, value, index}) {
   return (
@@ -20,126 +17,39 @@ function CustomTabPanel({children, selectedTab, value, index}) {
         }
       }}
     >
-      {value === selectedTab && <Paper elevation={0}>{children}</Paper>}
+      {value === selectedTab && <Paper 
+      elevation={0}
+      sx={{borderRadius: '0px'}}
+      >{children}</Paper>}
     </div>
   );
 }
 
-const MemoizedRichText = memo(function RichTextEditor({
-  content,
-  index,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange,
-  clientId
-}) {
 
-  const { selectBlock } = useDispatch('core/block-editor');
+export default function TabContent(props) {
 
-  return (
-    <div 
-      className="rich-text-wrapper"
-      onClick={(e) => {
-        if (clientId) {
-          selectBlock(clientId);
-        }
-      }}
-    >
-      <RichText
-      tagName="p"
-      placeholder="Écrivez ici."
-      value={content}
-      allowedFormats={['core/bold', 'core/italic']}
-      onChange={(value) => {
-        setEditingContent({
-          index: index,
-          content: value
-        });
-      }}
-      onBlur={() => {
-        if (editingContent && editingContent.index === index) {
-          handleTabValueChange(editingContent.content, 'content', index);
-          setEditingContent(null);
-        }
-      }}
-      />
-    </div>
-  );
-}, (prevProps, nextProps) => {
-  if (prevProps.content !== nextProps.content) {
-    return false;
-  }
-  
-  const prevEditing = prevProps.editingContent?.index === prevProps.index;
-  const nextEditing = nextProps.editingContent?.index === nextProps.index;
-  if (prevEditing !== nextEditing) {
-    return false;
-  }
-  
-  if (nextEditing) {
-    return false;
-  }
-  
-  return true;
-});
-
-export default function TabContent({ 
-  tab, 
-  index, 
-  selectedTab,
-  editingContent,
-  setEditingContent,
-  handleTabValueChange,
-  clientId,
-  posts,
-  calendarPosts
-}) {
-
-  useEffect(() => {
-    return () => {
-      if (editingContent && editingContent.index === index) {
-        setEditingContent(null);
-      }
-    };
-  }, []);
-
-  const template = tab?.template || 'grid';
-
-  const content = editingContent !== null && editingContent.index === index 
-    ? editingContent.content 
-    : tab?.content || '';
+  const { tab, index, selectedTab, posts } = props;
 
   return (
     <CustomTabPanel 
       selectedTab={selectedTab} 
       value={index} 
       index={index}
+      className="w-full"
     >
-      <h3 className="flex justify-between pb-4">
-        <span className="block">
-          {tab.title && <span className="block text-xl font-bold">{tab.title}</span>}
-          {tab.subtitle && <span className="block text-2xl text-secondary font-regular">{tab.subtitle}</span>}
-        </span>
+      {tab.meta_1 || tab.meta_2 &&
+      <p className="flex justify-between pb-4">
         <span className="block">
           {tab.meta_1 && <span className="block text-xl font-regular">{tab.meta_1}</span>}
           {tab.meta_2 && <span className="block text-xl leading-2xl font-regular">{tab.meta_2}</span>}
         </span>
-      </h3>
+      </p>}
     
-      <div className="flex justify-start flex-wrap">
-        <div className="w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between">
-          <MemoizedRichText
-            content={content}
-            index={index}
-            editingContent={editingContent}
-            setEditingContent={setEditingContent}
-            handleTabValueChange={handleTabValueChange}
-            clientId={clientId}
-          />
-        </div>   
-      </div>
-      {template === 'grid' && <PostsGrid posts={posts} />}
-      {template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
+     
+      {tab.content &&  <div className="w-full md:w-1/2 p-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tab.content)}}/>}
+
+      {tab.template === 'grid' && <PostsGrid posts={posts} />}
+      {tab.template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
     </CustomTabPanel>
   );
 }

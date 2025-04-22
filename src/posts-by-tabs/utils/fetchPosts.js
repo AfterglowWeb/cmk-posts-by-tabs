@@ -107,7 +107,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
 
     if (getHeaders) {
         const response = await wp.apiFetch({ 
-            path,
+            path: queryPath,
             parse: false
         });
         
@@ -120,7 +120,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
             }
         };
     } else {
-        return await wp.apiFetch({ path });
+        return await wp.apiFetch({ path:queryPath });
     }
 
 }

@@ -350,12 +350,10 @@ export default function EventsCalendar(props) {
 
           <div className="grid grid-cols-7 gap-1 mt-1">
             
-            {/* Empty days before the month starts */}
             {Array.from({ length: monthStart.getDay() === 0 ? 6 : monthStart.getDay() - 1 }).map((_, i) => (
               <div key={`empty-start-${i}`} className="aspect-square bg-gray-50 p-1"></div>
             ))}
             
-            {/* Actual month days */}
             {monthDays.map((day, i) => {
               const dayKey = format(day, 'yyyy-MM-dd');
               const dayEvents = eventsByDate[dayKey] || [];

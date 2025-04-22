@@ -84,8 +84,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 			templates={templates}
 			attributes={attributes} 
 			setAttributes={setAttributes} 
-			handleTabValueChange={handleTabValueChange} 
-			clientId={clientId} 
+			isEditor={true}
 			/>
 
 		</>
