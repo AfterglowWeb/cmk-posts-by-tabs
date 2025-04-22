@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Tooltip from '@mui/material/Tooltip';
-import PostCategories from './PostCategories';
+import PostTerms from './PostTerms';
 import sanitizeHtml from '../utils/sanitizeHtml';
 
 export default function XSmallCard({post, compact = false, hideImage = false}) {
@@ -34,7 +34,7 @@ export default function XSmallCard({post, compact = false, hideImage = false}) {
               </h3>
           </Tooltip>
           }
-          <PostCategories post={post} taxonomy={'event-type'} className="flex gap-1 items-center w-full max-w-full" />
+          <PostTerms post={post} taxonomy={'event-type'} />
         </Box>
 
         

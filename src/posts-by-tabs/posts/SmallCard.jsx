@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import PostCategories from './PostCategories';
+import PostTerms from './PostTerms';
 import PostDate from './PostDate';
 import EventDates from './EventDates';
 import sanitizeHtml from '../utils/sanitizeHtml';
@@ -61,7 +61,7 @@ if(!post) {
           <EventDates post={post} className="px-2"/>
           <Box sx={{ display: 'flex', alignItems: 'center', p: 1, gap: 1 }}> 
               <PostDate post={post} className="w-1/2" />
-              <PostCategories post={post} taxonomy={'event-type'} className="w-1/2" />
+              <PostTerms post={post} taxonomy={'event-type'} />
           </Box>
         </Box>
         <SubEvent post={post} />

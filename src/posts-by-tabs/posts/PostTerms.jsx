@@ -1,24 +1,7 @@
 import React, { Fragment } from 'react';
-import Box from '@mui/material/Box';
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import { Tooltip } from '@mui/material';
 
-export default function PostCategories(props) {
-  
-  const {className} = props;
-
-  return(
-    <Box component="p" className={`flex gap-1 items-center  ${className}`}>
-        <CategoryOutlinedIcon sx={{width:18 , height:18}} color="inherit" />
-        <span className="block text-xs leading-none truncate ellipsis overflow-hidden">
-            <PostTerms {...props} />
-        </span>
-    </Box>
-  )
-
-}
-
-export function PostTerms(props) {
+export default function PostTerms(props) {
 
   const {post, taxonomy = 'categories'} = props;
   if(!post) {

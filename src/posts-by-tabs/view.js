@@ -1,6 +1,7 @@
 import { createRoot } from '@wordpress/element';
 import ThemePalette from './front/ThemePalette';
 import PostsByTabs from './front/PostsByTabs';
+import './style.scss';
 
 document.addEventListener('DOMContentLoaded', () => {
     

@@ -2806,30 +2806,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/@mui/icons-material/esm/CategoryOutlined.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@mui/icons-material/esm/CategoryOutlined.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/createSvgIcon.js */ "./node_modules/@mui/material/utils/createSvgIcon.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-"use client";
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-  d: "m12 2-5.5 9h11zm0 3.84L13.93 9h-3.87zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5m0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5M3 21.5h8v-8H3zm2-6h4v4H5z"
-}), 'CategoryOutlined'));
-
-/***/ }),
-
 /***/ "./node_modules/@mui/icons-material/esm/InsertInvitation.js":
 /*!******************************************************************!*\
   !*** ./node_modules/@mui/icons-material/esm/InsertInvitation.js ***!
@@ -53404,12 +53380,13 @@ function PostsByTabs(props) {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps)(),
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_6__["default"], {
       sx: {
-        position: 'relative'
+        position: 'relative',
+        widht: '100%'
       },
       onClick: e => {
         selectBlock(clientId);
       },
-      maxWidth: maxWidth(),
+      maxWidth: false,
       children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_7__["default"], {
         component: "h2",
         className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
@@ -53427,7 +53404,7 @@ function PostsByTabs(props) {
           scrollButtons: "auto",
           "aria-label": "detailed list tabs",
           sx: {
-            mb: 3
+            mb: 1
           },
           children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_9__["default"], {
             label: tab.title,
@@ -53513,10 +53490,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
-/* harmony import */ var _EventsCalendar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EventsCalendar */ "./src/posts-by-tabs/front/EventsCalendar.jsx");
-/* harmony import */ var _PostsGrid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PostsGrid */ "./src/posts-by-tabs/front/PostsGrid.jsx");
+/* harmony import */ var _EventsCalendar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EventsCalendar */ "./src/posts-by-tabs/front/EventsCalendar.jsx");
+/* harmony import */ var _PostsGrid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PostsGrid */ "./src/posts-by-tabs/front/PostsGrid.jsx");
+/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 
@@ -53548,7 +53527,6 @@ function CustomTabPanel({
   });
 }
 function TabContent(props) {
-  console.log('TabContent', props);
   const {
     tab,
     index,
@@ -53559,18 +53537,10 @@ function TabContent(props) {
     selectedTab: selectedTab,
     value: index,
     index: index,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("h3", {
+    className: "w-full",
+    children: [tab.meta_1 || tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
       className: "flex justify-between pb-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
-        className: "block",
-        children: [tab.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-          className: "block text-xl font-bold",
-          children: tab.title
-        }), tab.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-          className: "block text-2xl text-secondary font-regular",
-          children: tab.subtitle
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
         className: "block",
         children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
           className: "block text-xl font-regular",
@@ -53579,21 +53549,15 @@ function TabContent(props) {
           className: "block text-xl leading-2xl font-regular",
           children: tab.meta_2
         })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "flex justify-start flex-wrap",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "w-full md:w-1/2 p-2 flex flex-col gap-4 justify-between",
-        children: tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-          className: "tab-content-html",
-          dangerouslySetInnerHTML: {
-            __html: tab.content
-          }
-        })
       })
-    }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "w-full md:w-1/2 p-2",
+      dangerouslySetInnerHTML: {
+        __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_3__["default"])(tab.content)
+      }
+    }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_4__["default"], {
       posts: posts
-    }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_5__["default"], {
       posts: posts,
       tab: tab
     })]
@@ -53941,7 +53905,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _PostTerms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PostTerms */ "./src/posts-by-tabs/posts/PostTerms.jsx");
 /* harmony import */ var _PostTop__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PostTop */ "./src/posts-by-tabs/posts/PostTop.jsx");
 /* harmony import */ var _PostBottom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PostBottom */ "./src/posts-by-tabs/posts/PostBottom.jsx");
 /* harmony import */ var _EventDates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EventDates */ "./src/posts-by-tabs/posts/EventDates.jsx");
@@ -54008,12 +53972,15 @@ function Post({
       },
       className: "h-[260px] w-[260px] border border-white cursor-pointer relative flex justify-center items-center z-10 font-title transition duration-500 bg-white/90 hover:bg-white/0 rounded-full shadow-lg",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostTop__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        text: topTextString
+        text: topTextString?.toUpperCase()
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "max-w-[180px] mx-auto",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_5__.PostTerms, {
-          post: post,
-          taxonomy: 'event-type'
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "text-center *:text-[12px] *:leading-none",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostTerms__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            post: post,
+            taxonomy: 'event-type'
+          })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
           href: post.link,
           title: post.title?.rendered,
@@ -54026,7 +53993,7 @@ function Post({
           })
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostBottom__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        text: bottomTextString
+        text: bottomTextString?.toUpperCase()
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
         className: "post-cross block absolute top-[calc(50% - 20px)] left-[calc(50% - 20px)] w-[40px] h-[40px]",
         dangerouslySetInnerHTML: {
@@ -54089,7 +54056,7 @@ const PostBottom = ({
   fill = '#091219'
 }) => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-    className: "block absolute bottom-[6px] left-0 w-full h-[124px]",
+    className: "block absolute bottom-0 left-0 w-full h-[144px]",
     dangerouslySetInnerHTML: {
       __html: createSvg(text, fill)
     }
@@ -54097,7 +54064,7 @@ const PostBottom = ({
 };
 function createSvg(text, fill) {
   const id = (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  return `<svg style="width:100%;height:100%;" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 260 130" xmlSpace="preserve">
+  return `<svg style="width:100%;height:100%;" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 260 144" xmlSpace="preserve">
     <defs>
         <path 
         fill="${fill}" 
@@ -54110,87 +54077,6 @@ function createSvg(text, fill) {
 </svg>`;
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PostBottom);
-
-/***/ }),
-
-/***/ "./src/posts-by-tabs/posts/PostCategories.jsx":
-/*!****************************************************!*\
-  !*** ./src/posts-by-tabs/posts/PostCategories.jsx ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   PostTerms: () => (/* binding */ PostTerms),
-/* harmony export */   "default": () => (/* binding */ PostCategories)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _mui_icons_material_CategoryOutlined__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/icons-material/CategoryOutlined */ "./node_modules/@mui/icons-material/esm/CategoryOutlined.js");
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-
-
-function PostCategories(props) {
-  const {
-    className
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    component: "p",
-    className: `flex gap-1 items-center  ${className}`,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_icons_material_CategoryOutlined__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      sx: {
-        width: 18,
-        height: 18
-      },
-      color: "inherit"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "block text-xs leading-none truncate ellipsis overflow-hidden",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(PostTerms, {
-        ...props
-      })
-    })]
-  });
-}
-function PostTerms(props) {
-  const {
-    post,
-    taxonomy = 'categories'
-  } = props;
-  if (!post) {
-    return null;
-  }
-  const taxonomies = post.terms;
-  if (!taxonomies) {
-    return null;
-  }
-  const terms = taxonomies[taxonomy] ? taxonomies[taxonomy] : null;
-  if (!terms || terms.length === 0) {
-    return null;
-  }
-  return terms.map((term, index) => {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
-        href: term.url,
-        title: term.name,
-        className: "no-underline",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: `Catégorie ${term.name}`,
-          placement: "top-start",
-          children: term.name
-        })
-      }), index < terms.length - 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        children: " \u2022 "
-      })]
-    }, index + term.name);
-  });
-}
 
 /***/ }),
 
@@ -54260,6 +54146,61 @@ function PostDate(props) {
 
 /***/ }),
 
+/***/ "./src/posts-by-tabs/posts/PostTerms.jsx":
+/*!***********************************************!*\
+  !*** ./src/posts-by-tabs/posts/PostTerms.jsx ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PostTerms)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+function PostTerms(props) {
+  const {
+    post,
+    taxonomy = 'categories'
+  } = props;
+  if (!post) {
+    return null;
+  }
+  const taxonomies = post.terms;
+  if (!taxonomies) {
+    return null;
+  }
+  const terms = taxonomies[taxonomy] ? taxonomies[taxonomy] : null;
+  if (!terms || terms.length === 0) {
+    return null;
+  }
+  return terms.map((term, index) => {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+        href: term.url,
+        title: term.name,
+        className: "no-underline",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          title: `Catégorie ${term.name}`,
+          placement: "top-start",
+          children: term.name
+        })
+      }), index < terms.length - 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        children: " \u2022 "
+      })]
+    }, index + term.name);
+  });
+}
+
+/***/ }),
+
 /***/ "./src/posts-by-tabs/posts/PostTop.jsx":
 /*!*********************************************!*\
   !*** ./src/posts-by-tabs/posts/PostTop.jsx ***!
@@ -54284,7 +54225,7 @@ const PostTop = ({
   fill = '#091219'
 }) => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-    className: "block absolute left-0 top-[6px] w-full h-[124px]",
+    className: "block absolute left-0 top-[6px] w-full h-[144px]",
     dangerouslySetInnerHTML: {
       __html: createSvg(text, fill)
     }
@@ -54292,7 +54233,7 @@ const PostTop = ({
 };
 function createSvg(text, fill) {
   const id = (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  return `<svg style="width:100%;height:100%;" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 260 130" xml:space="preserve">
+  return `<svg style="width:100%;height:100%;" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 260 144" xml:space="preserve">
         <defs>
         <path 
         fill="${fill}" 
@@ -54323,7 +54264,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mui_material_Card__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/material/Card */ "./node_modules/@mui/material/Card/Card.js");
 /* harmony import */ var _mui_material_CardContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/CardContent */ "./node_modules/@mui/material/CardContent/CardContent.js");
 /* harmony import */ var _mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/CardMedia */ "./node_modules/@mui/material/CardMedia/CardMedia.js");
-/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _PostTerms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PostTerms */ "./src/posts-by-tabs/posts/PostTerms.jsx");
 /* harmony import */ var _PostDate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PostDate */ "./src/posts-by-tabs/posts/PostDate.jsx");
 /* harmony import */ var _EventDates__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./EventDates */ "./src/posts-by-tabs/posts/EventDates.jsx");
 /* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
@@ -54433,10 +54374,9 @@ function SmallCard({
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostDate__WEBPACK_IMPORTED_MODULE_9__["default"], {
             post: post,
             className: "w-1/2"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostTerms__WEBPACK_IMPORTED_MODULE_10__["default"], {
             post: post,
-            taxonomy: 'event-type',
-            className: "w-1/2"
+            taxonomy: 'event-type'
           })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_SubEvent__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -54508,7 +54448,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mui_material_CardContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/CardContent */ "./node_modules/@mui/material/CardContent/CardContent.js");
 /* harmony import */ var _mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material/CardMedia */ "./node_modules/@mui/material/CardMedia/CardMedia.js");
 /* harmony import */ var _mui_material_Tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Tooltip */ "./node_modules/@mui/material/Tooltip/Tooltip.js");
-/* harmony import */ var _PostCategories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PostCategories */ "./src/posts-by-tabs/posts/PostCategories.jsx");
+/* harmony import */ var _PostTerms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PostTerms */ "./src/posts-by-tabs/posts/PostTerms.jsx");
 /* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
@@ -54586,10 +54526,9 @@ function XSmallCard({
               }
             })
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostCategories__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_PostTerms__WEBPACK_IMPORTED_MODULE_8__["default"], {
           post: post,
-          taxonomy: 'event-type',
-          className: "flex gap-1 items-center w-full max-w-full"
+          taxonomy: 'event-type'
         })]
       })
     })]

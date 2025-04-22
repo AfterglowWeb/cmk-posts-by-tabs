@@ -19,3 +19,8 @@ body .posts-by-tabs-panel input[type=text] {
     background-color: inherit!important;
     color: inherit!important;
 }
+
+body .wp-block-group-is-layout-flex.alignfull {
+    width: 100%; 
+    min-width: 100%;
+}

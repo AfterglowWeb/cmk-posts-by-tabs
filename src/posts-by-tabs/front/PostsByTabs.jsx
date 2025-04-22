@@ -135,11 +135,11 @@ export default function PostsByTabs(props) {
 
         <div { ...useBlockProps() } >
             <Container 
-            sx={{position: 'relative'}}
+            sx={{position: 'relative', widht:'100%'}}
             onClick={(e) => {
                 selectBlock(clientId);
             }}
-            maxWidth={maxWidth()}
+            maxWidth={false}
             >
                 {attributes.title && 
                 <Box 
@@ -159,7 +159,7 @@ export default function PostsByTabs(props) {
                     variant="scrollable"
                     scrollButtons="auto"
                     aria-label="detailed list tabs"
-                    sx={{ mb: 3 }}
+                    sx={{ mb: 1 }}
                     >
                         {attributes.tabs && attributes.tabs.map((tab, index) => (
                             <Tab 
