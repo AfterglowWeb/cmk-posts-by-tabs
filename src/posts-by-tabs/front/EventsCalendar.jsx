@@ -133,10 +133,6 @@ export default function EventsCalendar(props) {
         setCurrentDate(prevDate => addMonths(prevDate, 1));
     }
   };
-  
-  const handleViewChange = (view) => {
-    setCalendarView(view);
-  };
 
   const renderDayView = () => {
     const todayKey = format(currentDate, 'yyyy-MM-dd');
@@ -188,7 +184,7 @@ export default function EventsCalendar(props) {
                   component="h4" 
                   className={`py-2 font-bold text-center ${
                     format(day, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') 
-                      ? 'text-primary bg-primary-light rounded' 
+                      ? 'text-disabled bg-gray-100' 
                       : ''
                   }`}
                 >
@@ -204,15 +200,13 @@ export default function EventsCalendar(props) {
                     dayEvents.map((post, index) => (
                       <Box 
                         key={`week-event-${dayIndex}-${index}`} 
-                        className={`mb-3 p-2 rounded ${
+                        className={`mb-3 p-2 bg-slate-100 text-primary border-slate-100 ${
                           post.multiDay 
-                            ? `${post.position === 'start' 
-                                ? 'rounded-r-none border-r-0' 
-                                : post.position === 'end' 
-                                  ? 'rounded-l-none border-l-0' 
-                                  : 'rounded-none border-x-0'
-                              } bg-primary text-white`
-                            : 'bg-white shadow-sm border'
+                            ? `${post.position === 'start' ? 'border-r-0' 
+                                : 
+                                post.position === 'end' ? 'border-l-0' : 'border-x-0'
+                              }`
+                            : 'border'
                         }`}
                       >
                         <SmallCard 
@@ -363,7 +357,7 @@ export default function EventsCalendar(props) {
                 <div 
                   key={`month-day-${i}`} 
                   className={`aspect-square border border-gray-100 p-0 overflow-hidden ${
-                    isToday ? 'bg-primary-light' : 'bg-white'
+                    isToday ? 'bg-gray-100' : 'bg-white'
                   }`}
                 >
                   <Typography 
@@ -449,43 +443,43 @@ export default function EventsCalendar(props) {
               
               {has_day_view && (
               <Tooltip title={__('Day view', 'posts-by-tabs')} placement="top">
-              <Fab 
+              <IconButton 
                 color={calendarView === 'day' ? 'secondary' : 'primary'} 
                 aria-label={__('day', 'posts-by-tabs')} 
                 onClick={() => setCalendarView('day')}
                 size="small"
                 sx={{ boxShadow: 'none' }}
               >
-                <CalendarViewDayOutlinedIcon />
-              </Fab>
+                <CalendarViewDayOutlinedIcon color={calendarView === 'day' ? 'secondary' : 'primary'}  />
+              </IconButton>
               </Tooltip>
               )}
 
               {has_week_view && (
               <Tooltip title={__('Week view', 'posts-by-tabs')} placement="top">
-              <Fab 
+              <IconButton 
                 color={calendarView === 'week' ? 'secondary' : 'primary'} 
                 aria-label={__('week', 'posts-by-tabs')}  
                 onClick={() => setCalendarView('week')}
                 size="small"
                 sx={{ boxShadow: 'none' }}
               >
-                <CalendarViewWeekIcon />
-              </Fab>
+                <CalendarViewWeekIcon color={calendarView === 'week' ? 'secondary' : 'primary'} />
+              </IconButton>
               </Tooltip>
               )}
 
               {has_month_view && (
               <Tooltip title={__('Month view', 'posts-by-tabs')} placement="top">
-              <Fab 
+              <IconButton 
                 color={calendarView === 'month' ? 'secondary' : 'primary'} 
                 aria-label={__('month', 'posts-by-tabs')} 
                 onClick={() => setCalendarView('month')}
                 size="small"
                 sx={{ boxShadow: 'none' }}
               >
-                <CalendarViewMonthIcon />
-              </Fab>
+                <CalendarViewMonthIcon color={calendarView === 'month' ? 'secondary' : 'primary'}  />
+              </IconButton>
               </Tooltip>
               )}
 

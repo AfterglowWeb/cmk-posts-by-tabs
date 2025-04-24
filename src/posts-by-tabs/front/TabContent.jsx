@@ -35,7 +35,7 @@ export default function TabContent(props) {
       selectedTab={selectedTab} 
       value={index} 
       index={index}
-      className="w-full"
+      className="w-full min-w-full"
     >
       {tab.meta_1 || tab.meta_2 &&
       <p className="flex justify-between pb-4">
@@ -50,6 +50,7 @@ export default function TabContent(props) {
 
       {tab.template === 'grid' && <PostsGrid posts={posts} />}
       {tab.template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
+      {tab.template === 'map' && <EventsMap posts={posts} tab={tab} />}
     </CustomTabPanel>
   );
 }

@@ -7,7 +7,7 @@ $block_id = isset($attributes['blockId']) ? $attributes['blockId'] : '';
 $background = isset($attributes['background']) ? $attributes['background'] : [];
 
 ?>
-<div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block']); ?> id="block-<?php echo esc_attr($block_id); ?>">
+<div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block w-full min-w-full']); ?> id="block-<?php echo esc_attr($block_id); ?>">
     <?php if (empty($tabs)) : ?>
         <div class="posts-by-tabs-empty">
             <?php esc_html_e('No tabs available.', 'posts-by-tabs'); ?>
