@@ -8,7 +8,7 @@
 **Requires at least:** 6.0  
 **Tested up to:** 6.7  
 **Requires PHP:** 8.1  
-**Stable tag:** 1.0.2  
+**Stable tag:** 1.0.3  
 **License:** GPL-3.0-or-later  
 **License URI:** [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
@@ -136,6 +136,10 @@ Posts By Tabs uses:
 - Tailwind CSS for utility styling
 
 ## Changelog
+
+### 1.0.3
+
+- Front debug
 
 ### 1.0.2
 

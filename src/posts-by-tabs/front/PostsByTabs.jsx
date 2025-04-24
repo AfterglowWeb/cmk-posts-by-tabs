@@ -1,4 +1,3 @@
-import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
@@ -7,17 +6,19 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Paper from '@mui/material/Paper';
 
-import TabContent from './TabContent';
 import { fetchPosts } from '../utils/fetchPosts';
-import Pagination from './Pagination';
+import sanitizeHtml from '../utils/sanitizeHtml';
 
+import Pagination from './Pagination';
+import EventsCalendar from './EventsCalendar';
+import PostsGrid from './PostsGrid';
+import EventsMap from './EventsMap';
 
 export default function PostsByTabs(props) {
-    const { attributes, setAttributes, handleTabValueChange, clientId, templates } = props;
+    const { attributes, setAttributes, clientId } = props;
     const [selectedTab, setSelectedTab] = useState(0);
-    const [editingContent, setEditingContent] = useState(null);
-    const { selectBlock } = useDispatch('core/block-editor');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -80,7 +81,6 @@ export default function PostsByTabs(props) {
 
 
     const handleTabChange = (event, value) => {
-        selectBlock(clientId);
         setSelectedTab(value);
 	};
 
@@ -133,9 +133,6 @@ export default function PostsByTabs(props) {
     return (
         <Container 
         sx={{position: 'relative', widht:'100%'}}
-        onClick={(e) => {
-            selectBlock(clientId);
-        }}
         maxWidth={maxWidth()}
         >
             {attributes.title && 
@@ -171,18 +168,30 @@ export default function PostsByTabs(props) {
                 {renderPostsStatus()}
 
                 {attributes.tabs?.map((tab, index) => (
-                    <TabContent
-                        key={index}
-                        tab={tab}
-                        index={index}
-                        selectedTab={selectedTab}
-                        editingContent={editingContent}
-                        setEditingContent={setEditingContent}
-                        handleTabValueChange={handleTabValueChange}
-                        clientId={clientId}
-                        templates={templates}
-                        posts={posts}
-                    />
+
+                        <CustomTabPanel 
+                          key={index}
+                          selectedTab={selectedTab} 
+                          value={index} 
+                          index={index}
+                          className="w-full min-w-full"
+                        >
+                          {tab.meta_1 || tab.meta_2 &&
+                          <p className="flex justify-between pb-4">
+                            <span className="block">
+                              {tab.meta_1 && <span className="block text-xl font-regular">{tab.meta_1}</span>}
+                              {tab.meta_2 && <span className="block text-xl leading-2xl font-regular">{tab.meta_2}</span>}
+                            </span>
+                          </p>}
+                        
+                         
+                          {tab.content &&  <div className="w-full md:w-1/2 p-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tab.content)}}/>}
+                    
+                          {tab.template === 'grid' && <PostsGrid posts={posts} />}
+                          {tab.template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
+                          {tab.template === 'map' && <EventsMap posts={posts} tab={tab} />}
+                        </CustomTabPanel>
+                      
                 ))}
 
                 {activeTab && activeTab.options?.paginationEnabled && (
@@ -202,3 +211,24 @@ export default function PostsByTabs(props) {
         </Container>
     );
 }
+
+function CustomTabPanel({children, selectedTab, value, index}) {
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== selectedTab}
+        id={`tabpanel-${value}`}
+        aria-labelledby={`tab-${index}`}
+        onClick={(e) => {
+          if (e.currentTarget === e.target) {
+            e.stopPropagation();
+          }
+        }}
+      >
+        {value === selectedTab && <Paper 
+        elevation={0}
+        sx={{borderRadius: '0px'}}
+        >{children}</Paper>}
+      </div>
+    );
+  }

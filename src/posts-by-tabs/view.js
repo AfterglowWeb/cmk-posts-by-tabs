@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const root = createRoot(blockRoot);
             root.render(
                 <ThemePalette>
-                    <PostsByTabs attributes={attributes} />
+                    <PostsByTabs 
+                    attributes={attributes} 
+                    restUrl={attributes?.restUrl} 
+                    nonce={attributes?.nonce} 
+                    />
                 </ThemePalette>
             )
         }

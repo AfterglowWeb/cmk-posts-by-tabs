@@ -6,6 +6,11 @@ $tabs = isset($attributes['tabs']) ? $attributes['tabs'] : [];
 $block_id = isset($attributes['blockId']) ? $attributes['blockId'] : '';
 $background = isset($attributes['background']) ? $attributes['background'] : [];
 
+$attributes = array_merge($attributes, [
+    'restUrl' => esc_url_raw(rest_url()),
+    'nonce' => wp_create_nonce('wp_rest'),
+]);
+
 ?>
 <div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block w-full min-w-full']); ?> id="block-<?php echo esc_attr($block_id); ?>">
     <?php if (empty($tabs)) : ?>

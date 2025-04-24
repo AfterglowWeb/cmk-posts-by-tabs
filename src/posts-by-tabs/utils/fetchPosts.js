@@ -4,7 +4,6 @@ export async function fetchPosts(attributes, options = {}) {
     let response;
     
     try {
-        // Determine if we need to use the meta query endpoint
         if (hasMetaQuery(attributes)) {
             response = await fetchPostsWithMetaQuery(attributes, headers);
         } else {
@@ -32,7 +31,7 @@ export function hasMetaQuery(attributes) {
 }
 
 async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
-    const endpoint = '/posts-by-tabs/v1/posts';
+    const endpoint = 'posts-by-tabs/v1/posts';
     
     const requestData = {
         post_type: attributes.postType || 'post',
@@ -50,10 +49,12 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
         requestData.terms[attributes.taxonomy] = attributes.terms;
     }
 
-    const response = await wp.apiFetch({
+    const response = await universalFetch({
         path: endpoint,
         method: 'POST',
-        data: requestData
+        data: requestData,
+        returnHeaders: getHeaders,
+        attributes: attributes
     });
     
     if (getHeaders && response.total_posts !== undefined) {
@@ -65,8 +66,9 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
             }
         };
     }
-    
-    return response.posts || response;
+
+    return getHeaders ? response.data.posts || response.data : response.posts || response;
+
 }
 
 async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
@@ -98,7 +100,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
     }
     
     if (attributes.search) {
-        queryPath += `&search=${encodeURIComponent(attributes.search)}`;
+        queryPath += `&s=${encodeURIComponent(attributes.search)}`;
     }
     
     if (attributes.offset) {
@@ -111,6 +113,17 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
             parse: false
         });
         
+        if (response instanceof Response) {
+            const posts = await response.json();
+            return {
+                posts,
+                headers: {
+                    'x-wp-total': response.headers.get('X-WP-Total'),
+                    'x-wp-totalpages': response.headers.get('X-WP-TotalPages')
+                }
+            };
+        } 
+        
         const posts = await response.json();
         return {
             posts,
@@ -120,7 +133,61 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
             }
         };
     } else {
-        return await wp.apiFetch({ path:queryPath });
+        return await universalFetch({ path: queryPath, attributes: attributes });
     }
 
+}
+
+async function universalFetch(options) {
+    if (typeof wp !== 'undefined' && wp.apiFetch) {
+        return await wp.apiFetch(options);
+    }
+    
+    const { restUrl, nonce } = options.attributes || {};
+    const { path } = options;
+    if (!restUrl || !nonce || !path) {
+        console.error('Missing required attributes for universalFetch');
+        return null;
+    }
+
+    const url = `${restUrl}${path}`;
+    
+    const fetchOptions = {
+        method: options.method || 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': nonce
+        }
+    };
+    
+    if ((options.method === 'POST') && options.data) {
+        fetchOptions.body = JSON.stringify(options.data);
+    }
+    
+    try {
+        const response = await fetch(url, fetchOptions);
+        
+        if (options.parse === false) {
+            return response;
+        }
+        
+        const headers = {};
+        response.headers.forEach((value, key) => { 
+            headers[key.toLowerCase()] = value;
+        });
+        
+        const data = await response.json();
+        
+        if (options.returnHeaders) {
+            return { 
+                data,
+                headers 
+            };
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('Error in universalFetch:', error);
+        throw error; // Re-throw to be consistent with wp.apiFetch behavior
+    }
 }

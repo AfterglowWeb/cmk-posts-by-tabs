@@ -84,7 +84,7 @@ class restExtend {
 								'sanitize_callback' => 'sanitize_text_field',
 							),
 							'meta_key'       => array(
-								'default'           => 'datedebut',
+								'default'           => 'start',
 								'sanitize_callback' => 'sanitize_text_field',
 							),
 						),
@@ -100,21 +100,26 @@ class restExtend {
 
 	public static function get_posts_rest( \WP_REST_Request $request ): \WP_REST_Response {
 
+		$params = $request->get_params();
+		
 		$args = array(
 			'post_status'    => 'publish',
-			'post_type'      => $request->get_param( 'post_type' ),
-			'paged'          => $request->get_param( 'paged' ),
-			'posts_per_page' => $request->get_param( 'per_page' ),
-			'order'          => $request->get_param( 'order' ),
-			'orderby'        => $request->get_param( 'orderby' ),
-			'meta_key'       => $request->get_param( 'meta_key' ),
+			'post_type'      => $params['post_type'] ?? 'post',
+			'paged'          => $params['paged'] ?? 1,
+			'posts_per_page' => $params['posts_per_page'] ?? 10,
+			'order'          => $params['order'] ?? 'DESC',
+			'orderby'        => $params['orderby'] ?? 'date',
+			'meta_key'       => $params['meta_key'] ?? 'start',
 		);
 
 		$response = array(
 			'posts'         => array(),
 			'total'         => 0,
-			'calendarPosts' => array(),
 		);
+
+		if (!empty($params['search'])) {
+			$args['s'] = sanitize_text_field($params['search']);
+		}
 
 		$terms = $request->get_param( 'terms' );
 		if ( ! empty( $terms ) ) {
@@ -167,6 +172,8 @@ class restExtend {
 
 		$response['posts']       = $posts_prepared;
 		$response['total_posts'] = $query->found_posts;
+		$response['max_pages']   = $query->max_num_pages;
+		$response['current_page'] = $query->get( 'paged' );
 
 		return new \WP_REST_Response( $response, 200 );
 	}

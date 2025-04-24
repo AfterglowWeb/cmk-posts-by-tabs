@@ -5,11 +5,9 @@ export function initializeMap(config, places, mapElement) {
 
   if (!mapElement) return { map: null, markers: [] };
   
-  const config = block || {};
-
   let defaultPosition = { lat: 48.8566, lng: 2.3522 };
  
-  if (config.default_address_lat && config.default_address_lng) {
+  if (config?.default_address_lat && config?.default_address_lng) {
     defaultPosition = {
       lat: parseFloat(config.default_address_lat),
       lng: parseFloat(config.default_address_lng)
