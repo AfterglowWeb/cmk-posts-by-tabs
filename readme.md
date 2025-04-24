@@ -70,11 +70,12 @@ No. Each tab presents the same posts with a different view
 
 ### How do I customize the appearance of posts?
 
-Each tab has template options controlling how content is displayed. You can toggle visibility of elements like featured images, excerpts, author information, and more.
+Under development: Each tab has template options controlling how content is displayed. You can toggle visibility of elements like featured images, excerpts, author information, and more.
 
 ### Does it support custom post types?
 
 Yes, the plugin works with any registered public post type in your WordPress installation.
+Of course, the plugin will not work with private post types (revision, nav_menu_item and plugins private post types).
 
 ### Can I select multiple taxonomy terms?
 
@@ -135,6 +136,12 @@ Posts By Tabs uses:
 - Tailwind CSS for utility styling
 
 ## Changelog
+
+### 1.0.2
+
+- Added calendar templates support for day, week, month
+- Removed block background options as setting up your own wrapper with Gutenberg group, columns etc. offers much more versatilty
+- Verious styles and bug fixes
 
 ### 1.0.1b
 
