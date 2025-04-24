@@ -4,39 +4,44 @@
 
 **Plugin Type:** WordPress Block Editor (Gutenberg)  
 **Contributors:** Cédric Moris Kelly  
-**Tags:** gutenberg, block, tabs, posts, calendar, google map, custom post types, post query, tax query, meta query  
+**Tags:** gutenberg, block, tabs, posts, events, calendar, google map, custom post types, post query, tax query, meta query  
 **Requires at least:** 6.0  
 **Tested up to:** 6.7  
 **Requires PHP:** 8.1  
-**Stable tag:** 1.0.1b  
+**Stable tag:** 1.0.2  
 **License:** GPL-3.0-or-later  
 **License URI:** [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
-
-## Currently under development ##
-
-This plugin is currently in beta version with core functionality complete and ready for testing. The base grid template is fully implemented and operational. The plugin is not yet recommended for production environments.
-
-Additional template views, including a calendar interface for events and a Google Maps integration for venues/locations, are currently in active development. These templates will be included in upcoming releases.
-
-We recommend using this plugin in testing or staging environments until a stable release is available.
 
 ## Description
 
 Posts By Tabs is a Gutenberg WordPress block that displays posts, custom post types, and other content in interactive tabbed layouts. The block shows the same collection of posts across multiple tabs, with each tab presenting a different visual template and presentation style.
 
-Developed for events and venues management, Posts By Tabs includes display options such as grid views, calendar layouts, and geolocated map interfaces—all within a single block. Visitors can switch between different visualization methods for the same content.
+Developed for events and venues management, Posts By Tabs includes display options such as grid views, posts gallery view (Swiper.js), day, week, month,calendar layouts, and geolocated map interfaces—all within a single block. Visitors can switch between different visualization methods for the same content.
 
 The block features a query builder and template system that allows for organizing and displaying content in multiple formats, each appropriate to different contexts.
 
-The block includes a comprehensive query builder with support for post types, taxonomies, multiple term selection, meta query filters (with AND/OR logic, comparison operators, and data types), and various sorting options.
+The block includes a comprehensive query builder with support for post types, taxonomies, multiple term selection, meta query filters with AND/OR logic, comparison operators, data types and various sorting options.
+
+The meta query selector automatically fetch the metafields attached to the currently selected post type.
+
+## Currently under development ##
+
+This plugin is currently in beta version with core functionality complete and ready for testing. The base grid, slider and calendar templates are fully implemented and operational. The plugin is not yet recommended for production environments.
+
+Additional template views, including a Google Maps integration for venues/locations, are currently in active development. These templates will be included in upcoming releases.
+
+A post filtering component for frontend users is also in active development. 
+
+We recommend using this plugin in testing or staging environments until a stable release is available.
 
 ### Key Features:
 
 - **Multiple Tab Layouts**: Create and customize multiple tabs, each with its own display template and settings
-- **Advanced Query Builder**: Filter posts by type, taxonomy, multiple terms, and order
-- **WIP: Meta Query Support**: Advanced filtering using custom fields (post metadatas and ACF fields). Choose metafields related to a post type and build complex queries.
+- **Advanced Query Builder**: Filter posts by type, taxonomy, multiple terms, meta values and order
+- **Meta Query Support**: Advanced filtering using your existing custom meta fields (ACF and Wordpress meta fields support). Choose metafields associated to a post type and build complex queries.
 - **Template Variations**: Choose different display templates for your posts : grid, slider, calendar (events), map (venues)
-- **Customizable Options**: Control excerpt length, display of dates, authors, categories, and more
+- **WIP Customizable Options**: Control excerpt length, display of dates, authors, categories, and more
+- **WIP Various card/hero templates**: Choose between several card templates in grid and slider tabs
 - **Material UI Interface**: Modern, responsive design powered by Material UI components
 - **Dynamic Loading**: Load posts without page reload for better user experience
 - **Calendar template** : Display Events and Venues in a day/week/month fullscreen calendar. Preview each post.

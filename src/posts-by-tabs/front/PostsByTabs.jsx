@@ -9,7 +9,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import TabContent from './TabContent';
-import SectionBackground from './SectionBackground';
 import { fetchPosts } from '../utils/fetchPosts';
 import Pagination from './Pagination';
 
@@ -132,78 +131,74 @@ export default function PostsByTabs(props) {
     }
     
     return (
+        <Container 
+        sx={{position: 'relative', widht:'100%'}}
+        onClick={(e) => {
+            selectBlock(clientId);
+        }}
+        maxWidth={maxWidth()}
+        >
+            {attributes.title && 
+            <Box 
+            component="h2" 
+            className={`font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`}>
+                {attributes.title}
+            </Box>}
 
-        <div { ...useBlockProps() } >
-            <Container 
-            sx={{position: 'relative', widht:'100%'}}
-            onClick={(e) => {
-                selectBlock(clientId);
-            }}
-            maxWidth={false}
-            >
-                {attributes.title && 
-                <Box 
-                component="h2" 
-                className={`font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`}>
-                    {attributes.title}
-                </Box>}
-
-                {attributes.subtitle && <p className="font-bold text-xl text-[30px] mb-0">
-                    <strong>{attributes.subtitle}</strong>
-                </p>}
-                
-                <Box>
-                    <Tabs
-                    value={selectedTab}
-                    onChange={handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    aria-label="detailed list tabs"
-                    sx={{ mb: 1 }}
-                    >
-                        {attributes.tabs && attributes.tabs.map((tab, index) => (
-                            <Tab 
-                                key={index}
-                                label={tab.title}
-                                id={`tab-${index}`}
-                                aria-controls={`tabpanel-${index}`}
-                            />
-                        ))}
-                    </Tabs>
-
-                    {renderPostsStatus()}
-
-                    {attributes.tabs?.map((tab, index) => (
-                        <TabContent
+            {attributes.subtitle && <p className="font-bold text-xl text-[30px] mb-0">
+                <strong>{attributes.subtitle}</strong>
+            </p>}
+            
+            <Box>
+                <Tabs
+                value={selectedTab}
+                onChange={handleTabChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="detailed list tabs"
+                sx={{ mb: 1 }}
+                >
+                    {attributes.tabs && attributes.tabs.map((tab, index) => (
+                        <Tab 
                             key={index}
-                            tab={tab}
-                            index={index}
-                            selectedTab={selectedTab}
-                            editingContent={editingContent}
-                            setEditingContent={setEditingContent}
-                            handleTabValueChange={handleTabValueChange}
-                            clientId={clientId}
-                            templates={templates}
-                            posts={posts}
+                            label={tab.title}
+                            id={`tab-${index}`}
+                            aria-controls={`tabpanel-${index}`}
                         />
                     ))}
+                </Tabs>
 
-                    {activeTab && activeTab.options?.paginationEnabled && (
-                        <Pagination
-                            posts={posts}
-                            totalPosts={totalPosts}
-                            offset={attributes.offset || 0}
-                            postsPerPage={postsPerPage}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
-                            paginationType={paginationType}
-                            isLoading={isLoading}
-                            template={activeTab.template}
-                        />
-                    )}
-                </Box>
-            </Container>
-        </div>
+                {renderPostsStatus()}
 
+                {attributes.tabs?.map((tab, index) => (
+                    <TabContent
+                        key={index}
+                        tab={tab}
+                        index={index}
+                        selectedTab={selectedTab}
+                        editingContent={editingContent}
+                        setEditingContent={setEditingContent}
+                        handleTabValueChange={handleTabValueChange}
+                        clientId={clientId}
+                        templates={templates}
+                        posts={posts}
+                    />
+                ))}
+
+                {activeTab && activeTab.options?.paginationEnabled && (
+                    <Pagination
+                        posts={posts}
+                        totalPosts={totalPosts}
+                        offset={attributes.offset || 0}
+                        postsPerPage={postsPerPage}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                        paginationType={paginationType}
+                        isLoading={isLoading}
+                        template={activeTab.template}
+                    />
+                )}
+            </Box>
+        </Container>
     );
 }
