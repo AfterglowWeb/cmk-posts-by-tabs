@@ -5,69 +5,48 @@ export default function groupEventsByPlaces(attributes, posts) {
     return [];
   }
 
-  const placeForeignKey = attributes?.placeForeignKey || 'places';
+  const placeForeignKey = attributes?.placeForeignKey || 'lieu';
+  const grouped = [];
 
-  const grouped = fetchPlaces(attributes);
-
+  // Process each post/event
   posts.forEach(post => {
-    const placeIds = getPlaceIdsFromPost(post, placeForeignKey);
 
-    if (!Array.isArray(placeIds) || placeIds.length === 0) {
+  let places = null;
+
+  if (post.acf && post.acf[placeForeignKey]) {
+      places = post.acf[placeForeignKey];
+    } else if (post.meta && post.meta[placeForeignKey]) {
+      places = post.meta[placeForeignKey];
+    } else if (post[placeForeignKey]) {
+      places = post[placeForeignKey];
+    }
+
+    if (!places) {
+      console.log('No place data found for post:', post.id);
       return;
     }
 
-    placeIds.forEach(placeId => {
-      if (grouped[placeId]) {
-          grouped[placeId].events = grouped[placeId].events || [];
-          grouped[placeId].events.push(post);
+    const placesArray = Array.isArray(places) ? places : [places];
+    
+    placesArray.forEach(place => {
+      if (!place || !place.id) {
+        console.log('Invalid place data for post:', post.id);
+        return;
       }
-
+      
+      const existingIndex = grouped.findIndex(item => item.place.id === place.id);
+      
+      if (existingIndex !== -1) {
+        grouped[existingIndex].events.push(post);
+      } else {
+        grouped.push({
+          place: place,
+          events: [post]
+        });
+      }
     });
   });
 
-  return Object.values(grouped);
-}
-  
-export function getPlaceIdsFromPost(post, placeForeignKey) {
-  let places;
 
-  if(! placeForeignKey) {
-    return null;
-  }
-
-  if(post.meta) {
-    if(post.meta[placeForeignKey]) {
-      places = post.meta[placeForeignKey];
-    }
-  } 
-  
-  if (!places && post.acf) {
-    if ( post.acf[placeForeignKey]) {
-      places = post.acf[placeForeignKey];
-    }
-  }
-
-  if (typeof places === 'string') {
-    places = places.split(',');
-  }
-
-  if (!places) {
-    return null;
-  }
-
-  if (!Array.isArray(places)) {
-    return null;
-  }
-
-  const placeIds = places.map(place => {
-    if (typeof place === 'object' && place !== null) {
-      return parseInt(place.id, 10);
-    }
-    if (!isNaN(parseInt(place, 10))) {
-      return parseInt(place, 10);
-    }
-    return null;
-  });
-
-  return [...new Set(placeIds.filter(id => id !== null))];
+  return grouped;
 }

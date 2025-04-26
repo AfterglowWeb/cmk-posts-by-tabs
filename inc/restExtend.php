@@ -16,11 +16,30 @@ class restExtend {
 
 	private function __construct() {
 		$this->register_rest_routes();
-		add_action('init', function() {
-			$post_type = get_post_type_object('lieu');
-			error_log('Post type lieu exists: ' . ($post_type ? 'yes' : 'no'));
-			error_log('Post type lieu is public: ' . ($post_type && $post_type->public ? 'yes' : 'no'));
-		});
+		
+
+		add_action(
+			'init',
+			function () {
+				$post_type_names = array( 'post', 'page', 'lieu', 'evenement' );	
+
+				foreach ( $post_type_names as $post_type_name ) {
+					add_filter(
+						"rest_{$post_type_name}_collection_params",
+						function ( $query_params ) {
+							if ( isset( $query_params['per_page'] ) ) {
+								$query_params['per_page']['default'] = 1000;
+								$query_params['per_page']['maximum'] = 1000;
+							}
+							return $query_params;
+						},
+						10,
+						2
+					);
+				}
+			},
+			20
+		);
 	}
 
 	public function register_rest_routes(): void {
@@ -154,7 +173,7 @@ class restExtend {
 		}
 
 		if ( 
-			true === is_array( $params['meta_query'] ) && 
+			true === isset( $params['meta_query'] ) && 
 			true === isset( $params['meta_query']['fields'] ) 
 		) {
 
