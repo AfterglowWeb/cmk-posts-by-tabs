@@ -1,3 +1,4 @@
+import universalFetch from './universalFetch';
 
 export async function fetchPosts(attributes, options = {}) {
     const { headers = false, append = false } = options;
@@ -31,8 +32,7 @@ export function hasMetaQuery(attributes) {
 }
 
 async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
-    const endpoint = 'posts-by-tabs/v1/posts';
-    
+
     const requestData = {
         post_type: attributes.postType || 'post',
         posts_per_page: attributes.numberOfItems || 5,
@@ -49,8 +49,9 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
         requestData.terms[attributes.taxonomy] = attributes.terms;
     }
 
+
     const response = await universalFetch({
-        path: endpoint,
+        path: 'posts-by-tabs/v1/posts',
         method: 'POST',
         data: requestData,
         returnHeaders: getHeaders,
@@ -136,58 +137,4 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
         return await universalFetch({ path: queryPath, attributes: attributes });
     }
 
-}
-
-async function universalFetch(options) {
-    if (typeof wp !== 'undefined' && wp.apiFetch) {
-        return await wp.apiFetch(options);
-    }
-    
-    const { restUrl, nonce } = options.attributes || {};
-    const { path } = options;
-    if (!restUrl || !nonce || !path) {
-        console.error('Missing required attributes for universalFetch');
-        return null;
-    }
-
-    const url = `${restUrl}${path}`;
-    
-    const fetchOptions = {
-        method: options.method || 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': nonce
-        }
-    };
-    
-    if ((options.method === 'POST') && options.data) {
-        fetchOptions.body = JSON.stringify(options.data);
-    }
-    
-    try {
-        const response = await fetch(url, fetchOptions);
-        
-        if (options.parse === false) {
-            return response;
-        }
-        
-        const headers = {};
-        response.headers.forEach((value, key) => { 
-            headers[key.toLowerCase()] = value;
-        });
-        
-        const data = await response.json();
-        
-        if (options.returnHeaders) {
-            return { 
-                data,
-                headers 
-            };
-        }
-        
-        return data;
-    } catch (error) {
-        console.error('Error in universalFetch:', error);
-        throw error; // Re-throw to be consistent with wp.apiFetch behavior
-    }
 }

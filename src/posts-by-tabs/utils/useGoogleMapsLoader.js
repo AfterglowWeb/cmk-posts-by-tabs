@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { initializeMap } from './map/map';
 
+const pluginSettings = window.postsByTabsSettings || {
+  googleMapsApiKey: ''
+};
+
 export function useGoogleMapsLoader(config, places, elementRef) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapInstance, setMapInstance] = useState(null);
@@ -9,7 +13,7 @@ export function useGoogleMapsLoader(config, places, elementRef) {
 
   useEffect(() => {
 
-    if (!config?.api_key || !elementRef.current) {
+    if (!pluginSettings.googleMapsApiKey || !elementRef.current) {
       setError("Missing API key or map element");
       return;
     }
@@ -23,8 +27,7 @@ export function useGoogleMapsLoader(config, places, elementRef) {
     window.initMap = initMapInstance;
 
     const script = document.createElement('script');
-    const apiKey = config.api_key;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${pluginSettings.googleMapsApiKey}&loading=async&callback=initMap`;
     script.async = true;
     script.defer = true;
     
@@ -51,6 +54,7 @@ export function useGoogleMapsLoader(config, places, elementRef) {
       setMapInstance(map);
       setMarkers(markers);
       setMapLoaded(true);
+
     } catch (err) {
       setError(`Map initialization error: ${err.message}`);
     }

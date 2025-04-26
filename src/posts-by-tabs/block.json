@@ -23,13 +23,12 @@
 	},
 	"allowedBlocks": [],
 	"attributes": {
-		"title": {
-			"type": "string",
-			"default": ""
-		},
-		"subtitle": {
-			"type": "string",
-			"default": ""
+		"initialized": {
+            "type": "boolean",
+            "default": false
+        },
+		"blockId": {
+			"type": "string"
 		},
 		"tabs": {
 			"type": "array",
@@ -251,8 +250,8 @@
 			"default": []
 		},
 		"postType": {
-        "type": "string",
-        "default": "post"
+			"type": "string",
+			"default": "post"
 		},
 		"taxonomy": {
 			"type": "string",
@@ -338,9 +337,6 @@
 		"orderBy": {
 			"type": "string",
 			"default": "date"
-		},
-		"blockId": {
-			"type": "string"
 		}
 	},
 	"textdomain": "cmk-posts-by-tab",

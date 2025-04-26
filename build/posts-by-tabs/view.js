@@ -27325,6 +27325,2049 @@ function withinMaxClamp(min, value, max) {
 
 /***/ }),
 
+/***/ "./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   APILoadingStatus: () => (/* binding */ APILoadingStatus),
+/* harmony export */   APIProvider: () => (/* binding */ APIProvider),
+/* harmony export */   APIProviderContext: () => (/* binding */ APIProviderContext),
+/* harmony export */   AdvancedMarker: () => (/* binding */ AdvancedMarker),
+/* harmony export */   AdvancedMarkerAnchorPoint: () => (/* binding */ AdvancedMarkerAnchorPoint),
+/* harmony export */   AdvancedMarkerContext: () => (/* binding */ AdvancedMarkerContext),
+/* harmony export */   CollisionBehavior: () => (/* binding */ CollisionBehavior),
+/* harmony export */   ColorScheme: () => (/* binding */ ColorScheme),
+/* harmony export */   ControlPosition: () => (/* binding */ ControlPosition),
+/* harmony export */   GoogleMapsContext: () => (/* binding */ GoogleMapsContext),
+/* harmony export */   InfoWindow: () => (/* binding */ InfoWindow),
+/* harmony export */   Map: () => (/* binding */ Map),
+/* harmony export */   MapControl: () => (/* binding */ MapControl),
+/* harmony export */   Marker: () => (/* binding */ Marker),
+/* harmony export */   Pin: () => (/* binding */ Pin),
+/* harmony export */   RenderingType: () => (/* binding */ RenderingType),
+/* harmony export */   StaticMap: () => (/* binding */ StaticMap),
+/* harmony export */   createStaticMapsUrl: () => (/* binding */ createStaticMapsUrl),
+/* harmony export */   isAdvancedMarker: () => (/* binding */ isAdvancedMarker),
+/* harmony export */   isLatLngLiteral: () => (/* binding */ isLatLngLiteral),
+/* harmony export */   latLngEquals: () => (/* binding */ latLngEquals),
+/* harmony export */   limitTiltRange: () => (/* binding */ limitTiltRange),
+/* harmony export */   toLatLngLiteral: () => (/* binding */ toLatLngLiteral),
+/* harmony export */   useAdvancedMarkerRef: () => (/* binding */ useAdvancedMarkerRef),
+/* harmony export */   useApiIsLoaded: () => (/* binding */ useApiIsLoaded),
+/* harmony export */   useApiLoadingStatus: () => (/* binding */ useApiLoadingStatus),
+/* harmony export */   useMap: () => (/* binding */ useMap),
+/* harmony export */   useMapsLibrary: () => (/* binding */ useMapsLibrary),
+/* harmony export */   useMarkerRef: () => (/* binding */ useMarkerRef)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
+/* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fast-deep-equal */ "./node_modules/fast-deep-equal/index.js");
+
+
+
+
+function _extends() {
+  return _extends = Object.assign ? Object.assign.bind() : function (n) {
+    for (var e = 1; e < arguments.length; e++) {
+      var t = arguments[e];
+      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+    }
+    return n;
+  }, _extends.apply(null, arguments);
+}
+function _objectWithoutPropertiesLoose(r, e) {
+  if (null == r) return {};
+  var t = {};
+  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
+    if (-1 !== e.indexOf(n)) continue;
+    t[n] = r[n];
+  }
+  return t;
+}
+function _toPrimitive(t, r) {
+  if ("object" != typeof t || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != typeof i) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == typeof i ? i : i + "";
+}
+
+const APILoadingStatus = {
+  NOT_LOADED: 'NOT_LOADED',
+  LOADING: 'LOADING',
+  LOADED: 'LOADED',
+  FAILED: 'FAILED',
+  AUTH_FAILURE: 'AUTH_FAILURE'
+};
+
+const MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js';
+/**
+ * A GoogleMapsApiLoader to reliably load and unload the Google Maps JavaScript API.
+ *
+ * The actual loading and unloading is delayed into the microtask queue, to
+ * allow using the API in an useEffect hook, without worrying about multiple API loads.
+ */
+class GoogleMapsApiLoader {
+  /**
+   * Loads the Maps JavaScript API with the specified parameters.
+   * Since the Maps library can only be loaded once per page, this will
+   * produce a warning when called multiple times with different
+   * parameters.
+   *
+   * The returned promise resolves when loading completes
+   * and rejects in case of an error or when the loading was aborted.
+   */
+  static async load(params, onLoadingStatusChange) {
+    var _window$google;
+    const libraries = params.libraries ? params.libraries.split(',') : [];
+    const serializedParams = this.serializeParams(params);
+    this.listeners.push(onLoadingStatusChange);
+    // Note: if `google.maps.importLibrary` has been defined externally, we
+    //   assume that loading is complete and successful.
+    //   If it was defined by a previous call to this method, a warning
+    //   message is logged if there are differences in api-parameters used
+    //   for both calls.
+    if ((_window$google = window.google) != null && (_window$google = _window$google.maps) != null && _window$google.importLibrary) {
+      // no serialized parameters means it was loaded externally
+      if (!this.serializedApiParams) {
+        this.loadingStatus = APILoadingStatus.LOADED;
+      }
+      this.notifyLoadingStatusListeners();
+    } else {
+      this.serializedApiParams = serializedParams;
+      this.initImportLibrary(params);
+    }
+    if (this.serializedApiParams && this.serializedApiParams !== serializedParams) {
+      console.warn(`[google-maps-api-loader] The maps API has already been loaded ` + `with different parameters and will not be loaded again. Refresh the ` + `page for new values to have effect.`);
+    }
+    const librariesToLoad = ['maps', ...libraries];
+    await Promise.all(librariesToLoad.map(name => google.maps.importLibrary(name)));
+  }
+  /**
+   * Serialize the parameters used to load the library for easier comparison.
+   */
+  static serializeParams(params) {
+    return [params.v, params.key, params.language, params.region, params.authReferrerPolicy, params.solutionChannel].join('/');
+  }
+  /**
+   * Creates the global `google.maps.importLibrary` function for bootstrapping.
+   * This is essentially a formatted version of the dynamic loading script
+   * from the official documentation with some minor adjustments.
+   *
+   * The created importLibrary function will load the Google Maps JavaScript API,
+   * which will then replace the `google.maps.importLibrary` function with the full
+   * implementation.
+   *
+   * @see https://developers.google.com/maps/documentation/javascript/load-maps-js-api#dynamic-library-import
+   */
+  static initImportLibrary(params) {
+    if (!window.google) window.google = {};
+    if (!window.google.maps) window.google.maps = {};
+    if (window.google.maps['importLibrary']) {
+      console.error('[google-maps-api-loader-internal]: initImportLibrary must only be called once');
+      return;
+    }
+    let apiPromise = null;
+    const loadApi = () => {
+      if (apiPromise) return apiPromise;
+      apiPromise = new Promise((resolve, reject) => {
+        var _document$querySelect;
+        const scriptElement = document.createElement('script');
+        const urlParams = new URLSearchParams();
+        for (const [key, value] of Object.entries(params)) {
+          const urlParamName = key.replace(/[A-Z]/g, t => '_' + t[0].toLowerCase());
+          urlParams.set(urlParamName, String(value));
+        }
+        urlParams.set('loading', 'async');
+        urlParams.set('callback', '__googleMapsCallback__');
+        scriptElement.async = true;
+        scriptElement.src = MAPS_API_BASE_URL + `?` + urlParams.toString();
+        scriptElement.nonce = ((_document$querySelect = document.querySelector('script[nonce]')) == null ? void 0 : _document$querySelect.nonce) || '';
+        scriptElement.onerror = () => {
+          this.loadingStatus = APILoadingStatus.FAILED;
+          this.notifyLoadingStatusListeners();
+          reject(new Error('The Google Maps JavaScript API could not load.'));
+        };
+        window.__googleMapsCallback__ = () => {
+          this.loadingStatus = APILoadingStatus.LOADED;
+          this.notifyLoadingStatusListeners();
+          resolve();
+        };
+        window.gm_authFailure = () => {
+          this.loadingStatus = APILoadingStatus.AUTH_FAILURE;
+          this.notifyLoadingStatusListeners();
+        };
+        this.loadingStatus = APILoadingStatus.LOADING;
+        this.notifyLoadingStatusListeners();
+        document.head.append(scriptElement);
+      });
+      return apiPromise;
+    };
+    // for the first load, we declare an importLibrary function that will
+    // be overwritten once the api is loaded.
+    google.maps.importLibrary = libraryName => loadApi().then(() => google.maps.importLibrary(libraryName));
+  }
+  /**
+   * Calls all registered loadingStatusListeners after a status update.
+   */
+  static notifyLoadingStatusListeners() {
+    for (const fn of this.listeners) {
+      fn(this.loadingStatus);
+    }
+  }
+}
+/**
+ * The current loadingStatus of the API.
+ */
+GoogleMapsApiLoader.loadingStatus = APILoadingStatus.NOT_LOADED;
+/**
+ * The parameters used for first loading the API.
+ */
+GoogleMapsApiLoader.serializedApiParams = void 0;
+/**
+ * A list of functions to be notified when the loading status changes.
+ */
+GoogleMapsApiLoader.listeners = [];
+
+const _excluded$3 = ["onLoad", "onError", "apiKey", "version", "libraries"],
+  _excluded2$1 = ["children"];
+const DEFAULT_SOLUTION_CHANNEL = 'GMP_visgl_rgmlibrary_v1_default';
+const APIProviderContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(null);
+/**
+ * local hook to set up the map-instance management context.
+ */
+function useMapInstances() {
+  const [mapInstances, setMapInstances] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
+  const addMapInstance = (mapInstance, id = 'default') => {
+    setMapInstances(instances => _extends({}, instances, {
+      [id]: mapInstance
+    }));
+  };
+  const removeMapInstance = (id = 'default') => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setMapInstances(_ref => {
+      let remaining = _objectWithoutPropertiesLoose(_ref, [id].map(_toPropertyKey));
+      return remaining;
+    });
+  };
+  const clearMapInstances = () => {
+    setMapInstances({});
+  };
+  return {
+    mapInstances,
+    addMapInstance,
+    removeMapInstance,
+    clearMapInstances
+  };
+}
+/**
+ * local hook to handle the loading of the maps API, returns the current loading status
+ * @param props
+ */
+function useGoogleMapsApiLoader(props) {
+  const {
+      onLoad,
+      onError,
+      apiKey,
+      version,
+      libraries = []
+    } = props,
+    otherApiParams = _objectWithoutPropertiesLoose(props, _excluded$3);
+  const [status, setStatus] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(GoogleMapsApiLoader.loadingStatus);
+  const [loadedLibraries, addLoadedLibrary] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)((loadedLibraries, action) => {
+    return loadedLibraries[action.name] ? loadedLibraries : _extends({}, loadedLibraries, {
+      [action.name]: action.value
+    });
+  }, {});
+  const librariesString = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => libraries == null ? void 0 : libraries.join(','), [libraries]);
+  const serializedParams = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => JSON.stringify(_extends({
+    apiKey,
+    version
+  }, otherApiParams)), [apiKey, version, otherApiParams]);
+  const importLibrary = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async name => {
+    var _google;
+    if (loadedLibraries[name]) {
+      return loadedLibraries[name];
+    }
+    if (!((_google = google) != null && (_google = _google.maps) != null && _google.importLibrary)) {
+      throw new Error('[api-provider-internal] importLibrary was called before ' + 'google.maps.importLibrary was defined.');
+    }
+    const res = await window.google.maps.importLibrary(name);
+    addLoadedLibrary({
+      name,
+      value: res
+    });
+    return res;
+  }, [loadedLibraries]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    (async () => {
+      try {
+        const params = _extends({
+          key: apiKey
+        }, otherApiParams);
+        if (version) params.v = version;
+        if ((librariesString == null ? void 0 : librariesString.length) > 0) params.libraries = librariesString;
+        if (params.channel === undefined || params.channel < 0 || params.channel > 999) delete params.channel;
+        if (params.solutionChannel === undefined) params.solutionChannel = DEFAULT_SOLUTION_CHANNEL;else if (params.solutionChannel === '') delete params.solutionChannel;
+        await GoogleMapsApiLoader.load(params, status => setStatus(status));
+        for (const name of ['core', 'maps', ...libraries]) {
+          await importLibrary(name);
+        }
+        if (onLoad) {
+          onLoad();
+        }
+      } catch (error) {
+        if (onError) {
+          onError(error);
+        } else {
+          console.error('<ApiProvider> failed to load the Google Maps JavaScript API', error);
+        }
+      }
+    })();
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [apiKey, librariesString, serializedParams]);
+  return {
+    status,
+    loadedLibraries,
+    importLibrary
+  };
+}
+/**
+ * Component to wrap the components from this library and load the Google Maps JavaScript API
+ */
+const APIProvider = props => {
+  const {
+      children
+    } = props,
+    loaderProps = _objectWithoutPropertiesLoose(props, _excluded2$1);
+  const {
+    mapInstances,
+    addMapInstance,
+    removeMapInstance,
+    clearMapInstances
+  } = useMapInstances();
+  const {
+    status,
+    loadedLibraries,
+    importLibrary
+  } = useGoogleMapsApiLoader(loaderProps);
+  const contextValue = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    mapInstances,
+    addMapInstance,
+    removeMapInstance,
+    clearMapInstances,
+    status,
+    loadedLibraries,
+    importLibrary
+  }), [mapInstances, addMapInstance, removeMapInstance, clearMapInstances, status, loadedLibraries, importLibrary]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(APIProviderContext.Provider, {
+    value: contextValue
+  }, children);
+};
+
+/**
+ * Sets up effects to bind event-handlers for all event-props in MapEventProps.
+ * @internal
+ */
+function useMapEvents(map, props) {
+  // note: calling a useEffect hook from within a loop is prohibited by the
+  // rules of hooks, but it's ok here since it's unconditional and the number
+  // and order of iterations is always strictly the same.
+  // (see https://legacy.reactjs.org/docs/hooks-rules.html)
+  for (const propName of eventPropNames) {
+    // fixme: this cast is essentially a 'trust me, bro' for typescript, but
+    //   a proper solution seems way too complicated right now
+    const handler = props[propName];
+    const eventType = propNameToEventType[propName];
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+      if (!map) return;
+      if (!handler) return;
+      const listener = google.maps.event.addListener(map, eventType, ev => {
+        handler(createMapEvent(eventType, map, ev));
+      });
+      return () => listener.remove();
+    }, [map, eventType, handler]);
+  }
+}
+/**
+ * Create the wrapped map-events used for the event-props.
+ * @param type the event type as it is specified to the maps api
+ * @param map the map instance the event originates from
+ * @param srcEvent the source-event if there is one.
+ */
+function createMapEvent(type, map, srcEvent) {
+  const ev = {
+    type,
+    map,
+    detail: {},
+    stoppable: false,
+    stop: () => {}
+  };
+  if (cameraEventTypes.includes(type)) {
+    const camEvent = ev;
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    const heading = map.getHeading() || 0;
+    const tilt = map.getTilt() || 0;
+    const bounds = map.getBounds();
+    if (!center || !bounds || !Number.isFinite(zoom)) {
+      console.warn('[createEvent] at least one of the values from the map ' + 'returned undefined. This is not expected to happen. Please ' + 'report an issue at https://github.com/visgl/react-google-maps/issues/new');
+    }
+    camEvent.detail = {
+      center: (center == null ? void 0 : center.toJSON()) || {
+        lat: 0,
+        lng: 0
+      },
+      zoom: zoom || 0,
+      heading: heading,
+      tilt: tilt,
+      bounds: (bounds == null ? void 0 : bounds.toJSON()) || {
+        north: 90,
+        east: 180,
+        south: -90,
+        west: -180
+      }
+    };
+    return camEvent;
+  } else if (mouseEventTypes.includes(type)) {
+    var _srcEvent$latLng;
+    if (!srcEvent) throw new Error('[createEvent] mouse events must provide a srcEvent');
+    const mouseEvent = ev;
+    mouseEvent.domEvent = srcEvent.domEvent;
+    mouseEvent.stoppable = true;
+    mouseEvent.stop = () => srcEvent.stop();
+    mouseEvent.detail = {
+      latLng: ((_srcEvent$latLng = srcEvent.latLng) == null ? void 0 : _srcEvent$latLng.toJSON()) || null,
+      placeId: srcEvent.placeId
+    };
+    return mouseEvent;
+  }
+  return ev;
+}
+/**
+ * maps the camelCased names of event-props to the corresponding event-types
+ * used in the maps API.
+ */
+const propNameToEventType = {
+  onBoundsChanged: 'bounds_changed',
+  onCenterChanged: 'center_changed',
+  onClick: 'click',
+  onContextmenu: 'contextmenu',
+  onDblclick: 'dblclick',
+  onDrag: 'drag',
+  onDragend: 'dragend',
+  onDragstart: 'dragstart',
+  onHeadingChanged: 'heading_changed',
+  onIdle: 'idle',
+  onIsFractionalZoomEnabledChanged: 'isfractionalzoomenabled_changed',
+  onMapCapabilitiesChanged: 'mapcapabilities_changed',
+  onMapTypeIdChanged: 'maptypeid_changed',
+  onMousemove: 'mousemove',
+  onMouseout: 'mouseout',
+  onMouseover: 'mouseover',
+  onProjectionChanged: 'projection_changed',
+  onRenderingTypeChanged: 'renderingtype_changed',
+  onTilesLoaded: 'tilesloaded',
+  onTiltChanged: 'tilt_changed',
+  onZoomChanged: 'zoom_changed',
+  // note: onCameraChanged is an alias for the bounds_changed event,
+  // since that is going to be fired in every situation where the camera is
+  // updated.
+  onCameraChanged: 'bounds_changed'
+};
+const cameraEventTypes = ['bounds_changed', 'center_changed', 'heading_changed', 'tilt_changed', 'zoom_changed'];
+const mouseEventTypes = ['click', 'contextmenu', 'dblclick', 'mousemove', 'mouseout', 'mouseover'];
+const eventPropNames = Object.keys(propNameToEventType);
+
+function useDeepCompareEffect(effect, deps) {
+  const ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(undefined);
+  if (!ref.current || !fast_deep_equal__WEBPACK_IMPORTED_MODULE_2__(deps, ref.current)) {
+    ref.current = deps;
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(effect, ref.current);
+}
+
+const mapOptionKeys = new Set(['backgroundColor', 'clickableIcons', 'controlSize', 'disableDefaultUI', 'disableDoubleClickZoom', 'draggable', 'draggableCursor', 'draggingCursor', 'fullscreenControl', 'fullscreenControlOptions', 'gestureHandling', 'headingInteractionEnabled', 'isFractionalZoomEnabled', 'keyboardShortcuts', 'mapTypeControl', 'mapTypeControlOptions', 'mapTypeId', 'maxZoom', 'minZoom', 'noClear', 'panControl', 'panControlOptions', 'restriction', 'rotateControl', 'rotateControlOptions', 'scaleControl', 'scaleControlOptions', 'scrollwheel', 'streetView', 'streetViewControl', 'streetViewControlOptions', 'styles', 'tiltInteractionEnabled', 'zoomControl', 'zoomControlOptions']);
+/**
+ * Internal hook to update the map-options when props are changed.
+ *
+ * @param map the map instance
+ * @param mapProps the props to update the map-instance with
+ * @internal
+ */
+function useMapOptions(map, mapProps) {
+  /* eslint-disable react-hooks/exhaustive-deps --
+   *
+   * The following effects aren't triggered when the map is changed.
+   * In that case, the values will be or have been passed to the map
+   * constructor via mapOptions.
+   */
+  const mapOptions = {};
+  const keys = Object.keys(mapProps);
+  for (const key of keys) {
+    if (!mapOptionKeys.has(key)) continue;
+    mapOptions[key] = mapProps[key];
+  }
+  // update the map options when mapOptions is changed
+  // Note: due to the destructuring above, mapOptions will be seen as changed
+  //   with every re-render, so we're assuming the maps-api will properly
+  //   deal with unchanged option-values passed into setOptions.
+  useDeepCompareEffect(() => {
+    if (!map) return;
+    map.setOptions(mapOptions);
+  }, [mapOptions]);
+  /* eslint-enable react-hooks/exhaustive-deps */
+}
+
+function useApiLoadingStatus() {
+  var _useContext;
+  return ((_useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(APIProviderContext)) == null ? void 0 : _useContext.status) || APILoadingStatus.NOT_LOADED;
+}
+
+/**
+ * Internal hook that updates the camera when deck.gl viewState changes.
+ * @internal
+ */
+function useDeckGLCameraUpdate(map, props) {
+  const {
+    viewport,
+    viewState
+  } = props;
+  const isDeckGlControlled = !!viewport;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect)(() => {
+    if (!map || !viewState) return;
+    const {
+      latitude,
+      longitude,
+      bearing: heading,
+      pitch: tilt,
+      zoom
+    } = viewState;
+    map.moveCamera({
+      center: {
+        lat: latitude,
+        lng: longitude
+      },
+      heading,
+      tilt,
+      zoom: zoom + 1
+    });
+  }, [map, viewState]);
+  return isDeckGlControlled;
+}
+
+function isLatLngLiteral(obj) {
+  if (!obj || typeof obj !== 'object') return false;
+  if (!('lat' in obj && 'lng' in obj)) return false;
+  return Number.isFinite(obj.lat) && Number.isFinite(obj.lng);
+}
+function latLngEquals(a, b) {
+  if (!a || !b) return false;
+  const A = toLatLngLiteral(a);
+  const B = toLatLngLiteral(b);
+  if (A.lat !== B.lat || A.lng !== B.lng) return false;
+  return true;
+}
+function toLatLngLiteral(obj) {
+  if (isLatLngLiteral(obj)) return obj;
+  return obj.toJSON();
+}
+
+function useMapCameraParams(map, cameraStateRef, mapProps) {
+  const center = mapProps.center ? toLatLngLiteral(mapProps.center) : null;
+  let lat = null;
+  let lng = null;
+  if (center && Number.isFinite(center.lat) && Number.isFinite(center.lng)) {
+    lat = center.lat;
+    lng = center.lng;
+  }
+  const zoom = Number.isFinite(mapProps.zoom) ? mapProps.zoom : null;
+  const heading = Number.isFinite(mapProps.heading) ? mapProps.heading : null;
+  const tilt = Number.isFinite(mapProps.tilt) ? mapProps.tilt : null;
+  // the following effect runs for every render of the map component and checks
+  // if there are differences between the known state of the map instance
+  // (cameraStateRef, which is updated by all bounds_changed events) and the
+  // desired state in the props.
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect)(() => {
+    if (!map) return;
+    const nextCamera = {};
+    let needsUpdate = false;
+    if (lat !== null && lng !== null && (cameraStateRef.current.center.lat !== lat || cameraStateRef.current.center.lng !== lng)) {
+      nextCamera.center = {
+        lat,
+        lng
+      };
+      needsUpdate = true;
+    }
+    if (zoom !== null && cameraStateRef.current.zoom !== zoom) {
+      nextCamera.zoom = zoom;
+      needsUpdate = true;
+    }
+    if (heading !== null && cameraStateRef.current.heading !== heading) {
+      nextCamera.heading = heading;
+      needsUpdate = true;
+    }
+    if (tilt !== null && cameraStateRef.current.tilt !== tilt) {
+      nextCamera.tilt = tilt;
+      needsUpdate = true;
+    }
+    if (needsUpdate) {
+      map.moveCamera(nextCamera);
+    }
+  });
+}
+
+const AuthFailureMessage = () => {
+  const style = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 999,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: '.8rem',
+    color: 'rgba(0,0,0,0.6)',
+    background: '#dddddd',
+    padding: '1rem 1.5rem'
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    style: style
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Error: AuthFailure"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "A problem with your API key prevents the map from rendering correctly. Please make sure the value of the ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("code", null, "APIProvider.apiKey"), " prop is correct. Check the error-message in the console for further details."));
+};
+
+function useCallbackRef() {
+  const [el, setEl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(value => setEl(value), [setEl]);
+  return [el, ref];
+}
+
+/**
+ * Hook to check if the Maps JavaScript API is loaded
+ */
+function useApiIsLoaded() {
+  const status = useApiLoadingStatus();
+  return status === APILoadingStatus.LOADED;
+}
+
+function useForceUpdate() {
+  const [, forceUpdate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)(x => x + 1, 0);
+  return forceUpdate;
+}
+
+function handleBoundsChange(map, ref) {
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+  const heading = map.getHeading() || 0;
+  const tilt = map.getTilt() || 0;
+  const bounds = map.getBounds();
+  if (!center || !bounds || !Number.isFinite(zoom)) {
+    console.warn('[useTrackedCameraState] at least one of the values from the map ' + 'returned undefined. This is not expected to happen. Please ' + 'report an issue at https://github.com/visgl/react-google-maps/issues/new');
+  }
+  // fixme: do we need the `undefined` cases for the camera-params? When are they used in the maps API?
+  Object.assign(ref.current, {
+    center: (center == null ? void 0 : center.toJSON()) || {
+      lat: 0,
+      lng: 0
+    },
+    zoom: zoom || 0,
+    heading: heading,
+    tilt: tilt
+  });
+}
+/**
+ * Creates a mutable ref object to track the last known state of the map camera.
+ * This is used in `useMapCameraParams` to reduce stuttering in normal operation
+ * by avoiding updates of the map camera with values that have already been processed.
+ */
+function useTrackedCameraStateRef(map) {
+  const forceUpdate = useForceUpdate();
+  const ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    center: {
+      lat: 0,
+      lng: 0
+    },
+    heading: 0,
+    tilt: 0,
+    zoom: 0
+  });
+  // Record camera state with every bounds_changed event dispatched by the map.
+  // This data is used to prevent feeding these values back to the
+  // map-instance when a typical "controlled component" setup (state variable is
+  // fed into and updated by the map).
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!map) return;
+    const listener = google.maps.event.addListener(map, 'bounds_changed', () => {
+      handleBoundsChange(map, ref);
+      // When an event is occured, we have to update during the next cycle.
+      // The application could decide to ignore the event and not update any
+      // camera props of the map, meaning that in that case we will have to
+      // 'undo' the change to the camera.
+      forceUpdate();
+    });
+    return () => listener.remove();
+  }, [map, forceUpdate]);
+  return ref;
+}
+
+const _excluded$2 = ["id", "defaultBounds", "defaultCenter", "defaultZoom", "defaultHeading", "defaultTilt", "reuseMaps", "renderingType", "colorScheme"],
+  _excluded2 = ["padding"];
+/**
+ * Stores a stack of map-instances for each mapId. Whenever an
+ * instance is used, it is removed from the stack while in use,
+ * and returned to the stack when the component unmounts.
+ * This allows us to correctly implement caching for multiple
+ * maps om the same page, while reusing as much as possible.
+ *
+ * FIXME: while it should in theory be possible to reuse maps solely
+ *   based on the mapId (as all other parameters can be changed at
+ *   runtime), we don't yet have good enough tracking of options to
+ *   reliably unset all the options that have been set.
+ */
+class CachedMapStack {
+  static has(key) {
+    return this.entries[key] && this.entries[key].length > 0;
+  }
+  static pop(key) {
+    if (!this.entries[key]) return null;
+    return this.entries[key].pop() || null;
+  }
+  static push(key, value) {
+    if (!this.entries[key]) this.entries[key] = [];
+    this.entries[key].push(value);
+  }
+}
+/**
+ * The main hook takes care of creating map-instances and registering them in
+ * the api-provider context.
+ * @return a tuple of the map-instance created (or null) and the callback
+ *   ref that will be used to pass the map-container into this hook.
+ * @internal
+ */
+CachedMapStack.entries = {};
+function useMapInstance(props, context) {
+  const apiIsLoaded = useApiIsLoaded();
+  const [map, setMap] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [container, containerRef] = useCallbackRef();
+  const cameraStateRef = useTrackedCameraStateRef(map);
+  const {
+      id,
+      defaultBounds,
+      defaultCenter,
+      defaultZoom,
+      defaultHeading,
+      defaultTilt,
+      reuseMaps,
+      renderingType,
+      colorScheme
+    } = props,
+    mapOptions = _objectWithoutPropertiesLoose(props, _excluded$2);
+  const hasZoom = props.zoom !== undefined || props.defaultZoom !== undefined;
+  const hasCenter = props.center !== undefined || props.defaultCenter !== undefined;
+  if (!defaultBounds && (!hasZoom || !hasCenter)) {
+    console.warn('<Map> component is missing configuration. ' + 'You have to provide zoom and center (via the `zoom`/`defaultZoom` and ' + '`center`/`defaultCenter` props) or specify the region to show using ' + '`defaultBounds`. See ' + 'https://visgl.github.io/react-google-maps/docs/api-reference/components/map#required');
+  }
+  // apply default camera props if available and not overwritten by controlled props
+  if (!mapOptions.center && defaultCenter) mapOptions.center = defaultCenter;
+  if (!mapOptions.zoom && Number.isFinite(defaultZoom)) mapOptions.zoom = defaultZoom;
+  if (!mapOptions.heading && Number.isFinite(defaultHeading)) mapOptions.heading = defaultHeading;
+  if (!mapOptions.tilt && Number.isFinite(defaultTilt)) mapOptions.tilt = defaultTilt;
+  for (const key of Object.keys(mapOptions)) if (mapOptions[key] === undefined) delete mapOptions[key];
+  const savedMapStateRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(undefined);
+  // create the map instance and register it in the context
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!container || !apiIsLoaded) return;
+    const {
+      addMapInstance,
+      removeMapInstance
+    } = context;
+    // note: colorScheme (upcoming feature) isn't yet in the typings, remove once that is fixed:
+    const {
+      mapId
+    } = props;
+    const cacheKey = `${mapId || 'default'}:${renderingType || 'default'}:${colorScheme || 'LIGHT'}`;
+    let mapDiv;
+    let map;
+    if (reuseMaps && CachedMapStack.has(cacheKey)) {
+      map = CachedMapStack.pop(cacheKey);
+      mapDiv = map.getDiv();
+      container.appendChild(mapDiv);
+      map.setOptions(mapOptions);
+      // detaching the element from the DOM lets the map fall back to its default
+      // size, setting the center will trigger reloading the map.
+      setTimeout(() => map.setCenter(map.getCenter()), 0);
+    } else {
+      mapDiv = document.createElement('div');
+      mapDiv.style.height = '100%';
+      container.appendChild(mapDiv);
+      map = new google.maps.Map(mapDiv, _extends({}, mapOptions, renderingType ? {
+        renderingType: renderingType
+      } : {}, colorScheme ? {
+        colorScheme: colorScheme
+      } : {}));
+    }
+    setMap(map);
+    addMapInstance(map, id);
+    if (defaultBounds) {
+      const {
+          padding
+        } = defaultBounds,
+        defBounds = _objectWithoutPropertiesLoose(defaultBounds, _excluded2);
+      map.fitBounds(defBounds, padding);
+    }
+    // prevent map not rendering due to missing configuration
+    else if (!hasZoom || !hasCenter) {
+      map.fitBounds({
+        east: 180,
+        west: -180,
+        south: -90,
+        north: 90
+      });
+    }
+    // the savedMapState is used to restore the camera parameters when the mapId is changed
+    if (savedMapStateRef.current) {
+      const {
+        mapId: savedMapId,
+        cameraState: savedCameraState
+      } = savedMapStateRef.current;
+      if (savedMapId !== mapId) {
+        map.setOptions(savedCameraState);
+      }
+    }
+    return () => {
+      savedMapStateRef.current = {
+        mapId,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        cameraState: cameraStateRef.current
+      };
+      // detach the map-div from the dom
+      mapDiv.remove();
+      if (reuseMaps) {
+        // push back on the stack
+        CachedMapStack.push(cacheKey, map);
+      } else {
+        // remove all event-listeners to minimize the possibility of memory-leaks
+        google.maps.event.clearInstanceListeners(map);
+      }
+      setMap(null);
+      removeMapInstance(id);
+    };
+  },
+  // some dependencies are ignored in the list below:
+  //  - defaultBounds and the default* camera props will only be used once, and
+  //    changes should be ignored
+  //  - mapOptions has special hooks that take care of updating the options
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [container, apiIsLoaded, id,
+  // these props can't be changed after initialization and require a new
+  // instance to be created
+  props.mapId, props.renderingType, props.colorScheme]);
+  return [map, containerRef, cameraStateRef];
+}
+
+const GoogleMapsContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(null);
+// ColorScheme and RenderingType are redefined here to make them usable before the
+// maps API has been fully loaded.
+const ColorScheme = {
+  DARK: 'DARK',
+  LIGHT: 'LIGHT',
+  FOLLOW_SYSTEM: 'FOLLOW_SYSTEM'
+};
+const RenderingType = {
+  VECTOR: 'VECTOR',
+  RASTER: 'RASTER',
+  UNINITIALIZED: 'UNINITIALIZED'
+};
+const Map = props => {
+  const {
+    children,
+    id,
+    className,
+    style
+  } = props;
+  const context = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(APIProviderContext);
+  const loadingStatus = useApiLoadingStatus();
+  if (!context) {
+    throw new Error('<Map> can only be used inside an <ApiProvider> component.');
+  }
+  const [map, mapRef, cameraStateRef] = useMapInstance(props, context);
+  useMapCameraParams(map, cameraStateRef, props);
+  useMapEvents(map, props);
+  useMapOptions(map, props);
+  const isDeckGlControlled = useDeckGLCameraUpdate(map, props);
+  const isControlledExternally = !!props.controlled;
+  // disable interactions with the map for externally controlled maps
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!map) return;
+    // fixme: this doesn't seem to belong here (and it's mostly there for convenience anyway).
+    //   The reasoning is that a deck.gl canvas will be put on top of the map, rendering
+    //   any default map controls pretty much useless
+    if (isDeckGlControlled) {
+      map.setOptions({
+        disableDefaultUI: true
+      });
+    }
+    // disable all control-inputs when the map is controlled externally
+    if (isDeckGlControlled || isControlledExternally) {
+      map.setOptions({
+        gestureHandling: 'none',
+        keyboardShortcuts: false
+      });
+    }
+    return () => {
+      map.setOptions({
+        gestureHandling: props.gestureHandling,
+        keyboardShortcuts: props.keyboardShortcuts
+      });
+    };
+  }, [map, isDeckGlControlled, isControlledExternally, props.gestureHandling, props.keyboardShortcuts]);
+  // setup a stable cameraOptions object that can be used as dependency
+  const center = props.center ? toLatLngLiteral(props.center) : null;
+  let lat = null;
+  let lng = null;
+  if (center && Number.isFinite(center.lat) && Number.isFinite(center.lng)) {
+    lat = center.lat;
+    lng = center.lng;
+  }
+  const cameraOptions = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    var _lat, _lng, _props$zoom, _props$heading, _props$tilt;
+    return {
+      center: {
+        lat: (_lat = lat) != null ? _lat : 0,
+        lng: (_lng = lng) != null ? _lng : 0
+      },
+      zoom: (_props$zoom = props.zoom) != null ? _props$zoom : 0,
+      heading: (_props$heading = props.heading) != null ? _props$heading : 0,
+      tilt: (_props$tilt = props.tilt) != null ? _props$tilt : 0
+    };
+  }, [lat, lng, props.zoom, props.heading, props.tilt]);
+  // externally controlled mode: reject all camera changes that don't correspond to changes in props
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect)(() => {
+    if (!map || !isControlledExternally) return;
+    map.moveCamera(cameraOptions);
+    const listener = map.addListener('bounds_changed', () => {
+      map.moveCamera(cameraOptions);
+    });
+    return () => listener.remove();
+  }, [map, isControlledExternally, cameraOptions]);
+  const combinedStyle = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => _extends({
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+    // when using deckgl, the map should be sent to the back
+    zIndex: isDeckGlControlled ? -1 : 0
+  }, style), [style, isDeckGlControlled]);
+  const contextValue = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
+    map
+  }), [map]);
+  if (loadingStatus === APILoadingStatus.AUTH_FAILURE) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: _extends({
+        position: 'relative'
+      }, className ? {} : combinedStyle),
+      className: className
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(AuthFailureMessage, null));
+  }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", _extends({
+    ref: mapRef,
+    "data-testid": 'map',
+    style: className ? undefined : combinedStyle,
+    className: className
+  }, id ? {
+    id
+  } : {}), map ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(GoogleMapsContext.Provider, {
+    value: contextValue
+  }, children) : null);
+};
+// The deckGLViewProps flag here indicates to deck.gl that the Map component is
+// able to handle viewProps from deck.gl when deck.gl is used to control the map.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Map.deckGLViewProps = true;
+
+const shownMessages = new Set();
+function logErrorOnce(...args) {
+  const key = JSON.stringify(args);
+  if (!shownMessages.has(key)) {
+    shownMessages.add(key);
+    console.error(...args);
+  }
+}
+
+/**
+ * Retrieves a map-instance from the context. This is either an instance
+ * identified by id or the parent map instance if no id is specified.
+ * Returns null if neither can be found.
+ */
+const useMap = (id = null) => {
+  const ctx = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(APIProviderContext);
+  const {
+    map
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(GoogleMapsContext) || {};
+  if (ctx === null) {
+    logErrorOnce('useMap(): failed to retrieve APIProviderContext. ' + 'Make sure that the <APIProvider> component exists and that the ' + 'component you are calling `useMap()` from is a sibling of the ' + '<APIProvider>.');
+    return null;
+  }
+  const {
+    mapInstances
+  } = ctx;
+  // if an id is specified, the corresponding map or null is returned
+  if (id !== null) return mapInstances[id] || null;
+  // otherwise, return the closest ancestor
+  if (map) return map;
+  // finally, return the default map instance
+  return mapInstances['default'] || null;
+};
+
+function useMapsLibrary(name) {
+  const apiIsLoaded = useApiIsLoaded();
+  const ctx = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(APIProviderContext);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!apiIsLoaded || !ctx) return;
+    // Trigger loading the libraries via our proxy-method.
+    // The returned promise is ignored, since importLibrary will update loadedLibraries
+    // list in the context, triggering a re-render.
+    void ctx.importLibrary(name);
+  }, [apiIsLoaded, ctx, name]);
+  return (ctx == null ? void 0 : ctx.loadedLibraries[name]) || null;
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * Internally used to bind events to Maps JavaScript API objects.
+ * @internal
+ */
+function useMapsEventListener(target, name, callback) {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!target || !name || !callback) return;
+    const listener = google.maps.event.addListener(target, name, callback);
+    return () => listener.remove();
+  }, [target, name, callback]);
+}
+
+/**
+ * Internally used to copy values from props into API-Objects
+ * whenever they change.
+ *
+ * @example
+ *   usePropBinding(marker, 'position', position);
+ *
+ * @internal
+ */
+function usePropBinding(object, prop, value) {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!object) return;
+    object[prop] = value;
+  }, [object, prop, value]);
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * Internally used to bind events to DOM nodes.
+ * @internal
+ */
+function useDomEventListener(target, name, callback) {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!target || !name || !callback) return;
+    target.addEventListener(name, callback);
+    return () => target.removeEventListener(name, callback);
+  }, [target, name, callback]);
+}
+
+/* eslint-disable complexity */
+function isAdvancedMarker(marker) {
+  return marker.content !== undefined;
+}
+function isElementNode(node) {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+/**
+ * Copy of the `google.maps.CollisionBehavior` constants.
+ * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
+ */
+const CollisionBehavior = {
+  REQUIRED: 'REQUIRED',
+  REQUIRED_AND_HIDES_OPTIONAL: 'REQUIRED_AND_HIDES_OPTIONAL',
+  OPTIONAL_AND_HIDES_LOWER_PRIORITY: 'OPTIONAL_AND_HIDES_LOWER_PRIORITY'
+};
+const AdvancedMarkerContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(null);
+// [xPosition, yPosition] when the top left corner is [0, 0]
+const AdvancedMarkerAnchorPoint = {
+  TOP_LEFT: ['0%', '0%'],
+  TOP_CENTER: ['50%', '0%'],
+  TOP: ['50%', '0%'],
+  TOP_RIGHT: ['100%', '0%'],
+  LEFT_CENTER: ['0%', '50%'],
+  LEFT_TOP: ['0%', '0%'],
+  LEFT: ['0%', '50%'],
+  LEFT_BOTTOM: ['0%', '100%'],
+  RIGHT_TOP: ['100%', '0%'],
+  RIGHT: ['100%', '50%'],
+  RIGHT_CENTER: ['100%', '50%'],
+  RIGHT_BOTTOM: ['100%', '100%'],
+  BOTTOM_LEFT: ['0%', '100%'],
+  BOTTOM_CENTER: ['50%', '100%'],
+  BOTTOM: ['50%', '100%'],
+  BOTTOM_RIGHT: ['100%', '100%'],
+  CENTER: ['50%', '50%']
+};
+const MarkerContent = ({
+  children,
+  styles,
+  className,
+  anchorPoint
+}) => {
+  const [xTranslation, yTranslation] = anchorPoint != null ? anchorPoint : AdvancedMarkerAnchorPoint['BOTTOM'];
+  let xTranslationFlipped = `-${xTranslation}`;
+  let yTranslationFlipped = `-${yTranslation}`;
+  if (xTranslation.trimStart().startsWith('-')) {
+    xTranslationFlipped = xTranslation.substring(1);
+  }
+  if (yTranslation.trimStart().startsWith('-')) {
+    yTranslationFlipped = yTranslation.substring(1);
+  }
+  // The "translate(50%, 100%)" is here to counter and reset the default anchoring of the advanced marker element
+  // that comes from the api
+  const transformStyle = `translate(50%, 100%) translate(${xTranslationFlipped}, ${yTranslationFlipped})`;
+  return (
+    /*#__PURE__*/
+    // anchoring container
+    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        transform: transformStyle
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: className,
+      style: styles
+    }, children))
+  );
+};
+function useAdvancedMarker(props) {
+  const [marker, setMarker] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [contentContainer, setContentContainer] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const map = useMap();
+  const markerLibrary = useMapsLibrary('marker');
+  const {
+    children,
+    onClick,
+    className,
+    onMouseEnter,
+    onMouseLeave,
+    onDrag,
+    onDragStart,
+    onDragEnd,
+    collisionBehavior,
+    clickable,
+    draggable,
+    position,
+    title,
+    zIndex
+  } = props;
+  const numChildren = react__WEBPACK_IMPORTED_MODULE_0__.Children.count(children);
+  // create an AdvancedMarkerElement instance and add it to the map once available
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!map || !markerLibrary) return;
+    const newMarker = new markerLibrary.AdvancedMarkerElement();
+    newMarker.map = map;
+    setMarker(newMarker);
+    // create the container for marker content if there are children
+    let contentElement = null;
+    if (numChildren > 0) {
+      contentElement = document.createElement('div');
+      // We need some kind of flag to identify the custom marker content
+      // in the infowindow component. Choosing a custom property instead of a className
+      // to not encourage users to style the marker content directly.
+      contentElement.isCustomMarker = true;
+      newMarker.content = contentElement;
+      setContentContainer(contentElement);
+    }
+    return () => {
+      var _contentElement;
+      newMarker.map = null;
+      (_contentElement = contentElement) == null || _contentElement.remove();
+      setMarker(null);
+      setContentContainer(null);
+    };
+  }, [map, markerLibrary, numChildren]);
+  // When no children are present we don't have our own wrapper div
+  // which usually gets the user provided className. In this case
+  // we set the className directly on the marker.content element that comes
+  // with the AdvancedMarker.
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!marker || !marker.content || numChildren > 0) return;
+    marker.content.className = className || '';
+  }, [marker, className, numChildren]);
+  // copy other props
+  usePropBinding(marker, 'position', position);
+  usePropBinding(marker, 'title', title != null ? title : '');
+  usePropBinding(marker, 'zIndex', zIndex);
+  usePropBinding(marker, 'collisionBehavior', collisionBehavior);
+  // set gmpDraggable from props (when unspecified, it's true if any drag-event
+  // callbacks are specified)
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!marker) return;
+    if (draggable !== undefined) marker.gmpDraggable = draggable;else if (onDrag || onDragStart || onDragEnd) marker.gmpDraggable = true;else marker.gmpDraggable = false;
+  }, [marker, draggable, onDrag, onDragEnd, onDragStart]);
+  // set gmpClickable from props (when unspecified, it's true if the onClick or one of
+  // the hover events callbacks are specified)
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!marker) return;
+    const gmpClickable = clickable !== undefined || Boolean(onClick) || Boolean(onMouseEnter) || Boolean(onMouseLeave);
+    // gmpClickable is only available in beta version of the
+    // maps api (as of 2024-10-10)
+    marker.gmpClickable = gmpClickable;
+    // enable pointer events for the markers with custom content
+    if (gmpClickable && marker != null && marker.content && isElementNode(marker.content)) {
+      marker.content.style.pointerEvents = 'none';
+      if (marker.content.firstElementChild) {
+        marker.content.firstElementChild.style.pointerEvents = 'all';
+      }
+    }
+  }, [marker, clickable, onClick, onMouseEnter, onMouseLeave]);
+  useMapsEventListener(marker, 'click', onClick);
+  useMapsEventListener(marker, 'drag', onDrag);
+  useMapsEventListener(marker, 'dragstart', onDragStart);
+  useMapsEventListener(marker, 'dragend', onDragEnd);
+  useDomEventListener(marker == null ? void 0 : marker.element, 'mouseenter', onMouseEnter);
+  useDomEventListener(marker == null ? void 0 : marker.element, 'mouseleave', onMouseLeave);
+  return [marker, contentContainer];
+}
+const AdvancedMarker = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)((props, ref) => {
+  const {
+    children,
+    style,
+    className,
+    anchorPoint
+  } = props;
+  const [marker, contentContainer] = useAdvancedMarker(props);
+  const advancedMarkerContextValue = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => marker ? {
+    marker
+  } : null, [marker]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(ref, () => marker, [marker]);
+  if (!contentContainer) return null;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(AdvancedMarkerContext.Provider, {
+    value: advancedMarkerContextValue
+  }, (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(MarkerContent, {
+    anchorPoint: anchorPoint,
+    styles: style,
+    className: className
+  }, children), contentContainer));
+});
+function useAdvancedMarkerRef() {
+  const [marker, setMarker] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const refCallback = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(m => {
+    setMarker(m);
+  }, []);
+  return [refCallback, marker];
+}
+
+function setValueForStyles(element, styles, prevStyles) {
+  if (styles != null && typeof styles !== 'object') {
+    throw new Error('The `style` prop expects a mapping from style properties to values, ' + "not a string. For example, style={{marginRight: spacing + 'em'}} when " + 'using JSX.');
+  }
+  const elementStyle = element.style;
+  // without `prevStyles`, just set all values
+  if (prevStyles == null) {
+    if (styles == null) return;
+    for (const styleName in styles) {
+      if (!styles.hasOwnProperty(styleName)) continue;
+      setValueForStyle(elementStyle, styleName, styles[styleName]);
+    }
+    return;
+  }
+  // unset all styles in `prevStyles` that aren't in `styles`
+  for (const styleName in prevStyles) {
+    if (prevStyles.hasOwnProperty(styleName) && (styles == null || !styles.hasOwnProperty(styleName))) {
+      // Clear style
+      const isCustomProperty = styleName.indexOf('--') === 0;
+      if (isCustomProperty) {
+        elementStyle.setProperty(styleName, '');
+      } else if (styleName === 'float') {
+        elementStyle.cssFloat = '';
+      } else {
+        elementStyle[styleName] = '';
+      }
+    }
+  }
+  // only assign values from `styles` that are different from `prevStyles`
+  if (styles == null) return;
+  for (const styleName in styles) {
+    const value = styles[styleName];
+    if (styles.hasOwnProperty(styleName) && prevStyles[styleName] !== value) {
+      setValueForStyle(elementStyle, styleName, value);
+    }
+  }
+}
+function setValueForStyle(elementStyle, styleName, value) {
+  const isCustomProperty = styleName.indexOf('--') === 0;
+  // falsy values will unset the style property
+  if (value == null || typeof value === 'boolean' || value === '') {
+    if (isCustomProperty) {
+      elementStyle.setProperty(styleName, '');
+    } else if (styleName === 'float') {
+      elementStyle.cssFloat = '';
+    } else {
+      elementStyle[styleName] = '';
+    }
+  }
+  // custom properties can't be directly assigned
+  else if (isCustomProperty) {
+    elementStyle.setProperty(styleName, value);
+  }
+  // numeric values are treated as 'px' unless the style property expects unitless numbers
+  else if (typeof value === 'number' && value !== 0 && !isUnitlessNumber(styleName)) {
+    elementStyle[styleName] = value + 'px'; // Presumes implicit 'px' suffix for unitless numbers
+  }
+  // everything else can just be assigned
+  else {
+    if (styleName === 'float') {
+      elementStyle.cssFloat = value;
+    } else {
+      elementStyle[styleName] = ('' + value).trim();
+    }
+  }
+}
+// CSS properties which accept numbers but are not in units of "px".
+const unitlessNumbers = new Set(['animationIterationCount', 'aspectRatio', 'borderImageOutset', 'borderImageSlice', 'borderImageWidth', 'boxFlex', 'boxFlexGroup', 'boxOrdinalGroup', 'columnCount', 'columns', 'flex', 'flexGrow', 'flexPositive', 'flexShrink', 'flexNegative', 'flexOrder', 'gridArea', 'gridRow', 'gridRowEnd', 'gridRowSpan', 'gridRowStart', 'gridColumn', 'gridColumnEnd', 'gridColumnSpan', 'gridColumnStart', 'fontWeight', 'lineClamp', 'lineHeight', 'opacity', 'order', 'orphans', 'scale', 'tabSize', 'widows', 'zIndex', 'zoom', 'fillOpacity',
+// SVG-related properties
+'floodOpacity', 'stopOpacity', 'strokeDasharray', 'strokeDashoffset', 'strokeMiterlimit', 'strokeOpacity', 'strokeWidth']);
+function isUnitlessNumber(name) {
+  return unitlessNumbers.has(name);
+}
+
+const _excluded$1 = ["children", "headerContent", "style", "className", "pixelOffset", "anchor", "shouldFocus", "onClose", "onCloseClick"];
+/**
+ * Component to render an Info Window with the Maps JavaScript API
+ */
+const InfoWindow = props => {
+  const {
+      // content options
+      children,
+      headerContent,
+      style,
+      className,
+      pixelOffset,
+      // open options
+      anchor,
+      shouldFocus,
+      // events
+      onClose,
+      onCloseClick
+      // other options
+    } = props,
+    infoWindowOptions = _objectWithoutPropertiesLoose(props, _excluded$1);
+  // ## create infowindow instance once the mapsLibrary is available.
+  const mapsLibrary = useMapsLibrary('maps');
+  const [infoWindow, setInfoWindow] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const contentContainerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const headerContainerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!mapsLibrary) return;
+    contentContainerRef.current = document.createElement('div');
+    headerContainerRef.current = document.createElement('div');
+    const opts = infoWindowOptions;
+    if (pixelOffset) {
+      opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+    }
+    if (headerContent) {
+      // if headerContent is specified as string we can directly forward it,
+      // otherwise we'll pass the element the portal will render into
+      opts.headerContent = typeof headerContent === 'string' ? headerContent : headerContainerRef.current;
+    }
+    // intentionally shadowing the state variables here
+    const infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    infoWindow.setContent(contentContainerRef.current);
+    setInfoWindow(infoWindow);
+    // unmount: remove infoWindow and content elements (note: close is called in a different effect-cleanup)
+    return () => {
+      var _contentContainerRef$, _headerContainerRef$c;
+      infoWindow.setContent(null);
+      (_contentContainerRef$ = contentContainerRef.current) == null || _contentContainerRef$.remove();
+      (_headerContainerRef$c = headerContainerRef.current) == null || _headerContainerRef$c.remove();
+      contentContainerRef.current = null;
+      headerContainerRef.current = null;
+      setInfoWindow(null);
+    };
+  },
+  // `infoWindowOptions` and other props are missing from dependencies:
+  //
+  // We don't want to re-create the infowindow instance
+  // when the options change.
+  // Updating the options is handled in the useEffect below.
+  //
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [mapsLibrary]);
+  // ## update className and styles for `contentContainer`
+  // stores previously applied style properties, so they can be removed when unset
+  const prevStyleRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!infoWindow || !contentContainerRef.current) return;
+    setValueForStyles(contentContainerRef.current, style || null, prevStyleRef.current);
+    prevStyleRef.current = style || null;
+    if (className !== contentContainerRef.current.className) contentContainerRef.current.className = className || '';
+  }, [infoWindow, className, style]);
+  // ## update options
+  useDeepCompareEffect(() => {
+    if (!infoWindow) return;
+    const opts = infoWindowOptions;
+    if (!pixelOffset) {
+      opts.pixelOffset = null;
+    } else {
+      opts.pixelOffset = new google.maps.Size(pixelOffset[0], pixelOffset[1]);
+    }
+    if (!headerContent) {
+      opts.headerContent = null;
+    } else {
+      opts.headerContent = typeof headerContent === 'string' ? headerContent : headerContainerRef.current;
+    }
+    infoWindow.setOptions(infoWindowOptions);
+  },
+  // dependency `infoWindow` isn't needed since options are also passed
+  // to the constructor when a new infoWindow is created.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [infoWindowOptions, pixelOffset, headerContent]);
+  // ## bind event handlers
+  useMapsEventListener(infoWindow, 'close', onClose);
+  useMapsEventListener(infoWindow, 'closeclick', onCloseClick);
+  // ## open info window when content and map are available
+  const map = useMap();
+  useDeepCompareEffect(() => {
+    // `anchor === null` means an anchor is defined but not ready yet.
+    if (!map || !infoWindow || anchor === null) return;
+    const isOpenedWithAnchor = !!anchor;
+    const openOptions = {
+      map
+    };
+    if (anchor) {
+      openOptions.anchor = anchor;
+      // Only do the infowindow adjusting when dealing with an AdvancedMarker
+      if (isAdvancedMarker(anchor) && anchor.content instanceof Element) {
+        const wrapper = anchor.content;
+        const wrapperBcr = wrapper == null ? void 0 : wrapper.getBoundingClientRect();
+        // This checks whether or not the anchor has custom content with our own
+        // div wrapper. If not, that means we have a regular AdvancedMarker without any children.
+        // In that case we do not want to adjust the infowindow since it is all handled correctly
+        // by the Google Maps API.
+        if (wrapperBcr && wrapper != null && wrapper.isCustomMarker) {
+          var _anchor$content$first;
+          // We can safely typecast here since we control that element and we know that
+          // it is a div
+          const anchorDomContent = (_anchor$content$first = anchor.content.firstElementChild) == null ? void 0 : _anchor$content$first.firstElementChild;
+          const contentBcr = anchorDomContent == null ? void 0 : anchorDomContent.getBoundingClientRect();
+          // center infowindow above marker
+          const anchorOffsetX = contentBcr.x - wrapperBcr.x + (contentBcr.width - wrapperBcr.width) / 2;
+          const anchorOffsetY = contentBcr.y - wrapperBcr.y;
+          const opts = infoWindowOptions;
+          opts.pixelOffset = new google.maps.Size(pixelOffset ? pixelOffset[0] + anchorOffsetX : anchorOffsetX, pixelOffset ? pixelOffset[1] + anchorOffsetY : anchorOffsetY);
+          infoWindow.setOptions(opts);
+        }
+      }
+    }
+    if (shouldFocus !== undefined) {
+      openOptions.shouldFocus = shouldFocus;
+    }
+    infoWindow.open(openOptions);
+    return () => {
+      // Note: when the infowindow has an anchor, it will automatically show up again when the
+      // anchor was removed from the map before infoWindow.close() is called but the it gets
+      // added back to the map after that.
+      // More information here: https://issuetracker.google.com/issues/343750849
+      if (isOpenedWithAnchor) infoWindow.set('anchor', null);
+      infoWindow.close();
+    };
+  }, [infoWindow, anchor, map, shouldFocus, infoWindowOptions, pixelOffset]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, contentContainerRef.current && (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(children, contentContainerRef.current), headerContainerRef.current !== null && (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(headerContent, headerContainerRef.current));
+};
+
+/**
+ * Formats a location into a string representation suitable for Google Static Maps API.
+ *
+ * @param location - The location to format, can be either a string or an object with lat/lng properties
+ * @returns A string representation of the location in the format "lat,lng" or the original string
+ *
+ * @example
+ * // Returns "40.714728,-73.998672"
+ * formatLocation({ lat: 40.714728, lng: -73.998672 })
+ *
+ * @example
+ * // Returns "New York, NY"
+ * formatLocation("New York, NY")
+ */
+function formatLocation(location) {
+  return typeof location === 'string' ? location : `${location.lat},${location.lng}`;
+}
+// Used for removing the leading pipe from the param string
+function formatParam(string) {
+  return string.slice(1);
+}
+
+/**
+ * Assembles marker parameters for static maps.
+ *
+ * This function takes an array of markers and groups them by their style properties.
+ * It then creates a string representation of these markers, including their styles and locations,
+ * which can be used as parameters for static map APIs.
+ *
+ * @param {StaticMapsMarker[]} [markers=[]] - An array of markers to be processed. Each marker can have properties such as color, label, size, scale, icon, anchor, and location.
+ * @returns {string[]} An array of strings, each representing a group of markers with their styles and locations.
+ *
+ * @example
+ * const markers = [
+ *   { color: 'blue', label: 'A', size: 'mid', location: '40.714728,-73.998672' },
+ *   { color: 'blue', label: 'B', size: 'mid', location: '40.714728,-73.998672' },
+ *   { icon: 'http://example.com/icon.png', location: { lat: 40.714728, lng: -73.998672 } }
+ * ];
+ * const params = assembleMarkerParams(markers);
+ * // Params will be an array of strings representing the marker parameters
+ * Example output: [
+ *   "color:blue|label:A|size:mid|40.714728,-73.998672|40.714728,-73.998672",
+ *   "color:blue|label:B|size:mid|40.714728,-73.998672|40.714728,-73.998672",
+ *   "icon:http://example.com/icon.png|40.714728,-73.998672"
+ * ]
+ */
+function assembleMarkerParams(markers = []) {
+  const markerParams = [];
+  // Group markers by style
+  const markersByStyle = markers == null ? void 0 : markers.reduce((styles, marker) => {
+    const {
+      color = 'red',
+      label,
+      size,
+      scale,
+      icon,
+      anchor
+    } = marker;
+    // Create a unique style key based on either icon properties or standard marker properties
+    const relevantProps = icon ? [icon, anchor, scale] : [color, label, size];
+    const key = relevantProps.filter(Boolean).join('-');
+    styles[key] = styles[key] || [];
+    styles[key].push(marker);
+    return styles;
+  }, {});
+  Object.values(markersByStyle != null ? markersByStyle : {}).forEach(markers => {
+    let markerParam = '';
+    const {
+      icon
+    } = markers[0];
+    // Create marker style from first marker in group since all markers share the same style.
+    Object.entries(markers[0]).forEach(([key, value]) => {
+      // Determine which properties to include based on whether marker uses custom icon
+      const relevantKeys = icon ? ['icon', 'anchor', 'scale'] : ['color', 'label', 'size'];
+      if (relevantKeys.includes(key)) {
+        markerParam += `|${key}:${value}`;
+      }
+    });
+    // Add location coordinates for each marker in the style group
+    // Handles both string locations and lat/lng object formats.
+    for (const marker of markers) {
+      const location = typeof marker.location === 'string' ? marker.location : `${marker.location.lat},${marker.location.lng}`;
+      markerParam += `|${location}`;
+    }
+    markerParams.push(markerParam);
+  });
+  return markerParams.map(formatParam);
+}
+
+/**
+ * Assembles path parameters for the Static Maps Api from an array of paths.
+ *
+ * This function groups paths by their style properties (color, weight, fillcolor, geodesic)
+ * and then constructs a string of path parameters for each group. Each path parameter string
+ * includes the style properties and the coordinates of the paths.
+ *
+ * @param {Array<StaticMapsPath>} [paths=[]] - An array of paths to be assembled into path parameters.
+ * @returns {Array<string>} An array of path parameter strings.
+ *
+ * @example
+ * const paths = [
+ *   {
+ *     color: 'red',
+ *     weight: 5,
+ *     coordinates: [
+ *       { lat: 40.714728, lng: -73.998672 },
+ *       { lat: 40.718217, lng: -73.998284 }
+ *     ]
+ *   }
+ * ];
+ *
+ * const pathParams = assemblePathParams(paths);
+ * Output: [
+ *    'color:red|weight:5|40.714728,-73.998672|40.718217,-73.998284'
+ *  ]
+ */
+function assemblePathParams(paths = []) {
+  const pathParams = [];
+  // Group paths by their style properties (color, weight, fillcolor, geodesic)
+  // to combine paths with identical styles into single parameter strings
+  const pathsByStyle = paths == null ? void 0 : paths.reduce((styles, path) => {
+    const {
+      color = 'default',
+      weight,
+      fillcolor,
+      geodesic
+    } = path;
+    // Create unique key for this style combination
+    const key = [color, weight, fillcolor, geodesic].filter(Boolean).join('-');
+    styles[key] = styles[key] || [];
+    styles[key].push(path);
+    return styles;
+  }, {});
+  // Process each group of paths with identical styles
+  Object.values(pathsByStyle != null ? pathsByStyle : {}).forEach(paths => {
+    let pathParam = '';
+    // Build style parameter string using properties from first path in group
+    // since all paths in this group share the same style
+    Object.entries(paths[0]).forEach(([key, value]) => {
+      if (['color', 'weight', 'fillcolor', 'geodesic'].includes(key)) {
+        pathParam += `|${key}:${value}`;
+      }
+    });
+    // Add location for all marker in style group
+    for (const path of paths) {
+      if (typeof path.coordinates === 'string') {
+        pathParam += `|${decodeURIComponent(path.coordinates)}`;
+      } else {
+        for (const location of path.coordinates) {
+          pathParam += `|${formatLocation(location)}`;
+        }
+      }
+    }
+    pathParams.push(pathParam);
+  });
+  return pathParams.map(formatParam);
+}
+
+/**
+ * Converts an array of Google Maps style objects into an array of style strings
+ * compatible with the Google Static Maps API.
+ *
+ * @param styles - An array of Google Maps MapTypeStyle objects that define the styling rules
+ * @returns An array of formatted style strings ready to be used with the Static Maps API
+ *
+ * @example
+ * const styles = [{
+ *   featureType: "road",
+ *   elementType: "geometry",
+ *   stylers: [{color: "#ff0000"}, {weight: 1}]
+ * }];
+ *
+ * const styleStrings = assembleMapTypeStyles(styles);
+ * // Returns: ["|feature:road|element:geometry|color:0xff0000|weight:1"]
+ *
+ * Each style string follows the format:
+ * "feature:{featureType}|element:{elementType}|{stylerName}:{stylerValue}"
+ *
+ * Note: Color values with hexadecimal notation (#) are automatically converted
+ * to the required 0x format for the Static Maps API.
+ */
+function assembleMapTypeStyles(styles) {
+  return styles.map(mapTypeStyle => {
+    const {
+      featureType,
+      elementType,
+      stylers = []
+    } = mapTypeStyle;
+    let styleString = '';
+    if (featureType) {
+      styleString += `|feature:${featureType}`;
+    }
+    if (elementType) {
+      styleString += `|element:${elementType}`;
+    }
+    for (const styler of stylers) {
+      Object.entries(styler).forEach(([name, value]) => {
+        styleString += `|${name}:${String(value).replace('#', '0x')}`;
+      });
+    }
+    return styleString;
+  }).map(formatParam);
+}
+
+const STATIC_MAPS_BASE = 'https://maps.googleapis.com/maps/api/staticmap';
+/**
+ * Creates a URL for the Google Static Maps API with the specified parameters.
+ *
+ * @param {Object} options - The configuration options for the static map
+ * @param {string} options.apiKey - Your Google Maps API key (required)
+ * @param {number} options.width - The width of the map image in pixels (required)
+ * @param {number} options.height - The height of the map image in pixels (required)
+ * @param {StaticMapsLocation} [options.center] - The center point of the map (lat/lng or address).
+ *  Required if no markers or paths or "visible locations" are provided.
+ * @param {number} [options.zoom] - The zoom level of the map. Required if no markers or paths or "visible locations" are provided.
+ * @param {1|2|4} [options.scale] - The resolution of the map (1, 2, or 4)
+ * @param {string} [options.format] - The image format (png, png8, png32, gif, jpg, jpg-baseline)
+ * @param {string} [options.mapType] - The type of map (roadmap, satellite, terrain, hybrid)
+ * @param {string} [options.language] - The language of the map labels
+ * @param {string} [options.region] - The region code for the map
+ * @param {string} [options.map_id] - The Cloud-based map style ID
+ * @param {StaticMapsMarker[]} [options.markers=[]] - Array of markers to display on the map
+ * @param {StaticMapsPath[]} [options.paths=[]] - Array of paths to display on the map
+ * @param {StaticMapsLocation[]} [options.visible=[]] - Array of locations that should be visible on the map
+ * @param {MapTypeStyle[]} [options.style=[]] - Array of style objects to customize the map appearance
+ *
+ * @returns {string} The complete Google Static Maps API URL
+ *
+ * @throws {Error} If API key is not provided
+ * @throws {Error} If width or height is not provided
+ *
+ * @example
+ * const url = createStaticMapsUrl({
+ *   apiKey: 'YOUR_API_KEY',
+ *   width: 600,
+ *   height: 400,
+ *   center: { lat: 40.714728, lng: -73.998672 },
+ *   zoom: 12,
+ *   markers: [
+ *     {
+ *       location: { lat: 40.714728, lng: -73.998672 },
+ *       color: 'red',
+ *       label: 'A'
+ *     }
+ *   ],
+ *   paths: [
+ *     {
+ *       coordinates: [
+ *         { lat: 40.714728, lng: -73.998672 },
+ *         { lat: 40.719728, lng: -73.991672 }
+ *       ],
+ *       color: '0x0000ff',
+ *       weight: 5
+ *     }
+ *   ],
+ *   style: [
+ *     {
+ *       featureType: 'road',
+ *       elementType: 'geometry',
+ *       stylers: [{color: '#00ff00'}]
+ *     }
+ *   ]
+ * });
+ *
+ * // Results in URL similar to:
+ * // https://maps.googleapis.com/maps/api/staticmap?key=YOUR_API_KEY
+ * // &size=600x400
+ * // &center=40.714728,-73.998672&zoom=12
+ * // &markers=color:red|label:A|40.714728,-73.998672
+ * // &path=color:0x0000ff|weight:5|40.714728,-73.998672|40.719728,-73.991672
+ * // &style=feature:road|element:geometry|color:0x00ff00
+ */
+function createStaticMapsUrl({
+  apiKey,
+  width,
+  height,
+  center,
+  zoom,
+  scale,
+  format,
+  mapType,
+  language,
+  region,
+  mapId,
+  markers = [],
+  paths = [],
+  visible = [],
+  style = []
+}) {
+  if (!apiKey) {
+    console.warn('API key is required');
+  }
+  if (!width || !height) {
+    console.warn('Width and height are required');
+  }
+  const params = _extends({
+    key: apiKey,
+    size: `${width}x${height}`
+  }, center && {
+    center: formatLocation(center)
+  }, zoom && {
+    zoom
+  }, scale && {
+    scale
+  }, format && {
+    format
+  }, mapType && {
+    maptype: mapType
+  }, language && {
+    language
+  }, region && {
+    region
+  }, mapId && {
+    map_id: mapId
+  });
+  const url = new URL(STATIC_MAPS_BASE);
+  // Params that don't need special handling
+  Object.entries(params).forEach(([key, value]) => {
+    url.searchParams.append(key, String(value));
+  });
+  // Assemble Markers
+  for (const markerParam of assembleMarkerParams(markers)) {
+    url.searchParams.append('markers', markerParam);
+  }
+  // Assemble Paths
+  for (const pathParam of assemblePathParams(paths)) {
+    url.searchParams.append('path', pathParam);
+  }
+  // Assemble visible locations
+  if (visible.length) {
+    url.searchParams.append('visible', visible.map(location => formatLocation(location)).join('|'));
+  }
+  // Assemble Map Type Styles
+  for (const styleString of assembleMapTypeStyles(style)) {
+    url.searchParams.append('style', styleString);
+  }
+  return url.toString();
+}
+
+const StaticMap = props => {
+  const {
+    url,
+    className
+  } = props;
+  if (!url) throw new Error('URL is required');
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+    className: className,
+    src: url,
+    width: "100%"
+  });
+};
+
+/**
+ * Copy of the `google.maps.ControlPosition` constants.
+ * They have to be duplicated here since we can't wait for the maps API to load to be able to use them.
+ */
+const ControlPosition = {
+  TOP_LEFT: 1,
+  TOP_CENTER: 2,
+  TOP: 2,
+  TOP_RIGHT: 3,
+  LEFT_CENTER: 4,
+  LEFT_TOP: 5,
+  LEFT: 5,
+  LEFT_BOTTOM: 6,
+  RIGHT_TOP: 7,
+  RIGHT: 7,
+  RIGHT_CENTER: 8,
+  RIGHT_BOTTOM: 9,
+  BOTTOM_LEFT: 10,
+  BOTTOM_CENTER: 11,
+  BOTTOM: 11,
+  BOTTOM_RIGHT: 12,
+  CENTER: 13,
+  BLOCK_START_INLINE_START: 14,
+  BLOCK_START_INLINE_CENTER: 15,
+  BLOCK_START_INLINE_END: 16,
+  INLINE_START_BLOCK_CENTER: 17,
+  INLINE_START_BLOCK_START: 18,
+  INLINE_START_BLOCK_END: 19,
+  INLINE_END_BLOCK_START: 20,
+  INLINE_END_BLOCK_CENTER: 21,
+  INLINE_END_BLOCK_END: 22,
+  BLOCK_END_INLINE_START: 23,
+  BLOCK_END_INLINE_CENTER: 24,
+  BLOCK_END_INLINE_END: 25
+};
+const MapControl = ({
+  children,
+  position
+}) => {
+  const controlContainer = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => document.createElement('div'), []);
+  const map = useMap();
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!map) return;
+    const controls = map.controls[position];
+    controls.push(controlContainer);
+    return () => {
+      const controlsArray = controls.getArray();
+      // controlsArray could be undefined if the map is in an undefined state (e.g. invalid API-key, see #276
+      if (!controlsArray) return;
+      const index = controlsArray.indexOf(controlContainer);
+      controls.removeAt(index);
+    };
+  }, [controlContainer, map, position]);
+  return (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(children, controlContainer);
+};
+
+const _excluded = ["onClick", "onDrag", "onDragStart", "onDragEnd", "onMouseOver", "onMouseOut"];
+function useMarker(props) {
+  const [marker, setMarker] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const map = useMap();
+  const {
+      onClick,
+      onDrag,
+      onDragStart,
+      onDragEnd,
+      onMouseOver,
+      onMouseOut
+    } = props,
+    markerOptions = _objectWithoutPropertiesLoose(props, _excluded);
+  const {
+    position,
+    draggable
+  } = markerOptions;
+  // create marker instance and add to the map once the map is available
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!map) {
+      if (map === undefined) console.error('<Marker> has to be inside a Map component.');
+      return;
+    }
+    const newMarker = new google.maps.Marker(markerOptions);
+    newMarker.setMap(map);
+    setMarker(newMarker);
+    return () => {
+      newMarker.setMap(null);
+      setMarker(null);
+    };
+    // We do not want to re-render the whole marker when the options change.
+    // Marker options update is handled in a useEffect below.
+    // Excluding markerOptions from dependency array on purpose here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map]);
+  // attach and re-attach event-handlers when any of the properties change
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!marker) return;
+    const m = marker;
+    // Add event listeners
+    const gme = google.maps.event;
+    if (onClick) gme.addListener(m, 'click', onClick);
+    if (onDrag) gme.addListener(m, 'drag', onDrag);
+    if (onDragStart) gme.addListener(m, 'dragstart', onDragStart);
+    if (onDragEnd) gme.addListener(m, 'dragend', onDragEnd);
+    if (onMouseOver) gme.addListener(m, 'mouseover', onMouseOver);
+    if (onMouseOut) gme.addListener(m, 'mouseout', onMouseOut);
+    marker.setDraggable(Boolean(draggable));
+    return () => {
+      gme.clearInstanceListeners(m);
+    };
+  }, [marker, draggable, onClick, onDrag, onDragStart, onDragEnd, onMouseOver, onMouseOut]);
+  // update markerOptions (note the dependencies aren't properly checked
+  // here, we just assume that setOptions is smart enough to not waste a
+  // lot of time updating values that didn't change)
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!marker) return;
+    if (markerOptions) marker.setOptions(markerOptions);
+  }, [marker, markerOptions]);
+  // update position when changed
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    // Should not update position when draggable
+    if (draggable || !position || !marker) return;
+    marker.setPosition(position);
+  }, [draggable, position, marker]);
+  return marker;
+}
+/**
+ * Component to render a marker on a map
+ */
+const Marker = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)((props, ref) => {
+  const marker = useMarker(props);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(ref, () => marker, [marker]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null);
+});
+function useMarkerRef() {
+  const [marker, setMarker] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const refCallback = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(m => {
+    setMarker(m);
+  }, []);
+  return [refCallback, marker];
+}
+
+/**
+ * Component to configure the appearance of an AdvancedMarker
+ */
+const Pin = props => {
+  var _useContext;
+  const advancedMarker = (_useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(AdvancedMarkerContext)) == null ? void 0 : _useContext.marker;
+  const glyphContainer = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => document.createElement('div'), []);
+  // Create Pin View instance
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    var _advancedMarker$conte;
+    if (!advancedMarker) {
+      if (advancedMarker === undefined) {
+        console.error('The <Pin> component can only be used inside <AdvancedMarker>.');
+      }
+      return;
+    }
+    if (props.glyph && props.children) {
+      logErrorOnce('The <Pin> component only uses children to render the glyph if both the glyph property and children are present.');
+    }
+    if (react__WEBPACK_IMPORTED_MODULE_0__.Children.count(props.children) > 1) {
+      logErrorOnce('Passing multiple children to the <Pin> component might lead to unexpected results.');
+    }
+    const pinViewOptions = _extends({}, props);
+    const pinElement = new google.maps.marker.PinElement(pinViewOptions);
+    // Set glyph to glyph container if children are present (rendered via portal).
+    // If both props.glyph and props.children are present, props.children takes priority.
+    if (props.children) {
+      pinElement.glyph = glyphContainer;
+    }
+    // Set content of Advanced Marker View to the Pin View element
+    // Here we are selecting the anchor container.
+    // The hierarchy is as follows:
+    // "advancedMarker.content" (from google) -> "pointer events reset div" -> "anchor container"
+    const markerContent = (_advancedMarker$conte = advancedMarker.content) == null || (_advancedMarker$conte = _advancedMarker$conte.firstChild) == null ? void 0 : _advancedMarker$conte.firstChild;
+    while (markerContent != null && markerContent.firstChild) {
+      markerContent.removeChild(markerContent.firstChild);
+    }
+    if (markerContent) {
+      markerContent.appendChild(pinElement.element);
+    }
+  }, [advancedMarker, glyphContainer, props]);
+  return (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(props.children, glyphContainer);
+};
+
+const mapLinear = (x, a1, a2, b1, b2) => b1 + (x - a1) * (b2 - b1) / (a2 - a1);
+const getMapMaxTilt = zoom => {
+  if (zoom <= 10) {
+    return 30;
+  }
+  if (zoom >= 15.5) {
+    return 67.5;
+  }
+  // range [10...14]
+  if (zoom <= 14) {
+    return mapLinear(zoom, 10, 14, 30, 45);
+  }
+  // range [14...15.5]
+  return mapLinear(zoom, 14, 15.5, 45, 67.5);
+};
+/**
+ * Function to limit the tilt range of the Google map when updating the view state
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const limitTiltRange = ({
+  viewState
+}) => {
+  const pitch = viewState.pitch;
+  const gmZoom = viewState.zoom + 1;
+  const maxTilt = getMapMaxTilt(gmZoom);
+  return _extends({}, viewState, {
+    fovy: 25,
+    pitch: Math.min(maxTilt, pitch)
+  });
+};
+
+
+//# sourceMappingURL=index.modern.mjs.map
+
+
+/***/ }),
+
 /***/ "./node_modules/clsx/dist/clsx.mjs":
 /*!*****************************************!*\
   !*** ./node_modules/clsx/dist/clsx.mjs ***!
@@ -37236,6 +39279,63 @@ var purify = createDOMPurify();
 
 /***/ }),
 
+/***/ "./node_modules/fast-deep-equal/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/fast-deep-equal/index.js ***!
+  \***********************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+// do not edit .js files directly - edit src/index.jst
+
+
+
+module.exports = function equal(a, b) {
+  if (a === b) return true;
+
+  if (a && b && typeof a == 'object' && typeof b == 'object') {
+    if (a.constructor !== b.constructor) return false;
+
+    var length, i, keys;
+    if (Array.isArray(a)) {
+      length = a.length;
+      if (length != b.length) return false;
+      for (i = length; i-- !== 0;)
+        if (!equal(a[i], b[i])) return false;
+      return true;
+    }
+
+
+
+    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
+    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+
+    keys = Object.keys(a);
+    length = keys.length;
+    if (length !== Object.keys(b).length) return false;
+
+    for (i = length; i-- !== 0;)
+      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+
+    for (i = length; i-- !== 0;) {
+      var key = keys[i];
+
+      if (!equal(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  // true if both NaN, false otherwise
+  return a!==a && b!==b;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js":
 /*!**********************************************************************************!*\
   !*** ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js ***!
@@ -37346,6 +39446,348 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
 }
 
 module.exports = hoistNonReactStatics;
+
+
+/***/ }),
+
+/***/ "./node_modules/kdbush/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/kdbush/index.js ***!
+  \**************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ KDBush)
+/* harmony export */ });
+
+const ARRAY_TYPES = [
+    Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array,
+    Int32Array, Uint32Array, Float32Array, Float64Array
+];
+
+/** @typedef {Int8ArrayConstructor | Uint8ArrayConstructor | Uint8ClampedArrayConstructor | Int16ArrayConstructor | Uint16ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor | Float32ArrayConstructor | Float64ArrayConstructor} TypedArrayConstructor */
+
+const VERSION = 1; // serialized format version
+const HEADER_SIZE = 8;
+
+class KDBush {
+
+    /**
+     * Creates an index from raw `ArrayBuffer` data.
+     * @param {ArrayBuffer} data
+     */
+    static from(data) {
+        if (!(data instanceof ArrayBuffer)) {
+            throw new Error('Data must be an instance of ArrayBuffer.');
+        }
+        const [magic, versionAndType] = new Uint8Array(data, 0, 2);
+        if (magic !== 0xdb) {
+            throw new Error('Data does not appear to be in a KDBush format.');
+        }
+        const version = versionAndType >> 4;
+        if (version !== VERSION) {
+            throw new Error(`Got v${version} data when expected v${VERSION}.`);
+        }
+        const ArrayType = ARRAY_TYPES[versionAndType & 0x0f];
+        if (!ArrayType) {
+            throw new Error('Unrecognized array type.');
+        }
+        const [nodeSize] = new Uint16Array(data, 2, 1);
+        const [numItems] = new Uint32Array(data, 4, 1);
+
+        return new KDBush(numItems, nodeSize, ArrayType, data);
+    }
+
+    /**
+     * Creates an index that will hold a given number of items.
+     * @param {number} numItems
+     * @param {number} [nodeSize=64] Size of the KD-tree node (64 by default).
+     * @param {TypedArrayConstructor} [ArrayType=Float64Array] The array type used for coordinates storage (`Float64Array` by default).
+     * @param {ArrayBuffer} [data] (For internal use only)
+     */
+    constructor(numItems, nodeSize = 64, ArrayType = Float64Array, data) {
+        if (isNaN(numItems) || numItems < 0) throw new Error(`Unpexpected numItems value: ${numItems}.`);
+
+        this.numItems = +numItems;
+        this.nodeSize = Math.min(Math.max(+nodeSize, 2), 65535);
+        this.ArrayType = ArrayType;
+        this.IndexArrayType = numItems < 65536 ? Uint16Array : Uint32Array;
+
+        const arrayTypeIndex = ARRAY_TYPES.indexOf(this.ArrayType);
+        const coordsByteSize = numItems * 2 * this.ArrayType.BYTES_PER_ELEMENT;
+        const idsByteSize = numItems * this.IndexArrayType.BYTES_PER_ELEMENT;
+        const padCoords = (8 - idsByteSize % 8) % 8;
+
+        if (arrayTypeIndex < 0) {
+            throw new Error(`Unexpected typed array class: ${ArrayType}.`);
+        }
+
+        if (data && (data instanceof ArrayBuffer)) { // reconstruct an index from a buffer
+            this.data = data;
+            this.ids = new this.IndexArrayType(this.data, HEADER_SIZE, numItems);
+            this.coords = new this.ArrayType(this.data, HEADER_SIZE + idsByteSize + padCoords, numItems * 2);
+            this._pos = numItems * 2;
+            this._finished = true;
+        } else { // initialize a new index
+            this.data = new ArrayBuffer(HEADER_SIZE + coordsByteSize + idsByteSize + padCoords);
+            this.ids = new this.IndexArrayType(this.data, HEADER_SIZE, numItems);
+            this.coords = new this.ArrayType(this.data, HEADER_SIZE + idsByteSize + padCoords, numItems * 2);
+            this._pos = 0;
+            this._finished = false;
+
+            // set header
+            new Uint8Array(this.data, 0, 2).set([0xdb, (VERSION << 4) + arrayTypeIndex]);
+            new Uint16Array(this.data, 2, 1)[0] = nodeSize;
+            new Uint32Array(this.data, 4, 1)[0] = numItems;
+        }
+    }
+
+    /**
+     * Add a point to the index.
+     * @param {number} x
+     * @param {number} y
+     * @returns {number} An incremental index associated with the added item (starting from `0`).
+     */
+    add(x, y) {
+        const index = this._pos >> 1;
+        this.ids[index] = index;
+        this.coords[this._pos++] = x;
+        this.coords[this._pos++] = y;
+        return index;
+    }
+
+    /**
+     * Perform indexing of the added points.
+     */
+    finish() {
+        const numAdded = this._pos >> 1;
+        if (numAdded !== this.numItems) {
+            throw new Error(`Added ${numAdded} items when expected ${this.numItems}.`);
+        }
+        // kd-sort both arrays for efficient search
+        sort(this.ids, this.coords, this.nodeSize, 0, this.numItems - 1, 0);
+
+        this._finished = true;
+        return this;
+    }
+
+    /**
+     * Search the index for items within a given bounding box.
+     * @param {number} minX
+     * @param {number} minY
+     * @param {number} maxX
+     * @param {number} maxY
+     * @returns {number[]} An array of indices correponding to the found items.
+     */
+    range(minX, minY, maxX, maxY) {
+        if (!this._finished) throw new Error('Data not yet indexed - call index.finish().');
+
+        const {ids, coords, nodeSize} = this;
+        const stack = [0, ids.length - 1, 0];
+        const result = [];
+
+        // recursively search for items in range in the kd-sorted arrays
+        while (stack.length) {
+            const axis = stack.pop() || 0;
+            const right = stack.pop() || 0;
+            const left = stack.pop() || 0;
+
+            // if we reached "tree node", search linearly
+            if (right - left <= nodeSize) {
+                for (let i = left; i <= right; i++) {
+                    const x = coords[2 * i];
+                    const y = coords[2 * i + 1];
+                    if (x >= minX && x <= maxX && y >= minY && y <= maxY) result.push(ids[i]);
+                }
+                continue;
+            }
+
+            // otherwise find the middle index
+            const m = (left + right) >> 1;
+
+            // include the middle item if it's in range
+            const x = coords[2 * m];
+            const y = coords[2 * m + 1];
+            if (x >= minX && x <= maxX && y >= minY && y <= maxY) result.push(ids[m]);
+
+            // queue search in halves that intersect the query
+            if (axis === 0 ? minX <= x : minY <= y) {
+                stack.push(left);
+                stack.push(m - 1);
+                stack.push(1 - axis);
+            }
+            if (axis === 0 ? maxX >= x : maxY >= y) {
+                stack.push(m + 1);
+                stack.push(right);
+                stack.push(1 - axis);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Search the index for items within a given radius.
+     * @param {number} qx
+     * @param {number} qy
+     * @param {number} r Query radius.
+     * @returns {number[]} An array of indices correponding to the found items.
+     */
+    within(qx, qy, r) {
+        if (!this._finished) throw new Error('Data not yet indexed - call index.finish().');
+
+        const {ids, coords, nodeSize} = this;
+        const stack = [0, ids.length - 1, 0];
+        const result = [];
+        const r2 = r * r;
+
+        // recursively search for items within radius in the kd-sorted arrays
+        while (stack.length) {
+            const axis = stack.pop() || 0;
+            const right = stack.pop() || 0;
+            const left = stack.pop() || 0;
+
+            // if we reached "tree node", search linearly
+            if (right - left <= nodeSize) {
+                for (let i = left; i <= right; i++) {
+                    if (sqDist(coords[2 * i], coords[2 * i + 1], qx, qy) <= r2) result.push(ids[i]);
+                }
+                continue;
+            }
+
+            // otherwise find the middle index
+            const m = (left + right) >> 1;
+
+            // include the middle item if it's in range
+            const x = coords[2 * m];
+            const y = coords[2 * m + 1];
+            if (sqDist(x, y, qx, qy) <= r2) result.push(ids[m]);
+
+            // queue search in halves that intersect the query
+            if (axis === 0 ? qx - r <= x : qy - r <= y) {
+                stack.push(left);
+                stack.push(m - 1);
+                stack.push(1 - axis);
+            }
+            if (axis === 0 ? qx + r >= x : qy + r >= y) {
+                stack.push(m + 1);
+                stack.push(right);
+                stack.push(1 - axis);
+            }
+        }
+
+        return result;
+    }
+}
+
+/**
+ * @param {Uint16Array | Uint32Array} ids
+ * @param {InstanceType<TypedArrayConstructor>} coords
+ * @param {number} nodeSize
+ * @param {number} left
+ * @param {number} right
+ * @param {number} axis
+ */
+function sort(ids, coords, nodeSize, left, right, axis) {
+    if (right - left <= nodeSize) return;
+
+    const m = (left + right) >> 1; // middle index
+
+    // sort ids and coords around the middle index so that the halves lie
+    // either left/right or top/bottom correspondingly (taking turns)
+    select(ids, coords, m, left, right, axis);
+
+    // recursively kd-sort first half and second half on the opposite axis
+    sort(ids, coords, nodeSize, left, m - 1, 1 - axis);
+    sort(ids, coords, nodeSize, m + 1, right, 1 - axis);
+}
+
+/**
+ * Custom Floyd-Rivest selection algorithm: sort ids and coords so that
+ * [left..k-1] items are smaller than k-th item (on either x or y axis)
+ * @param {Uint16Array | Uint32Array} ids
+ * @param {InstanceType<TypedArrayConstructor>} coords
+ * @param {number} k
+ * @param {number} left
+ * @param {number} right
+ * @param {number} axis
+ */
+function select(ids, coords, k, left, right, axis) {
+
+    while (right > left) {
+        if (right - left > 600) {
+            const n = right - left + 1;
+            const m = k - left + 1;
+            const z = Math.log(n);
+            const s = 0.5 * Math.exp(2 * z / 3);
+            const sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * (m - n / 2 < 0 ? -1 : 1);
+            const newLeft = Math.max(left, Math.floor(k - m * s / n + sd));
+            const newRight = Math.min(right, Math.floor(k + (n - m) * s / n + sd));
+            select(ids, coords, k, newLeft, newRight, axis);
+        }
+
+        const t = coords[2 * k + axis];
+        let i = left;
+        let j = right;
+
+        swapItem(ids, coords, left, k);
+        if (coords[2 * right + axis] > t) swapItem(ids, coords, left, right);
+
+        while (i < j) {
+            swapItem(ids, coords, i, j);
+            i++;
+            j--;
+            while (coords[2 * i + axis] < t) i++;
+            while (coords[2 * j + axis] > t) j--;
+        }
+
+        if (coords[2 * left + axis] === t) swapItem(ids, coords, left, j);
+        else {
+            j++;
+            swapItem(ids, coords, j, right);
+        }
+
+        if (j <= k) left = j + 1;
+        if (k <= j) right = j - 1;
+    }
+}
+
+/**
+ * @param {Uint16Array | Uint32Array} ids
+ * @param {InstanceType<TypedArrayConstructor>} coords
+ * @param {number} i
+ * @param {number} j
+ */
+function swapItem(ids, coords, i, j) {
+    swap(ids, i, j);
+    swap(coords, 2 * i, 2 * j);
+    swap(coords, 2 * i + 1, 2 * j + 1);
+}
+
+/**
+ * @param {InstanceType<TypedArrayConstructor>} arr
+ * @param {number} i
+ * @param {number} j
+ */
+function swap(arr, i, j) {
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+}
+
+/**
+ * @param {number} ax
+ * @param {number} ay
+ * @param {number} bx
+ * @param {number} by
+ */
+function sqDist(ax, ay, bx, by) {
+    const dx = ax - bx;
+    const dy = ay - by;
+    return dx * dx + dy * dy;
+}
 
 
 /***/ }),
@@ -40611,6 +43053,446 @@ function combine (array, callback) {
 
 /***/ }),
 
+/***/ "./node_modules/supercluster/index.js":
+/*!********************************************!*\
+  !*** ./node_modules/supercluster/index.js ***!
+  \********************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Supercluster)
+/* harmony export */ });
+/* harmony import */ var kdbush__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! kdbush */ "./node_modules/kdbush/index.js");
+
+
+
+const defaultOptions = {
+    minZoom: 0,   // min zoom to generate clusters on
+    maxZoom: 16,  // max zoom level to cluster the points on
+    minPoints: 2, // minimum points to form a cluster
+    radius: 40,   // cluster radius in pixels
+    extent: 512,  // tile extent (radius is calculated relative to it)
+    nodeSize: 64, // size of the KD-tree leaf node, affects performance
+    log: false,   // whether to log timing info
+
+    // whether to generate numeric ids for input features (in vector tiles)
+    generateId: false,
+
+    // a reduce function for calculating custom cluster properties
+    reduce: null, // (accumulated, props) => { accumulated.sum += props.sum; }
+
+    // properties to use for individual points when running the reducer
+    map: props => props // props => ({sum: props.my_value})
+};
+
+const fround = Math.fround || (tmp => ((x) => { tmp[0] = +x; return tmp[0]; }))(new Float32Array(1));
+
+const OFFSET_ZOOM = 2;
+const OFFSET_ID = 3;
+const OFFSET_PARENT = 4;
+const OFFSET_NUM = 5;
+const OFFSET_PROP = 6;
+
+class Supercluster {
+    constructor(options) {
+        this.options = Object.assign(Object.create(defaultOptions), options);
+        this.trees = new Array(this.options.maxZoom + 1);
+        this.stride = this.options.reduce ? 7 : 6;
+        this.clusterProps = [];
+    }
+
+    load(points) {
+        const {log, minZoom, maxZoom} = this.options;
+
+        if (log) console.time('total time');
+
+        const timerId = `prepare ${  points.length  } points`;
+        if (log) console.time(timerId);
+
+        this.points = points;
+
+        // generate a cluster object for each point and index input points into a KD-tree
+        const data = [];
+
+        for (let i = 0; i < points.length; i++) {
+            const p = points[i];
+            if (!p.geometry) continue;
+
+            const [lng, lat] = p.geometry.coordinates;
+            const x = fround(lngX(lng));
+            const y = fround(latY(lat));
+            // store internal point/cluster data in flat numeric arrays for performance
+            data.push(
+                x, y, // projected point coordinates
+                Infinity, // the last zoom the point was processed at
+                i, // index of the source feature in the original input array
+                -1, // parent cluster id
+                1 // number of points in a cluster
+            );
+            if (this.options.reduce) data.push(0); // noop
+        }
+        let tree = this.trees[maxZoom + 1] = this._createTree(data);
+
+        if (log) console.timeEnd(timerId);
+
+        // cluster points on max zoom, then cluster the results on previous zoom, etc.;
+        // results in a cluster hierarchy across zoom levels
+        for (let z = maxZoom; z >= minZoom; z--) {
+            const now = +Date.now();
+
+            // create a new set of clusters for the zoom and index them with a KD-tree
+            tree = this.trees[z] = this._createTree(this._cluster(tree, z));
+
+            if (log) console.log('z%d: %d clusters in %dms', z, tree.numItems, +Date.now() - now);
+        }
+
+        if (log) console.timeEnd('total time');
+
+        return this;
+    }
+
+    getClusters(bbox, zoom) {
+        let minLng = ((bbox[0] + 180) % 360 + 360) % 360 - 180;
+        const minLat = Math.max(-90, Math.min(90, bbox[1]));
+        let maxLng = bbox[2] === 180 ? 180 : ((bbox[2] + 180) % 360 + 360) % 360 - 180;
+        const maxLat = Math.max(-90, Math.min(90, bbox[3]));
+
+        if (bbox[2] - bbox[0] >= 360) {
+            minLng = -180;
+            maxLng = 180;
+        } else if (minLng > maxLng) {
+            const easternHem = this.getClusters([minLng, minLat, 180, maxLat], zoom);
+            const westernHem = this.getClusters([-180, minLat, maxLng, maxLat], zoom);
+            return easternHem.concat(westernHem);
+        }
+
+        const tree = this.trees[this._limitZoom(zoom)];
+        const ids = tree.range(lngX(minLng), latY(maxLat), lngX(maxLng), latY(minLat));
+        const data = tree.data;
+        const clusters = [];
+        for (const id of ids) {
+            const k = this.stride * id;
+            clusters.push(data[k + OFFSET_NUM] > 1 ? getClusterJSON(data, k, this.clusterProps) : this.points[data[k + OFFSET_ID]]);
+        }
+        return clusters;
+    }
+
+    getChildren(clusterId) {
+        const originId = this._getOriginId(clusterId);
+        const originZoom = this._getOriginZoom(clusterId);
+        const errorMsg = 'No cluster with the specified id.';
+
+        const tree = this.trees[originZoom];
+        if (!tree) throw new Error(errorMsg);
+
+        const data = tree.data;
+        if (originId * this.stride >= data.length) throw new Error(errorMsg);
+
+        const r = this.options.radius / (this.options.extent * Math.pow(2, originZoom - 1));
+        const x = data[originId * this.stride];
+        const y = data[originId * this.stride + 1];
+        const ids = tree.within(x, y, r);
+        const children = [];
+        for (const id of ids) {
+            const k = id * this.stride;
+            if (data[k + OFFSET_PARENT] === clusterId) {
+                children.push(data[k + OFFSET_NUM] > 1 ? getClusterJSON(data, k, this.clusterProps) : this.points[data[k + OFFSET_ID]]);
+            }
+        }
+
+        if (children.length === 0) throw new Error(errorMsg);
+
+        return children;
+    }
+
+    getLeaves(clusterId, limit, offset) {
+        limit = limit || 10;
+        offset = offset || 0;
+
+        const leaves = [];
+        this._appendLeaves(leaves, clusterId, limit, offset, 0);
+
+        return leaves;
+    }
+
+    getTile(z, x, y) {
+        const tree = this.trees[this._limitZoom(z)];
+        const z2 = Math.pow(2, z);
+        const {extent, radius} = this.options;
+        const p = radius / extent;
+        const top = (y - p) / z2;
+        const bottom = (y + 1 + p) / z2;
+
+        const tile = {
+            features: []
+        };
+
+        this._addTileFeatures(
+            tree.range((x - p) / z2, top, (x + 1 + p) / z2, bottom),
+            tree.data, x, y, z2, tile);
+
+        if (x === 0) {
+            this._addTileFeatures(
+                tree.range(1 - p / z2, top, 1, bottom),
+                tree.data, z2, y, z2, tile);
+        }
+        if (x === z2 - 1) {
+            this._addTileFeatures(
+                tree.range(0, top, p / z2, bottom),
+                tree.data, -1, y, z2, tile);
+        }
+
+        return tile.features.length ? tile : null;
+    }
+
+    getClusterExpansionZoom(clusterId) {
+        let expansionZoom = this._getOriginZoom(clusterId) - 1;
+        while (expansionZoom <= this.options.maxZoom) {
+            const children = this.getChildren(clusterId);
+            expansionZoom++;
+            if (children.length !== 1) break;
+            clusterId = children[0].properties.cluster_id;
+        }
+        return expansionZoom;
+    }
+
+    _appendLeaves(result, clusterId, limit, offset, skipped) {
+        const children = this.getChildren(clusterId);
+
+        for (const child of children) {
+            const props = child.properties;
+
+            if (props && props.cluster) {
+                if (skipped + props.point_count <= offset) {
+                    // skip the whole cluster
+                    skipped += props.point_count;
+                } else {
+                    // enter the cluster
+                    skipped = this._appendLeaves(result, props.cluster_id, limit, offset, skipped);
+                    // exit the cluster
+                }
+            } else if (skipped < offset) {
+                // skip a single point
+                skipped++;
+            } else {
+                // add a single point
+                result.push(child);
+            }
+            if (result.length === limit) break;
+        }
+
+        return skipped;
+    }
+
+    _createTree(data) {
+        const tree = new kdbush__WEBPACK_IMPORTED_MODULE_0__["default"](data.length / this.stride | 0, this.options.nodeSize, Float32Array);
+        for (let i = 0; i < data.length; i += this.stride) tree.add(data[i], data[i + 1]);
+        tree.finish();
+        tree.data = data;
+        return tree;
+    }
+
+    _addTileFeatures(ids, data, x, y, z2, tile) {
+        for (const i of ids) {
+            const k = i * this.stride;
+            const isCluster = data[k + OFFSET_NUM] > 1;
+
+            let tags, px, py;
+            if (isCluster) {
+                tags = getClusterProperties(data, k, this.clusterProps);
+                px = data[k];
+                py = data[k + 1];
+            } else {
+                const p = this.points[data[k + OFFSET_ID]];
+                tags = p.properties;
+                const [lng, lat] = p.geometry.coordinates;
+                px = lngX(lng);
+                py = latY(lat);
+            }
+
+            const f = {
+                type: 1,
+                geometry: [[
+                    Math.round(this.options.extent * (px * z2 - x)),
+                    Math.round(this.options.extent * (py * z2 - y))
+                ]],
+                tags
+            };
+
+            // assign id
+            let id;
+            if (isCluster || this.options.generateId) {
+                // optionally generate id for points
+                id = data[k + OFFSET_ID];
+            } else {
+                // keep id if already assigned
+                id = this.points[data[k + OFFSET_ID]].id;
+            }
+
+            if (id !== undefined) f.id = id;
+
+            tile.features.push(f);
+        }
+    }
+
+    _limitZoom(z) {
+        return Math.max(this.options.minZoom, Math.min(Math.floor(+z), this.options.maxZoom + 1));
+    }
+
+    _cluster(tree, zoom) {
+        const {radius, extent, reduce, minPoints} = this.options;
+        const r = radius / (extent * Math.pow(2, zoom));
+        const data = tree.data;
+        const nextData = [];
+        const stride = this.stride;
+
+        // loop through each point
+        for (let i = 0; i < data.length; i += stride) {
+            // if we've already visited the point at this zoom level, skip it
+            if (data[i + OFFSET_ZOOM] <= zoom) continue;
+            data[i + OFFSET_ZOOM] = zoom;
+
+            // find all nearby points
+            const x = data[i];
+            const y = data[i + 1];
+            const neighborIds = tree.within(data[i], data[i + 1], r);
+
+            const numPointsOrigin = data[i + OFFSET_NUM];
+            let numPoints = numPointsOrigin;
+
+            // count the number of points in a potential cluster
+            for (const neighborId of neighborIds) {
+                const k = neighborId * stride;
+                // filter out neighbors that are already processed
+                if (data[k + OFFSET_ZOOM] > zoom) numPoints += data[k + OFFSET_NUM];
+            }
+
+            // if there were neighbors to merge, and there are enough points to form a cluster
+            if (numPoints > numPointsOrigin && numPoints >= minPoints) {
+                let wx = x * numPointsOrigin;
+                let wy = y * numPointsOrigin;
+
+                let clusterProperties;
+                let clusterPropIndex = -1;
+
+                // encode both zoom and point index on which the cluster originated -- offset by total length of features
+                const id = ((i / stride | 0) << 5) + (zoom + 1) + this.points.length;
+
+                for (const neighborId of neighborIds) {
+                    const k = neighborId * stride;
+
+                    if (data[k + OFFSET_ZOOM] <= zoom) continue;
+                    data[k + OFFSET_ZOOM] = zoom; // save the zoom (so it doesn't get processed twice)
+
+                    const numPoints2 = data[k + OFFSET_NUM];
+                    wx += data[k] * numPoints2; // accumulate coordinates for calculating weighted center
+                    wy += data[k + 1] * numPoints2;
+
+                    data[k + OFFSET_PARENT] = id;
+
+                    if (reduce) {
+                        if (!clusterProperties) {
+                            clusterProperties = this._map(data, i, true);
+                            clusterPropIndex = this.clusterProps.length;
+                            this.clusterProps.push(clusterProperties);
+                        }
+                        reduce(clusterProperties, this._map(data, k));
+                    }
+                }
+
+                data[i + OFFSET_PARENT] = id;
+                nextData.push(wx / numPoints, wy / numPoints, Infinity, id, -1, numPoints);
+                if (reduce) nextData.push(clusterPropIndex);
+
+            } else { // left points as unclustered
+                for (let j = 0; j < stride; j++) nextData.push(data[i + j]);
+
+                if (numPoints > 1) {
+                    for (const neighborId of neighborIds) {
+                        const k = neighborId * stride;
+                        if (data[k + OFFSET_ZOOM] <= zoom) continue;
+                        data[k + OFFSET_ZOOM] = zoom;
+                        for (let j = 0; j < stride; j++) nextData.push(data[k + j]);
+                    }
+                }
+            }
+        }
+
+        return nextData;
+    }
+
+    // get index of the point from which the cluster originated
+    _getOriginId(clusterId) {
+        return (clusterId - this.points.length) >> 5;
+    }
+
+    // get zoom of the point from which the cluster originated
+    _getOriginZoom(clusterId) {
+        return (clusterId - this.points.length) % 32;
+    }
+
+    _map(data, i, clone) {
+        if (data[i + OFFSET_NUM] > 1) {
+            const props = this.clusterProps[data[i + OFFSET_PROP]];
+            return clone ? Object.assign({}, props) : props;
+        }
+        const original = this.points[data[i + OFFSET_ID]].properties;
+        const result = this.options.map(original);
+        return clone && result === original ? Object.assign({}, result) : result;
+    }
+}
+
+function getClusterJSON(data, i, clusterProps) {
+    return {
+        type: 'Feature',
+        id: data[i + OFFSET_ID],
+        properties: getClusterProperties(data, i, clusterProps),
+        geometry: {
+            type: 'Point',
+            coordinates: [xLng(data[i]), yLat(data[i + 1])]
+        }
+    };
+}
+
+function getClusterProperties(data, i, clusterProps) {
+    const count = data[i + OFFSET_NUM];
+    const abbrev =
+        count >= 10000 ? `${Math.round(count / 1000)  }k` :
+        count >= 1000 ? `${Math.round(count / 100) / 10  }k` : count;
+    const propIndex = data[i + OFFSET_PROP];
+    const properties = propIndex === -1 ? {} : Object.assign({}, clusterProps[propIndex]);
+    return Object.assign(properties, {
+        cluster: true,
+        cluster_id: data[i + OFFSET_ID],
+        point_count: count,
+        point_count_abbreviated: abbrev
+    });
+}
+
+// longitude/latitude to spherical mercator in [0..1] range
+function lngX(lng) {
+    return lng / 360 + 0.5;
+}
+function latY(lat) {
+    const sin = Math.sin(lat * Math.PI / 180);
+    const y = (0.5 - 0.25 * Math.log((1 + sin) / (1 - sin)) / Math.PI);
+    return y < 0 ? 0 : y > 1 ? 1 : y;
+}
+
+// spherical mercator to longitude/latitude
+function xLng(x) {
+    return (x - 0.5) * 360;
+}
+function yLat(y) {
+    const y2 = (180 - y * 360) * Math.PI / 180;
+    return 360 * Math.atan(Math.exp(y2)) / Math.PI - 90;
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/uuid/dist/esm-browser/regex.js":
 /*!*****************************************************!*\
   !*** ./node_modules/uuid/dist/esm-browser/regex.js ***!
@@ -41286,94 +44168,466 @@ function EventsCalendar(props) {
 
 /***/ }),
 
-/***/ "./src/posts-by-tabs/front/EventsMap.jsx":
-/*!***********************************************!*\
-  !*** ./src/posts-by-tabs/front/EventsMap.jsx ***!
-  \***********************************************/
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/EventsMapCluster.jsx":
+/*!***********************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/EventsMapCluster.jsx ***!
+  \***********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EventsMap)
+/* harmony export */   "default": () => (/* binding */ EventsMapCluster)
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_useGoogleMapsLoader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/useGoogleMapsLoader */ "./src/posts-by-tabs/utils/useGoogleMapsLoader.js");
+/* harmony import */ var _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vis.gl/react-google-maps */ "./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs");
+/* harmony import */ var _components_clustered_markers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/clustered-markers */ "./src/posts-by-tabs/front/EventsMapCluster/components/clustered-markers.tsx");
+/* harmony import */ var _utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/groupEventsByPlaces */ "./src/posts-by-tabs/utils/groupEventsByPlaces.js");
+/* harmony import */ var _components_info_window_content__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/info-window-content */ "./src/posts-by-tabs/front/EventsMapCluster/components/info-window-content.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+
+
+
+const pluginSettings = window.postsByTabsSettings || {
+  defaultLatitude: 48.8566,
+  defaultLongitude: 2.3522
+};
+function EventsMapCluster(props) {
+  const {
+    attributes,
+    posts,
+    tab
+  } = props;
+  const {
+    zoom
+  } = tab;
+  const geojson = (0,_utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_3__["default"])(attributes, posts);
+  const [numClusters, setNumClusters] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
+  const [infowindowData, setInfowindowData] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const handleInfoWindowClose = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => setInfowindowData(null), [setInfowindowData]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.Map, {
+    mapId: 'b5387d230c6cf22f',
+    defaultCenter: {
+      lat: pluginSettings.defaultLatitude,
+      lng: pluginSettings.defaultLongitude
+    },
+    defaultZoom: zoom || 11,
+    gestureHandling: 'greedy',
+    disableDefaultUI: true,
+    onClick: () => setInfowindowData(null),
+    className: 'custom-marker-clustering-map',
+    children: [!geojson && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_clustered_markers__WEBPACK_IMPORTED_MODULE_4__.ClusteredMarkers, {
+      geojson: geojson,
+      setNumClusters: setNumClusters,
+      setInfowindowData: setInfowindowData
+    }), infowindowData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.InfoWindow, {
+      onCloseClick: handleInfoWindowClose,
+      anchor: infowindowData.anchor,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_info_window_content__WEBPACK_IMPORTED_MODULE_5__.InfoWindowContent, {
+        features: infowindowData.features
+      })
+    })]
+  });
+}
+;
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/components/castle-svg.tsx":
+/*!****************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/components/castle-svg.tsx ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CastleSvg: () => (/* binding */ CastleSvg)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+const CastleSvg = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 100 100",
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+    fill: "currentColor",
+    d: "M86.465 29.086V9.875a6.443 6.443 0 0 0-6.438-6.438h-8.675a6.433 6.433 0 0 0-6.426 6.426v10.684c0 .442-.36.801-.8.801h-2.388c-.441 0-.8-.36-.8-.8l.004-10.673a6.443 6.443 0 0 0-6.438-6.437h-9a6.443 6.443 0 0 0-6.437 6.437v10.676c0 .442-.36.801-.801.801h-2.387c-.441 0-.8-.36-.8-.8V9.874a6.443 6.443 0 0 0-6.438-6.437h-8.668a6.443 6.443 0 0 0-6.438 6.437v19.211c0 6.414 4.992 11.625 11.29 12.098L16.038 87.65a7.487 7.487 0 0 0 1.598 6.192 7.489 7.489 0 0 0 5.789 2.722h53.152a7.494 7.494 0 0 0 5.789-2.722 7.487 7.487 0 0 0 1.598-6.192l-8.786-46.465c6.293-.472 11.285-5.687 11.285-12.098zm-8.43 61.168a1.86 1.86 0 0 1-1.457.684H23.426c-.773 0-1.242-.43-1.457-.684-.21-.258-.55-.8-.406-1.559l8.965-47.418h38.945l8.965 47.418c.144.758-.192 1.301-.403 1.559zm2.805-61.168a6.572 6.572 0 0 1-6.563 6.562H25.724a6.572 6.572 0 0 1-6.563-6.562V9.875c0-.45.367-.813.813-.813h8.664c.449 0 .812.368.812.813v10.676a6.433 6.433 0 0 0 6.426 6.426h2.387a6.433 6.433 0 0 0 6.425-6.426l-.004-10.676c0-.45.368-.813.813-.813h9c.45 0 .812.368.812.813v10.676a6.433 6.433 0 0 0 6.426 6.426h2.387a6.433 6.433 0 0 0 6.426-6.426V9.863c0-.441.36-.8.8-.8h8.676c.45 0 .813.366.813.812v19.21z"
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+    fill: "currentColor",
+    d: "M50 52.133c-6.36 0-11.535 5.176-11.535 11.535v11.473a4.94 4.94 0 0 0 4.938 4.938h13.195a4.943 4.943 0 0 0 4.937-4.938V63.668c0-6.36-5.176-11.535-11.535-11.535zm5.91 22.316H44.09V63.668c0-3.258 2.652-5.91 5.91-5.91s5.91 2.648 5.91 5.91z"
+  })]
+});
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/components/clustered-markers.tsx":
+/*!***********************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/components/clustered-markers.tsx ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ClusteredMarkers: () => (/* binding */ ClusteredMarkers)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _features_cluster_marker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./features-cluster-marker */ "./src/posts-by-tabs/front/EventsMapCluster/components/features-cluster-marker.tsx");
+/* harmony import */ var _feature_marker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./feature-marker */ "./src/posts-by-tabs/front/EventsMapCluster/components/feature-marker.tsx");
+/* harmony import */ var _hooks_use_supercluster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks/use-supercluster */ "./src/posts-by-tabs/front/EventsMapCluster/hooks/use-supercluster.ts");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
-function EventsMap(props) {
-  const mapRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+
+
+const superclusterOptions = {
+  extent: 256,
+  radius: 80,
+  maxZoom: 12
+};
+const ClusteredMarkers = ({
+  geojson,
+  setNumClusters,
+  setInfowindowData
+}) => {
   const {
-    posts,
-    tab,
-    config
-  } = props;
-  if (!posts) {
-    return null;
-  }
-  const {
-    zoom
-  } = tab;
-  const places = groupEventsByPlaces(posts);
-  const {
-    mapLoaded,
-    mapInstance,
-    markers,
-    error
-  } = (0,_utils_useGoogleMapsLoader__WEBPACK_IMPORTED_MODULE_2__.useGoogleMapsLoader)(config, mapRef, places);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (mapLoaded && mapInstance && markers) {
-      //centerMap(mapInstance, markers);
-    }
-  }, [mapLoaded, mapInstance, markers]);
-  const mapHeight = '400px';
-  const mapWidth = '100%';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "w-full z-10 overflow-hidden rounded-none",
-    children: [error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "map-error",
-      children: error
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      ref: mapRef,
-      style: {
-        height: mapHeight,
-        width: mapWidth
-      },
-      "data-zoom": zoom || 11
+    clusters,
+    getLeaves
+  } = (0,_hooks_use_supercluster__WEBPACK_IMPORTED_MODULE_2__.useSupercluster)(geojson, superclusterOptions);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setNumClusters(clusters.length);
+  }, [setNumClusters, clusters.length]);
+  const handleClusterClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((marker, clusterId) => {
+    const leaves = getLeaves(clusterId);
+    setInfowindowData({
+      anchor: marker,
+      features: leaves
+    });
+  }, [getLeaves, setInfowindowData]);
+  const handleMarkerClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((marker, featureId) => {
+    const feature = clusters.find(feat => feat.id === featureId);
+    setInfowindowData({
+      anchor: marker,
+      features: [feature]
+    });
+  }, [clusters, setInfowindowData]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: clusters.map(feature => {
+      const [lng, lat] = feature.geometry.coordinates;
+      const clusterProperties = feature.properties;
+      const isCluster = clusterProperties.cluster;
+      return isCluster ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_features_cluster_marker__WEBPACK_IMPORTED_MODULE_3__.FeaturesClusterMarker, {
+        clusterId: clusterProperties.cluster_id,
+        position: {
+          lat,
+          lng
+        },
+        size: clusterProperties.point_count,
+        sizeAsText: String(clusterProperties.point_count_abbreviated),
+        onMarkerClick: handleClusterClick
+      }, feature.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_feature_marker__WEBPACK_IMPORTED_MODULE_4__.FeatureMarker, {
+        featureId: feature.id,
+        position: {
+          lat,
+          lng
+        },
+        onMarkerClick: handleMarkerClick
+      }, feature.id);
+    })
+  });
+};
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/components/feature-marker.tsx":
+/*!********************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/components/feature-marker.tsx ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FeatureMarker: () => (/* binding */ FeatureMarker)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vis.gl/react-google-maps */ "./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs");
+/* harmony import */ var _castle_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./castle-svg */ "./src/posts-by-tabs/front/EventsMapCluster/components/castle-svg.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const FeatureMarker = ({
+  position,
+  featureId,
+  onMarkerClick
+}) => {
+  const [markerRef, marker] = (0,_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.useAdvancedMarkerRef)();
+  const handleClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => onMarkerClick && onMarkerClick(marker, featureId), [onMarkerClick, marker, featureId]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.AdvancedMarker, {
+    ref: markerRef,
+    position: position,
+    onClick: handleClick,
+    anchorPoint: _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.AdvancedMarkerAnchorPoint.CENTER,
+    className: 'marker feature',
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_castle_svg__WEBPACK_IMPORTED_MODULE_3__.CastleSvg, {})
+  });
+};
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/components/features-cluster-marker.tsx":
+/*!*****************************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/components/features-cluster-marker.tsx ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FeaturesClusterMarker: () => (/* binding */ FeaturesClusterMarker)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vis.gl/react-google-maps */ "./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs");
+/* harmony import */ var _castle_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./castle-svg */ "./src/posts-by-tabs/front/EventsMapCluster/components/castle-svg.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const FeaturesClusterMarker = ({
+  position,
+  size,
+  sizeAsText,
+  onMarkerClick,
+  clusterId
+}) => {
+  const [markerRef, marker] = (0,_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.useAdvancedMarkerRef)();
+  const handleClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => onMarkerClick && onMarkerClick(marker, clusterId), [onMarkerClick, marker, clusterId]);
+  const markerSize = Math.floor(48 + Math.sqrt(size) * 2);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.AdvancedMarker, {
+    ref: markerRef,
+    position: position,
+    zIndex: size,
+    onClick: handleClick,
+    className: 'marker cluster',
+    style: {
+      width: markerSize,
+      height: markerSize
+    },
+    anchorPoint: _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.AdvancedMarkerAnchorPoint.CENTER,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_castle_svg__WEBPACK_IMPORTED_MODULE_3__.CastleSvg, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      children: sizeAsText
     })]
   });
-}
-function groupEventsByPlaces(posts) {
-  if (!posts) {
-    return null;
+};
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/components/info-window-content.tsx":
+/*!*************************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/components/info-window-content.tsx ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   InfoWindowContent: () => (/* binding */ InfoWindowContent)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+const numFmt = new Intl.NumberFormat();
+const InfoWindowContent = (0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(({
+  features
+}) => {
+  if (features.length === 1) {
+    const f = features[0];
+    const props = f.properties;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h4", {
+        children: props.name
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+          href: getDetailsUrl(props),
+          target: "_blank",
+          children: "more information"
+        })
+      })]
+    });
   }
-  const eventsByPlaces = [];
-  const placeMap = new Map();
-  posts.forEach(post => {
-    if (!post.acf?.lieu) {
-      return;
-    }
-    const lieu = post.acf.lieu;
-    if (!lieu.id) {
-      console.warn('Place is missing ID:', lieu);
-      return;
-    }
-    if (placeMap.has(lieu.id)) {
-      placeMap.get(lieu.id).events.push(post);
-    } else {
-      const eventsByPlace = {
-        place: lieu,
-        events: [post]
-      };
-      eventsByPlaces.push(eventsByPlace);
-      placeMap.set(lieu.id, eventsByPlace);
-    }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("h4", {
+      children: [numFmt.format(features.length), " features. Zoom in to explore."]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("ul", {
+      children: [features.slice(0, 5).map(feature => {
+        const props = feature.properties;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("li", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+            href: getDetailsUrl(props),
+            target: "_blank",
+            children: props.name
+          })
+        }, feature.id);
+      }), features.length > 5 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("li", {
+        children: ["and ", numFmt.format(features.length - 5), " more."]
+      })]
+    })]
   });
-  return eventsByPlaces;
+});
+function getDetailsUrl(props) {
+  return props.wikipedia ? getWikipediaUrl(props.wikipedia) : getWikidataUrl(props.wikidata);
+}
+function getWikipediaUrl(contentId) {
+  const [lang, title] = contentId.split(':');
+  return `https://${lang}.wikipedia.org/wiki/${title.replace(/ /g, '_')}`;
+}
+function getWikidataUrl(id) {
+  return `https://www.wikidata.org/wiki/${id}`;
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/hooks/use-map-viewport.ts":
+/*!****************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/hooks/use-map-viewport.ts ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useMapViewport: () => (/* binding */ useMapViewport)
+/* harmony export */ });
+/* harmony import */ var _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vis.gl/react-google-maps */ "./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function useMapViewport({
+  padding = 0
+} = {}) {
+  const map = (0,_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_0__.useMap)();
+  const [bbox, setBbox] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([-180, -90, 180, 90]);
+  const [zoom, setZoom] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
+
+  // observe the map to get current bounds
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    if (!map) return;
+    const listener = map.addListener('bounds_changed', () => {
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      const projection = map.getProjection();
+      if (!bounds || !zoom || !projection) return;
+      const sw = bounds.getSouthWest();
+      const ne = bounds.getNorthEast();
+      const paddingDegrees = degreesPerPixel(zoom) * padding;
+      const n = Math.min(90, ne.lat() + paddingDegrees);
+      const s = Math.max(-90, sw.lat() - paddingDegrees);
+      const w = sw.lng() - paddingDegrees;
+      const e = ne.lng() + paddingDegrees;
+      setBbox([w, s, e, n]);
+      setZoom(zoom);
+    });
+    return () => listener.remove();
+  }, [map, padding]);
+  return {
+    bbox,
+    zoom
+  };
+}
+function degreesPerPixel(zoomLevel) {
+  // 360° divided by the number of pixels at the zoom-level
+  return 360 / (Math.pow(2, zoomLevel) * 256);
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/EventsMapCluster/hooks/use-supercluster.ts":
+/*!****************************************************************************!*\
+  !*** ./src/posts-by-tabs/front/EventsMapCluster/hooks/use-supercluster.ts ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useSupercluster: () => (/* binding */ useSupercluster)
+/* harmony export */ });
+/* harmony import */ var supercluster__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! supercluster */ "./node_modules/supercluster/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _use_map_viewport__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./use-map-viewport */ "./src/posts-by-tabs/front/EventsMapCluster/hooks/use-map-viewport.ts");
+
+
+
+function useSupercluster(geojson, superclusterOptions) {
+  // create the clusterer and keep it
+  const clusterer = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    return new supercluster__WEBPACK_IMPORTED_MODULE_1__["default"](superclusterOptions);
+  }, [superclusterOptions]);
+
+  // version-number for the data loaded into the clusterer
+  // (this is needed to trigger updating the clusters when data was changed)
+  const [version, dataWasUpdated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)(x => x + 1, 0);
+
+  // when data changes, load it into the clusterer
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    clusterer.load(geojson.features);
+    dataWasUpdated();
+  }, [clusterer, geojson]);
+
+  // get bounding-box and zoomlevel from the map
+  const {
+    bbox,
+    zoom
+  } = (0,_use_map_viewport__WEBPACK_IMPORTED_MODULE_2__.useMapViewport)({
+    padding: 100
+  });
+
+  // retrieve the clusters within the current viewport
+  const clusters = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    // don't try to read clusters before data was loaded into the clusterer (version===0),
+    // otherwise getClusters will crash
+    if (!clusterer || version === 0) return [];
+    return clusterer.getClusters(bbox, zoom);
+  }, [version, clusterer, bbox, zoom]);
+
+  // create callbacks to expose supercluster functionality outside of this hook
+  const getChildren = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(clusterId => clusterer.getChildren(clusterId), [clusterer]);
+
+  // note: here, the paging that would be possible is disabled; we found this
+  // has no significant performance impact when it's just used in a click event handler.
+  const getLeaves = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(clusterId => clusterer.getLeaves(clusterId, Infinity), [clusterer]);
+  const getClusterExpansionZoom = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(clusterId => clusterer.getClusterExpansionZoom(clusterId), [clusterer]);
+  return {
+    clusters,
+    getChildren,
+    getLeaves,
+    getClusterExpansionZoom
+  };
 }
 
 /***/ }),
@@ -41596,21 +44850,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
-/* harmony import */ var _mui_material_Container__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Container */ "./node_modules/@mui/material/Container/Container.js");
-/* harmony import */ var _mui_material_Tabs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/Tabs */ "./node_modules/@mui/material/Tabs/Tabs.js");
-/* harmony import */ var _mui_material_Tab__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/material/Tab */ "./node_modules/@mui/material/Tab/Tab.js");
-/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
-/* harmony import */ var _utils_fetchPosts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/fetchPosts */ "./src/posts-by-tabs/utils/fetchPosts.js");
-/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
-/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Pagination */ "./src/posts-by-tabs/front/Pagination.jsx");
-/* harmony import */ var _EventsCalendar__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EventsCalendar */ "./src/posts-by-tabs/front/EventsCalendar.jsx");
-/* harmony import */ var _PostsGrid__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PostsGrid */ "./src/posts-by-tabs/front/PostsGrid.jsx");
-/* harmony import */ var _EventsMap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./EventsMap */ "./src/posts-by-tabs/front/EventsMap.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Box */ "./node_modules/@mui/material/Box/Box.js");
+/* harmony import */ var _mui_material_Container__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Container */ "./node_modules/@mui/material/Container/Container.js");
+/* harmony import */ var _mui_material_Tabs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/Tabs */ "./node_modules/@mui/material/Tabs/Tabs.js");
+/* harmony import */ var _mui_material_Tab__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/Tab */ "./node_modules/@mui/material/Tab/Tab.js");
+/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
+/* harmony import */ var _utils_fetchPosts__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/fetchPosts */ "./src/posts-by-tabs/utils/fetchPosts.js");
+/* harmony import */ var _utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/sanitizeHtml */ "./src/posts-by-tabs/utils/sanitizeHtml.js");
+/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Pagination */ "./src/posts-by-tabs/front/Pagination.jsx");
+/* harmony import */ var _EventsCalendar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EventsCalendar */ "./src/posts-by-tabs/front/EventsCalendar.jsx");
+/* harmony import */ var _PostsGrid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PostsGrid */ "./src/posts-by-tabs/front/PostsGrid.jsx");
+/* harmony import */ var _EventsMapCluster_EventsMapCluster__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EventsMapCluster/EventsMapCluster */ "./src/posts-by-tabs/front/EventsMapCluster/EventsMapCluster.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
@@ -41650,7 +44902,7 @@ function PostsByTabs(props) {
           headers: true,
           append: false
         };
-        const result = await (0,_utils_fetchPosts__WEBPACK_IMPORTED_MODULE_4__.fetchPosts)({
+        const result = await (0,_utils_fetchPosts__WEBPACK_IMPORTED_MODULE_3__.fetchPosts)({
           ...attributes
         }, fetchOptions);
         if (result.headers && result.headers['x-wp-total']) {
@@ -41691,19 +44943,19 @@ function PostsByTabs(props) {
   };
   const renderPostsStatus = () => {
     if (isLoading) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "p-4 text-center",
         children: "Loading posts..."
       });
     }
     if (error) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "p-4 text-center text-red-600",
         children: ["Error: ", error]
       });
     }
     if (posts.length === 0) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "p-4 text-center",
         children: "No posts found matching your criteria."
       });
@@ -41719,23 +44971,23 @@ function PostsByTabs(props) {
       return 'lg';
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_4__["default"], {
     sx: {
       position: 'relative',
       widht: '100%'
     },
     maxWidth: maxWidth(),
-    children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
       component: "h2",
       className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
       children: attributes.title
-    }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+    }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
       className: "font-bold text-xl text-[30px] mb-0",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
         children: attributes.subtitle
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_6__["default"], {
         value: selectedTab,
         onChange: handleTabChange,
         variant: "scrollable",
@@ -41744,43 +44996,45 @@ function PostsByTabs(props) {
         sx: {
           mb: 1
         },
-        children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_7__["default"], {
           label: tab.title,
           id: `tab-${index}`,
           "aria-controls": `tabpanel-${index}`
         }, index))
-      }), renderPostsStatus(), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(CustomTabPanel, {
+      }), renderPostsStatus(), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(CustomTabPanel, {
         selectedTab: selectedTab,
         value: index,
         index: index,
         className: "w-full min-w-full",
-        children: [tab.meta_1 || tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+        children: [tab.meta_1 || tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
           className: "flex justify-between pb-4",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
             className: "block",
-            children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
               className: "block text-xl font-regular",
               children: tab.meta_1
-            }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
               className: "block text-xl leading-2xl font-regular",
               children: tab.meta_2
             })]
           })
-        }), tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        }), tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "w-full md:w-1/2 p-2",
           dangerouslySetInnerHTML: {
-            __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_9__["default"])(tab.content)
+            __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_8__["default"])(tab.content)
           }
-        }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_9__["default"], {
           posts: posts
-        }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          attributes: attributes,
           posts: posts,
           tab: tab
-        }), tab.template === 'map' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_EventsMap__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        }), tab.template === 'map' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_EventsMapCluster_EventsMapCluster__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          attributes: attributes,
           posts: posts,
           tab: tab
         })]
-      }, index)), activeTab && activeTab.options?.paginationEnabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      }, index)), activeTab && activeTab.options?.paginationEnabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_12__["default"], {
         posts: posts,
         totalPosts: totalPosts,
         offset: attributes.offset || 0,
@@ -41800,7 +45054,7 @@ function CustomTabPanel({
   value,
   index
 }) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     role: "tabpanel",
     hidden: value !== selectedTab,
     id: `tabpanel-${value}`,
@@ -41810,7 +45064,7 @@ function CustomTabPanel({
         e.stopPropagation();
       }
     },
-    children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_14__["default"], {
+    children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_13__["default"], {
       elevation: 0,
       sx: {
         borderRadius: '0px'
@@ -42950,6 +46204,54 @@ function XSmallCard({
 
 /***/ }),
 
+/***/ "./src/posts-by-tabs/utils/fetchPlaces.js":
+/*!************************************************!*\
+  !*** ./src/posts-by-tabs/utils/fetchPlaces.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ fetchPlaces)
+/* harmony export */ });
+/* harmony import */ var _universalFetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./universalFetch */ "./src/posts-by-tabs/utils/universalFetch.js");
+
+async function fetchPlaces(attributes) {
+  const {
+    placePostType
+  } = attributes?.options;
+  const requestData = {
+    post_type: placePostType || 'place',
+    posts_per_page: 10,
+    pages: 1,
+    order: attributes.order || 'ASC',
+    orderby: 'title'
+  };
+  const response = await (0,_universalFetch__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    path: 'posts-by-tabs/v1/posts',
+    method: 'POST',
+    data: requestData,
+    returnHeaders: true,
+    attributes: attributes
+  });
+  if (response.error) {
+    console.error('Error fetching places:', response.error);
+    return [];
+  }
+  if (!response.data) {
+    console.error('No data returned from fetchPlaces');
+    return [];
+  }
+  if (!response.data.posts) {
+    console.error('No places returned from fetchPlaces');
+    return [];
+  }
+  return response.data.posts;
+}
+
+/***/ }),
+
 /***/ "./src/posts-by-tabs/utils/fetchPosts.js":
 /*!***********************************************!*\
   !*** ./src/posts-by-tabs/utils/fetchPosts.js ***!
@@ -42962,6 +46264,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   fetchPosts: () => (/* binding */ fetchPosts),
 /* harmony export */   hasMetaQuery: () => (/* binding */ hasMetaQuery)
 /* harmony export */ });
+/* harmony import */ var _universalFetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./universalFetch */ "./src/posts-by-tabs/utils/universalFetch.js");
+
 async function fetchPosts(attributes, options = {}) {
   const {
     headers = false,
@@ -42994,7 +46298,6 @@ function hasMetaQuery(attributes) {
   return attributes?.metaFields?.fields?.length > 0;
 }
 async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
-  const endpoint = 'posts-by-tabs/v1/posts';
   const requestData = {
     post_type: attributes.postType || 'post',
     posts_per_page: attributes.numberOfItems || 5,
@@ -43009,8 +46312,8 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
     requestData.terms = {};
     requestData.terms[attributes.taxonomy] = attributes.terms;
   }
-  const response = await universalFetch({
-    path: endpoint,
+  const response = await (0,_universalFetch__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    path: 'posts-by-tabs/v1/posts',
     method: 'POST',
     data: requestData,
     returnHeaders: getHeaders,
@@ -43080,58 +46383,10 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
       }
     };
   } else {
-    return await universalFetch({
+    return await (0,_universalFetch__WEBPACK_IMPORTED_MODULE_0__["default"])({
       path: queryPath,
       attributes: attributes
     });
-  }
-}
-async function universalFetch(options) {
-  if (typeof wp !== 'undefined' && wp.apiFetch) {
-    return await wp.apiFetch(options);
-  }
-  const {
-    restUrl,
-    nonce
-  } = options.attributes || {};
-  const {
-    path
-  } = options;
-  if (!restUrl || !nonce || !path) {
-    console.error('Missing required attributes for universalFetch');
-    return null;
-  }
-  const url = `${restUrl}${path}`;
-  const fetchOptions = {
-    method: options.method || 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-WP-Nonce': nonce
-    }
-  };
-  if (options.method === 'POST' && options.data) {
-    fetchOptions.body = JSON.stringify(options.data);
-  }
-  try {
-    const response = await fetch(url, fetchOptions);
-    if (options.parse === false) {
-      return response;
-    }
-    const headers = {};
-    response.headers.forEach((value, key) => {
-      headers[key.toLowerCase()] = value;
-    });
-    const data = await response.json();
-    if (options.returnHeaders) {
-      return {
-        data,
-        headers
-      };
-    }
-    return data;
-  } catch (error) {
-    console.error('Error in universalFetch:', error);
-    throw error; // Re-throw to be consistent with wp.apiFetch behavior
   }
 }
 
@@ -43166,162 +46421,75 @@ function formatDateToFrench(dateString, options = {}) {
 
 /***/ }),
 
-/***/ "./src/posts-by-tabs/utils/map/map.js":
-/*!********************************************!*\
-  !*** ./src/posts-by-tabs/utils/map/map.js ***!
-  \********************************************/
+/***/ "./src/posts-by-tabs/utils/groupEventsByPlaces.js":
+/*!********************************************************!*\
+  !*** ./src/posts-by-tabs/utils/groupEventsByPlaces.js ***!
+  \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   centerMap: () => (/* binding */ centerMap),
-/* harmony export */   geolocateByAddress: () => (/* binding */ geolocateByAddress),
-/* harmony export */   initializeMap: () => (/* binding */ initializeMap)
+/* harmony export */   "default": () => (/* binding */ groupEventsByPlaces),
+/* harmony export */   getPlaceIdsFromPost: () => (/* binding */ getPlaceIdsFromPost)
 /* harmony export */ });
-/* harmony import */ var _map_style_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./map.style.json */ "./src/posts-by-tabs/utils/map/map.style.json");
-/* harmony import */ var _marker_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./marker.svg */ "./src/posts-by-tabs/utils/map/marker.svg");
+/* harmony import */ var _fetchPlaces__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchPlaces */ "./src/posts-by-tabs/utils/fetchPlaces.js");
 
-
-function initializeMap(config, places, mapElement) {
-  if (!mapElement) return {
-    map: null,
-    markers: []
-  };
-  let defaultPosition = {
-    lat: 48.8566,
-    lng: 2.3522
-  };
-  if (config?.default_address_lat && config?.default_address_lng) {
-    defaultPosition = {
-      lat: parseFloat(config.default_address_lat),
-      lng: parseFloat(config.default_address_lng)
-    };
+function groupEventsByPlaces(attributes, posts) {
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return [];
   }
-  const map = new google.maps.Map(mapElement, {
-    zoom: parseInt(mapElement.dataset.zoom) || 11,
-    center: defaultPosition,
-    streetViewControl: false,
-    mapTypeControl: false,
-    styles: _map_style_json__WEBPACK_IMPORTED_MODULE_0__
-  });
-  const markers = addMarkers(map, places);
-  return {
-    map,
-    markers
-  };
-}
-function addMarkers(map, places) {
-  if (!places) return [];
-  const markers = [];
-  places.forEach(place => {
-    const lat = parseFloat(place.lat);
-    const lng = parseFloat(place.lng);
-    if (isNaN(lat) || isNaN(lng)) return;
-    const marker = new google.maps.Marker({
-      position: {
-        lat,
-        lng
-      },
-      map,
-      icon: _marker_svg__WEBPACK_IMPORTED_MODULE_1__["default"],
-      title: place.title,
-      placeId: place.id
-    });
-    const content = place.content || '';
-    const infoWindow = new google.maps.InfoWindow({
-      content
-    });
-    marker.addListener('click', () => {
-      map.setCenter(marker.getPosition());
-      map.setZoom(11);
-      infoWindow.open(map, marker);
-    });
-    markers.push(marker);
-  });
-  return markers;
-}
-function centerMap(map, markers, userMarker = null) {
-  if (!markers.length) return;
-  const bounds = new google.maps.LatLngBounds();
-  markers.forEach(marker => {
-    bounds.extend(marker.getPosition());
-  });
-  if (userMarker) {
-    bounds.extend(userMarker.getPosition());
-  }
-  map.setCenter(bounds.getCenter());
-  map.fitBounds(bounds);
-}
-function geolocateByAddress(address, callback, errorCallback) {
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({
-    address
-  }, (results, status) => {
-    if (status === google.maps.GeocoderStatus.OK && results[0]) {
-      const location = results[0].geometry.location;
-      const position = {
-        lat: location.lat(),
-        lng: location.lng()
-      };
-      if (callback && typeof callback === 'function') {
-        callback(position);
-      }
-      return position;
-    } else {
-      if (errorCallback && typeof errorCallback === 'function') {
-        errorCallback(status);
-      } else {
-        console.error(`Geocode failed with status ${status}`);
-      }
+  const placeForeignKey = attributes?.placeForeignKey || 'places';
+  const grouped = (0,_fetchPlaces__WEBPACK_IMPORTED_MODULE_0__["default"])(attributes);
+  posts.forEach(post => {
+    const placeIds = getPlaceIdsFromPost(post, placeForeignKey);
+    if (!Array.isArray(placeIds) || placeIds.length === 0) {
+      return;
     }
+    placeIds.forEach(placeId => {
+      if (grouped[placeId]) {
+        grouped[placeId].events = grouped[placeId].events || [];
+        grouped[placeId].events.push(post);
+      }
+    });
   });
+  return Object.values(grouped);
 }
-
-/***/ }),
-
-/***/ "./src/posts-by-tabs/utils/map/map.style.json":
-/*!****************************************************!*\
-  !*** ./src/posts-by-tabs/utils/map/map.style.json ***!
-  \****************************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = /*#__PURE__*/JSON.parse('[{"featureType":"all","elementType":"geometry.fill","stylers":[{"weight":"2.00"}]},{"featureType":"all","elementType":"geometry.stroke","stylers":[{"color":"#e7ebed"}]},{"featureType":"all","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#e7ebed"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#e7ebed"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#e7ebed"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#2a4360"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#ffffff"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#2a4360"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]}]');
-
-/***/ }),
-
-/***/ "./src/posts-by-tabs/utils/map/marker.svg":
-/*!************************************************!*\
-  !*** ./src/posts-by-tabs/utils/map/marker.svg ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ReactComponent: () => (/* binding */ SvgMarker),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _path;
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-
-var SvgMarker = function SvgMarker(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", _extends({
-    xmlns: "http://www.w3.org/2000/svg",
-    width: 30,
-    height: 30,
-    "aria-hidden": "true",
-    viewBox: "0 0 24 24"
-  }, props), _path || (_path = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    fill: "#007a80",
-    d: "M12 2c-4.2 0-8 3.22-8 8.2 0 3.32 2.67 7.25 8 11.8 5.33-4.55 8-8.48 8-11.8C20 5.22 16.2 2 12 2m0 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2"
-  })));
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGFyaWEtaGlkZGVuPSJ0cnVlIiB4PSIwcHgiIHk9IjBweCIgaGVpZ2h0PSIzMCIgd2lkdGg9IjMwIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDdhODAiIGQ9Ik0xMiAyYy00LjIgMC04IDMuMjItOCA4LjIgMCAzLjMyIDIuNjcgNy4yNSA4IDExLjggNS4zMy00LjU1IDgtOC40OCA4LTExLjhDMjAgNS4yMiAxNi4yIDIgMTIgMm0wIDEwYy0xLjEgMC0yLS45LTItMnMuOS0yIDItMiAyIC45IDIgMi0uOSAyLTIgMiI+PC9wYXRoPjwvc3ZnPg==");
+function getPlaceIdsFromPost(post, placeForeignKey) {
+  let places;
+  if (!placeForeignKey) {
+    return null;
+  }
+  if (post.meta) {
+    if (post.meta[placeForeignKey]) {
+      places = post.meta[placeForeignKey];
+    }
+  }
+  if (!places && post.acf) {
+    if (post.acf[placeForeignKey]) {
+      places = post.acf[placeForeignKey];
+    }
+  }
+  if (typeof places === 'string') {
+    places = places.split(',');
+  }
+  if (!places) {
+    return null;
+  }
+  if (!Array.isArray(places)) {
+    return null;
+  }
+  const placeIds = places.map(place => {
+    if (typeof place === 'object' && place !== null) {
+      return parseInt(place.id, 10);
+    }
+    if (!isNaN(parseInt(place, 10))) {
+      return parseInt(place, 10);
+    }
+    return null;
+  });
+  return [...new Set(placeIds.filter(id => id !== null))];
+}
 
 /***/ }),
 
@@ -43350,85 +46518,65 @@ function sanitizeHtml(html) {
 
 /***/ }),
 
-/***/ "./src/posts-by-tabs/utils/useGoogleMapsLoader.js":
-/*!********************************************************!*\
-  !*** ./src/posts-by-tabs/utils/useGoogleMapsLoader.js ***!
-  \********************************************************/
+/***/ "./src/posts-by-tabs/utils/universalFetch.js":
+/*!***************************************************!*\
+  !*** ./src/posts-by-tabs/utils/universalFetch.js ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   useGoogleMapsLoader: () => (/* binding */ useGoogleMapsLoader)
+/* harmony export */   "default": () => (/* binding */ universalFetch)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _map_map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map/map */ "./src/posts-by-tabs/utils/map/map.js");
-
-
-function useGoogleMapsLoader(config, places, elementRef) {
-  const [mapLoaded, setMapLoaded] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [mapInstance, setMapInstance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [markers, setMarkers] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!config?.api_key || !elementRef.current) {
-      setError("Missing API key or map element");
-      return;
-    }
-    if (window.google && window.google.maps) {
-      initMapInstance();
-      return;
-    }
-    window.initMap = initMapInstance;
-    const script = document.createElement('script');
-    const apiKey = config.api_key;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    script.onerror = () => {
-      setError("Failed to load Google Maps API");
-    };
-    document.head.appendChild(script);
-    return () => {
-      if (window.initMap) {
-        delete window.initMap;
-      }
-      document.head.removeChild(script);
-    };
-  }, [elementRef]);
-  function initMapInstance() {
-    if (!elementRef.current) return;
-    try {
-      const {
-        map,
-        markers
-      } = (0,_map_map__WEBPACK_IMPORTED_MODULE_1__.initializeMap)(config, places, elementRef.current);
-      setMapInstance(map);
-      setMarkers(markers);
-      setMapLoaded(true);
-    } catch (err) {
-      setError(`Map initialization error: ${err.message}`);
-    }
+async function universalFetch(props) {
+  if (typeof wp !== 'undefined' && wp.apiFetch) {
+    return await wp.apiFetch(props);
   }
-  return {
-    mapLoaded,
-    mapInstance,
-    markers,
-    error
+  const {
+    restUrl,
+    nonce
+  } = props.attributes || {};
+  const {
+    path
+  } = props;
+  if (!restUrl || !nonce || !path) {
+    console.error('Missing required attributes for universalFetch');
+    return null;
+  }
+  const url = `${restUrl}${path}`;
+  const fetchOptions = {
+    method: props.method || 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce
+    }
   };
+  if (props.method === 'POST' && props.data) {
+    fetchOptions.body = JSON.stringify(props.data);
+  }
+  try {
+    const response = await fetch(url, fetchOptions);
+    if (props.parse === false) {
+      return response;
+    }
+    const headers = {};
+    response.headers.forEach((value, key) => {
+      headers[key.toLowerCase()] = value;
+    });
+    const data = await response.json();
+    if (props.returnHeaders) {
+      return {
+        data,
+        headers
+      };
+    }
+    return data;
+  } catch (error) {
+    console.error('Error in universalFetch:', error);
+    throw error;
+  }
 }
-
-/***/ }),
-
-/***/ "@wordpress/data":
-/*!******************************!*\
-  !*** external ["wp","data"] ***!
-  \******************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = window["wp"]["data"];
 
 /***/ }),
 
@@ -43577,10 +46725,12 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _front_ThemePalette__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./front/ThemePalette */ "./src/posts-by-tabs/front/ThemePalette.jsx");
-/* harmony import */ var _front_PostsByTabs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./front/PostsByTabs */ "./src/posts-by-tabs/front/PostsByTabs.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _front_ThemePalette__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./front/ThemePalette */ "./src/posts-by-tabs/front/ThemePalette.jsx");
+/* harmony import */ var _front_PostsByTabs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./front/PostsByTabs */ "./src/posts-by-tabs/front/PostsByTabs.jsx");
+/* harmony import */ var _vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vis.gl/react-google-maps */ "./node_modules/@vis.gl/react-google-maps/dist/index.modern.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
@@ -43599,11 +46749,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const attributes = JSON.parse(dataScript.textContent);
     if (attributes && blockRoot) {
       const root = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createRoot)(blockRoot);
-      root.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_front_ThemePalette__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_front_PostsByTabs__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          attributes: attributes,
-          restUrl: attributes?.restUrl,
-          nonce: attributes?.nonce
+      root.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_vis_gl_react_google_maps__WEBPACK_IMPORTED_MODULE_1__.APIProvider, {
+        apiKey: attributes?.options?.googleMapsApiKey,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_front_ThemePalette__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_front_PostsByTabs__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            attributes: attributes
+          })
         })
       }));
     }

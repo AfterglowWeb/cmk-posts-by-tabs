@@ -1,13 +1,22 @@
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextControl } from '@wordpress/components';
+import { PanelBody } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
-import BackgroundFields from './editor/BackgroundFields';
 
 import PostsByTabs from './front/PostsByTabs';
+
+const pluginSettings = window.postsByTabsSettings || {
+    dateFormat: 'Y-m-d',
+    googleMapsApiKey: '',
+    defaultLatitude: 48.8566,
+    defaultLongitude: 2.3522,
+    postsPerPage: 10,
+    defaultTemplate: 'grid',
+    cacheDuration: 3600
+};
 
 export default function Edit({attributes, setAttributes, clientId}) {
 
@@ -38,9 +47,29 @@ export default function Edit({attributes, setAttributes, clientId}) {
 
 		if (!attributes.blockId) {
 			setAttributes({ blockId: crypto.randomUUID() });
-		  }
+		}
 
-    }, [attributes.blockId, setAttributes]);
+		if (!attributes.initialized) {
+            setAttributes({ 
+                initialized: true,
+                numberOfItems: pluginSettings.postsPerPage,
+                tabs: attributes.tabs?.length ? attributes.tabs : [{
+                    template: pluginSettings.defaultTemplate,
+                    options: {
+                        map: {
+                            apiKey: pluginSettings.googleMapsApiKey,
+                            center: {
+                                lat: pluginSettings.defaultLatitude,
+                                lng: pluginSettings.defaultLongitude
+                            },
+                            zoom: 13
+                        }
+                    }
+                }]
+            });
+        }
+
+    }, [attributes.blockId, attributes.initialized, setAttributes]);
 	
 
     const handleTabValueChange = ( value, key, index ) => {
@@ -53,31 +82,25 @@ export default function Edit({attributes, setAttributes, clientId}) {
 	return (
 		<>
 			<InspectorControls>
-				
-				<PanelBody title={__('Block title')} initialOpen={true}>
-					<TextControl
-						placeholder="Title"
-						value={attributes.title || ''}
-						onChange={(value) => setAttributes({ title: value })}
-					/>
-					<TextControl
-						placeholder="Subtitle"
-						value={attributes.subtitle || ''}
-						onChange={(value) => setAttributes({ subtitle: value })}
-					/>
-				</PanelBody>
-				
+
 				<PanelBody title={__('Query settings')} initialOpen={false}>
-					<QueryFields attributes={attributes} setAttributes={setAttributes} />
+					<QueryFields 
+					attributes={attributes} 
+					setAttributes={setAttributes} 
+					defaultPostsPerPage={pluginSettings.postsPerPage}
+					/>
 				</PanelBody>
 
 				<PanelBody title={__('Tabs')} initialOpen={false}>
-					<TabFields attributes={attributes} setAttributes={setAttributes} handleTabValueChange={handleTabValueChange} templates={templates}  />
+					<TabFields 
+					attributes={attributes} 
+					setAttributes={setAttributes} 
+					handleTabValueChange={handleTabValueChange} 
+					templates={templates}  
+					pluginSettings={pluginSettings}
+					/>
 				</PanelBody>
 
-				<PanelBody title={__('Block background')} initialOpen={false}>
-					<BackgroundFields attributes={attributes} setAttributes={setAttributes} />
-				</PanelBody>
 			</InspectorControls>
 			
 			<PostsByTabs 
@@ -85,6 +108,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 			attributes={attributes} 
 			setAttributes={setAttributes} 
 			isEditor={true}
+			pluginSettings={pluginSettings}
 			/>
 
 		</>

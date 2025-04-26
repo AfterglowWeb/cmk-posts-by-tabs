@@ -1,6 +1,5 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -15,6 +14,7 @@ import Pagination from './Pagination';
 import EventsCalendar from './EventsCalendar';
 import PostsGrid from './PostsGrid';
 import EventsMap from './EventsMap';
+import EventsMapCluster from './EventsMapCluster/EventsMapCluster';
 
 export default function PostsByTabs(props) {
     const { attributes, setAttributes, clientId } = props;
@@ -188,8 +188,8 @@ export default function PostsByTabs(props) {
                           {tab.content &&  <div className="w-full md:w-1/2 p-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tab.content)}}/>}
                     
                           {tab.template === 'grid' && <PostsGrid posts={posts} />}
-                          {tab.template === 'calendar' && <EventsCalendar posts={posts} tab={tab} />}
-                          {tab.template === 'map' && <EventsMap posts={posts} tab={tab} />}
+                          {tab.template === 'calendar' && <EventsCalendar attributes={attributes} posts={posts} tab={tab} />}
+                          {tab.template === 'map' && <EventsMapCluster attributes={attributes} posts={posts} tab={tab} />}
                         </CustomTabPanel>
                       
                 ))}

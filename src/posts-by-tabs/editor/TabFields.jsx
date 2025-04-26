@@ -6,6 +6,13 @@ import Paper from '@mui/material/Paper';
 import TabTemplateOptions from './TabTemplateOptions';
 import MuiSelect from './MuiSelect';
 
+const pluginSettings = window.postsByTabsSettings || {
+    googleMapsApiKey: '',
+    defaultLatitude: 48.8566,
+    defaultLongitude: 2.3522,
+    defaultTemplate: 'grid'
+};
+
 export default function TabFields(props) {
     
     const { attributes, setAttributes, handleTabValueChange, templates } = props;
@@ -20,7 +27,7 @@ export default function TabFields(props) {
     const handleAddTab = () => {
         const tabs = [ ...attributes.tabs || [] ];
         tabs.push( {
-            template:'',
+            template: pluginSettings.defaultTemplate,
             title: '',
             subtitle: '',
             meta_1: '',
@@ -53,6 +60,14 @@ export default function TabFields(props) {
                     show_days: false,
                     show_weeks: false,
                     show_months: true,
+                },
+                map:{
+                    apiKey: pluginSettings.googleMapsApiKey,
+                    center: {
+                        lat: pluginSettings.defaultLatitude,
+                        lng: pluginSettings.defaultLongitude
+                    },
+                    zoom: 13
                 },
                 slider:{
                     slidesPerView: 1,
@@ -95,7 +110,7 @@ export default function TabFields(props) {
                 </Button>
             </div>
             <div className="mb-2">
-                <PanelBody title={__('Titles')} initialOpen={true}>
+                <PanelBody title={__('Titles')} initialOpen={false}>
                     <TextControl
                         placeholder={__('Title')}
                         value={ tab?.title || '' }
@@ -117,7 +132,7 @@ export default function TabFields(props) {
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_2', index)} }
                     />
                 </PanelBody>
-                <PanelBody title={__('Template options')} initialOpen={true}>
+                <PanelBody title={__('Template options')} initialOpen={false}>
                     <MuiSelect
                         label={__('Template')}
                         value={ tab?.template || '' }

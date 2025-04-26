@@ -15,7 +15,7 @@ import MetaKeySelector from './MetaKeySelector';
 import PostTypeSelector from './PostTypeSelector'
 
 export default function QueryFields(props) {
-    const { attributes, setAttributes } = props;
+    const { attributes, setAttributes, defaultPostsPerPage } = props;
     const { numberOfItems, maxNumPages, order, orderBy, paginationType } = attributes;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -185,7 +185,7 @@ export default function QueryFields(props) {
                     />
 
                     <MuiInputSlider
-                    value={numberOfItems}
+                    value={numberOfItems || defaultPostsPerPage}
                     onChange={
                         (value) => updateQuery({ numberOfItems: value })
                     }
