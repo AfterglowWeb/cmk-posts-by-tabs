@@ -1,8 +1,8 @@
-<?php namespace cmk\postsByTabs;
+<?php namespace Cmk\PostsByTabs;
 
 defined( 'ABSPATH' ) || exit;
 
-class calendar {
+class Calendar {
 
 	protected static $instance = null;
 

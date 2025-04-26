@@ -250,8 +250,14 @@
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);
   }
+  .bottom-2 {
+    bottom: calc(var(--spacing) * 2);
+  }
   .left-0 {
     left: calc(var(--spacing) * 0);
+  }
+  .left-2 {
+    left: calc(var(--spacing) * 2);
   }
   .isolate {
     isolation: isolate;
@@ -394,11 +400,20 @@
   .h-\[320px\] {
     height: 320px;
   }
+  .h-\[500px\] {
+    height: 500px;
+  }
   .h-\[600px\] {
     height: 600px;
   }
+  .h-full {
+    height: 100%;
+  }
   .min-h-\[320px\] {
     min-height: 320px;
+  }
+  .min-h-\[500px\] {
+    min-height: 500px;
   }
   .w-1\/2 {
     width: calc(1/2 * 100%);
