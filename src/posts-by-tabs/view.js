@@ -1,8 +1,8 @@
 import { createRoot } from '@wordpress/element';
 import ThemePalette from './front/ThemePalette';
 import PostsByTabs from './front/PostsByTabs';
+import {APIProvider} from './front/GoogleMapsProvider';
 import './style.scss';
-import {APIProvider} from '@vis.gl/react-google-maps';
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,8 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const attributes = JSON.parse(dataScript.textContent);
         if(attributes && blockRoot) {
             const root = createRoot(blockRoot);
+
             root.render(
-                <APIProvider apiKey={attributes?.options?.googleMapsApiKey}>
+                <APIProvider 
+                apiKey={attributes?.options?.googleMapsApiKey}
+                libraries={['places', 'marker']}
+                >
                     <ThemePalette>
                         <PostsByTabs 
                         attributes={attributes} 

@@ -1,4 +1,3 @@
-import fetchPlaces from './fetchPlaces';
 
 export default function groupEventsByPlaces(attributes, posts) {
   if (!Array.isArray(posts) || posts.length === 0) {

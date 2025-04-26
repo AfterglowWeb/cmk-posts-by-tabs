@@ -1,8 +1,8 @@
-<?php namespace cmk\postsByTabs;
+<?php namespace Cmk\PostsByTabs;
 
 defined( 'ABSPATH' ) || exit;
 
-class optionPage {
+class OptionPage {
 
     protected static $instance = null;
     protected $option_name = 'posts_by_tabs_options';

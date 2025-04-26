@@ -1,4 +1,4 @@
-<?php namespace cmk\postsByTabs;
+<?php namespace Cmk\PostsByTabs;
 
 /**
  * Plugin Name:       Posts By Tabs
@@ -22,9 +22,9 @@ if (!file_exists(plugin_dir_path(__FILE__) . '/vendor/autoload.php')) {
 }
 require_once realpath(plugin_dir_path(__FILE__) . '/vendor/autoload.php');
 
-restExtend::get_instance();
-optionPage::get_instance();
-//map::get_instance();
+RestExtend::get_instance();
+OptionPage::get_instance();
+PrepareAcfPostsRelations::get_instance();
 
 add_action( 'init', function () {
 	register_block_type( __DIR__ . '/build/posts-by-tabs' );
@@ -47,7 +47,7 @@ add_action('enqueue_block_editor_assets', function () {
         $asset_file['version']
     );
     
-    $options = optionPage::get_instance()->get_options();
+    $options = OptionPage::get_instance()->get_options();
 
     wp_localize_script(
         'posts-by-tabs-editor',

@@ -1,8 +1,10 @@
-<?php namespace cmk\postsByTabs;
+<?php namespace Cmk\PostsByTabs;
 
-use cmk\postsByTabs\optionPage;
+defined( 'ABSPATH' ) || exit;
 
-class restExtend {
+use Cmk\PostsByTabs\OptionPage;
+
+class RestExtend {
 
 	protected static $instance = null;
 	public static $endpoint    = 'posts-by-tabs/v1';
@@ -53,8 +55,8 @@ class restExtend {
 					"/meta/(?P<post_type>$post_types)",
 					array(
 						'methods'             => 'GET',
-						'callback'            => array( '\cmk\postsByTabs\restExtend', 'get_metafields_rest' ),
-						'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
+						'callback'            => array( '\Cmk\PostsByTabs\restExtend', 'get_metafields_rest' ),
+						'permission_callback' => '\Cmk\PostsByTabs\restExtend::validate_token',
 						'args'                => array(
 							'post_type' => array(
 								'sanitize_callback' => 'sanitize_text_field',
@@ -71,8 +73,8 @@ class restExtend {
 					'/posts',
 					array(
 						'methods'             => 'POST',
-						'callback'            => array( '\cmk\postsByTabs\restExtend', 'get_posts_rest' ),
-						'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
+						'callback'            => array( '\Cmk\PostsByTabs\restExtend', 'get_posts_rest' ),
+						'permission_callback' => '\Cmk\PostsByTabs\restExtend::validate_token',
 						'args'                => array(
 							'post_type'      => array(
 								'sanitize_callback' => 'sanitize_text_field',
@@ -93,7 +95,7 @@ class restExtend {
 								},
 							),
 							'meta_query'     => array(
-								'sanitize_callback' => '\cmk\postsByTabs\restExtend::sanitize_meta_fields',
+								'sanitize_callback' => '\Cmk\PostsByTabs\restExtend::sanitize_meta_fields',
 							),
 							'order'          => array(
 								'sanitize_callback' => 'sanitize_text_field',
@@ -116,8 +118,8 @@ class restExtend {
 					'/places',
 					array(
 						'methods'             => 'POST',
-						'callback'            => array( '\cmk\postsByTabs\restExtend', 'get_places_rest' ),
-						'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
+						'callback'            => array( '\Cmk\PostsByTabs\restExtend', 'get_places_rest' ),
+						'permission_callback' => '\Cmk\PostsByTabs\restExtend::validate_token',
 						'args'                => array(
 							'towns' => array(
 								'sanitize_callback' => function ( $param ) {
@@ -207,7 +209,7 @@ class restExtend {
 				
 				$post_prepared['featured_media'] = get_the_post_thumbnail_url( $post->ID, 'full' );
 				$post_prepared['terms']          = self::get_post_terms( $post->ID );
-				$post_prepared['acf']            = apply_filters( 'rest_prepare_acf_fields', get_fields( $post->ID ), $post, $request );
+				$post_prepared['acf']            = apply_filters( 'cmk_posts_by_tabs_acf_posts_relations', get_fields( $post->ID ), $post, $request );
 				
 				$posts_prepared[]                = $post_prepared;
 			}
@@ -312,7 +314,7 @@ class restExtend {
 
 	private static function places( $towns = array() ): array {
 		
-		$place_post_type = optionPage::get_instance()->get_option( 'place_post_type' );
+		$place_post_type = OptionPage::get_instance()->get_option( 'place_post_type' );
 
 		$args = array(
 			'post_type'      => $place_post_type  ?? 'lieu',
