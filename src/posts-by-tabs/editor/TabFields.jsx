@@ -67,7 +67,8 @@ export default function TabFields(props) {
                         lat: pluginSettings.defaultLatitude,
                         lng: pluginSettings.defaultLongitude
                     },
-                    zoom: 13
+                    zoom: 13,
+                    styleId: 'red',
                 },
                 slider:{
                     slidesPerView: 1,

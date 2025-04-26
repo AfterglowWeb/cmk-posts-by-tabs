@@ -239,6 +239,31 @@
 										"default": false
 									}
 								}
+							},
+							"map": {
+								"type": "object",
+								"default": {
+									"defaultLatitude": {
+										"type": "number",
+										"default": 0
+									},
+									"defaultLongitude": {
+										"type": "number",
+										"default": 0
+									},
+									"zoom": {
+										"type": "number",
+										"default": 8
+									},
+									"styleId": {
+										"type": "string",
+										"default": "red"
+									},
+									"markerIcon": {
+										"type": "string",
+										"default": ""
+									}
+								}
 							}
 						}
 					}

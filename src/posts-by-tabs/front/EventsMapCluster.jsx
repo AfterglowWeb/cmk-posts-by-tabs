@@ -1,12 +1,7 @@
-import React, { useCallback, useState, useEffect, useRef } from '@wordpress/element';
+import React, { useState, useEffect, useRef } from '@wordpress/element';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
-import { GridAlgorithm } from '@googlemaps/markerclusterer';  // Import GridAlgorithm separately
+import { GridAlgorithm } from '@googlemaps/markerclusterer';
 import groupEventsByPlaces from '../utils/groupEventsByPlaces';
-
-const pluginSettings = window.postsByTabsSettings || {
-  defaultLatitude: 48.8566,
-  defaultLongitude: 2.3522
-};
 
 const RED_MAP_STYLE = [
   {"featureType":"administrative","stylers":[{"color":"#ffffff"},{"visibility":"simplified"},{"weight":1}]},
@@ -27,8 +22,15 @@ const RED_MAP_STYLE = [
   {"featureType":"water","stylers":[{"color":"#afc8d2"}]}
 ];
 
+import mapRedStyle from '../styles/mapRedStyle.json';
+import mapGreenStyle from '../styles/mapGreenStyle.json';
+
 const DEFAULT_MARKER_SVG = `data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve"><path id="Tracé_1056" style="opacity:0.7;fill:%23091219;" d="M15.8,1.3C10,1.3,5.3,6,5.3,11.8l0,0 c0,7.5,10.5,19.5,10.5,19.5s10.5-12,10.5-19.5C26.3,6,21.6,1.3,15.8,1.3L15.8,1.3z"/></svg>`;
 
+const pluginSettings = window.postsByTabsSettings?.options || {
+  defaultLatitude: 48.8566,
+  defaultLongitude: 2.3522
+};
 function createInfoWindowContent(placeData) {
   const { place, events } = placeData;
   
@@ -58,18 +60,19 @@ function createInfoWindowContent(placeData) {
 
 export default function EventsMapCluster(props) {
   const { attributes, posts, tab } = props;
-  const { zoom } = tab;
   const [eventByPlaces, setEventByPlaces] = useState([]);
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
   const markersRef = useRef([]);
   const clustererRef = useRef(null);
 
-  const mapStyle = attributes?.options?.mapStyle ? 
-    JSON.parse(attributes.options.mapStyle) : 
-    RED_MAP_STYLE;
+  const mapOptions = tab?.map || {};
+  const mapStyle = mapOptions.mapStyle === 'green' ? mapGreenStyle : mapRedStyle;
   
-  const markerIcon = attributes?.options?.markerIcon || DEFAULT_MARKER_SVG;
+  const markerIcon = mapOptions.markerIcon || DEFAULT_MARKER_SVG;
+  
+  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || pluginSettings.defaultLatitude);
+  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || pluginSettings.defaultLongitude);
   
   useEffect(() => {
     if (!window.google || !window.google.maps) {
@@ -78,10 +81,10 @@ export default function EventsMapCluster(props) {
     }
     
     const mapOptions = {
-      zoom: zoom || 11,
+      zoom: 11,
       center: { 
-        lat: pluginSettings.defaultLatitude, 
-        lng: pluginSettings.defaultLongitude 
+        lat: defaultLatitude,
+        lng: defaultLongitude 
       },
       gestureHandling: 'greedy',
       mapTypeControl: true,
@@ -94,7 +97,7 @@ export default function EventsMapCluster(props) {
     const map = new google.maps.Map(mapContainerRef.current, mapOptions);
     mapRef.current = map;
     
-  }, [zoom, mapStyle]); 
+  }, [mapStyle]); 
   
   useEffect(() => {
     if (!posts?.length) {
@@ -183,7 +186,7 @@ export default function EventsMapCluster(props) {
             },
             icon: {
               path: google.maps.SymbolPath.CIRCLE,
-              scale: count < 10 ? 18 : (count < 20 ? 22 : 26), // Size based on count
+              scale: count < 10 ? 18 : (count < 20 ? 22 : 26),
               fillColor: "#d13d40", // BOTOXS red color
               fillOpacity: 0.9,
               strokeWeight: 2,

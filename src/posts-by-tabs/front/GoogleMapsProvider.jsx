@@ -10,61 +10,79 @@ export const useGoogleMaps = () => {
   return context;
 };
 
+const isApiLoaded = () => {
+  return typeof window !== 'undefined' && window.google && window.google.maps;
+};
+
 export const GoogleMapsProvider = ({ apiKey, children, libraries = ['places'], version = 'weekly' }) => {
-  const [googleMaps, setGoogleMaps] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [googleMaps, setGoogleMaps] = useState(isApiLoaded() ? window.google.maps : null);
+  const [loading, setLoading] = useState(!isApiLoaded());
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (window.google && window.google.maps) {
+    if (isApiLoaded()) {
       setGoogleMaps(window.google.maps);
       setLoading(false);
       return;
     }
 
-    const callbackName = `googleMapsApiCallback_${Date.now()}`;
-
-    const loadGoogleMapsApi = new Promise((resolve, reject) => {
-
-      window[callbackName] = () => {
-        if (window.google && window.google.maps) {
-          resolve(window.google.maps);
-        } else {
-          reject(new Error('Google Maps API failed to load'));
-        }
-        
-        delete window[callbackName];
-      };
-
-      const librariesParam = libraries.join(',');
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=${librariesParam}&callback=${callbackName}&v=${version}`;
-      script.async = true;
-      script.defer = true;
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
+    if (existingScript) {
+      console.log('Google Maps API is already being loaded by another script');
       
-      script.onerror = () => {
-        reject(new Error('Google Maps API script failed to load'));
-        delete window[callbackName];
+      const checkGoogleMaps = setInterval(() => {
+        if (isApiLoaded()) {
+          setGoogleMaps(window.google.maps);
+          setLoading(false);
+          clearInterval(checkGoogleMaps);
+        }
+      }, 100);
+      
+      setTimeout(() => {
+        clearInterval(checkGoogleMaps);
+        if (!isApiLoaded()) {
+          setError(new Error('Google Maps API failed to load within timeout'));
+          setLoading(false);
+        }
+      }, 10000);
+      
+      return () => {
+        clearInterval(checkGoogleMaps);
       };
+    }
 
-      document.head.appendChild(script);
-    });
-
-    loadGoogleMapsApi
-      .then((maps) => {
-        console.log('Google Maps API loaded successfully');
-        setGoogleMaps(maps);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error loading Google Maps API:', err);
-        setError(err);
-        setLoading(false);
-      });
-
-    return () => {
-      delete window[callbackName];
+    const script = document.createElement('script');
+    
+    if (!apiKey) {
+      setError(new Error('Google Maps API key is required'));
+      setLoading(false);
+      return;
+    }
+    
+    const librariesParam = libraries.join(',');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=${librariesParam}`;
+    script.async = true;
+    script.defer = true;
+    
+    script.onerror = () => {
+      setError(new Error('Google Maps API script failed to load'));
+      setLoading(false);
     };
+    
+    script.onload = () => {
+      if (isApiLoaded()) {
+        console.log('Google Maps API loaded successfully');
+        setGoogleMaps(window.google.maps);
+        setLoading(false);
+      } else {
+        setError(new Error('Google Maps API loaded but not available'));
+        setLoading(false);
+      }
+    };
+
+    document.head.appendChild(script);
+
+    return () => {};
   }, [apiKey, libraries.join(','), version]);
 
   const contextValue = {
@@ -73,15 +91,6 @@ export const GoogleMapsProvider = ({ apiKey, children, libraries = ['places'], v
     error,
     isLoaded: !!googleMaps && !loading,
   };
-
-  if (error) {
-    console.error('Google Maps API error:', error);
-    return (
-      <div className="google-maps-error">
-        Failed to load Google Maps. Please check your API key and try again.
-      </div>
-    );
-  }
 
   return (
     <GoogleMapsContext.Provider value={contextValue}>

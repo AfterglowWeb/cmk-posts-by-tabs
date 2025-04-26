@@ -3,26 +3,14 @@
 $tabs = isset($attributes['tabs']) ? $attributes['tabs'] : [];
 $block_id = isset($attributes['blockId']) ? $attributes['blockId'] : '';
 $background = isset($attributes['background']) ? $attributes['background'] : [];
-$options = \cmk\postsByTabs\optionPage::get_instance()->get_options();
+$rest_options = \cmk\postsByTabs\optionPage::get_instance()->get_rest_options();
 
 $attributes = array_merge(
     $attributes, 
     array(
         'restUrl' => esc_url_raw(rest_url()),
         'nonce' => wp_create_nonce('wp_rest'),
-        'options' => array(
-            'dateFormat'        => isset($options['date_format']) ? $options['date_format'] : 'F j, Y',
-            'googleMapsApiKey'  => isset($options['google_maps_api_key']) ? $options['google_maps_api_key'] : '',
-            'defaultLatitude'   => isset($options['google_maps_default_lat']) ? $options['google_maps_default_lat'] : '',
-            'defaultLongitude'  => isset($options['google_maps_default_lng']) ? $options['google_maps_default_lng'] : '',
-            'postsPerPage'      => isset($options['posts_per_page']) ? $options['posts_per_page'] : 10,
-            'defaultTemplate'   => isset($options['default_template']) ? $options['default_template'] : '',
-            'placePostType' => isset($options['place_post_type']) ? $options['place_post_type'] : '',
-            'placeForeignKey' => isset($options['place_foreign_key']) ? $options['place_foreign_key'] : '',
-            'eventPostType' => isset($options['event_post_type']) ? $options['event_post_type'] : '',
-            'eventForeignKey' => isset($options['event_foreign_key']) ? $options['event_foreign_key'] : '',
-            'cacheDuration'     => isset($options['cache_duration']) ? $options['cache_duration'] : 3600
-        )
+        'options' => $rest_options
     )
 );
 

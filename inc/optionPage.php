@@ -493,6 +493,23 @@ class OptionPage {
         return isset( $options[$key] ) ? $options[$key] : $default;
     }
 
+    public function get_rest_options() {
+        $options = $this->get_options();
+        return array(
+            'dateFormat'        => $options['date_format'],
+            'googleMapsApiKey'  => $options['google_maps_api_key'],
+            'defaultLatitude'   => $options['google_maps_default_lat'],
+            'defaultLongitude'  => $options['google_maps_default_lng'],
+            'postsPerPage'      => $options['posts_per_page'],
+            'defaultTemplate'   => $options['default_template'],
+            'placePostType'     => $options['place_post_type'],
+            'placeForeignKey'   => $options['place_foreign_key'],
+            'eventPostType'     => $options['event_post_type'],
+            'eventForeignKey'   => $options['event_foreign_key'],
+            'cacheDuration'     => $options['cache_duration'],
+        );
+    }
+
     /**
      * Helper function to get all public post types
      */

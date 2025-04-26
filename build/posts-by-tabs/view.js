@@ -43132,18 +43132,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _googlemaps_markerclusterer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @googlemaps/markerclusterer */ "./node_modules/@googlemaps/markerclusterer/dist/index.esm.js");
-/* harmony import */ var _utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/groupEventsByPlaces */ "./src/posts-by-tabs/utils/groupEventsByPlaces.js");
+/* harmony import */ var _utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/groupEventsByPlaces */ "./src/posts-by-tabs/utils/groupEventsByPlaces.js");
+/* harmony import */ var _styles_mapRedStyle_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/mapRedStyle.json */ "./src/posts-by-tabs/styles/mapRedStyle.json");
+/* harmony import */ var _styles_mapGreenStyle_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles/mapGreenStyle.json */ "./src/posts-by-tabs/styles/mapGreenStyle.json");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
- // Import GridAlgorithm separately
 
 
-const pluginSettings = window.postsByTabsSettings || {
-  defaultLatitude: 48.8566,
-  defaultLongitude: 2.3522
-};
 const RED_MAP_STYLE = [{
   "featureType": "administrative",
   "stylers": [{
@@ -43243,7 +43240,14 @@ const RED_MAP_STYLE = [{
     "color": "#afc8d2"
   }]
 }];
+
+
+
 const DEFAULT_MARKER_SVG = `data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve"><path id="Tracé_1056" style="opacity:0.7;fill:%23091219;" d="M15.8,1.3C10,1.3,5.3,6,5.3,11.8l0,0 c0,7.5,10.5,19.5,10.5,19.5s10.5-12,10.5-19.5C26.3,6,21.6,1.3,15.8,1.3L15.8,1.3z"/></svg>`;
+const pluginSettings = window.postsByTabsSettings?.options || {
+  defaultLatitude: 48.8566,
+  defaultLongitude: 2.3522
+};
 function createInfoWindowContent(placeData) {
   const {
     place,
@@ -43275,26 +43279,26 @@ function EventsMapCluster(props) {
     posts,
     tab
   } = props;
-  const {
-    zoom
-  } = tab;
   const [eventByPlaces, setEventByPlaces] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const mapRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const mapContainerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const markersRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)([]);
   const clustererRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const mapStyle = attributes?.options?.mapStyle ? JSON.parse(attributes.options.mapStyle) : RED_MAP_STYLE;
-  const markerIcon = attributes?.options?.markerIcon || DEFAULT_MARKER_SVG;
+  const mapOptions = tab?.map || {};
+  const mapStyle = mapOptions.mapStyle === 'green' ? _styles_mapGreenStyle_json__WEBPACK_IMPORTED_MODULE_3__ : _styles_mapRedStyle_json__WEBPACK_IMPORTED_MODULE_4__;
+  const markerIcon = mapOptions.markerIcon || DEFAULT_MARKER_SVG;
+  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || pluginSettings.defaultLatitude);
+  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || pluginSettings.defaultLongitude);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!window.google || !window.google.maps) {
       console.warn('Google Maps API not loaded');
       return;
     }
     const mapOptions = {
-      zoom: zoom || 11,
+      zoom: 11,
       center: {
-        lat: pluginSettings.defaultLatitude,
-        lng: pluginSettings.defaultLongitude
+        lat: defaultLatitude,
+        lng: defaultLongitude
       },
       gestureHandling: 'greedy',
       mapTypeControl: true,
@@ -43305,13 +43309,13 @@ function EventsMapCluster(props) {
     };
     const map = new google.maps.Map(mapContainerRef.current, mapOptions);
     mapRef.current = map;
-  }, [zoom, mapStyle]);
+  }, [mapStyle]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!posts?.length) {
       setEventByPlaces([]);
       return;
     }
-    const placesData = (0,_utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_3__["default"])(attributes, posts);
+    const placesData = (0,_utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_5__["default"])(attributes, posts);
     setEventByPlaces(placesData);
   }, [posts, attributes]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -43387,7 +43391,6 @@ function EventsMapCluster(props) {
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
             scale: count < 10 ? 18 : count < 20 ? 22 : 26,
-            // Size based on count
             fillColor: "#d13d40",
             // BOTOXS red color
             fillOpacity: 0.9,
@@ -43460,54 +43463,71 @@ const useGoogleMaps = () => {
   }
   return context;
 };
+const isApiLoaded = () => {
+  return typeof window !== 'undefined' && window.google && window.google.maps;
+};
 const GoogleMapsProvider = ({
   apiKey,
   children,
   libraries = ['places'],
   version = 'weekly'
 }) => {
-  const [googleMaps, setGoogleMaps] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [loading, setLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  const [googleMaps, setGoogleMaps] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(isApiLoaded() ? window.google.maps : null);
+  const [loading, setLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(!isApiLoaded());
   const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (window.google && window.google.maps) {
+    if (isApiLoaded()) {
       setGoogleMaps(window.google.maps);
       setLoading(false);
       return;
     }
-    const callbackName = `googleMapsApiCallback_${Date.now()}`;
-    const loadGoogleMapsApi = new Promise((resolve, reject) => {
-      window[callbackName] = () => {
-        if (window.google && window.google.maps) {
-          resolve(window.google.maps);
-        } else {
-          reject(new Error('Google Maps API failed to load'));
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
+    if (existingScript) {
+      console.log('Google Maps API is already being loaded by another script');
+      const checkGoogleMaps = setInterval(() => {
+        if (isApiLoaded()) {
+          setGoogleMaps(window.google.maps);
+          setLoading(false);
+          clearInterval(checkGoogleMaps);
         }
-        delete window[callbackName];
+      }, 100);
+      setTimeout(() => {
+        clearInterval(checkGoogleMaps);
+        if (!isApiLoaded()) {
+          setError(new Error('Google Maps API failed to load within timeout'));
+          setLoading(false);
+        }
+      }, 10000);
+      return () => {
+        clearInterval(checkGoogleMaps);
       };
-      const librariesParam = libraries.join(',');
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=${librariesParam}&callback=${callbackName}&v=${version}`;
-      script.async = true;
-      script.defer = true;
-      script.onerror = () => {
-        reject(new Error('Google Maps API script failed to load'));
-        delete window[callbackName];
-      };
-      document.head.appendChild(script);
-    });
-    loadGoogleMapsApi.then(maps => {
-      console.log('Google Maps API loaded successfully');
-      setGoogleMaps(maps);
+    }
+    const script = document.createElement('script');
+    if (!apiKey) {
+      setError(new Error('Google Maps API key is required'));
       setLoading(false);
-    }).catch(err => {
-      console.error('Error loading Google Maps API:', err);
-      setError(err);
+      return;
+    }
+    const librariesParam = libraries.join(',');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=${librariesParam}`;
+    script.async = true;
+    script.defer = true;
+    script.onerror = () => {
+      setError(new Error('Google Maps API script failed to load'));
       setLoading(false);
-    });
-    return () => {
-      delete window[callbackName];
     };
+    script.onload = () => {
+      if (isApiLoaded()) {
+        console.log('Google Maps API loaded successfully');
+        setGoogleMaps(window.google.maps);
+        setLoading(false);
+      } else {
+        setError(new Error('Google Maps API loaded but not available'));
+        setLoading(false);
+      }
+    };
+    document.head.appendChild(script);
+    return () => {};
   }, [apiKey, libraries.join(','), version]);
   const contextValue = {
     googleMaps,
@@ -43515,13 +43535,6 @@ const GoogleMapsProvider = ({
     error,
     isLoaded: !!googleMaps && !loading
   };
-  if (error) {
-    console.error('Google Maps API error:', error);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "google-maps-error",
-      children: "Failed to load Google Maps. Please check your API key and try again."
-    });
-  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(GoogleMapsContext.Provider, {
     value: contextValue,
     children: children
@@ -43762,7 +43775,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EventsMapCluster__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EventsMapCluster */ "./src/posts-by-tabs/front/EventsMapCluster.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
-
 
 
 
@@ -45100,6 +45112,28 @@ function XSmallCard({
     })]
   });
 }
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/styles/mapGreenStyle.json":
+/*!*****************************************************!*\
+  !*** ./src/posts-by-tabs/styles/mapGreenStyle.json ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('[{"featureType":"all","elementType":"geometry.fill","stylers":[{"weight":"2.00"}]},{"featureType":"all","elementType":"geometry.stroke","stylers":[{"color":"#e7ebed"}]},{"featureType":"all","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#e7ebed"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#e7ebed"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#e7ebed"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#2a4360"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#ffffff"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#2a4360"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]}]');
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/styles/mapRedStyle.json":
+/*!***************************************************!*\
+  !*** ./src/posts-by-tabs/styles/mapRedStyle.json ***!
+  \***************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('[{"featureType":"administrative","stylers":[{"color":"#ffffff"},{"visibility":"simplified"},{"weight":1}]},{"featureType":"landscape","stylers":[{"color":"#f56060"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#f56060"}]},{"featureType":"poi","stylers":[{"color":"#d13d40"},{"visibility":"simplified"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#d33b3b"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"color":"#ffffff"}]},{"featureType":"poi.park","stylers":[{"color":"#d15254"},{"visibility":"simplified"}]},{"featureType":"poi.park","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"road","stylers":[{"color":"#eb4553"}]},{"featureType":"road.arterial","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"off"}]},{"featureType":"transit","stylers":[{"color":"#e7e7e7"}]},{"featureType":"transit","elementType":"labels","stylers":[{"color":"#7a7a7a"},{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"color":"#afc8d2"}]}]');
 
 /***/ }),
 

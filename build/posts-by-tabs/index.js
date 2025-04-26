@@ -51884,7 +51884,7 @@ function validate(uuid) {
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"cmk/posts-by-tabs","version":"0.1.0","title":"Posts by Tabs","category":"widgets","icon":"smiley","description":"Display posts in multiple template formats using tabs.","example":{},"supports":{"html":false,"innerBlocks":true,"align":["wide","full","left","center","right"],"alignWide":true,"background":{"backgroundImage":true,"backgroundSize":true}},"providesContext":{"cmk/selectedTab":"selectedTab"},"allowedBlocks":[],"attributes":{"initialized":{"type":"boolean","default":false},"blockId":{"type":"string"},"tabs":{"type":"array","default":[],"items":{"type":"object","properties":{"template":{"type":"string","default":""},"title":{"type":"string","default":""},"subtitle":{"type":"string","default":""},"content":{"type":"string","source":"html","default":""},"showNavigation":{"type":"boolean","default":false},"showPagination":{"type":"boolean","default":false},"showLoadMore":{"type":"boolean","default":false},"showExcerpt":{"type":"boolean","default":false},"showTitle":{"type":"boolean","default":false},"showSubtitle":{"type":"boolean","default":false},"showDate":{"type":"boolean","default":false},"showAuthor":{"type":"boolean","default":false},"showCategory":{"type":"boolean","default":false},"showTags":{"type":"boolean","default":false},"options":{"type":"object","default":{"grid":{"type":"object","default":{"free_flow":{"type":"boolean","default":false},"cols_desktop":{"type":"number","default":3},"cols_tablet":{"type":"number","default":2},"cols_mobile":{"type":"number","default":1},"gap_desktop":{"type":"number","default":4},"gap_mobile":{"type":"number","default":4},"gap_tablet":{"type":"number","default":4}}},"row":{"type":"object","default":{"infinite_scroll":{"type":"boolean","default":false},"free_flow":{"type":"boolean","default":false},"cols_desktop":{"type":"number","default":3},"cols_tablet":{"type":"number","default":2},"cols_mobile":{"type":"number","default":1},"gap_desktop":{"type":"number","default":4},"gap_mobile":{"type":"number","default":4},"gap_tablet":{"type":"number","default":4}}},"calendar":{"type":"object","default":{"start_key":{"type":"string","default":"start"},"end_key":{"type":"string","default":"end"},"default_view":{"type":"string","default":"week"},"show_days":{"type":"boolean","default":false},"show_weeks":{"type":"boolean","default":false},"show_months":{"type":"boolean","default":false}}},"slider":{"type":"object","default":{"slidesPerView":{"type":"number","default":1},"spaceBetween":{"type":"number","default":0},"effect":{"type":"string","default":"slide"},"autoplay":{"type":"boolean","default":false},"delay":{"type":"number","default":3000},"speed":{"type":"number","default":500},"loop":{"type":"boolean","default":false},"hideScrollBar":{"type":"boolean","default":false},"hideNavigation":{"type":"boolean","default":false},"hidePagination":{"type":"boolean","default":false}}}}}}}},"posts":{"type":"array","default":[]},"postType":{"type":"string","default":"post"},"taxonomy":{"type":"string","default":"category"},"terms":{"type":"array","default":[],"items":{"type":"number"}},"metaKey":{"type":"string","default":""},"metaFields":{"type":"object","default":{"relation":{"type":"string","default":"AND"},"fields":{"type":"array","default":[],"items":{"type":"object","properties":{"key":{"type":"string","default":""},"value":{"type":"string","default":""},"compare":{"type":"string","default":""},"type":{"type":"string","default":"CHAR"},"isUserValue":{"type":"boolean","default":false},"isDateToday":{"type":"boolean","default":false}}}}}},"numberOfItems":{"type":"number","default":5},"maxNumPages":{"type":"number","default":1},"paginationEnabled":{"type":"boolean","default":false},"paginationType":{"type":"string","default":"page"},"offset":{"type":"number","default":0},"order":{"type":"string","default":"desc"},"orderBy":{"type":"string","default":"date"}},"textdomain":"cmk-posts-by-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./output.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"cmk/posts-by-tabs","version":"0.1.0","title":"Posts by Tabs","category":"widgets","icon":"smiley","description":"Display posts in multiple template formats using tabs.","example":{},"supports":{"html":false,"innerBlocks":true,"align":["wide","full","left","center","right"],"alignWide":true,"background":{"backgroundImage":true,"backgroundSize":true}},"providesContext":{"cmk/selectedTab":"selectedTab"},"allowedBlocks":[],"attributes":{"initialized":{"type":"boolean","default":false},"blockId":{"type":"string"},"tabs":{"type":"array","default":[],"items":{"type":"object","properties":{"template":{"type":"string","default":""},"title":{"type":"string","default":""},"subtitle":{"type":"string","default":""},"content":{"type":"string","source":"html","default":""},"showNavigation":{"type":"boolean","default":false},"showPagination":{"type":"boolean","default":false},"showLoadMore":{"type":"boolean","default":false},"showExcerpt":{"type":"boolean","default":false},"showTitle":{"type":"boolean","default":false},"showSubtitle":{"type":"boolean","default":false},"showDate":{"type":"boolean","default":false},"showAuthor":{"type":"boolean","default":false},"showCategory":{"type":"boolean","default":false},"showTags":{"type":"boolean","default":false},"options":{"type":"object","default":{"grid":{"type":"object","default":{"free_flow":{"type":"boolean","default":false},"cols_desktop":{"type":"number","default":3},"cols_tablet":{"type":"number","default":2},"cols_mobile":{"type":"number","default":1},"gap_desktop":{"type":"number","default":4},"gap_mobile":{"type":"number","default":4},"gap_tablet":{"type":"number","default":4}}},"row":{"type":"object","default":{"infinite_scroll":{"type":"boolean","default":false},"free_flow":{"type":"boolean","default":false},"cols_desktop":{"type":"number","default":3},"cols_tablet":{"type":"number","default":2},"cols_mobile":{"type":"number","default":1},"gap_desktop":{"type":"number","default":4},"gap_mobile":{"type":"number","default":4},"gap_tablet":{"type":"number","default":4}}},"calendar":{"type":"object","default":{"start_key":{"type":"string","default":"start"},"end_key":{"type":"string","default":"end"},"default_view":{"type":"string","default":"week"},"show_days":{"type":"boolean","default":false},"show_weeks":{"type":"boolean","default":false},"show_months":{"type":"boolean","default":false}}},"slider":{"type":"object","default":{"slidesPerView":{"type":"number","default":1},"spaceBetween":{"type":"number","default":0},"effect":{"type":"string","default":"slide"},"autoplay":{"type":"boolean","default":false},"delay":{"type":"number","default":3000},"speed":{"type":"number","default":500},"loop":{"type":"boolean","default":false},"hideScrollBar":{"type":"boolean","default":false},"hideNavigation":{"type":"boolean","default":false},"hidePagination":{"type":"boolean","default":false}}},"map":{"type":"object","default":{"defaultLatitude":{"type":"number","default":0},"defaultLongitude":{"type":"number","default":0},"zoom":{"type":"number","default":8},"styleId":{"type":"string","default":"red"},"markerIcon":{"type":"string","default":""}}}}}}}},"posts":{"type":"array","default":[]},"postType":{"type":"string","default":"post"},"taxonomy":{"type":"string","default":"category"},"terms":{"type":"array","default":[],"items":{"type":"number"}},"metaKey":{"type":"string","default":""},"metaFields":{"type":"object","default":{"relation":{"type":"string","default":"AND"},"fields":{"type":"array","default":[],"items":{"type":"object","properties":{"key":{"type":"string","default":""},"value":{"type":"string","default":""},"compare":{"type":"string","default":""},"type":{"type":"string","default":"CHAR"},"isUserValue":{"type":"boolean","default":false},"isDateToday":{"type":"boolean","default":false}}}}}},"numberOfItems":{"type":"number","default":5},"maxNumPages":{"type":"number","default":1},"paginationEnabled":{"type":"boolean","default":false},"paginationType":{"type":"string","default":"page"},"offset":{"type":"number","default":0},"order":{"type":"string","default":"desc"},"orderBy":{"type":"string","default":"date"}},"textdomain":"cmk-posts-by-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./output.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 
@@ -51909,7 +51909,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _editor_QueryFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor/QueryFields */ "./src/posts-by-tabs/editor/QueryFields.jsx");
 /* harmony import */ var _editor_TabFields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor/TabFields */ "./src/posts-by-tabs/editor/TabFields.jsx");
-/* harmony import */ var _front_PostsByTabs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./front/PostsByTabs */ "./src/posts-by-tabs/front/PostsByTabs.jsx");
+/* harmony import */ var _front_PostsByTabs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./front/PostsByTabs */ "./src/posts-by-tabs/front/PostsByTabs.jsx");
+/* harmony import */ var _front_GoogleMapsProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./front/GoogleMapsProvider */ "./src/posts-by-tabs/front/GoogleMapsProvider.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 
@@ -51920,20 +51921,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const pluginSettings = window.postsByTabsSettings || {
-  dateFormat: 'Y-m-d',
-  googleMapsApiKey: '',
-  defaultLatitude: 48.8566,
-  defaultLongitude: 2.3522,
-  postsPerPage: 10,
-  defaultTemplate: 'grid',
-  cacheDuration: 3600
-};
+
+
 function Edit({
   attributes,
-  setAttributes,
-  clientId
+  setAttributes
 }) {
+  const [pluginSettings, setPluginSettings] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)({
+    dateFormat: 'd/m/Y',
+    googleMapsApiKey: '',
+    defaultLatitude: 48.8566,
+    defaultLongitude: 2.3522,
+    postsPerPage: 10,
+    defaultTemplate: 'grid',
+    cacheDuration: 3600
+  });
   const templates = [{
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Posts Grid'),
     value: 'grid'
@@ -51950,6 +51952,19 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Posts Calendar (events)'),
     value: 'calendar'
   }];
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    // Check if the global object exists
+    if (typeof window !== 'undefined' && window.postsByTabsSettings) {
+      const savedSettings = window.postsByTabsSettings?.options || {};
+      setPluginSettings(prevSettings => ({
+        ...prevSettings,
+        ...savedSettings
+      }));
+      console.log('Plugin settings loaded:', window.postsByTabsSettings);
+    } else {
+      console.warn('postsByTabsSettings not found in global scope');
+    }
+  }, []);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     if (!attributes.blockId) {
       setAttributes({
@@ -51975,7 +51990,7 @@ function Edit({
         }]
       });
     }
-  }, [attributes.blockId, attributes.initialized, setAttributes]);
+  }, [attributes.blockId, attributes.initialized, pluginSettings, setAttributes]);
   const handleTabValueChange = (value, key, index) => {
     const tabs = [...attributes.tabs];
     tabs[index][key] = value;
@@ -52004,13 +52019,116 @@ function Edit({
           pluginSettings: pluginSettings
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_PostsByTabs__WEBPACK_IMPORTED_MODULE_7__["default"], {
-      templates: templates,
-      attributes: attributes,
-      setAttributes: setAttributes,
-      isEditor: true,
-      pluginSettings: pluginSettings
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_GoogleMapsProvider__WEBPACK_IMPORTED_MODULE_7__.APIProvider, {
+      apiKey: pluginSettings?.googleMapsApiKey,
+      libraries: ['places', 'marker'],
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_PostsByTabs__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        templates: templates,
+        attributes: attributes,
+        setAttributes: setAttributes,
+        isEditor: true,
+        pluginSettings: pluginSettings
+      })
     })]
+  });
+}
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/editor/MapStyleSelector.jsx":
+/*!*******************************************************!*\
+  !*** ./src/posts-by-tabs/editor/MapStyleSelector.jsx ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MapStyleSelector)
+/* harmony export */ });
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const MAP_STYLES = {
+  red: {
+    id: 'red',
+    name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Red Theme', 'posts-by-tabs'),
+    description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Bold red theme with red landscapes and roads', 'posts-by-tabs'),
+    previewColor: '#d13d40'
+  },
+  green: {
+    id: 'green',
+    name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Green Theme', 'posts-by-tabs'),
+    description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Natural green theme with green landscapes', 'posts-by-tabs'),
+    previewColor: '#2a4360'
+  },
+  standard: {
+    id: 'standard',
+    name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default Google Maps', 'posts-by-tabs'),
+    description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Standard Google Maps style', 'posts-by-tabs'),
+    previewColor: '#4285f4'
+  }
+};
+function MapStyleSelector(props) {
+  const {
+    tab,
+    index,
+    handleTabValueChange,
+    postType
+  } = props;
+  if (!tab) {
+    return null;
+  }
+  const {
+    template,
+    options
+  } = tab;
+  if (template !== 'map') {
+    return null;
+  }
+  const {
+    styleId
+  } = options?.map || 'red';
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Panel, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.PanelBody, {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Map Style', 'posts-by-tabs'),
+      initialOpen: true,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Map style'),
+        value: styleId,
+        options: Object.entries(MAP_STYLES).map(([key, value]) => ({
+          value: key,
+          label: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "flex items-center",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "w-4 h-4 mr-2",
+              style: {
+                backgroundColor: value.previewColor,
+                borderRadius: '50%',
+                border: '2px solid #000'
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+              children: value.name
+            })]
+          }, key)
+        })),
+        onChange: value => handleTabValueChange({
+          ...options,
+          map: {
+            ...options.map,
+            styleId: value
+          }
+        }, 'options', index)
+      })
+    })
   });
 }
 
@@ -53365,7 +53483,8 @@ function TabFields(props) {
             lat: pluginSettings.defaultLatitude,
             lng: pluginSettings.defaultLongitude
           },
-          zoom: 13
+          zoom: 13,
+          styleId: 'red'
         },
         slider: {
           slidesPerView: 1,
@@ -53491,11 +53610,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MuiInputSlider */ "./src/posts-by-tabs/editor/MuiInputSlider.jsx");
-/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
-/* harmony import */ var _MetaKeySelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MetaKeySelector */ "./src/posts-by-tabs/editor/MetaKeySelector.jsx");
+/* harmony import */ var _MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MuiInputSlider */ "./src/posts-by-tabs/editor/MuiInputSlider.jsx");
+/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
+/* harmony import */ var _MetaKeySelector__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MetaKeySelector */ "./src/posts-by-tabs/editor/MetaKeySelector.jsx");
+/* harmony import */ var _MapStyleSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MapStyleSelector */ "./src/posts-by-tabs/editor/MapStyleSelector.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
@@ -53536,7 +53657,9 @@ function optionFields(props) {
         ...props
       });
     case 'map':
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {});
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MapStyleSelector__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        ...props
+      });
     default:
       return null;
   }
@@ -53583,7 +53706,7 @@ function GridFields(props) {
           free_flow: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (Desktop)'),
       min: 1,
       max: 12,
@@ -53596,7 +53719,7 @@ function GridFields(props) {
           cols_desktop: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (Tablet)'),
       min: 1,
       max: 12,
@@ -53609,7 +53732,7 @@ function GridFields(props) {
           cols_tablet: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Columns (Mobile)'),
       min: 1,
       max: 12,
@@ -53622,7 +53745,7 @@ function GridFields(props) {
           cols_mobile: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Gap between items (Desktop)'),
       min: 0,
       max: 48,
@@ -53635,7 +53758,7 @@ function GridFields(props) {
           gap_desktop: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Gap between items (Tablet)'),
       min: 0,
       max: 48,
@@ -53648,7 +53771,7 @@ function GridFields(props) {
           gap_tablet: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Gap between items (Mobile)'),
       min: 0,
       max: 48,
@@ -53691,7 +53814,7 @@ function CalendarFields(props) {
     has_month_view
   } = options?.calendar;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MetaKeySelector__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MetaKeySelector__WEBPACK_IMPORTED_MODULE_5__["default"], {
       postType: postType,
       onChange: value => handleTabValueChange({
         ...options,
@@ -53702,7 +53825,7 @@ function CalendarFields(props) {
       }, 'options', index),
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Start key'),
       value: start_key || ''
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MetaKeySelector__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MetaKeySelector__WEBPACK_IMPORTED_MODULE_5__["default"], {
       postType: postType,
       onChange: value => handleTabValueChange({
         ...options,
@@ -53713,7 +53836,7 @@ function CalendarFields(props) {
       }, 'options', index),
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('End key'),
       value: end_key || ''
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Default view'),
       value: default_view || '',
       options: [{
@@ -53794,7 +53917,7 @@ function SliderFields(props) {
     hidePagination
   } = options?.slider;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Slides per view'),
       min: 1,
       max: 9,
@@ -53807,7 +53930,7 @@ function SliderFields(props) {
           slidesPerView: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Space between'),
       min: 0,
       max: 100,
@@ -53820,7 +53943,7 @@ function SliderFields(props) {
           spaceBetween: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Effect'),
       value: effect || '',
       options: [{
@@ -53856,7 +53979,7 @@ function SliderFields(props) {
           autoplay: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Delay'),
       min: 0,
       max: 10000,
@@ -53869,7 +53992,7 @@ function SliderFields(props) {
           delay: value
         }
       }, 'options', index)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_MuiInputSlider__WEBPACK_IMPORTED_MODULE_4__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Speed'),
       min: 0,
       max: 10000,
@@ -54452,18 +54575,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _googlemaps_markerclusterer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @googlemaps/markerclusterer */ "./node_modules/@googlemaps/markerclusterer/dist/index.esm.js");
-/* harmony import */ var _utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/groupEventsByPlaces */ "./src/posts-by-tabs/utils/groupEventsByPlaces.js");
+/* harmony import */ var _utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/groupEventsByPlaces */ "./src/posts-by-tabs/utils/groupEventsByPlaces.js");
+/* harmony import */ var _styles_mapRedStyle_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/mapRedStyle.json */ "./src/posts-by-tabs/styles/mapRedStyle.json");
+/* harmony import */ var _styles_mapGreenStyle_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles/mapGreenStyle.json */ "./src/posts-by-tabs/styles/mapGreenStyle.json");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
- // Import GridAlgorithm separately
 
 
-const pluginSettings = window.postsByTabsSettings || {
-  defaultLatitude: 48.8566,
-  defaultLongitude: 2.3522
-};
 const RED_MAP_STYLE = [{
   "featureType": "administrative",
   "stylers": [{
@@ -54563,7 +54683,14 @@ const RED_MAP_STYLE = [{
     "color": "#afc8d2"
   }]
 }];
+
+
+
 const DEFAULT_MARKER_SVG = `data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve"><path id="Tracé_1056" style="opacity:0.7;fill:%23091219;" d="M15.8,1.3C10,1.3,5.3,6,5.3,11.8l0,0 c0,7.5,10.5,19.5,10.5,19.5s10.5-12,10.5-19.5C26.3,6,21.6,1.3,15.8,1.3L15.8,1.3z"/></svg>`;
+const pluginSettings = window.postsByTabsSettings?.options || {
+  defaultLatitude: 48.8566,
+  defaultLongitude: 2.3522
+};
 function createInfoWindowContent(placeData) {
   const {
     place,
@@ -54595,26 +54722,26 @@ function EventsMapCluster(props) {
     posts,
     tab
   } = props;
-  const {
-    zoom
-  } = tab;
   const [eventByPlaces, setEventByPlaces] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const mapRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const mapContainerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const markersRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)([]);
   const clustererRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const mapStyle = attributes?.options?.mapStyle ? JSON.parse(attributes.options.mapStyle) : RED_MAP_STYLE;
-  const markerIcon = attributes?.options?.markerIcon || DEFAULT_MARKER_SVG;
+  const mapOptions = tab?.map || {};
+  const mapStyle = mapOptions.mapStyle === 'green' ? _styles_mapGreenStyle_json__WEBPACK_IMPORTED_MODULE_3__ : _styles_mapRedStyle_json__WEBPACK_IMPORTED_MODULE_4__;
+  const markerIcon = mapOptions.markerIcon || DEFAULT_MARKER_SVG;
+  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || pluginSettings.defaultLatitude);
+  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || pluginSettings.defaultLongitude);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!window.google || !window.google.maps) {
       console.warn('Google Maps API not loaded');
       return;
     }
     const mapOptions = {
-      zoom: zoom || 11,
+      zoom: 11,
       center: {
-        lat: pluginSettings.defaultLatitude,
-        lng: pluginSettings.defaultLongitude
+        lat: defaultLatitude,
+        lng: defaultLongitude
       },
       gestureHandling: 'greedy',
       mapTypeControl: true,
@@ -54625,13 +54752,13 @@ function EventsMapCluster(props) {
     };
     const map = new google.maps.Map(mapContainerRef.current, mapOptions);
     mapRef.current = map;
-  }, [zoom, mapStyle]);
+  }, [mapStyle]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!posts?.length) {
       setEventByPlaces([]);
       return;
     }
-    const placesData = (0,_utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_3__["default"])(attributes, posts);
+    const placesData = (0,_utils_groupEventsByPlaces__WEBPACK_IMPORTED_MODULE_5__["default"])(attributes, posts);
     setEventByPlaces(placesData);
   }, [posts, attributes]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -54707,7 +54834,6 @@ function EventsMapCluster(props) {
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
             scale: count < 10 ? 18 : count < 20 ? 22 : 26,
-            // Size based on count
             fillColor: "#d13d40",
             // BOTOXS red color
             fillOpacity: 0.9,
@@ -54749,6 +54875,115 @@ function EventsMapCluster(props) {
     })]
   });
 }
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/front/GoogleMapsProvider.jsx":
+/*!********************************************************!*\
+  !*** ./src/posts-by-tabs/front/GoogleMapsProvider.jsx ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   APIProvider: () => (/* binding */ APIProvider),
+/* harmony export */   GoogleMapsContext: () => (/* binding */ GoogleMapsContext),
+/* harmony export */   GoogleMapsProvider: () => (/* binding */ GoogleMapsProvider),
+/* harmony export */   useGoogleMaps: () => (/* binding */ useGoogleMaps)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+const GoogleMapsContext = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+const useGoogleMaps = () => {
+  const context = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useContext)(GoogleMapsContext);
+  if (!context) {
+    throw new Error('useGoogleMaps must be used within a GoogleMapsProvider');
+  }
+  return context;
+};
+const isApiLoaded = () => {
+  return typeof window !== 'undefined' && window.google && window.google.maps;
+};
+const GoogleMapsProvider = ({
+  apiKey,
+  children,
+  libraries = ['places'],
+  version = 'weekly'
+}) => {
+  const [googleMaps, setGoogleMaps] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(isApiLoaded() ? window.google.maps : null);
+  const [loading, setLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(!isApiLoaded());
+  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (isApiLoaded()) {
+      setGoogleMaps(window.google.maps);
+      setLoading(false);
+      return;
+    }
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
+    if (existingScript) {
+      console.log('Google Maps API is already being loaded by another script');
+      const checkGoogleMaps = setInterval(() => {
+        if (isApiLoaded()) {
+          setGoogleMaps(window.google.maps);
+          setLoading(false);
+          clearInterval(checkGoogleMaps);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(checkGoogleMaps);
+        if (!isApiLoaded()) {
+          setError(new Error('Google Maps API failed to load within timeout'));
+          setLoading(false);
+        }
+      }, 10000);
+      return () => {
+        clearInterval(checkGoogleMaps);
+      };
+    }
+    const script = document.createElement('script');
+    if (!apiKey) {
+      setError(new Error('Google Maps API key is required'));
+      setLoading(false);
+      return;
+    }
+    const librariesParam = libraries.join(',');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=${librariesParam}`;
+    script.async = true;
+    script.defer = true;
+    script.onerror = () => {
+      setError(new Error('Google Maps API script failed to load'));
+      setLoading(false);
+    };
+    script.onload = () => {
+      if (isApiLoaded()) {
+        console.log('Google Maps API loaded successfully');
+        setGoogleMaps(window.google.maps);
+        setLoading(false);
+      } else {
+        setError(new Error('Google Maps API loaded but not available'));
+        setLoading(false);
+      }
+    };
+    document.head.appendChild(script);
+    return () => {};
+  }, [apiKey, libraries.join(','), version]);
+  const contextValue = {
+    googleMaps,
+    loading,
+    error,
+    isLoaded: !!googleMaps && !loading
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(GoogleMapsContext.Provider, {
+    value: contextValue,
+    children: children
+  });
+};
+const APIProvider = GoogleMapsProvider;
 
 /***/ }),
 
@@ -54983,7 +55218,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EventsMapCluster__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./EventsMapCluster */ "./src/posts-by-tabs/front/EventsMapCluster.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
-
 
 
 
@@ -56321,6 +56555,28 @@ function XSmallCard({
     })]
   });
 }
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/styles/mapGreenStyle.json":
+/*!*****************************************************!*\
+  !*** ./src/posts-by-tabs/styles/mapGreenStyle.json ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('[{"featureType":"all","elementType":"geometry.fill","stylers":[{"weight":"2.00"}]},{"featureType":"all","elementType":"geometry.stroke","stylers":[{"color":"#e7ebed"}]},{"featureType":"all","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#e7ebed"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#e7ebed"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#e7ebed"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#2a4360"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#ffffff"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#2a4360"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]}]');
+
+/***/ }),
+
+/***/ "./src/posts-by-tabs/styles/mapRedStyle.json":
+/*!***************************************************!*\
+  !*** ./src/posts-by-tabs/styles/mapRedStyle.json ***!
+  \***************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('[{"featureType":"administrative","stylers":[{"color":"#ffffff"},{"visibility":"simplified"},{"weight":1}]},{"featureType":"landscape","stylers":[{"color":"#f56060"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#f56060"}]},{"featureType":"poi","stylers":[{"color":"#d13d40"},{"visibility":"simplified"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#d33b3b"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"color":"#ffffff"}]},{"featureType":"poi.park","stylers":[{"color":"#d15254"},{"visibility":"simplified"}]},{"featureType":"poi.park","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"road","stylers":[{"color":"#eb4553"}]},{"featureType":"road.arterial","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"off"}]},{"featureType":"transit","stylers":[{"color":"#e7e7e7"}]},{"featureType":"transit","elementType":"labels","stylers":[{"color":"#7a7a7a"},{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"color":"#afc8d2"}]}]');
 
 /***/ }),
 

@@ -13,7 +13,6 @@ import sanitizeHtml from '../utils/sanitizeHtml';
 import Pagination from './Pagination';
 import EventsCalendar from './EventsCalendar';
 import PostsGrid from './PostsGrid';
-import EventsMap from './EventsMap';
 import EventsMapCluster from './EventsMapCluster';
 
 export default function PostsByTabs(props) {

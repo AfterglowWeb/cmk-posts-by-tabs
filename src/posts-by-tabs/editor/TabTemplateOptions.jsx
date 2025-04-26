@@ -3,6 +3,7 @@ import { CheckboxControl } from '@wordpress/components';
 import MuiInputSlider from './MuiInputSlider';
 import MuiSelect from './MuiSelect';
 import MetaKeySelector from './MetaKeySelector';
+import MapStyleSelector from './MapStyleSelector';
 
 export default function TabTemplateOptions(props) {
 
@@ -31,10 +32,7 @@ function optionFields(props) {
         case 'slider':
             return <SliderFields {...props} />;
         case 'map':
-            return (
-                <>
-                </>
-            );
+            return <MapStyleSelector {...props} />;
         default:
             return null;
     }

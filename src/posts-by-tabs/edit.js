@@ -1,24 +1,26 @@
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
+import MapStyleSelector from './editor/MapStyleSelector';
 
 import PostsByTabs from './front/PostsByTabs';
+import {APIProvider} from './front/GoogleMapsProvider';
 
-const pluginSettings = window.postsByTabsSettings || {
-    dateFormat: 'Y-m-d',
-    googleMapsApiKey: '',
-    defaultLatitude: 48.8566,
-    defaultLongitude: 2.3522,
-    postsPerPage: 10,
-    defaultTemplate: 'grid',
-    cacheDuration: 3600
-};
+export default function Edit({attributes, setAttributes}) {
 
-export default function Edit({attributes, setAttributes, clientId}) {
+	const [pluginSettings, setPluginSettings] = useState({
+        dateFormat: 'd/m/Y',
+        googleMapsApiKey: '',
+        defaultLatitude: 48.8566,
+        defaultLongitude: 2.3522,
+        postsPerPage: 10,
+        defaultTemplate: 'grid',
+        cacheDuration: 3600
+    });
 
 	const templates = [
 		{
@@ -42,6 +44,20 @@ export default function Edit({attributes, setAttributes, clientId}) {
 			value: 'calendar',
 		}
 	];
+
+	useEffect(() => {
+        // Check if the global object exists
+        if (typeof window !== 'undefined' && window.postsByTabsSettings) {
+            const savedSettings = window.postsByTabsSettings?.options || {};
+            setPluginSettings(prevSettings => ({
+                ...prevSettings,
+                ...savedSettings
+            }));
+            console.log('Plugin settings loaded:', window.postsByTabsSettings);
+        } else {
+            console.warn('postsByTabsSettings not found in global scope');
+        }
+    }, []);
 
 	useEffect(() => {
 
@@ -69,7 +85,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
             });
         }
 
-    }, [attributes.blockId, attributes.initialized, setAttributes]);
+    }, [attributes.blockId, attributes.initialized, pluginSettings, setAttributes]);
 	
 
     const handleTabValueChange = ( value, key, index ) => {
@@ -77,7 +93,6 @@ export default function Edit({attributes, setAttributes, clientId}) {
         tabs[ index ][key] = value;
         setAttributes( { tabs } );
     };
-
 	
 	return (
 		<>
@@ -103,13 +118,18 @@ export default function Edit({attributes, setAttributes, clientId}) {
 
 			</InspectorControls>
 			
-			<PostsByTabs 
-			templates={templates}
-			attributes={attributes} 
-			setAttributes={setAttributes} 
-			isEditor={true}
-			pluginSettings={pluginSettings}
-			/>
+			<APIProvider 
+            apiKey={pluginSettings?.googleMapsApiKey}
+            libraries={['places', 'marker']}
+            >
+				<PostsByTabs 
+				templates={templates}
+				attributes={attributes} 
+				setAttributes={setAttributes} 
+				isEditor={true}
+				pluginSettings={pluginSettings}
+				/>
+			</APIProvider>
 
 		</>
 
