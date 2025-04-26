@@ -6,7 +6,7 @@ export default async function fetchPlaces (attributes) {
 
     const requestData = {
         post_type: placePostType || 'place',
-        posts_per_page: 10,
+        posts_per_page:130,
         pages:1,
         order: attributes.order || 'ASC',
         orderby: 'title',

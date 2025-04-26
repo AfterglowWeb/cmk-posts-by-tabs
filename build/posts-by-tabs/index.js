@@ -57593,54 +57593,6 @@ function useMetaKeys(postType) {
 
 /***/ }),
 
-/***/ "./src/posts-by-tabs/utils/fetchPlaces.js":
-/*!************************************************!*\
-  !*** ./src/posts-by-tabs/utils/fetchPlaces.js ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ fetchPlaces)
-/* harmony export */ });
-/* harmony import */ var _universalFetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./universalFetch */ "./src/posts-by-tabs/utils/universalFetch.js");
-
-async function fetchPlaces(attributes) {
-  const {
-    placePostType
-  } = attributes?.options;
-  const requestData = {
-    post_type: placePostType || 'place',
-    posts_per_page: 10,
-    pages: 1,
-    order: attributes.order || 'ASC',
-    orderby: 'title'
-  };
-  const response = await (0,_universalFetch__WEBPACK_IMPORTED_MODULE_0__["default"])({
-    path: 'posts-by-tabs/v1/posts',
-    method: 'POST',
-    data: requestData,
-    returnHeaders: true,
-    attributes: attributes
-  });
-  if (response.error) {
-    console.error('Error fetching places:', response.error);
-    return [];
-  }
-  if (!response.data) {
-    console.error('No data returned from fetchPlaces');
-    return [];
-  }
-  if (!response.data.posts) {
-    console.error('No places returned from fetchPlaces');
-    return [];
-  }
-  return response.data.posts;
-}
-
-/***/ }),
-
 /***/ "./src/posts-by-tabs/utils/fetchPostTypes.js":
 /*!***************************************************!*\
   !*** ./src/posts-by-tabs/utils/fetchPostTypes.js ***!
@@ -57887,65 +57839,48 @@ function formatDateToFrench(dateString, options = {}) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ groupEventsByPlaces),
-/* harmony export */   getPlaceIdsFromPost: () => (/* binding */ getPlaceIdsFromPost)
+/* harmony export */   "default": () => (/* binding */ groupEventsByPlaces)
 /* harmony export */ });
-/* harmony import */ var _fetchPlaces__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchPlaces */ "./src/posts-by-tabs/utils/fetchPlaces.js");
 
 function groupEventsByPlaces(attributes, posts) {
   if (!Array.isArray(posts) || posts.length === 0) {
     return [];
   }
-  const placeForeignKey = attributes?.placeForeignKey || 'places';
-  const grouped = (0,_fetchPlaces__WEBPACK_IMPORTED_MODULE_0__["default"])(attributes);
+  const placeForeignKey = attributes?.placeForeignKey || 'lieu';
+  const grouped = [];
+
+  // Process each post/event
   posts.forEach(post => {
-    const placeIds = getPlaceIdsFromPost(post, placeForeignKey);
-    if (!Array.isArray(placeIds) || placeIds.length === 0) {
+    let places = null;
+    if (post.acf && post.acf[placeForeignKey]) {
+      places = post.acf[placeForeignKey];
+    } else if (post.meta && post.meta[placeForeignKey]) {
+      places = post.meta[placeForeignKey];
+    } else if (post[placeForeignKey]) {
+      places = post[placeForeignKey];
+    }
+    if (!places) {
+      console.log('No place data found for post:', post.id);
       return;
     }
-    placeIds.forEach(placeId => {
-      if (grouped[placeId]) {
-        grouped[placeId].events = grouped[placeId].events || [];
-        grouped[placeId].events.push(post);
+    const placesArray = Array.isArray(places) ? places : [places];
+    placesArray.forEach(place => {
+      if (!place || !place.id) {
+        console.log('Invalid place data for post:', post.id);
+        return;
+      }
+      const existingIndex = grouped.findIndex(item => item.place.id === place.id);
+      if (existingIndex !== -1) {
+        grouped[existingIndex].events.push(post);
+      } else {
+        grouped.push({
+          place: place,
+          events: [post]
+        });
       }
     });
   });
-  return Object.values(grouped);
-}
-function getPlaceIdsFromPost(post, placeForeignKey) {
-  let places;
-  if (!placeForeignKey) {
-    return null;
-  }
-  if (post.meta) {
-    if (post.meta[placeForeignKey]) {
-      places = post.meta[placeForeignKey];
-    }
-  }
-  if (!places && post.acf) {
-    if (post.acf[placeForeignKey]) {
-      places = post.acf[placeForeignKey];
-    }
-  }
-  if (typeof places === 'string') {
-    places = places.split(',');
-  }
-  if (!places) {
-    return null;
-  }
-  if (!Array.isArray(places)) {
-    return null;
-  }
-  const placeIds = places.map(place => {
-    if (typeof place === 'object' && place !== null) {
-      return parseInt(place.id, 10);
-    }
-    if (!isNaN(parseInt(place, 10))) {
-      return parseInt(place, 10);
-    }
-    return null;
-  });
-  return [...new Set(placeIds.filter(id => id !== null))];
+  return grouped;
 }
 
 /***/ }),
