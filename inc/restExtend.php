@@ -1,5 +1,7 @@
 <?php namespace cmk\postsByTabs;
 
+use cmk\postsByTabs\optionPage;
+
 class restExtend {
 
 	protected static $instance = null;
@@ -14,6 +16,11 @@ class restExtend {
 
 	private function __construct() {
 		$this->register_rest_routes();
+		add_action('init', function() {
+			$post_type = get_post_type_object('lieu');
+			error_log('Post type lieu exists: ' . ($post_type ? 'yes' : 'no'));
+			error_log('Post type lieu is public: ' . ($post_type && $post_type->public ? 'yes' : 'no'));
+		});
 	}
 
 	public function register_rest_routes(): void {
@@ -28,14 +35,12 @@ class restExtend {
 					array(
 						'methods'             => 'GET',
 						'callback'            => array( '\cmk\postsByTabs\restExtend', 'get_metafields_rest' ),
-						'permission_callback' => '__return_true', // '\cmk\postsByTabs\restExtend::validate_token',
+						'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
 						'args'                => array(
 							'post_type' => array(
-								'default'           => 'evenement',
 								'sanitize_callback' => 'sanitize_text_field',
 							),
 							'keys_only' => array(
-								'default'           => false,
 								'sanitize_callback' => 'rest_sanitize_boolean',
 							),
 						),
@@ -51,15 +56,12 @@ class restExtend {
 						'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
 						'args'                => array(
 							'post_type'      => array(
-								'default'           => 'evenement',
 								'sanitize_callback' => 'sanitize_text_field',
 							),
 							'paged'          => array(
-								'default'           => 1,
 								'sanitize_callback' => 'absint',
 							),
 							'posts_per_page' => array(
-								'default'           => 10,
 								'sanitize_callback' => 'absint',
 							),
 							'terms'          => array(
@@ -72,20 +74,36 @@ class restExtend {
 								},
 							),
 							'meta_query'     => array(
-								'default'           => array(),
 								'sanitize_callback' => '\cmk\postsByTabs\restExtend::sanitize_meta_fields',
 							),
 							'order'          => array(
-								'default'           => 'DESC',
 								'sanitize_callback' => 'sanitize_text_field',
 							),
 							'orderby'        => array(
-								'default'           => 'date',
 								'sanitize_callback' => 'sanitize_text_field',
 							),
 							'meta_key'       => array(
-								'default'           => 'datedebut',
 								'sanitize_callback' => 'sanitize_text_field',
+							),
+							'search'        => array(
+								'sanitize_callback' => 'sanitize_text_field',
+							),
+						),
+					)
+				);
+
+				register_rest_route(
+					self::$endpoint,
+					'/places',
+					array(
+						'methods'             => 'POST',
+						'callback'            => array( '\cmk\postsByTabs\restExtend', 'get_places_rest' ),
+						'permission_callback' => '\cmk\postsByTabs\restExtend::validate_token',
+						'args'                => array(
+							'towns' => array(
+								'sanitize_callback' => function ( $param ) {
+									return is_array( $param ) ? $param : array();
+								},
 							),
 						),
 					)
@@ -100,28 +118,32 @@ class restExtend {
 
 	public static function get_posts_rest( \WP_REST_Request $request ): \WP_REST_Response {
 
+		$params = $request->get_params();
+		
 		$args = array(
 			'post_status'    => 'publish',
-			'post_type'      => $request->get_param( 'post_type' ),
-			'paged'          => $request->get_param( 'paged' ),
-			'posts_per_page' => $request->get_param( 'per_page' ),
-			'order'          => $request->get_param( 'order' ),
-			'orderby'        => $request->get_param( 'orderby' ),
-			'meta_key'       => $request->get_param( 'meta_key' ),
+			'post_type'      => $params['post_type'] ?? 'post',
+			'paged'          => $params['paged'] ?? 1,
+			'posts_per_page' => $params['posts_per_page'] ?? 10,
+			'order'          => $params['order'] ?? 'DESC',
+			'orderby'        => $params['orderby'] ?? 'date',
+			'meta_key'       => $params['meta_key'] ?? '',
 		);
 
 		$response = array(
 			'posts'         => array(),
 			'total'         => 0,
-			'calendarPosts' => array(),
 		);
 
-		$terms = $request->get_param( 'terms' );
-		if ( ! empty( $terms ) ) {
+		if ( ! empty($params['search'] ) ) {
+			$args['s'] = $params['search'];
+		}
+
+		if ( ! empty( $params['terms'] ) ) {
 			$args['tax_query'] = array(
-				'relation' => 'OR',
+				'relation' =>  isset($params['tax_query']['relation']) ? $params['tax_query']['relation'] : 'OR',
 			);
-			foreach ( $terms as $taxonomy => $term_ids ) {
+			foreach ( $params['terms'] as $taxonomy => $term_ids ) {
 				$args['tax_query'][] = array(
 					'taxonomy'         => $taxonomy,
 					'terms'            => $term_ids,
@@ -131,44 +153,62 @@ class restExtend {
 			}
 		}
 
-		$meta_query = $request->get_param( 'meta_query' );
-		if ( ! empty( $meta_query ) &&
-			is_array( $meta_query ) &&
-			! empty( $meta_query['fields'] ) ) {
+		if ( 
+			true === is_array( $params['meta_query'] ) && 
+			true === isset( $params['meta_query']['fields'] ) 
+		) {
 
-			$args['meta_query'] = array(
-				'relation' => $meta_query['relation'],
-				$meta_query['fields'],
-			);
+			if(false === empty($params['meta_query']['fields'])) {
+				$args['meta_query'] = array(
+					'relation' => isset($params['meta_query']['relation']) ? $params['meta_query']['relation'] : 'AND',
+					$params['meta_query']['fields'],
+				);
+			}
 
 		}
 
-		$query = new \WP_Query( $args );
-		$posts = $query->get_posts();
+		try {
 
-		wp_reset_postdata();
+			$query = new \WP_Query( $args );
+			$posts = $query->get_posts();
 
-		$posts_prepared = array();
-		if ( empty( $posts ) ) {
+			wp_reset_postdata();
+
+			$posts_prepared = array();
+			if ( empty( $posts ) ) {
+				return new \WP_REST_Response( $response, 200 );
+			}
+
+			$posts_prepared = array();
+			$post_controller = new \WP_REST_Posts_Controller( $args['post_type'] );
+			
+			foreach ( $posts as $post ) {
+				$prepared                        = $post_controller->prepare_item_for_response( $post, $request );
+				$post_prepared                   = $post_controller->prepare_response_for_collection( $prepared );
+				
+				$post_prepared['featured_media'] = get_the_post_thumbnail_url( $post->ID, 'full' );
+				$post_prepared['terms']          = self::get_post_terms( $post->ID );
+				$post_prepared['acf']            = apply_filters( 'rest_prepare_acf_fields', get_fields( $post->ID ), $post, $request );
+				
+				$posts_prepared[]                = $post_prepared;
+			}
+
+			$posts_prepared = apply_filters( 'cmk_posts_by_tabs_posts_prepared', $posts_prepared, $args );
+
+			$response['posts']       = $posts_prepared;
+			$response['total_posts'] = $query->found_posts;
+			$response['max_pages']   = $query->max_num_pages;
+			$response['current_page'] = $query->get( 'paged' );
+
 			return new \WP_REST_Response( $response, 200 );
+
+		} catch (\Exception $e) {
+			error_log('Posts-by-tabs API error: ' . $e->getMessage());
+			return new \WP_REST_Response([
+				'error' => $e->getMessage() . json_encode($args),
+				'code' => 'posts_query_error'
+			], 500);
 		}
-
-		$post_controller = new \WP_REST_Posts_Controller( $args['post_type'] );
-		foreach ( $posts as $post ) {
-			$prepared                        = $post_controller->prepare_item_for_response( $post, $request );
-			$post_prepared                   = $post_controller->prepare_response_for_collection( $prepared );
-			$post_prepared['featured_media'] = get_the_post_thumbnail_url( $post->ID, 'full' );
-			$post_prepared['terms']          = self::get_post_terms( $post->ID );
-			$post_prepared['acf']            = apply_filters( 'rest_prepare_acf_fields', get_fields( $post->ID ), $post, $request );
-			$posts_prepared[]                = $post_prepared;
-		}
-
-		apply_filters( 'cmk_posts_by_tabs_posts_prepared', $posts_prepared, $args );
-
-		$response['posts']       = $posts_prepared;
-		$response['total_posts'] = $query->found_posts;
-
-		return new \WP_REST_Response( $response, 200 );
 	}
 
 	private static function get_post_terms( $post_id ): array {
@@ -190,7 +230,6 @@ class restExtend {
 		}
 		return $terms;
 	}
-
 
 	public static function get_metafields_rest( \WP_REST_Request $request ): \WP_REST_Response {
 		$post_type   = $request->get_param( 'post_type' );
@@ -253,13 +292,11 @@ class restExtend {
 	}
 
 	private static function places( $towns = array() ): array {
-
-		if ( ! is_array( $towns ) ) {
-			$towns = array( $towns );
-		}
+		
+		$place_post_type = optionPage::get_instance()->get_option( 'place_post_type' );
 
 		$args = array(
-			'post_type'      => 'lieu',
+			'post_type'      => $place_post_type  ?? 'lieu',
 			'post_status'    => 'publish',
 			'orderby'        => 'title',
 			'order'          => 'ASC',

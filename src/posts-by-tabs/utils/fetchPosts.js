@@ -1,10 +1,10 @@
+import universalFetch from './universalFetch';
 
 export async function fetchPosts(attributes, options = {}) {
     const { headers = false, append = false } = options;
     let response;
     
     try {
-        // Determine if we need to use the meta query endpoint
         if (hasMetaQuery(attributes)) {
             response = await fetchPostsWithMetaQuery(attributes, headers);
         } else {
@@ -32,8 +32,7 @@ export function hasMetaQuery(attributes) {
 }
 
 async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
-    const endpoint = '/posts-by-tabs/v1/posts';
-    
+
     const requestData = {
         post_type: attributes.postType || 'post',
         posts_per_page: attributes.numberOfItems || 5,
@@ -50,10 +49,13 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
         requestData.terms[attributes.taxonomy] = attributes.terms;
     }
 
-    const response = await wp.apiFetch({
-        path: endpoint,
+
+    const response = await universalFetch({
+        path: 'posts-by-tabs/v1/posts',
         method: 'POST',
-        data: requestData
+        data: requestData,
+        returnHeaders: getHeaders,
+        attributes: attributes
     });
     
     if (getHeaders && response.total_posts !== undefined) {
@@ -65,8 +67,9 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
             }
         };
     }
-    
-    return response.posts || response;
+
+    return getHeaders ? response.data.posts || response.data : response.posts || response;
+
 }
 
 async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
@@ -98,7 +101,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
     }
     
     if (attributes.search) {
-        queryPath += `&search=${encodeURIComponent(attributes.search)}`;
+        queryPath += `&s=${encodeURIComponent(attributes.search)}`;
     }
     
     if (attributes.offset) {
@@ -111,6 +114,17 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
             parse: false
         });
         
+        if (response instanceof Response) {
+            const posts = await response.json();
+            return {
+                posts,
+                headers: {
+                    'x-wp-total': response.headers.get('X-WP-Total'),
+                    'x-wp-totalpages': response.headers.get('X-WP-TotalPages')
+                }
+            };
+        } 
+        
         const posts = await response.json();
         return {
             posts,
@@ -120,7 +134,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
             }
         };
     } else {
-        return await wp.apiFetch({ path:queryPath });
+        return await universalFetch({ path: queryPath, attributes: attributes });
     }
 
 }

@@ -1,24 +1,22 @@
 import mapStyles from './map.style.json';
 import markerIcon from './marker.svg';
 
-export function initializeMap(config, places, mapElement) {
+
+const pluginSettings = window.postsByTabsSettings || {
+  defaultLatitude: 48.8566,
+  defaultLongitude: 2.3522
+};
+
+export function initializeMap(places, mapElement) {
 
   if (!mapElement) return { map: null, markers: [] };
-  
-  const config = block || {};
-
-  let defaultPosition = { lat: 48.8566, lng: 2.3522 };
- 
-  if (config.default_address_lat && config.default_address_lng) {
-    defaultPosition = {
-      lat: parseFloat(config.default_address_lat),
-      lng: parseFloat(config.default_address_lng)
-    };
-  }
 
   const map = new google.maps.Map(mapElement, {
     zoom: parseInt(mapElement.dataset.zoom) || 11,
-    center: defaultPosition,
+    center: {
+      lat: parseFloat(pluginSettings.defaultLatitude),
+      lng: parseFloat(pluginSettings.defaultLongitude)
+    },
     streetViewControl: false,
     mapTypeControl: false,
     styles: mapStyles

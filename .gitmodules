@@ -1,0 +1,3 @@
+[submodule "src/posts-by-tabs/utils/mapCluster/react-google-maps"]
+	path = src/posts-by-tabs/utils/mapCluster/react-google-maps
+	url = https://github.com/visgl/react-google-maps.git

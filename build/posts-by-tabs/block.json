@@ -29,13 +29,12 @@
   },
   "allowedBlocks": [],
   "attributes": {
-    "title": {
-      "type": "string",
-      "default": ""
+    "initialized": {
+      "type": "boolean",
+      "default": false
     },
-    "subtitle": {
-      "type": "string",
-      "default": ""
+    "blockId": {
+      "type": "string"
     },
     "tabs": {
       "type": "array",
@@ -344,9 +343,6 @@
     "orderBy": {
       "type": "string",
       "default": "date"
-    },
-    "blockId": {
-      "type": "string"
     }
   },
   "textdomain": "cmk-posts-by-tab",

@@ -1,17 +1,18 @@
 
 import React, { useState, useRef, useEffect } from '@wordpress/element';
 import { useGoogleMapsLoader } from '../utils/useGoogleMapsLoader';
+import groupEventsByPlaces from '../utils/groupEventsByPlaces';
 
 export default function EventsMap(props) {
     const mapRef = useRef(null);
-    const { posts, tab, config } = props;
+    const { posts, tab, attributes, config } = props;
     
     if (!posts) {
         return null;
     }
     
     const { zoom } = tab;
-    const places = groupEventsByPlaces(posts);
+    const places = groupEventsByPlaces(attributes, posts);
     const { mapLoaded, mapInstance, markers, error } = useGoogleMapsLoader(config, mapRef, places);
     
     useEffect(() => {
@@ -33,39 +34,4 @@ export default function EventsMap(props) {
             />
         </div>
     );
-}
-
-function groupEventsByPlaces(posts) {
-    if (!posts) {
-        return null;
-    }
-    
-    const eventsByPlaces = [];
-    const placeMap = new Map();
-    
-    posts.forEach(post => {
-        if (!post.acf?.lieu) {
-            return;
-        }
-        
-        const lieu = post.acf.lieu;
-        
-        if (!lieu.id) {
-            console.warn('Place is missing ID:', lieu);
-            return;
-        }
-        
-        if (placeMap.has(lieu.id)) {
-            placeMap.get(lieu.id).events.push(post);
-        } else {
-            const eventsByPlace = {
-                place: lieu,
-                events: [post]
-            };
-            eventsByPlaces.push(eventsByPlace);
-            placeMap.set(lieu.id, eventsByPlace);
-        }
-    });
-    
-    return eventsByPlaces;
 }

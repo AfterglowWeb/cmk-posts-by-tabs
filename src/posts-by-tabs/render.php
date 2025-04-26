@@ -1,50 +1,40 @@
 <?php 
 
-$title = isset($attributes['title']) ? $attributes['title'] : '';
-$subtitle = isset($attributes['subtitle']) ? $attributes['subtitle'] : '';
 $tabs = isset($attributes['tabs']) ? $attributes['tabs'] : [];
 $block_id = isset($attributes['blockId']) ? $attributes['blockId'] : '';
 $background = isset($attributes['background']) ? $attributes['background'] : [];
+$options = \cmk\postsByTabs\optionPage::get_instance()->get_options();
+
+$attributes = array_merge(
+    $attributes, 
+    array(
+        'restUrl' => esc_url_raw(rest_url()),
+        'nonce' => wp_create_nonce('wp_rest'),
+        'options' => array(
+            'dateFormat'        => isset($options['date_format']) ? $options['date_format'] : 'F j, Y',
+            'googleMapsApiKey'  => isset($options['google_maps_api_key']) ? $options['google_maps_api_key'] : '',
+            'defaultLatitude'   => isset($options['google_maps_default_lat']) ? $options['google_maps_default_lat'] : '',
+            'defaultLongitude'  => isset($options['google_maps_default_lng']) ? $options['google_maps_default_lng'] : '',
+            'postsPerPage'      => isset($options['posts_per_page']) ? $options['posts_per_page'] : 10,
+            'defaultTemplate'   => isset($options['default_template']) ? $options['default_template'] : '',
+            'placePostType' => isset($options['place_post_type']) ? $options['place_post_type'] : '',
+            'placeForeignKey' => isset($options['place_foreign_key']) ? $options['place_foreign_key'] : '',
+            'eventPostType' => isset($options['event_post_type']) ? $options['event_post_type'] : '',
+            'eventForeignKey' => isset($options['event_foreign_key']) ? $options['event_foreign_key'] : '',
+            'cacheDuration'     => isset($options['cache_duration']) ? $options['cache_duration'] : 3600
+        )
+    )
+);
 
 ?>
-<div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block w-full min-w-full']); ?> id="block-<?php echo esc_attr($block_id); ?>">
-    <?php if (empty($tabs)) : ?>
+<div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block w-full min-w-full']); ?>>
+   
+<?php if (empty($tabs)) : ?>
         <div class="posts-by-tabs-empty">
             <?php esc_html_e('No tabs available.', 'posts-by-tabs'); ?>
         </div>
     <?php else : ?>
         <div class="container mx-auto xl:max-w-screen-xl">
-
-            <!-- Background Image -->
-            <?php if ( !empty($background) ) : ?>
-                <?php if ( isset($background["mediaType"]) && isset($background["mediaUrl"] ) ) : ?>
-                        <?php if ('video' === $background["mediaType"]) : ?>
-                        <div class="posts-by-tabs-background">
-                            <video autoplay muted loop playsinline title="<?php esc_attr_e($background["mediaAlt"]); ?>" >
-                                <source src="<?php echo esc_url($background["mediaUrl"]); ?>"  type="video/mp4" />
-                            </video>
-                        </div>
-                    <?php endif; ?>
-                    <?php if ('image' === $background["mediaType"]) : ?>
-                        <div class="posts-by-tabs-background">
-                            <img src="<?php echo esc_url($background["mediaUrl"]); ?>" alt="<?php esc_attr_e($background["mediaAlt"]); ?>" />
-                        </div>
-                    <?php endif; ?>
-                <?php endif; ?>
-            <?php endif; ?>
-               
-            <!-- Block Title -->
-            <?php if (!empty($title)) : ?>
-                <h2 class=" text-secondary font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0">
-                    <?php esc_html_e($title); ?>
-                </h2>
-            <?php endif; ?>
-            <?php if (!empty($subtitle)) : ?>
-				<p class="font-bold text-xl text-[30px] mb-0">
-                    <strong><?php esc_html_e($subtitle); ?></strong>
-				</p>
-            <?php endif; ?>
-            
 
             <!-- Tab Navigation -->
             <div class="posts-by-tabs-nav mb-3 overflow-x-auto" role="tablist">
