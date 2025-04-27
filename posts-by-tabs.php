@@ -47,24 +47,12 @@ add_action('enqueue_block_editor_assets', function () {
         $asset_file['version']
     );
     
-    $options = OptionPage::get_instance()->get_options();
+    $rest_options = OptionPage::get_instance()->get_rest_options();
 
     wp_localize_script(
         'posts-by-tabs-editor',
         'postsByTabsSettings',
-        [
-            'dateFormat'        => $options['date_format'],
-            'googleMapsApiKey'  => $options['google_maps_api_key'],
-            'defaultLatitude'   => $options['google_maps_default_lat'],
-            'defaultLongitude'  => $options['google_maps_default_lng'],
-            'postsPerPage'      => $options['posts_per_page'],
-            'defaultTemplate'   => $options['default_template'],
-            'placePostType' => $options['place_post_type'],
-            'placeForeignKey' => $options['place_foreign_key'],
-            'eventPostType' => $options['event_post_type'],
-            'eventForeignKey' => $options['event_foreign_key'],
-            'cacheDuration'     => $options['cache_duration'],
-        ]
+        ['options' => $rest_options]
     );
     
     wp_enqueue_script('posts-by-tabs-editor');
