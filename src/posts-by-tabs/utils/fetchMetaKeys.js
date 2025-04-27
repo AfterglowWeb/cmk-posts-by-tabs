@@ -1,63 +1,100 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, useRef } from '@wordpress/element';
+import universalFetch from './universalFetch';
 
 const metaKeysCache = {};
+const pendingRequests = {};
 
 export async function fetchMetaKeys(postType, useCache = true) {
+    if (!postType) {
+        console.log('No post type provided to fetchMetaKeys');
+        return [];
+    }
+    
     if (useCache && metaKeysCache[postType]) {
+        console.log(`Using cached meta keys for ${postType}`);
         return metaKeysCache[postType];
     }
     
-    try {
-        const metas = await wp.apiFetch({ 
-            path: `/posts-by-tabs/v1/meta/${postType}?keys_only=true` 
-        });
-        
-        if (!metas || typeof metas !== 'object') {
-            throw new Error('Invalid meta fields response');
-        }
-        
-        const metaKeyArray = Object.keys(metas)
-            .filter(meta => !meta.startsWith('_'))
-            .map(meta => {
-                const metaLabel = meta.split('_').join(' ');
-                return {
-                    label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
-                    value: meta
-                };
+    if (pendingRequests[postType]) {
+        return pendingRequests[postType];
+    }
+    
+    const requestPromise = new Promise(async (resolve) => {
+        try {
+            console.log(`Fetching meta keys for post type: ${postType}`);
+            const fetchedMetaKeys = await universalFetch({ 
+                path: `/posts-by-tabs/v1/meta/${postType}?keys_only=true`
             });
             
-        metaKeysCache[postType] = metaKeyArray;
-        
-        return metaKeyArray;
-    } catch (error) {
-        console.error(`Error fetching meta keys for ${postType}:`, error);
-        throw error;
-    }
+            console.log('Fetched meta keys:', fetchedMetaKeys);
+            
+            let metaKeysArray = [];
+            
+            if (Array.isArray(fetchedMetaKeys)) {
+                metaKeysArray = fetchedMetaKeys;
+            } else if (typeof fetchedMetaKeys === 'object' && fetchedMetaKeys !== null) {
+                metaKeysArray = Object.keys(fetchedMetaKeys);
+            }
+            
+            const metaKeyOptions = metaKeysArray
+                .filter(meta => typeof meta === 'string' && !meta.startsWith('_'))
+                .map(meta => {
+                    const metaLabel = meta.split('_').join(' ');
+                    return {
+                        label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
+                        value: meta
+                    };
+                });
+            
+            metaKeysCache[postType] = metaKeyOptions;
+            
+            resolve(metaKeyOptions);
+        } catch (error) {
+            console.error(`Error fetching meta keys for ${postType}:`, error);
+            resolve([]);
+        } finally {
+            delete pendingRequests[postType];
+        }
+    });
+    
+    pendingRequests[postType] = requestPromise;
+    
+    return requestPromise;
 }
 
 export function useMetaKeys(postType) {
     const [metaKeys, setMetaKeys] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    
+    const prevPostTypeRef = useRef(null);
+
     useEffect(() => {
-        if (!postType) {
-            setMetaKeys([]);
+
+        if (!postType || postType === prevPostTypeRef.current) {
             return;
         }
+
+       prevPostTypeRef.current = postType;
         
         setIsLoading(true);
         setError(null);
         
-        fetchMetaKeys(postType)
-            .then(keys => {
-                setMetaKeys(keys);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                setError(err);
-                setIsLoading(false);
-            });
+            fetchMetaKeys(postType)
+                .then(keys => {
+                    setMetaKeys(keys);
+                    setIsLoading(false);
+                })
+                .catch(err => {
+                    console.error(`Error fetching meta keys for ${postType}:`, err);
+                    setError(err);
+                    setIsLoading(false);
+                });
+        
+        return () => {
+            setMetaKeys([]);
+            setIsLoading(false);
+            setError(null);
+        }
     }, [postType]);
     
     return { metaKeys, isLoading, error };

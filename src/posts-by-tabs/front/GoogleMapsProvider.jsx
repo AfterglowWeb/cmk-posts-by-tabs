@@ -71,7 +71,6 @@ export const GoogleMapsProvider = ({ apiKey, children, libraries = ['places'], v
     
     script.onload = () => {
       if (isApiLoaded()) {
-        console.log('Google Maps API loaded successfully');
         setGoogleMaps(window.google.maps);
         setLoading(false);
       } else {

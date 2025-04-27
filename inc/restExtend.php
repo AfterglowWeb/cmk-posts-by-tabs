@@ -60,6 +60,7 @@ class RestExtend {
 						'args'                => array(
 							'post_type' => array(
 								'sanitize_callback' => 'sanitize_text_field',
+								'required'          => true,
 							),
 							'keys_only' => array(
 								'sanitize_callback' => 'rest_sanitize_boolean',
@@ -78,6 +79,7 @@ class RestExtend {
 						'args'                => array(
 							'post_type'      => array(
 								'sanitize_callback' => 'sanitize_text_field',
+								'required'          => true,
 							),
 							'paged'          => array(
 								'sanitize_callback' => 'absint',
@@ -256,8 +258,9 @@ class RestExtend {
 		$post_type   = $request->get_param( 'post_type' );
 		$keys_only   = $request->get_param( 'keys_only' );
 		$meta_fields = array();
-		$posts       = get_posts(
+		$postIds       = get_posts(
 			array(
+				'fields'        => 'ids',
 				'post_type'      => $post_type,
 				'posts_per_page' => -1,
 				'paged'          => 1,
@@ -267,8 +270,12 @@ class RestExtend {
 			)
 		);
 
-		foreach ( $posts as $post ) {
-			$post_meta_keys = get_post_custom_keys( $post->ID );
+		if ( empty( $postIds ) ) {
+			return new \WP_REST_Response( 'No posts found', 404 );
+		}
+
+		foreach ( $postIds as $postId ) {
+			$post_meta_keys = get_post_custom_keys( $postId );
 
 			if ( empty( $post_meta_keys ) ) {
 				continue;
@@ -281,7 +288,7 @@ class RestExtend {
 			);
 
 			foreach ( $post_meta_keys as $key ) {
-				$meta_fields[ $key ][] = get_post_meta( $post->ID, $key, true );
+				$meta_fields[ $key ][] = get_post_meta( $postId, $key, true );
 			}
 		}
 
@@ -297,7 +304,7 @@ class RestExtend {
 			foreach ( $meta_fields as $key => $values ) {
 				$keys_array[ $key ] = array();
 			}
-			return new \WP_REST_Response( $keys_array );
+			return new \WP_REST_Response( $keys_array, 200 );
 		}
 
 		return new \WP_REST_Response( $meta_fields, 200 );

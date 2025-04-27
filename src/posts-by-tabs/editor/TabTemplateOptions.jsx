@@ -3,7 +3,6 @@ import { CheckboxControl } from '@wordpress/components';
 import MuiInputSlider from './MuiInputSlider';
 import MuiSelect from './MuiSelect';
 import MetaKeySelector from './MetaKeySelector';
-import MapStyleSelector from './MapStyleSelector';
 
 export default function TabTemplateOptions(props) {
 
@@ -32,7 +31,7 @@ function optionFields(props) {
         case 'slider':
             return <SliderFields {...props} />;
         case 'map':
-            return <MapStyleSelector {...props} />;
+            return <MapFields {...props} />;
         default:
             return null;
     }
@@ -224,6 +223,8 @@ function CalendarFields(props) {
     
     return (
         <>
+        {postType &&
+        <>
         <MetaKeySelector 
         postType={postType} 
         onChange={(value) => handleTabValueChange(
@@ -242,6 +243,8 @@ function CalendarFields(props) {
         label={__('End key')}
         value={end_key || ''} 
         />
+        </>
+        }
         <MuiSelect
             label={__('Default view')}
             value={default_view || ''}
@@ -405,4 +408,72 @@ function SliderFields(props) {
         />
         </>
     );
+}
+
+function MapFields(props) {
+
+
+    const { tab, index, handleTabValueChange } = props;
+    if (!tab) {
+        return null;
+    }
+    const {
+        template, 
+        options
+    } = tab;
+
+    if (template !== 'map') {
+        return null;
+    }
+
+   
+    const mapStyles = {
+        red: {
+            id: 'red',
+            name: __('Red Theme', 'posts-by-tabs'),
+            description: __('Bold red theme with red landscapes and roads', 'posts-by-tabs'),
+            previewColor: '#d13d40',
+        },
+        green: {
+            id: 'green',
+            name: __('Green Theme', 'posts-by-tabs'),
+            description: __('Natural green theme with green landscapes', 'posts-by-tabs'),
+            previewColor: '#2a4360',
+        },
+        standard: {
+            id: 'standard',
+            name: __('Default', 'posts-by-tabs'),
+            description: __('Standard Google Maps style', 'posts-by-tabs'),
+            previewColor: '#4285f4'
+        }
+    };
+
+  const { mapStyle } = options?.mapStyle || 'red';
+
+  return (
+    <MuiSelect
+    label={__('Map style')}
+    value={mapStyle}
+    options={
+    Object.entries(mapStyles).map(([key, value]) => ({
+        value: key,
+        label: (
+        <div key={key} className="flex items-center">
+            <div
+            className="w-4 h-4 mr-2 rounded-full shadow"
+            style={{
+                backgroundColor: value.previewColor,
+            }}
+            />
+            <span>{value.name}</span>
+        </div>
+        ),
+    }))
+    }
+    onChange={(value) => handleTabValueChange(
+        {...options, map: {...options.map, mapStyle: value}},
+        'options', 
+        index)}
+    />
+  );
 }

@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import TabTemplateOptions from './TabTemplateOptions';
 import MuiSelect from './MuiSelect';
 
-const pluginSettings = window.postsByTabsSettings || {
+const postsByTabsSettings = window.postsByTabsSettings || {
     googleMapsApiKey: '',
     defaultLatitude: 48.8566,
     defaultLongitude: 2.3522,
@@ -27,7 +27,7 @@ export default function TabFields(props) {
     const handleAddTab = () => {
         const tabs = [ ...attributes.tabs || [] ];
         tabs.push( {
-            template: pluginSettings.defaultTemplate,
+            template: postsByTabsSettings.defaultTemplate,
             title: '',
             subtitle: '',
             meta_1: '',
@@ -62,13 +62,13 @@ export default function TabFields(props) {
                     show_months: true,
                 },
                 map:{
-                    apiKey: pluginSettings.googleMapsApiKey,
+                    apiKey: postsByTabsSettings.googleMapsApiKey,
                     center: {
-                        lat: pluginSettings.defaultLatitude,
-                        lng: pluginSettings.defaultLongitude
+                        lat: postsByTabsSettings.defaultLatitude,
+                        lng: postsByTabsSettings.defaultLongitude
                     },
                     zoom: 13,
-                    styleId: 'red',
+                    mapStyle: 'red',
                 },
                 slider:{
                     slidesPerView: 1,

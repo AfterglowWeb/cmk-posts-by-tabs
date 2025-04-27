@@ -54,11 +54,6 @@
             "type": "string",
             "default": ""
           },
-          "content": {
-            "type": "string",
-            "source": "html",
-            "default": ""
-          },
           "showNavigation": {
             "type": "boolean",
             "default": false
@@ -261,7 +256,7 @@
                     "type": "number",
                     "default": 8
                   },
-                  "styleId": {
+                  "mapStyle": {
                     "type": "string",
                     "default": "red"
                   },
@@ -292,12 +287,8 @@
       "type": "array",
       "default": [],
       "items": {
-        "type": "number"
+        "type": "object"
       }
-    },
-    "metaKey": {
-      "type": "string",
-      "default": ""
     },
     "metaFields": {
       "type": "object",
@@ -341,9 +332,9 @@
         }
       }
     },
-    "numberOfItems": {
+    "postsPerPage": {
       "type": "number",
-      "default": 5
+      "default": 12
     },
     "maxNumPages": {
       "type": "number",
@@ -368,6 +359,9 @@
     "orderBy": {
       "type": "string",
       "default": "date"
+    },
+    "orderByMetaKey": {
+      "type": "string"
     }
   },
   "textdomain": "cmk-posts-by-tab",

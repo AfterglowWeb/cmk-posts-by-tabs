@@ -43244,7 +43244,7 @@ const RED_MAP_STYLE = [{
 
 
 const DEFAULT_MARKER_SVG = `data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve"><path id="Tracé_1056" style="opacity:0.7;fill:%23091219;" d="M15.8,1.3C10,1.3,5.3,6,5.3,11.8l0,0 c0,7.5,10.5,19.5,10.5,19.5s10.5-12,10.5-19.5C26.3,6,21.6,1.3,15.8,1.3L15.8,1.3z"/></svg>`;
-const pluginSettings = window.postsByTabsSettings?.options || {
+const postsByTabsSettings = window.postsByTabsSettings?.options || {
   defaultLatitude: 48.8566,
   defaultLongitude: 2.3522
 };
@@ -43287,8 +43287,8 @@ function EventsMapCluster(props) {
   const mapOptions = tab?.map || {};
   const mapStyle = mapOptions.mapStyle === 'green' ? _styles_mapGreenStyle_json__WEBPACK_IMPORTED_MODULE_3__ : _styles_mapRedStyle_json__WEBPACK_IMPORTED_MODULE_4__;
   const markerIcon = mapOptions.markerIcon || DEFAULT_MARKER_SVG;
-  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || pluginSettings.defaultLatitude);
-  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || pluginSettings.defaultLongitude);
+  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || postsByTabsSettings.defaultLatitude);
+  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || postsByTabsSettings.defaultLongitude);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!window.google || !window.google.maps) {
       console.warn('Google Maps API not loaded');
@@ -43518,7 +43518,6 @@ const GoogleMapsProvider = ({
     };
     script.onload = () => {
       if (isApiLoaded()) {
-        console.log('Google Maps API loaded successfully');
         setGoogleMaps(window.google.maps);
         setLoading(false);
       } else {
@@ -43596,7 +43595,7 @@ function Pagination(props) {
     posts = [],
     totalPosts = 0,
     offset = 0,
-    postsPerPage = 10,
+    postsPerPage = 12,
     currentPage = 1,
     onPageChange,
     paginationType = 'buttons',
@@ -43803,7 +43802,7 @@ function PostsByTabs(props) {
   const [totalPosts, setTotalPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
   const activeTab = attributes.tabs ? attributes.tabs[selectedTab] : null;
   const paginationType = activeTab?.options?.paginationType || 'buttons';
-  const postsPerPage = attributes.numberOfItems || 10;
+  const postsPerPage = attributes.postsPerPage || 12;
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     const getPosts = async () => {
       setIsLoading(true);
@@ -43832,7 +43831,7 @@ function PostsByTabs(props) {
       }
     };
     getPosts();
-  }, [attributes.postType, attributes.taxonomy, attributes.terms, attributes.numberOfItems, attributes.order, attributes.orderBy, attributes.search, attributes.offset, attributes.metaFields, attributes.metaFields?.fields, attributes.metaFields?.relation, attributes.metaFields?.fields?.length]);
+  }, [attributes.postType, attributes.taxonomy, attributes.terms, attributes.postsPerPage, attributes.order, attributes.orderBy, attributes.search, attributes.offset, attributes.metaFields, attributes.metaFields?.fields, attributes.metaFields?.relation, attributes.metaFields?.fields?.length]);
   const handleTabChange = (event, value) => {
     setSelectedTab(value);
   };
@@ -45185,13 +45184,13 @@ function hasMetaQuery(attributes) {
 async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
   const requestData = {
     post_type: attributes.postType || 'post',
-    posts_per_page: attributes.numberOfItems || 5,
+    posts_per_page: attributes.postsPerPage || 12,
     order: attributes.order || 'desc',
     orderby: attributes.orderBy || 'date',
     meta_query: attributes.metaFields,
     search: attributes.search || '',
     offset: attributes.offset || 0,
-    meta_key: attributes.metaKey || ''
+    meta_key: attributes.orderByMetaKey || ''
   };
   if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {
     requestData.terms = {};
@@ -45209,7 +45208,7 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
       posts: response.posts || response,
       headers: {
         'x-wp-total': response.total_posts.toString(),
-        'x-wp-totalpages': Math.ceil(response.total_posts / (attributes.numberOfItems || 10)).toString()
+        'x-wp-totalpages': Math.ceil(response.total_posts / (attributes.postsPerPage || 12)).toString()
       }
     };
   }
@@ -45222,7 +45221,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
   } else if (attributes.postType === 'page') {
     restEndpoint = `/wp/v2/pages`;
   }
-  let queryPath = `${restEndpoint}?_embed&per_page=${attributes.numberOfItems || 5}`;
+  let queryPath = `${restEndpoint}?_embed&per_page=${attributes.postsPerPage || 12}`;
   if (attributes.order) {
     queryPath += `&order=${attributes.order}`;
   }

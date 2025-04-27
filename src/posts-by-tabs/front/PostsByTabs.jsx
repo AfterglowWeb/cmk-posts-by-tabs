@@ -26,7 +26,7 @@ export default function PostsByTabs(props) {
     const [totalPosts, setTotalPosts] = useState(0);
     const activeTab = attributes.tabs ? attributes.tabs[selectedTab] : null;
     const paginationType = activeTab?.options?.paginationType || 'buttons';
-    const postsPerPage = attributes.numberOfItems || 10;
+    const postsPerPage = attributes.postsPerPage || 12;
 
     useEffect(() => {
         const getPosts = async () => {
@@ -67,7 +67,7 @@ export default function PostsByTabs(props) {
         attributes.postType,
         attributes.taxonomy,
         attributes.terms,
-        attributes.numberOfItems,
+        attributes.postsPerPage,
         attributes.order,
         attributes.orderBy,
         attributes.search,

@@ -35,13 +35,13 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
 
     const requestData = {
         post_type: attributes.postType || 'post',
-        posts_per_page: attributes.numberOfItems || 5,
+        posts_per_page: attributes.postsPerPage || 12,
         order: attributes.order || 'desc',
         orderby: attributes.orderBy || 'date',
         meta_query: attributes.metaFields,
         search: attributes.search || '',
         offset: attributes.offset || 0,
-        meta_key: attributes.metaKey || ''
+        meta_key: attributes.orderByMetaKey || ''
     };
     
     if (attributes.taxonomy && attributes.terms && attributes.terms.length > 0) {
@@ -63,7 +63,7 @@ async function fetchPostsWithMetaQuery(attributes, getHeaders = false) {
             posts: response.posts || response,
             headers: {
                 'x-wp-total': response.total_posts.toString(),
-                'x-wp-totalpages': Math.ceil(response.total_posts / (attributes.numberOfItems || 10)).toString()
+                'x-wp-totalpages': Math.ceil(response.total_posts / (attributes.postsPerPage || 12)).toString()
             }
         };
     }
@@ -80,7 +80,7 @@ async function fetchPostsWithStandardQuery(attributes, getHeaders = false) {
         restEndpoint = `/wp/v2/pages`;
     }
 
-    let queryPath = `${restEndpoint}?_embed&per_page=${attributes.numberOfItems || 5}`;
+    let queryPath = `${restEndpoint}?_embed&per_page=${attributes.postsPerPage || 12}`;
     
     if (attributes.order) {
         queryPath += `&order=${attributes.order}`;

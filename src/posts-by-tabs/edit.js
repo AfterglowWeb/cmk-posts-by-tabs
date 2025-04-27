@@ -5,22 +5,14 @@ import { useEffect, useState } from '@wordpress/element';
 
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
-import MapStyleSelector from './editor/MapStyleSelector';
 
 import PostsByTabs from './front/PostsByTabs';
 import {APIProvider} from './front/GoogleMapsProvider';
+import { pl } from 'date-fns/locale';
 
 export default function Edit({attributes, setAttributes}) {
-
-	const [pluginSettings, setPluginSettings] = useState({
-        dateFormat: 'd/m/Y',
-        googleMapsApiKey: '',
-        defaultLatitude: 48.8566,
-        defaultLongitude: 2.3522,
-        postsPerPage: 10,
-        defaultTemplate: 'grid',
-        cacheDuration: 3600
-    });
+	
+	const [postsByTabsSettings, setpostsByTabsSettings] = useState(null);
 
 	const templates = [
 		{
@@ -46,13 +38,8 @@ export default function Edit({attributes, setAttributes}) {
 	];
 
 	useEffect(() => {
-        // Check if the global object exists
         if (typeof window !== 'undefined' && window.postsByTabsSettings) {
-            const savedSettings = window.postsByTabsSettings?.options || {};
-            setPluginSettings(prevSettings => ({
-                ...prevSettings,
-                ...savedSettings
-            }));
+			setpostsByTabsSettings(window.postsByTabsSettings);
             console.log('Plugin settings loaded:', window.postsByTabsSettings);
         } else {
             console.warn('postsByTabsSettings not found in global scope');
@@ -61,22 +48,27 @@ export default function Edit({attributes, setAttributes}) {
 
 	useEffect(() => {
 
+		if (!postsByTabsSettings) return;
+
 		if (!attributes.blockId) {
 			setAttributes({ blockId: crypto.randomUUID() });
 		}
 
-		if (!attributes.initialized) {
+		if (!attributes.initialized && postsByTabsSettings.options) {
+			
             setAttributes({ 
                 initialized: true,
-                numberOfItems: pluginSettings.postsPerPage,
+                postsPerPage: postsByTabsSettings.options.postsPerPage,
+				postType: attributes.postType ?  attributes.postType : 'post',
+				orderByMetaKey: attributes.orderByMetaKey ? attributes.orderByMetaKey : '',
                 tabs: attributes.tabs?.length ? attributes.tabs : [{
-                    template: pluginSettings.defaultTemplate,
+                    template: postsByTabsSettings.options.defaultTemplate,
                     options: {
                         map: {
-                            apiKey: pluginSettings.googleMapsApiKey,
+                            apiKey: postsByTabsSettings.options.googleMapsApiKey,
                             center: {
-                                lat: pluginSettings.defaultLatitude,
-                                lng: pluginSettings.defaultLongitude
+                                lat: postsByTabsSettings.options.defaultLatitude,
+                                lng: postsByTabsSettings.options.defaultLongitude
                             },
                             zoom: 13
                         }
@@ -85,7 +77,10 @@ export default function Edit({attributes, setAttributes}) {
             });
         }
 
-    }, [attributes.blockId, attributes.initialized, pluginSettings, setAttributes]);
+    }, [setAttributes, 
+		attributes,
+		postsByTabsSettings
+	]);
 	
 
     const handleTabValueChange = ( value, key, index ) => {
@@ -102,7 +97,7 @@ export default function Edit({attributes, setAttributes}) {
 					<QueryFields 
 					attributes={attributes} 
 					setAttributes={setAttributes} 
-					defaultPostsPerPage={pluginSettings.postsPerPage}
+					postsByTabsSettings={postsByTabsSettings?.options}
 					/>
 				</PanelBody>
 
@@ -112,14 +107,14 @@ export default function Edit({attributes, setAttributes}) {
 					setAttributes={setAttributes} 
 					handleTabValueChange={handleTabValueChange} 
 					templates={templates}  
-					pluginSettings={pluginSettings}
+					postsByTabsSettings={postsByTabsSettings?.options}
 					/>
 				</PanelBody>
 
 			</InspectorControls>
 			
 			<APIProvider 
-            apiKey={pluginSettings?.googleMapsApiKey}
+            apiKey={postsByTabsSettings?.googleMapsApiKey}
             libraries={['places', 'marker']}
             >
 				<PostsByTabs 
@@ -127,7 +122,7 @@ export default function Edit({attributes, setAttributes}) {
 				attributes={attributes} 
 				setAttributes={setAttributes} 
 				isEditor={true}
-				pluginSettings={pluginSettings}
+				postsByTabsSettings={postsByTabsSettings?.options}
 				/>
 			</APIProvider>
 

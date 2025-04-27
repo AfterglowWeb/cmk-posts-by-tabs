@@ -27,7 +27,7 @@ import mapGreenStyle from '../styles/mapGreenStyle.json';
 
 const DEFAULT_MARKER_SVG = `data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve"><path id="Tracé_1056" style="opacity:0.7;fill:%23091219;" d="M15.8,1.3C10,1.3,5.3,6,5.3,11.8l0,0 c0,7.5,10.5,19.5,10.5,19.5s10.5-12,10.5-19.5C26.3,6,21.6,1.3,15.8,1.3L15.8,1.3z"/></svg>`;
 
-const pluginSettings = window.postsByTabsSettings?.options || {
+const postsByTabsSettings = window.postsByTabsSettings?.options || {
   defaultLatitude: 48.8566,
   defaultLongitude: 2.3522
 };
@@ -71,8 +71,8 @@ export default function EventsMapCluster(props) {
   
   const markerIcon = mapOptions.markerIcon || DEFAULT_MARKER_SVG;
   
-  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || pluginSettings.defaultLatitude);
-  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || pluginSettings.defaultLongitude);
+  const defaultLatitude = parseFloat(mapOptions.defaultLatitudeitude || tab?.options?.map?.center?.lat || postsByTabsSettings.defaultLatitude);
+  const defaultLongitude = parseFloat(mapOptions.defaultLongitude || tab?.options?.map?.center?.lng || postsByTabsSettings.defaultLongitude);
   
   useEffect(() => {
     if (!window.google || !window.google.maps) {

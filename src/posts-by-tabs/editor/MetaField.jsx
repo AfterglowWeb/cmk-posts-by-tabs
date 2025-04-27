@@ -82,8 +82,6 @@ const compares = [
     },
 ];
 
-const metaCache = {};
-
 function metaFieldReducer(state, action) {
     switch (action.type) {
         case 'SET_KEY':
@@ -153,100 +151,10 @@ function metaFieldReducer(state, action) {
         default:
             return state;
     }
-  }
-
-function useMetaFields(postType) {
-    const [state, dispatch] = useReducer(
-        (state, action) => {
-            switch (action.type) {
-                case 'FETCH_START':
-                    return { ...state, isLoading: true, error: null };
-                case 'FETCH_SUCCESS':
-                    return { 
-                        isLoading: false, 
-                        metaFields: action.metaFields,
-                        availableValues: action.availableValues,
-                        error: null
-                    };
-                case 'FETCH_ERROR':
-                    return { ...state, isLoading: false, error: action.error };
-                case 'USE_CACHE':
-                    return {
-                        isLoading: false,
-                        metaFields: action.metaFields,
-                        availableValues: action.availableValues,
-                        error: null
-                    };
-                default:
-                    return state;
-            }
-        },
-        { isLoading: false, metaFields: [], availableValues: {}, error: null }
-    );
-
-    useEffect(() => {
-        if (!postType) return;
-
-        if (metaCache[postType]) {
-            dispatch({
-                type: 'USE_CACHE',
-                metaFields: metaCache[postType].metaFields,
-                availableValues: metaCache[postType].availableValues
-            });
-            return;
-        }
-
-        dispatch({ type: 'FETCH_START' });
-        
-        wp.apiFetch({ path: `/posts-by-tabs/v1/meta/${postType}` })
-            .then((metas) => {
- 
-                if (!metas || typeof metas !== 'object') {
-                    throw new Error('Invalid meta fields response');
-                }
-                
-                const metaArray = [];
-                const metaValues = {};
-
-                Object.keys(metas).forEach((meta) => {
-
-                    if (!meta.startsWith('_')) {
-                        const metaLabel = meta.split('_').join(' ');
-                        metaArray.push({
-                            label: metaLabel.charAt(0).toUpperCase() + metaLabel.slice(1),
-                            value: meta
-                        });
-
-                        metaValues[meta] = Array.isArray(metas[meta]) ? 
-                            metas[meta].map(val => ({
-                                label: String(val),
-                                value: String(val)
-                            })) : [];
-                    }
-                });
-
-                metaCache[postType] = {
-                    metaFields: metaArray,
-                    availableValues: metaValues
-                };
-
-                dispatch({
-                    type: 'FETCH_SUCCESS',
-                    metaFields: metaArray,
-                    availableValues: metaValues
-                });
-            })
-            .catch(error => {
-                console.error(`Error fetching meta fields for ${postType}:`, error);
-                dispatch({ type: 'FETCH_ERROR', error });
-            });
-    }, [postType]);
-
-    return state;
 }
 
 export default function MetaField(props) {
-    const { attributes, setAttributes, metaField, index } = props;
+    const { attributes, setAttributes, metaField, index, postsByTabsSettings } = props;
     
     const initialState = {
       key: metaField?.key || '',
@@ -281,11 +189,14 @@ export default function MetaField(props) {
       }
     }, [metaField]);
 
-    const { 
-        isLoading, 
-        metaFields, 
-        availableValues 
-    } = useMetaFields(attributes.postType);
+    const hasMetaFields = postsByTabsSettings?.metasByPostType && 
+    postsByTabsSettings.metasByPostType[attributes.postType];
+
+    const metaFields = hasMetaFields ? Object.entries(postsByTabsSettings.metasByPostType[attributes.postType])
+    .map(([key, field]) => ({
+    label: field.label,
+    value: key
+    })) : [];
     
 
     const updateMetaField = () => {
@@ -313,9 +224,10 @@ export default function MetaField(props) {
         setAttributes({ metaFields: updatedMetaFields });
     };
 
-    if (isLoading) {
-        return <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">Initializing meta fields...</div>
+    if (!hasMetaFields) {
+        return <div className="bg-gray-100 p-2 mb-2 rounded-[2px]">No meta fields available for this post type</div>
     }
+
 
     function freeFieldByType(type, value) {
         switch (type) {
@@ -388,15 +300,20 @@ export default function MetaField(props) {
     }
 
     const getValueOptions = () => {
-      if (!state.key || !availableValues[state.key] || !Array.isArray(availableValues[state.key])) {
-        return [{ label: __('Select meta value'), value: '' }];
-      }
-      
-      return [
-        { label: __('Select meta value'), value: '' }, 
-        ...availableValues[state.key]
-      ];
-    };
+        if (!state.key || !hasMetaFields || !postsByTabsSettings.metasByPostType[attributes.postType][state.key]?.options) {
+          return [{ label: __('Select meta value'), value: '' }];
+        }
+        
+        const options = postsByTabsSettings.metasByPostType[attributes.postType][state.key].options;
+        
+        return [
+          { label: __('Select meta value'), value: '' }, 
+          ...options.map(val => ({
+              label: String(val),
+              value: String(val)
+          }))
+        ];
+      };
 
     return (
         <Paper className="p-2 mb-4" elevation={2}>

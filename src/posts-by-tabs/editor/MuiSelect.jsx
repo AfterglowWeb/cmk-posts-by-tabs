@@ -12,7 +12,8 @@ export default function MuiSelect(props) {
       options = [], 
       value = '', 
       onChange,
-      label = __('Select')
+      label = __('Select'),
+      className = ''
   } = props;
     
   const [selectedValue, setSelectedValue] = useState(value);
@@ -32,7 +33,7 @@ export default function MuiSelect(props) {
   const id = crypto.randomUUID();
 
   return(
-  <div className="mb-4">
+  <div className={`${className} mb-4`}>
     <FormControl fullWidth>
         <InputLabel 
         size='small'

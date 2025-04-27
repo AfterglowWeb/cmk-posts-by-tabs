@@ -26,7 +26,7 @@ function Pagination(props) {
         posts = [],
         totalPosts = 0,
         offset = 0,
-        postsPerPage = 10,
+        postsPerPage = 12,
         currentPage = 1,
         onPageChange,
         paginationType = 'buttons',
