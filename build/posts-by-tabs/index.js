@@ -51922,7 +51922,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 function Edit({
   attributes,
   setAttributes
@@ -52017,6 +52016,7 @@ function Edit({
         attributes: attributes,
         setAttributes: setAttributes,
         isEditor: true,
+        useBlockProps: _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps,
         postsByTabsSettings: postsByTabsSettings?.options
       })
     })]
@@ -54997,7 +54997,9 @@ function PostsByTabs(props) {
   const {
     attributes,
     setAttributes,
-    clientId
+    clientId,
+    isEditor,
+    useBlockProps
   } = props;
   const [selectedTab, setSelectedTab] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
   const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
@@ -55036,7 +55038,12 @@ function PostsByTabs(props) {
       }
     };
     getPosts();
-  }, [attributes.postType, attributes.taxonomy, attributes.terms, attributes.postsPerPage, attributes.order, attributes.orderBy, attributes.search, attributes.offset, attributes.metaFields, attributes.metaFields?.fields, attributes.metaFields?.relation, attributes.metaFields?.fields?.length]);
+  }, [attributes.postType, attributes.taxonomy, attributes.terms, attributes.postsPerPage, attributes.maxNumPages, attributes.order, attributes.orderBy, attributes.orderByMetaKey, attributes.search, attributes.offset, attributes.metaFields, attributes.metaFields?.fields, attributes.metaFields?.relation, attributes.metaFields?.fields?.length]);
+  const blockProps = isEditor ? useBlockProps({
+    className: 'posts-by-tabs-block'
+  }) : {
+    className: 'posts-by-tabs-block'
+  };
   const handleTabChange = (event, value) => {
     setSelectedTab(value);
   };
@@ -55086,99 +55093,110 @@ function PostsByTabs(props) {
       return 'lg';
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    sx: {
-      position: 'relative',
-      widht: '100%'
-    },
-    maxWidth: maxWidth(),
-    children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      component: "h2",
-      className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
-      children: attributes.title
-    }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-      className: "font-bold text-xl text-[30px] mb-0",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
-        children: attributes.subtitle
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        value: selectedTab,
-        onChange: handleTabChange,
-        variant: "scrollable",
-        scrollButtons: "auto",
-        "aria-label": "detailed list tabs",
-        sx: {
-          mb: 1
-        },
-        children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          label: tab.title,
-          id: `tab-${index}`,
-          "aria-controls": `tabpanel-${index}`
-        }, index))
-      }), renderPostsStatus(), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(CustomTabPanel, {
-        selectedTab: selectedTab,
-        value: index,
-        index: index,
-        className: "w-full min-w-full",
-        children: [tab.meta_1 || tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-          className: "flex justify-between pb-4",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-            className: "block",
-            children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              className: "block text-xl font-regular",
-              children: tab.meta_1
-            }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              className: "block text-xl leading-2xl font-regular",
-              children: tab.meta_2
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    ...blockProps,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Container__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      sx: {
+        position: 'relative',
+        widht: '100%'
+      },
+      maxWidth: maxWidth(),
+      children: [attributes.title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        component: "h2",
+        className: `font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`,
+        children: attributes.title
+      }), attributes.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+        className: "font-bold text-xl text-[30px] mb-0",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
+          children: attributes.subtitle
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tabs__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          value: selectedTab,
+          onChange: handleTabChange,
+          variant: "scrollable",
+          scrollButtons: "auto",
+          "aria-label": "detailed list tabs",
+          sx: {
+            mb: 1
+          },
+          children: attributes.tabs && attributes.tabs.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Tab__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            label: tab.title,
+            id: `tab-${index}`,
+            "aria-controls": `tabpanel-${index}`
+          }, index))
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          sx: {
+            position: 'relative'
+          },
+          className: `w-full`,
+          children: [renderPostsStatus(), attributes.tabs?.map((tab, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(CustomTabPanel, {
+            selectedTab: selectedTab,
+            value: index,
+            index: index,
+            className: `${isEditor ? 'cursor-default' : ''} w-full min-w-full`,
+            children: [tab.meta_1 || tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+              className: "flex justify-between pb-4",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+                className: "block",
+                children: [tab.meta_1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                  className: "block text-xl font-regular",
+                  children: tab.meta_1
+                }), tab.meta_2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                  className: "block text-xl leading-2xl font-regular",
+                  children: tab.meta_2
+                })]
+              })
+            }), tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "w-full md:w-1/2 p-2",
+              dangerouslySetInnerHTML: {
+                __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_8__["default"])(tab.content)
+              }
+            }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              attributes: attributes,
+              posts: posts,
+              tab: tab
+            }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_10__["default"], {
+              attributes: attributes,
+              posts: posts,
+              tab: tab
+            }), tab.template === 'map' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_EventsMapCluster__WEBPACK_IMPORTED_MODULE_11__["default"], {
+              attributes: attributes,
+              posts: posts,
+              tab: tab
             })]
-          })
-        }), tab.content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          className: "w-full md:w-1/2 p-2",
-          dangerouslySetInnerHTML: {
-            __html: (0,_utils_sanitizeHtml__WEBPACK_IMPORTED_MODULE_8__["default"])(tab.content)
-          }
-        }), tab.template === 'grid' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_PostsGrid__WEBPACK_IMPORTED_MODULE_9__["default"], {
-          posts: posts
-        }), tab.template === 'calendar' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_EventsCalendar__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          attributes: attributes,
-          posts: posts,
-          tab: tab
-        }), tab.template === 'map' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_EventsMapCluster__WEBPACK_IMPORTED_MODULE_11__["default"], {
-          attributes: attributes,
-          posts: posts,
-          tab: tab
+          }, index)), activeTab && activeTab.options?.paginationEnabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_12__["default"], {
+            posts: posts,
+            totalPosts: totalPosts,
+            offset: attributes.offset || 0,
+            postsPerPage: postsPerPage,
+            currentPage: currentPage,
+            onPageChange: handlePageChange,
+            paginationType: paginationType,
+            isLoading: isLoading,
+            template: activeTab.template
+          }), isEditor && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "p-4 cursor-default inset-0 absolute z-10 w-full h-full flex items-center justify-center",
+            children: "This is a preview."
+          })]
         })]
-      }, index)), activeTab && activeTab.options?.paginationEnabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_12__["default"], {
-        posts: posts,
-        totalPosts: totalPosts,
-        offset: attributes.offset || 0,
-        postsPerPage: postsPerPage,
-        currentPage: currentPage,
-        onPageChange: handlePageChange,
-        paginationType: paginationType,
-        isLoading: isLoading,
-        template: activeTab.template
       })]
-    })]
+    })
   });
 }
 function CustomTabPanel({
   children,
   selectedTab,
   value,
-  index
+  index,
+  className
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     role: "tabpanel",
     hidden: value !== selectedTab,
     id: `tabpanel-${value}`,
     "aria-labelledby": `tab-${index}`,
-    onClick: e => {
-      if (e.currentTarget === e.target) {
-        e.stopPropagation();
-      }
-    },
+    className: className,
     children: value === selectedTab && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_13__["default"], {
       elevation: 0,
       sx: {
@@ -55212,7 +55230,9 @@ __webpack_require__.r(__webpack_exports__);
 
 function PostsGrid(props) {
   const {
-    posts
+    attributes,
+    posts,
+    tab
   } = props;
   if (!Array.isArray(posts) || posts.length === 0) {
     return null;

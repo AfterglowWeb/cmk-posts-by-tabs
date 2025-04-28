@@ -1,5 +1,6 @@
 import { __ } from '@wordpress/i18n';
-import { InspectorControls } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+
 import { PanelBody } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
@@ -8,7 +9,6 @@ import TabFields from './editor/TabFields';
 
 import PostsByTabs from './front/PostsByTabs';
 import {APIProvider} from './front/GoogleMapsProvider';
-import { pl } from 'date-fns/locale';
 
 export default function Edit({attributes, setAttributes}) {
 	
@@ -122,6 +122,7 @@ export default function Edit({attributes, setAttributes}) {
 				attributes={attributes} 
 				setAttributes={setAttributes} 
 				isEditor={true}
+				useBlockProps={useBlockProps}
 				postsByTabsSettings={postsByTabsSettings?.options}
 				/>
 			</APIProvider>
