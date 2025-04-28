@@ -14,28 +14,44 @@
 
 ## Description
 
-Posts By Tabs is a Gutenberg WordPress block that displays posts and custom post types in an interactive tabbed layouts. The block shows the same collection of post datas across multiple tabs, with each tab presenting a different display template.
+### Posts By Tabs
+Posts By Tabs is a Gutenberg block for WordPress that displays posts and custom post types in interactive tabbed layouts. The block presents the same collection of post data across multiple tabs, with each tab offering a different display template.
 
-Developed for events and venues management, Posts By Tabs includes display template options for your existing posts such as events calendar layouts, venues geolocated map, grid/card/heroe views (however you name it!), posts gallery view within a single block. Visitors can switch between different visualization methods for the same content.
+Originally developed for events and venues management, Posts By Tabs includes template options such as:
+- Calendar layouts for events
+- Geolocated maps for venues
+- Grid, card, or hero-style views
+- Gallery-style post displays
+Visitors can seamlessly switch between visualization methods while viewing the same content.
 
-The idea of this block comes from a recurring need among customers from so many various fields. The constant is that all of them has a custom post type for events, venues or shops or a group of metafields associated to an existing wordpress posttype.
+### Use Cases
+This block addresses a common need across various industries where users manage:
+- Custom post types for events, venues, or shops
+- Groups of meta fields associated with existing WordPress post types
 
-The block features acomprehensive query builder with support for your existing posts and custom posts. The template system allows for organizing and displaying content in multiple formats, each appropriate to different contexts.
+### Features
+#### Query Builder
+A comprehensive query builder supports filtering and organizing content, including:
+- Post type selection
+- Posts per page and pagination controls
+- Sorting (order, order by, meta key)
+- Taxonomy term filtering
+- Advanced meta queries with AND/OR logic, comparison operators, and data types
 
-The query builder itself includes the following fields: post types, posts per page, number of pages, ordering, ordering by, ordering by meta key, terms per taxonomy, repeating metaquery constructor with AND/OR logic, comparison operators and data types.
+#### Template System
+Flexible templates allow content to be displayed in multiple formats, each suited to different contexts.
 
-The plugin will filter out any private postype and non published post.
-A see draft posts option in editor will come later on.
+#### Security & Visibility
+The plugin automatically filters out private post types and unpublished posts. Future updates may include a "Preview Drafts" option for the editor.
 
-The meta query selector automatically fetch the metafields attached to the currently selected post type.
+#### Meta Field Integration
+The meta query selector dynamically fetches meta fields attached to the selected post type.
 
 ## Currently under development ##
 
-This plugin is currently in beta version with core functionality complete and ready for testing. The base grid, slider, calendar and Google Maps templates are fully implemented and operational. The plugin is not yet recommended for production environments.
+This plugin is currently in beta version with core functionality complete and ready for testing. The base grid, slider, calendar and Google Maps templates are fully implemented and operational. The plugin is not yet recommended for production environments as it has not yet been fully tested.
 
-Additional template views, including a Google Maps integration for venues/locations, are currently in active development. These templates will be included in upcoming releases.
-
-A post filtering component for frontend users is also in active development. 
+Additional template views and post filtering component for frontend are currently in active development. These templates will be included in upcoming releases.
 
 We recommend using this plugin in testing or staging environments until a stable release is available.
 
@@ -51,6 +67,40 @@ We recommend using this plugin in testing or staging environments until a stable
 - **Dynamic Loading**: Load posts without page reload for better user experience
 - **Calendar template** : Display Events and Venues in a day/week/month fullscreen calendar. Preview each post.
 - **Google Map template** : Display Places and Venues on Google Map with custom markers.
+
+
+
+## Currently Under Development ##
+This plugin is in beta, with core functionality complete and ready for testing. The following templates are fully implemented and operational:
+
+- Grid
+- Slider
+- Calendar
+- Google Maps
+
+While functional, the plugin is not yet recommended for production environments as it requires further testing.
+
+### Upcoming Features
+Additional template views and frontend post filtering components are in active development and will be included in future releases.
+We recommend testing this plugin in staging or development environments until a stable version is available.
+
+### Key Features
+#### Layout & Display
+- Multiple Tab Layouts – Create and customize tabs, each with unique display templates and settings.
+- Template Variations – Display posts as grids, sliders, event calendars, or Google Maps.
+- Dynamic Loading – Seamless post loading without page reloads for improved UX.
+
+#### Query & Filtering
+- Advanced Query Builder – Filter by post type, taxonomy, terms, meta values, and sorting.
+- Meta Query Support – Build complex queries using custom meta fields (supports ACF and native WordPress meta).
+
+#### Templates in Development (WIP)
+- Customizable Display Options – Control excerpt length, dates, authors, categories, and more.
+- Card/Hero Templates – Multiple styling options for grid and slider layouts.
+
+#### Specialized Templates
+- Calendar View – Display events and venues in day/week/month layouts with post previews.
+- Google Maps Integration with Markers Clutering – Plot locations with custom markers for places and venues.
 
 ## Installation
 
