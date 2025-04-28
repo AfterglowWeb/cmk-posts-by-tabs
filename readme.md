@@ -47,29 +47,6 @@ The plugin automatically filters out private post types and unpublished posts. F
 #### Meta Field Integration
 The meta query selector dynamically fetches meta fields attached to the selected post type.
 
-## Currently under development ##
-
-This plugin is currently in beta version with core functionality complete and ready for testing. The base grid, slider, calendar and Google Maps templates are fully implemented and operational. The plugin is not yet recommended for production environments as it has not yet been fully tested.
-
-Additional template views and post filtering component for frontend are currently in active development. These templates will be included in upcoming releases.
-
-We recommend using this plugin in testing or staging environments until a stable release is available.
-
-### Key Features:
-
-- **Multiple Tab Layouts**: Create and customize multiple tabs, each with its own display template and settings
-- **Advanced Query Builder**: Filter posts by type, taxonomy, multiple terms, meta values and order
-- **Meta Query Support**: Advanced filtering using your existing custom meta fields (ACF and Wordpress meta fields support). Choose metafields associated to a post type and build complex queries.
-- **Template Variations**: Choose different display templates for your posts : grid, slider, calendar (events), map (venues)
-- **WIP Customizable Options**: Control excerpt length, display of dates, authors, categories, and more
-- **WIP Various card/hero templates**: Choose between several card templates in grid and slider tabs
-- **Material UI Interface**: Modern, responsive design powered by Material UI components
-- **Dynamic Loading**: Load posts without page reload for better user experience
-- **Calendar template** : Display Events and Venues in a day/week/month fullscreen calendar. Preview each post.
-- **Google Map template** : Display Places and Venues on Google Map with custom markers.
-
-
-
 ## Currently Under Development ##
 This plugin is in beta, with core functionality complete and ready for testing. The following templates are fully implemented and operational:
 
