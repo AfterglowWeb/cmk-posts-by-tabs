@@ -14,19 +14,24 @@
 
 ## Description
 
-Posts By Tabs is a Gutenberg WordPress block that displays posts, custom post types, and other content in interactive tabbed layouts. The block shows the same collection of posts across multiple tabs, with each tab presenting a different visual template and presentation style.
+Posts By Tabs is a Gutenberg WordPress block that displays posts and custom post types in an interactive tabbed layouts. The block shows the same collection of post datas across multiple tabs, with each tab presenting a different display template.
 
-Developed for events and venues management, Posts By Tabs includes display options such as grid views, posts gallery view (Swiper.js), day, week, month,calendar layouts, and geolocated map interfaces—all within a single block. Visitors can switch between different visualization methods for the same content.
+Developed for events and venues management, Posts By Tabs includes display template options for your existing posts such as events calendar layouts, venues geolocated map, grid/card/heroe views (however you name it!), posts gallery view within a single block. Visitors can switch between different visualization methods for the same content.
 
-The block features a query builder and template system that allows for organizing and displaying content in multiple formats, each appropriate to different contexts.
+The idea of this block comes from a recurring need among customers from so many various fields. The constant is that all of them has a custom post type for events, venues or shops or a group of metafields associated to an existing wordpress posttype.
 
-The block includes a comprehensive query builder with support for post types, taxonomies, multiple term selection, meta query filters with AND/OR logic, comparison operators, data types and various sorting options.
+The block features acomprehensive query builder with support for your existing posts and custom posts. The template system allows for organizing and displaying content in multiple formats, each appropriate to different contexts.
+
+The query builder itself includes the following fields: post types, posts per page, number of pages, ordering, ordering by, ordering by meta key, terms per taxonomy, repeating metaquery constructor with AND/OR logic, comparison operators and data types.
+
+The plugin will filter out any private postype and non published post.
+A see draft posts option in editor will come later on.
 
 The meta query selector automatically fetch the metafields attached to the currently selected post type.
 
 ## Currently under development ##
 
-This plugin is currently in beta version with core functionality complete and ready for testing. The base grid, slider and calendar templates are fully implemented and operational. The plugin is not yet recommended for production environments.
+This plugin is currently in beta version with core functionality complete and ready for testing. The base grid, slider, calendar and Google Maps templates are fully implemented and operational. The plugin is not yet recommended for production environments.
 
 Additional template views, including a Google Maps integration for venues/locations, are currently in active development. These templates will be included in upcoming releases.
 
@@ -54,7 +59,7 @@ We recommend using this plugin in testing or staging environments until a stable
 3. Use the Block Editor (Gutenberg) to add a "Posts By Tabs" block to your page.
 4. Configure the block settings in the sidebar panel:
    - Add tabs with custom titles and templates
-   - Set post queries by type, taxonomy, and terms
+   - Set post queries by type, taxonomies, and terms
    - Configure meta queries for advanced filtering
    - Customize display options for each tab
 
@@ -97,42 +102,75 @@ yarn
 
 ### Development Commands
 
+Build the package for production:
 ```sh
 npm run build
 ```
-Build the package for production.
+or
+```sh
+yarn build
+```
 
+Build the package for development and watch for changes:
 ```sh
 npm run start
 ```
-Build the package for development and watch for changes.
+or
+```sh
+yarn start
+```
 
+Build tailwindcss output and watch for changes:
 ```sh
 npm run tailwind
 ```
-Build tailwindcss output and watch for changes.
+or
+```sh
+yarn tailwind
+```
 
+Create a plugin zip file for distribution:
 ```sh
 npm run plugin-zip
 ```
-Create a plugin zip file for distribution.
+or
+```sh
+yarn plugin-zip
+```
 
+Lint and format frontend code:
 ```sh
 npm run format
 npm run lint:css
 npm run lint:js
 ```
-Lint and format code.
+or
+```sh
+yarn format
+yarn lint:css
+yarn lint:js
+```
+
+Build backend code:
+```sh
+composer build
+```
+
+Lint and format backend code:
+```sh
+composer lint
+composer fix
+composer build
+```
 
 ## Technical Details
 
 Posts By Tabs uses:
 
-- React for component architecture
+- React (WordPress Provided) for component architecture
 - Material UI for interface elements
-- WordPress Block API for integration
+- WordPress Gutenberg Block API for integration
 - WordPress REST API for dynamic data fetching
-- Meta query support for advanced filtering
 - Tailwind CSS for utility styling
 
 ## Changelog
