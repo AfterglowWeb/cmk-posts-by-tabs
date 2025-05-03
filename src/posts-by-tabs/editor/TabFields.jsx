@@ -101,14 +101,19 @@ export default function TabFields(props) {
         <Paper key={ index } className="p-2 mb-4" elevation={3}>
             <div className="mb-2 flex justify-between">
                 <h3 className="lowercase">{__('Onglet')} {index + 1}</h3>
-                <Button 
+                {/*<Button 
                 variant="outlined" 
                 size="small" 
                 color="secondary"
                 sx={{textTransform:"none"}} 
                 onClick={() => handleRemoveTab(index)} >
                     { __( 'Supprimer' ) }
-                </Button>
+                </Button>*/}
+                <IconButton  
+                onClick={() => handleRemoveTab(index)}
+                >
+                    <DeleteIcon />
+                </IconButton>
             </div>
             <div className="mb-2">
                 <PanelBody title={__('Titles')} initialOpen={false}>
@@ -151,6 +156,7 @@ export default function TabFields(props) {
     size="small" 
     color="secondary"
     sx={{textTransform:"none"}}
+    startIcon={<AddIcon />}
     onClick={handleAddTab} >
         { __( 'Ajouter un onglet' ) }
     </Button>

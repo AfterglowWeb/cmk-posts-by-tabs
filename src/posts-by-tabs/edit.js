@@ -10,6 +10,8 @@ import TabFields from './editor/TabFields';
 import PostsByTabs from './front/PostsByTabs';
 import {APIProvider} from './front/GoogleMapsProvider';
 
+import EditorFilterFields from './editor/FilterFields';
+
 export default function Edit({attributes, setAttributes}) {
 	
 	const [postsByTabsSettings, setpostsByTabsSettings] = useState(null);
@@ -93,13 +95,13 @@ export default function Edit({attributes, setAttributes}) {
 		<>
 			<InspectorControls>
 
-				<PanelBody title={__('Query settings')} initialOpen={false}>
-					<QueryFields 
-					attributes={attributes} 
-					setAttributes={setAttributes} 
-					postsByTabsSettings={postsByTabsSettings?.options}
-					/>
-				</PanelBody>
+		
+				<QueryFields 
+				attributes={attributes} 
+				setAttributes={setAttributes} 
+				postsByTabsSettings={postsByTabsSettings?.options}
+				/>
+	
 
 				<PanelBody title={__('Tabs')} initialOpen={false}>
 					<TabFields 
@@ -107,6 +109,14 @@ export default function Edit({attributes, setAttributes}) {
 					setAttributes={setAttributes} 
 					handleTabValueChange={handleTabValueChange} 
 					templates={templates}  
+					postsByTabsSettings={postsByTabsSettings?.options}
+					/>
+				</PanelBody>
+
+				<PanelBody title={__('Filter settings')} initialOpen={false}>
+					<EditorFilterFields 
+					attributes={attributes} 
+					setAttributes={setAttributes} 
 					postsByTabsSettings={postsByTabsSettings?.options}
 					/>
 				</PanelBody>
