@@ -44,16 +44,17 @@ export default function PostsByTabs(props) {
                     ...attributes
                 }, fetchOptions);
 
-                if (result.headers && result.headers['x-wp-total']) {
-                    setTotalPosts(parseInt(result.headers['x-wp-total']));
-                }
-
-                if (result.posts) {
-                    setPosts(result.posts);
+                if (!result.error) {
+                    if (result.headers && result.headers['x-wp-total']) {
+                        setTotalPosts(parseInt(result.headers['x-wp-total']));
+                    }
+    
+                    if (result.posts) {
+                        setPosts(result.posts);
+                    }
                 }
 
             } catch (err) {
-                console.error("Error fetching posts:", err);
                 setError(err.message);
                 setPosts([]);
                 setTotalPosts(0);

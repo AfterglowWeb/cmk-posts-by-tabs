@@ -3847,6 +3847,30 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/@mui/icons-material/esm/DeleteOutline.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@mui/icons-material/esm/DeleteOutline.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/createSvgIcon.js */ "./node_modules/@mui/material/utils/createSvgIcon.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+"use client";
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+  d: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM8 9h8v10H8zm7.5-5-1-1h-5l-1 1H5v2h14V4z"
+}), 'DeleteOutline'));
+
+/***/ }),
+
 /***/ "./node_modules/@mui/icons-material/esm/DragIndicator.js":
 /*!***************************************************************!*\
   !*** ./node_modules/@mui/icons-material/esm/DragIndicator.js ***!
@@ -10443,6 +10467,346 @@ __webpack_require__.r(__webpack_exports__);
 function useFormControl() {
   return react__WEBPACK_IMPORTED_MODULE_0__.useContext(_FormControlContext_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
 }
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/FormControlLabel/FormControlLabel.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@mui/material/FormControlLabel/FormControlLabel.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FormControlLabelRoot: () => (/* binding */ FormControlLabelRoot),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var _mui_utils_refType__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @mui/utils/refType */ "./node_modules/@mui/utils/esm/refType/refType.js");
+/* harmony import */ var _mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/utils/composeClasses */ "./node_modules/@mui/utils/esm/composeClasses/composeClasses.js");
+/* harmony import */ var _FormControl_index_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../FormControl/index.js */ "./node_modules/@mui/material/FormControl/useFormControl.js");
+/* harmony import */ var _zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../zero-styled/index.js */ "./node_modules/@mui/material/styles/styled.js");
+/* harmony import */ var _utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/memoTheme.js */ "./node_modules/@mui/material/utils/memoTheme.js");
+/* harmony import */ var _DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../DefaultPropsProvider/index.js */ "./node_modules/@mui/material/DefaultPropsProvider/DefaultPropsProvider.js");
+/* harmony import */ var _Typography_index_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Typography/index.js */ "./node_modules/@mui/material/Typography/Typography.js");
+/* harmony import */ var _utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/capitalize.js */ "./node_modules/@mui/material/utils/capitalize.js");
+/* harmony import */ var _formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./formControlLabelClasses.js */ "./node_modules/@mui/material/FormControlLabel/formControlLabelClasses.js");
+/* harmony import */ var _FormControl_formControlState_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../FormControl/formControlState.js */ "./node_modules/@mui/material/FormControl/formControlState.js");
+/* harmony import */ var _utils_useSlot_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../utils/useSlot.js */ "./node_modules/@mui/material/utils/useSlot.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+'use client';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const useUtilityClasses = ownerState => {
+  const {
+    classes,
+    disabled,
+    labelPlacement,
+    error,
+    required
+  } = ownerState;
+  const slots = {
+    root: ['root', disabled && 'disabled', `labelPlacement${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(labelPlacement)}`, error && 'error', required && 'required'],
+    label: ['label', disabled && 'disabled'],
+    asterisk: ['asterisk', error && 'error']
+  };
+  return (0,_mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_4__["default"])(slots, _formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__.getFormControlLabelUtilityClasses, classes);
+};
+const FormControlLabelRoot = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])('label', {
+  name: 'MuiFormControlLabel',
+  slot: 'Root',
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [{
+      [`& .${_formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].label}`]: styles.label
+    }, styles.root, styles[`labelPlacement${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(ownerState.labelPlacement)}`]];
+  }
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_7__["default"])(({
+  theme
+}) => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  cursor: 'pointer',
+  // For correct alignment with the text.
+  verticalAlign: 'middle',
+  WebkitTapHighlightColor: 'transparent',
+  marginLeft: -11,
+  marginRight: 16,
+  // used for row presentation of radio/checkbox
+  [`&.${_formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].disabled}`]: {
+    cursor: 'default'
+  },
+  [`& .${_formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].label}`]: {
+    [`&.${_formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].disabled}`]: {
+      color: (theme.vars || theme).palette.text.disabled
+    }
+  },
+  variants: [{
+    props: {
+      labelPlacement: 'start'
+    },
+    style: {
+      flexDirection: 'row-reverse',
+      marginRight: -11
+    }
+  }, {
+    props: {
+      labelPlacement: 'top'
+    },
+    style: {
+      flexDirection: 'column-reverse'
+    }
+  }, {
+    props: {
+      labelPlacement: 'bottom'
+    },
+    style: {
+      flexDirection: 'column'
+    }
+  }, {
+    props: ({
+      labelPlacement
+    }) => labelPlacement === 'start' || labelPlacement === 'top' || labelPlacement === 'bottom',
+    style: {
+      marginLeft: 16 // used for row presentation of radio/checkbox
+    }
+  }]
+})));
+const AsteriskComponent = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])('span', {
+  name: 'MuiFormControlLabel',
+  slot: 'Asterisk',
+  overridesResolver: (props, styles) => styles.asterisk
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_7__["default"])(({
+  theme
+}) => ({
+  [`&.${_formControlLabelClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].error}`]: {
+    color: (theme.vars || theme).palette.error.main
+  }
+})));
+
+/**
+ * Drop-in replacement of the `Radio`, `Switch` and `Checkbox` component.
+ * Use this component if you want to display an extra label.
+ */
+const FormControlLabel = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function FormControlLabel(inProps, ref) {
+  const props = (0,_DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_8__.useDefaultProps)({
+    props: inProps,
+    name: 'MuiFormControlLabel'
+  });
+  const {
+    checked,
+    className,
+    componentsProps = {},
+    control,
+    disabled: disabledProp,
+    disableTypography,
+    inputRef,
+    label: labelProp,
+    labelPlacement = 'end',
+    name,
+    onChange,
+    required: requiredProp,
+    slots = {},
+    slotProps = {},
+    value,
+    ...other
+  } = props;
+  const muiFormControl = (0,_FormControl_index_js__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  const disabled = disabledProp ?? control.props.disabled ?? muiFormControl?.disabled;
+  const required = requiredProp ?? control.props.required;
+  const controlProps = {
+    disabled,
+    required
+  };
+  ['checked', 'name', 'onChange', 'value', 'inputRef'].forEach(key => {
+    if (typeof control.props[key] === 'undefined' && typeof props[key] !== 'undefined') {
+      controlProps[key] = props[key];
+    }
+  });
+  const fcs = (0,_FormControl_formControlState_js__WEBPACK_IMPORTED_MODULE_10__["default"])({
+    props,
+    muiFormControl,
+    states: ['error']
+  });
+  const ownerState = {
+    ...props,
+    disabled,
+    labelPlacement,
+    required,
+    error: fcs.error
+  };
+  const classes = useUtilityClasses(ownerState);
+  const externalForwardedProps = {
+    slots,
+    slotProps: {
+      ...componentsProps,
+      ...slotProps
+    }
+  };
+  const [TypographySlot, typographySlotProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_11__["default"])('typography', {
+    elementType: _Typography_index_js__WEBPACK_IMPORTED_MODULE_12__["default"],
+    externalForwardedProps,
+    ownerState
+  });
+  let label = labelProp;
+  if (label != null && label.type !== _Typography_index_js__WEBPACK_IMPORTED_MODULE_12__["default"] && !disableTypography) {
+    label = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(TypographySlot, {
+      component: "span",
+      ...typographySlotProps,
+      className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.label, typographySlotProps?.className),
+      children: label
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(FormControlLabelRoot, {
+    className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.root, className),
+    ownerState: ownerState,
+    ref: ref,
+    ...other,
+    children: [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.cloneElement(control, controlProps), required ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      children: [label, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(AsteriskComponent, {
+        ownerState: ownerState,
+        "aria-hidden": true,
+        className: classes.asterisk,
+        children: ["\u2009", '*']
+      })]
+    }) : label]
+  });
+});
+ true ? FormControlLabel.propTypes /* remove-proptypes */ = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * If `true`, the component appears selected.
+   */
+  checked: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().bool),
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().object),
+  /**
+   * @ignore
+   */
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().string),
+  /**
+   * The props used for each slot inside.
+   * @default {}
+   * @deprecated use the `slotProps` prop instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  componentsProps: prop_types__WEBPACK_IMPORTED_MODULE_13___default().shape({
+    typography: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().object)
+  }),
+  /**
+   * A control element. For instance, it can be a `Radio`, a `Switch` or a `Checkbox`.
+   */
+  control: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().element).isRequired,
+  /**
+   * If `true`, the control is disabled.
+   */
+  disabled: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().bool),
+  /**
+   * If `true`, the label is rendered as it is passed without an additional typography node.
+   */
+  disableTypography: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().bool),
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _mui_utils_refType__WEBPACK_IMPORTED_MODULE_14__["default"],
+  /**
+   * A text or an element to be used in an enclosing label element.
+   */
+  label: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().node),
+  /**
+   * The position of the label.
+   * @default 'end'
+   */
+  labelPlacement: prop_types__WEBPACK_IMPORTED_MODULE_13___default().oneOf(['bottom', 'end', 'start', 'top']),
+  /**
+   * @ignore
+   */
+  name: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().string),
+  /**
+   * Callback fired when the state is changed.
+   *
+   * @param {React.SyntheticEvent} event The event source of the callback.
+   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
+   */
+  onChange: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().func),
+  /**
+   * If `true`, the label will indicate that the `input` is required.
+   */
+  required: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().bool),
+  /**
+   * The props used for each slot inside.
+   * @default {}
+   */
+  slotProps: prop_types__WEBPACK_IMPORTED_MODULE_13___default().shape({
+    typography: prop_types__WEBPACK_IMPORTED_MODULE_13___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_13___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_13___default().object)])
+  }),
+  /**
+   * The components used for each slot inside.
+   * @default {}
+   */
+  slots: prop_types__WEBPACK_IMPORTED_MODULE_13___default().shape({
+    typography: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().elementType)
+  }),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: prop_types__WEBPACK_IMPORTED_MODULE_13___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_13___default().arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_13___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_13___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_13___default().object), (prop_types__WEBPACK_IMPORTED_MODULE_13___default().bool)])), (prop_types__WEBPACK_IMPORTED_MODULE_13___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_13___default().object)]),
+  /**
+   * The value of the component.
+   */
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_13___default().any)
+} : 0;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FormControlLabel);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/FormControlLabel/formControlLabelClasses.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/@mui/material/FormControlLabel/formControlLabelClasses.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getFormControlLabelUtilityClasses: () => (/* binding */ getFormControlLabelUtilityClasses)
+/* harmony export */ });
+/* harmony import */ var _mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils/generateUtilityClasses */ "./node_modules/@mui/utils/esm/generateUtilityClasses/generateUtilityClasses.js");
+/* harmony import */ var _mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/generateUtilityClass */ "./node_modules/@mui/utils/esm/generateUtilityClass/generateUtilityClass.js");
+
+
+function getFormControlLabelUtilityClasses(slot) {
+  return (0,_mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__["default"])('MuiFormControlLabel', slot);
+}
+const formControlLabelClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('MuiFormControlLabel', ['root', 'labelPlacementStart', 'labelPlacementTop', 'labelPlacementBottom', 'disabled', 'label', 'error', 'required', 'asterisk']);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (formControlLabelClasses);
 
 /***/ }),
 
@@ -21201,6 +21565,406 @@ const svgIconClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MO
 
 /***/ }),
 
+/***/ "./node_modules/@mui/material/Switch/Switch.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/@mui/material/Switch/Switch.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var _mui_utils_refType__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @mui/utils/refType */ "./node_modules/@mui/utils/esm/refType/refType.js");
+/* harmony import */ var _mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/utils/composeClasses */ "./node_modules/@mui/utils/esm/composeClasses/composeClasses.js");
+/* harmony import */ var _mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/system/colorManipulator */ "./node_modules/@mui/system/esm/colorManipulator/colorManipulator.js");
+/* harmony import */ var _utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/capitalize.js */ "./node_modules/@mui/material/utils/capitalize.js");
+/* harmony import */ var _utils_createSimplePaletteValueFilter_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../utils/createSimplePaletteValueFilter.js */ "./node_modules/@mui/material/utils/createSimplePaletteValueFilter.js");
+/* harmony import */ var _internal_SwitchBase_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../internal/SwitchBase.js */ "./node_modules/@mui/material/internal/SwitchBase.js");
+/* harmony import */ var _zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../zero-styled/index.js */ "./node_modules/@mui/material/styles/styled.js");
+/* harmony import */ var _utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/memoTheme.js */ "./node_modules/@mui/material/utils/memoTheme.js");
+/* harmony import */ var _DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../DefaultPropsProvider/index.js */ "./node_modules/@mui/material/DefaultPropsProvider/DefaultPropsProvider.js");
+/* harmony import */ var _switchClasses_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./switchClasses.js */ "./node_modules/@mui/material/Switch/switchClasses.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+'use client';
+
+// @inheritedComponent IconButton
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const useUtilityClasses = ownerState => {
+  const {
+    classes,
+    edge,
+    size,
+    color,
+    checked,
+    disabled
+  } = ownerState;
+  const slots = {
+    root: ['root', edge && `edge${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(edge)}`, `size${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(size)}`],
+    switchBase: ['switchBase', `color${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(color)}`, checked && 'checked', disabled && 'disabled'],
+    thumb: ['thumb'],
+    track: ['track'],
+    input: ['input']
+  };
+  const composedClasses = (0,_mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_4__["default"])(slots, _switchClasses_js__WEBPACK_IMPORTED_MODULE_5__.getSwitchUtilityClass, classes);
+  return {
+    ...classes,
+    // forward the disabled and checked classes to the SwitchBase
+    ...composedClasses
+  };
+};
+const SwitchRoot = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])('span', {
+  name: 'MuiSwitch',
+  slot: 'Root',
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [styles.root, ownerState.edge && styles[`edge${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(ownerState.edge)}`], styles[`size${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(ownerState.size)}`]];
+  }
+})({
+  display: 'inline-flex',
+  width: 34 + 12 * 2,
+  height: 14 + 12 * 2,
+  overflow: 'hidden',
+  padding: 12,
+  boxSizing: 'border-box',
+  position: 'relative',
+  flexShrink: 0,
+  zIndex: 0,
+  // Reset the stacking context.
+  verticalAlign: 'middle',
+  // For correct alignment with the text.
+  '@media print': {
+    colorAdjust: 'exact'
+  },
+  variants: [{
+    props: {
+      edge: 'start'
+    },
+    style: {
+      marginLeft: -8
+    }
+  }, {
+    props: {
+      edge: 'end'
+    },
+    style: {
+      marginRight: -8
+    }
+  }, {
+    props: {
+      size: 'small'
+    },
+    style: {
+      width: 40,
+      height: 24,
+      padding: 7,
+      [`& .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].thumb}`]: {
+        width: 16,
+        height: 16
+      },
+      [`& .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].switchBase}`]: {
+        padding: 4,
+        [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].checked}`]: {
+          transform: 'translateX(16px)'
+        }
+      }
+    }
+  }]
+});
+const SwitchSwitchBase = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])(_internal_SwitchBase_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  name: 'MuiSwitch',
+  slot: 'SwitchBase',
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [styles.switchBase, {
+      [`& .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].input}`]: styles.input
+    }, ownerState.color !== 'default' && styles[`color${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_3__["default"])(ownerState.color)}`]];
+  }
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_8__["default"])(({
+  theme
+}) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  zIndex: 1,
+  // Render above the focus ripple.
+  color: theme.vars ? theme.vars.palette.Switch.defaultColor : `${theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.grey[300]}`,
+  transition: theme.transitions.create(['left', 'transform'], {
+    duration: theme.transitions.duration.shortest
+  }),
+  [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].checked}`]: {
+    transform: 'translateX(20px)'
+  },
+  [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].disabled}`]: {
+    color: theme.vars ? theme.vars.palette.Switch.defaultDisabledColor : `${theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600]}`
+  },
+  [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].checked} + .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].track}`]: {
+    opacity: 0.5
+  },
+  [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].disabled} + .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].track}`]: {
+    opacity: theme.vars ? theme.vars.opacity.switchTrackDisabled : `${theme.palette.mode === 'light' ? 0.12 : 0.2}`
+  },
+  [`& .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].input}`]: {
+    left: '-100%',
+    width: '300%'
+  }
+})), (0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_8__["default"])(({
+  theme
+}) => ({
+  '&:hover': {
+    backgroundColor: theme.vars ? `rgba(${theme.vars.palette.action.activeChannel} / ${theme.vars.palette.action.hoverOpacity})` : (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_9__.alpha)(theme.palette.action.active, theme.palette.action.hoverOpacity),
+    // Reset on touch devices, it doesn't add specificity
+    '@media (hover: none)': {
+      backgroundColor: 'transparent'
+    }
+  },
+  variants: [...Object.entries(theme.palette).filter((0,_utils_createSimplePaletteValueFilter_js__WEBPACK_IMPORTED_MODULE_10__["default"])(['light'])) // check all the used fields in the style below
+  .map(([color]) => ({
+    props: {
+      color
+    },
+    style: {
+      [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].checked}`]: {
+        color: (theme.vars || theme).palette[color].main,
+        '&:hover': {
+          backgroundColor: theme.vars ? `rgba(${theme.vars.palette[color].mainChannel} / ${theme.vars.palette.action.hoverOpacity})` : (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_9__.alpha)(theme.palette[color].main, theme.palette.action.hoverOpacity),
+          '@media (hover: none)': {
+            backgroundColor: 'transparent'
+          }
+        },
+        [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].disabled}`]: {
+          color: theme.vars ? theme.vars.palette.Switch[`${color}DisabledColor`] : `${theme.palette.mode === 'light' ? (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_9__.lighten)(theme.palette[color].main, 0.62) : (0,_mui_system_colorManipulator__WEBPACK_IMPORTED_MODULE_9__.darken)(theme.palette[color].main, 0.55)}`
+        }
+      },
+      [`&.${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].checked} + .${_switchClasses_js__WEBPACK_IMPORTED_MODULE_5__["default"].track}`]: {
+        backgroundColor: (theme.vars || theme).palette[color].main
+      }
+    }
+  }))]
+})));
+const SwitchTrack = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])('span', {
+  name: 'MuiSwitch',
+  slot: 'Track',
+  overridesResolver: (props, styles) => styles.track
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_8__["default"])(({
+  theme
+}) => ({
+  height: '100%',
+  width: '100%',
+  borderRadius: 14 / 2,
+  zIndex: -1,
+  transition: theme.transitions.create(['opacity', 'background-color'], {
+    duration: theme.transitions.duration.shortest
+  }),
+  backgroundColor: theme.vars ? theme.vars.palette.common.onBackground : `${theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white}`,
+  opacity: theme.vars ? theme.vars.opacity.switchTrack : `${theme.palette.mode === 'light' ? 0.38 : 0.3}`
+})));
+const SwitchThumb = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])('span', {
+  name: 'MuiSwitch',
+  slot: 'Thumb',
+  overridesResolver: (props, styles) => styles.thumb
+})((0,_utils_memoTheme_js__WEBPACK_IMPORTED_MODULE_8__["default"])(({
+  theme
+}) => ({
+  boxShadow: (theme.vars || theme).shadows[1],
+  backgroundColor: 'currentColor',
+  width: 20,
+  height: 20,
+  borderRadius: '50%'
+})));
+const Switch = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function Switch(inProps, ref) {
+  const props = (0,_DefaultPropsProvider_index_js__WEBPACK_IMPORTED_MODULE_11__.useDefaultProps)({
+    props: inProps,
+    name: 'MuiSwitch'
+  });
+  const {
+    className,
+    color = 'primary',
+    edge = false,
+    size = 'medium',
+    sx,
+    ...other
+  } = props;
+  const ownerState = {
+    ...props,
+    color,
+    edge,
+    size
+  };
+  const classes = useUtilityClasses(ownerState);
+  const icon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(SwitchThumb, {
+    className: classes.thumb,
+    ownerState: ownerState
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(SwitchRoot, {
+    className: (0,clsx__WEBPACK_IMPORTED_MODULE_1__["default"])(classes.root, className),
+    sx: sx,
+    ownerState: ownerState,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(SwitchSwitchBase, {
+      type: "checkbox",
+      icon: icon,
+      checkedIcon: icon,
+      ref: ref,
+      ownerState: ownerState,
+      ...other,
+      classes: {
+        ...classes,
+        root: classes.switchBase
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(SwitchTrack, {
+      className: classes.track,
+      ownerState: ownerState
+    })]
+  });
+});
+ true ? Switch.propTypes /* remove-proptypes */ = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * If `true`, the component is checked.
+   */
+  checked: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().bool),
+  /**
+   * The icon to display when the component is checked.
+   */
+  checkedIcon: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().node),
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().object),
+  /**
+   * @ignore
+   */
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().string),
+  /**
+   * The color of the component.
+   * It supports both default and custom theme colors, which can be added as shown in the
+   * [palette customization guide](https://mui.com/material-ui/customization/palette/#custom-colors).
+   * @default 'primary'
+   */
+  color: prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOf(['default', 'primary', 'secondary', 'error', 'info', 'success', 'warning']), (prop_types__WEBPACK_IMPORTED_MODULE_12___default().string)]),
+  /**
+   * The default checked state. Use when the component is not controlled.
+   */
+  defaultChecked: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().bool),
+  /**
+   * If `true`, the component is disabled.
+   */
+  disabled: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().bool),
+  /**
+   * If `true`, the ripple effect is disabled.
+   * @default false
+   */
+  disableRipple: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().bool),
+  /**
+   * If given, uses a negative margin to counteract the padding on one
+   * side (this is often helpful for aligning the left or right
+   * side of the icon with content above or below, without ruining the border
+   * size and shape).
+   * @default false
+   */
+  edge: prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOf(['end', 'start', false]),
+  /**
+   * The icon to display when the component is unchecked.
+   */
+  icon: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().node),
+  /**
+   * The id of the `input` element.
+   */
+  id: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().string),
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   * @deprecated Use `slotProps.input` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  inputProps: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().object),
+  /**
+   * Pass a ref to the `input` element.
+   * @deprecated Use `slotProps.input.ref` instead. This prop will be removed in v7. See [Migrating from deprecated APIs](/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   */
+  inputRef: _mui_utils_refType__WEBPACK_IMPORTED_MODULE_13__["default"],
+  /**
+   * Callback fired when the state is changed.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
+   */
+  onChange: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().func),
+  /**
+   * If `true`, the `input` element is required.
+   * @default false
+   */
+  required: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().bool),
+  /**
+   * The size of the component.
+   * `small` is equivalent to the dense switch styling.
+   * @default 'medium'
+   */
+  size: prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOf(['medium', 'small']), (prop_types__WEBPACK_IMPORTED_MODULE_12___default().string)]),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_12___default().arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_12___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_12___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_12___default().object), (prop_types__WEBPACK_IMPORTED_MODULE_12___default().bool)])), (prop_types__WEBPACK_IMPORTED_MODULE_12___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_12___default().object)]),
+  /**
+   * The value of the component. The DOM API casts this to a string.
+   * The browser uses "on" as the default value.
+   */
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_12___default().any)
+} : 0;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Switch);
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/Switch/switchClasses.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@mui/material/Switch/switchClasses.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getSwitchUtilityClass: () => (/* binding */ getSwitchUtilityClass)
+/* harmony export */ });
+/* harmony import */ var _mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils/generateUtilityClasses */ "./node_modules/@mui/utils/esm/generateUtilityClasses/generateUtilityClasses.js");
+/* harmony import */ var _mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/generateUtilityClass */ "./node_modules/@mui/utils/esm/generateUtilityClass/generateUtilityClass.js");
+
+
+function getSwitchUtilityClass(slot) {
+  return (0,_mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__["default"])('MuiSwitch', slot);
+}
+const switchClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('MuiSwitch', ['root', 'edgeStart', 'edgeEnd', 'switchBase', 'colorPrimary', 'colorSecondary', 'sizeSmall', 'sizeMedium', 'checked', 'disabled', 'input', 'thumb', 'track']);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (switchClasses);
+
+/***/ }),
+
 /***/ "./node_modules/@mui/material/Tab/Tab.js":
 /*!***********************************************!*\
   !*** ./node_modules/@mui/material/Tab/Tab.js ***!
@@ -25058,6 +25822,390 @@ const red = {
 
 /***/ }),
 
+/***/ "./node_modules/@mui/material/internal/SwitchBase.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/@mui/material/internal/SwitchBase.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _mui_utils_refType__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @mui/utils/refType */ "./node_modules/@mui/utils/esm/refType/refType.js");
+/* harmony import */ var _mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/utils/composeClasses */ "./node_modules/@mui/utils/esm/composeClasses/composeClasses.js");
+/* harmony import */ var _utils_capitalize_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/capitalize.js */ "./node_modules/@mui/material/utils/capitalize.js");
+/* harmony import */ var _styles_rootShouldForwardProp_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../styles/rootShouldForwardProp.js */ "./node_modules/@mui/material/styles/rootShouldForwardProp.js");
+/* harmony import */ var _zero_styled_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../zero-styled/index.js */ "./node_modules/@mui/material/styles/styled.js");
+/* harmony import */ var _utils_useControlled_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/useControlled.js */ "./node_modules/@mui/material/utils/useControlled.js");
+/* harmony import */ var _FormControl_useFormControl_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../FormControl/useFormControl.js */ "./node_modules/@mui/material/FormControl/useFormControl.js");
+/* harmony import */ var _ButtonBase_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ButtonBase/index.js */ "./node_modules/@mui/material/ButtonBase/ButtonBase.js");
+/* harmony import */ var _switchBaseClasses_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./switchBaseClasses.js */ "./node_modules/@mui/material/internal/switchBaseClasses.js");
+/* harmony import */ var _utils_useSlot_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../utils/useSlot.js */ "./node_modules/@mui/material/utils/useSlot.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+'use client';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const useUtilityClasses = ownerState => {
+  const {
+    classes,
+    checked,
+    disabled,
+    edge
+  } = ownerState;
+  const slots = {
+    root: ['root', checked && 'checked', disabled && 'disabled', edge && `edge${(0,_utils_capitalize_js__WEBPACK_IMPORTED_MODULE_2__["default"])(edge)}`],
+    input: ['input']
+  };
+  return (0,_mui_utils_composeClasses__WEBPACK_IMPORTED_MODULE_3__["default"])(slots, _switchBaseClasses_js__WEBPACK_IMPORTED_MODULE_4__.getSwitchBaseUtilityClass, classes);
+};
+const SwitchBaseRoot = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_5__["default"])(_ButtonBase_index_js__WEBPACK_IMPORTED_MODULE_6__["default"])({
+  padding: 9,
+  borderRadius: '50%',
+  variants: [{
+    props: {
+      edge: 'start',
+      size: 'small'
+    },
+    style: {
+      marginLeft: -3
+    }
+  }, {
+    props: ({
+      edge,
+      ownerState
+    }) => edge === 'start' && ownerState.size !== 'small',
+    style: {
+      marginLeft: -12
+    }
+  }, {
+    props: {
+      edge: 'end',
+      size: 'small'
+    },
+    style: {
+      marginRight: -3
+    }
+  }, {
+    props: ({
+      edge,
+      ownerState
+    }) => edge === 'end' && ownerState.size !== 'small',
+    style: {
+      marginRight: -12
+    }
+  }]
+});
+const SwitchBaseInput = (0,_zero_styled_index_js__WEBPACK_IMPORTED_MODULE_5__["default"])('input', {
+  shouldForwardProp: _styles_rootShouldForwardProp_js__WEBPACK_IMPORTED_MODULE_7__["default"]
+})({
+  cursor: 'inherit',
+  position: 'absolute',
+  opacity: 0,
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  margin: 0,
+  padding: 0,
+  zIndex: 1
+});
+
+/**
+ * @ignore - internal component.
+ */
+const SwitchBase = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function SwitchBase(props, ref) {
+  const {
+    autoFocus,
+    checked: checkedProp,
+    checkedIcon,
+    defaultChecked,
+    disabled: disabledProp,
+    disableFocusRipple = false,
+    edge = false,
+    icon,
+    id,
+    inputProps,
+    inputRef,
+    name,
+    onBlur,
+    onChange,
+    onFocus,
+    readOnly,
+    required = false,
+    tabIndex,
+    type,
+    value,
+    slots = {},
+    slotProps = {},
+    ...other
+  } = props;
+  const [checked, setCheckedState] = (0,_utils_useControlled_js__WEBPACK_IMPORTED_MODULE_8__["default"])({
+    controlled: checkedProp,
+    default: Boolean(defaultChecked),
+    name: 'SwitchBase',
+    state: 'checked'
+  });
+  const muiFormControl = (0,_FormControl_useFormControl_js__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  const handleFocus = event => {
+    if (onFocus) {
+      onFocus(event);
+    }
+    if (muiFormControl && muiFormControl.onFocus) {
+      muiFormControl.onFocus(event);
+    }
+  };
+  const handleBlur = event => {
+    if (onBlur) {
+      onBlur(event);
+    }
+    if (muiFormControl && muiFormControl.onBlur) {
+      muiFormControl.onBlur(event);
+    }
+  };
+  const handleInputChange = event => {
+    // Workaround for https://github.com/facebook/react/issues/9023
+    if (event.nativeEvent.defaultPrevented) {
+      return;
+    }
+    const newChecked = event.target.checked;
+    setCheckedState(newChecked);
+    if (onChange) {
+      // TODO v6: remove the second argument.
+      onChange(event, newChecked);
+    }
+  };
+  let disabled = disabledProp;
+  if (muiFormControl) {
+    if (typeof disabled === 'undefined') {
+      disabled = muiFormControl.disabled;
+    }
+  }
+  const hasLabelFor = type === 'checkbox' || type === 'radio';
+  const ownerState = {
+    ...props,
+    checked,
+    disabled,
+    disableFocusRipple,
+    edge
+  };
+  const classes = useUtilityClasses(ownerState);
+  const externalForwardedProps = {
+    slots,
+    slotProps: {
+      input: inputProps,
+      ...slotProps
+    }
+  };
+  const [RootSlot, rootSlotProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_10__["default"])('root', {
+    ref,
+    elementType: SwitchBaseRoot,
+    className: classes.root,
+    shouldForwardComponentProp: true,
+    externalForwardedProps: {
+      ...externalForwardedProps,
+      component: 'span',
+      ...other
+    },
+    getSlotProps: handlers => ({
+      ...handlers,
+      onFocus: event => {
+        handlers.onFocus?.(event);
+        handleFocus(event);
+      },
+      onBlur: event => {
+        handlers.onBlur?.(event);
+        handleBlur(event);
+      }
+    }),
+    ownerState,
+    additionalProps: {
+      centerRipple: true,
+      focusRipple: !disableFocusRipple,
+      disabled,
+      role: undefined,
+      tabIndex: null
+    }
+  });
+  const [InputSlot, inputSlotProps] = (0,_utils_useSlot_js__WEBPACK_IMPORTED_MODULE_10__["default"])('input', {
+    ref: inputRef,
+    elementType: SwitchBaseInput,
+    className: classes.input,
+    externalForwardedProps,
+    getSlotProps: handlers => ({
+      onChange: event => {
+        handlers.onChange?.(event);
+        handleInputChange(event);
+      }
+    }),
+    ownerState,
+    additionalProps: {
+      autoFocus,
+      checked: checkedProp,
+      defaultChecked,
+      disabled,
+      id: hasLabelFor ? id : undefined,
+      name,
+      readOnly,
+      required,
+      tabIndex,
+      type,
+      ...(type === 'checkbox' && value === undefined ? {} : {
+        value
+      })
+    }
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(RootSlot, {
+    ...rootSlotProps,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(InputSlot, {
+      ...inputSlotProps
+    }), checked ? checkedIcon : icon]
+  });
+});
+
+// NB: If changed, please update Checkbox, Switch and Radio
+// so that the API documentation is updated.
+ true ? SwitchBase.propTypes = {
+  /**
+   * If `true`, the `input` element is focused during the first mount.
+   */
+  autoFocus: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, the component is checked.
+   */
+  checked: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * The icon to display when the component is checked.
+   */
+  checkedIcon: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().node).isRequired,
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object),
+  /**
+   * @ignore
+   */
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string),
+  /**
+   * @ignore
+   */
+  defaultChecked: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, the component is disabled.
+   */
+  disabled: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, the  keyboard focus ripple is disabled.
+   * @default false
+   */
+  disableFocusRipple: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If given, uses a negative margin to counteract the padding on one
+   * side (this is often helpful for aligning the left or right
+   * side of the icon with content above or below, without ruining the border
+   * size and shape).
+   * @default false
+   */
+  edge: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOf(['end', 'start', false]),
+  /**
+   * The icon to display when the component is unchecked.
+   */
+  icon: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().node).isRequired,
+  /**
+   * The id of the `input` element.
+   */
+  id: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string),
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object),
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _mui_utils_refType__WEBPACK_IMPORTED_MODULE_12__["default"],
+  /*
+   * @ignore
+   */
+  name: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string),
+  /**
+   * @ignore
+   */
+  onBlur: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().func),
+  /**
+   * Callback fired when the state is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
+   */
+  onChange: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().func),
+  /**
+   * @ignore
+   */
+  onFocus: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().func),
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * If `true`, the `input` element is required.
+   */
+  required: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().bool),
+  /**
+   * The props used for each slot inside.
+   * @default {}
+   */
+  slotProps: prop_types__WEBPACK_IMPORTED_MODULE_11___default().shape({
+    input: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_11___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object)]),
+    root: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_11___default().func), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object)])
+  }),
+  /**
+   * The components used for each slot inside.
+   * @default {}
+   */
+  slots: prop_types__WEBPACK_IMPORTED_MODULE_11___default().shape({
+    input: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().elementType),
+    root: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().elementType)
+  }),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().object),
+  /**
+   * @ignore
+   */
+  tabIndex: prop_types__WEBPACK_IMPORTED_MODULE_11___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_11___default().number), (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string)]),
+  /**
+   * The input component prop `type`.
+   */
+  type: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().string).isRequired,
+  /**
+   * The value of the component.
+   */
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_11___default().any)
+} : 0;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SwitchBase);
+
+/***/ }),
+
 /***/ "./node_modules/@mui/material/internal/animate.js":
 /*!********************************************************!*\
   !*** ./node_modules/@mui/material/internal/animate.js ***!
@@ -25232,6 +26380,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_utils_createSvgIcon_js__WEBPACK_IMPORTED_MODULE_2__["default"])(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
   d: "M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
 }), 'KeyboardArrowRight'));
+
+/***/ }),
+
+/***/ "./node_modules/@mui/material/internal/switchBaseClasses.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@mui/material/internal/switchBaseClasses.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getSwitchBaseUtilityClass: () => (/* binding */ getSwitchBaseUtilityClass)
+/* harmony export */ });
+/* harmony import */ var _mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @mui/utils/generateUtilityClasses */ "./node_modules/@mui/utils/esm/generateUtilityClasses/generateUtilityClasses.js");
+/* harmony import */ var _mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mui/utils/generateUtilityClass */ "./node_modules/@mui/utils/esm/generateUtilityClass/generateUtilityClass.js");
+
+
+function getSwitchBaseUtilityClass(slot) {
+  return (0,_mui_utils_generateUtilityClass__WEBPACK_IMPORTED_MODULE_0__["default"])('PrivateSwitchBase', slot);
+}
+const switchBaseClasses = (0,_mui_utils_generateUtilityClasses__WEBPACK_IMPORTED_MODULE_1__["default"])('PrivateSwitchBase', ['root', 'checked', 'disabled', 'input', 'edgeStart', 'edgeEnd']);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (switchBaseClasses);
 
 /***/ }),
 
@@ -51979,13 +53151,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_QueryFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor/QueryFields */ "./src/posts-by-tabs/editor/QueryFields.jsx");
-/* harmony import */ var _editor_TabFields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor/TabFields */ "./src/posts-by-tabs/editor/TabFields.jsx");
-/* harmony import */ var _front_PostsByTabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./front/PostsByTabs */ "./src/posts-by-tabs/front/PostsByTabs.jsx");
-/* harmony import */ var _front_GoogleMapsProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./front/GoogleMapsProvider */ "./src/posts-by-tabs/front/GoogleMapsProvider.jsx");
-/* harmony import */ var _editor_FilterFields__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor/FilterFields */ "./src/posts-by-tabs/editor/FilterFields.jsx");
+/* harmony import */ var _utils_universalFetch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/universalFetch */ "./src/posts-by-tabs/utils/universalFetch.js");
+/* harmony import */ var _editor_QueryFields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor/QueryFields */ "./src/posts-by-tabs/editor/QueryFields.jsx");
+/* harmony import */ var _editor_TabFields__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor/TabFields */ "./src/posts-by-tabs/editor/TabFields.jsx");
+/* harmony import */ var _editor_FilterFields__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor/FilterFields */ "./src/posts-by-tabs/editor/FilterFields.jsx");
+/* harmony import */ var _front_PostsByTabs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./front/PostsByTabs */ "./src/posts-by-tabs/front/PostsByTabs.jsx");
+/* harmony import */ var _front_GoogleMapsProvider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./front/GoogleMapsProvider */ "./src/posts-by-tabs/front/GoogleMapsProvider.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -52000,7 +53174,11 @@ function Edit({
   attributes,
   setAttributes
 }) {
-  const [postsByTabsSettings, setpostsByTabsSettings] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
+  const [postsByTabsSettings, setPostsByTabsSettings] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
+  const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(true);
+  const [selectedPostType, setSelectedPostType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(attributes.postType || 'post');
+  const [selectedOrderByMetaKey, setSelectedOrderByMetaKey] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(attributes.orderByMetaKey || '');
+  const [taxonomyTerms, setTaxonomyTerms] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(attributes.taxonomyTerms || {});
   const templates = [{
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Posts Grid'),
     value: 'grid'
@@ -52017,43 +53195,6 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Posts Calendar (events)'),
     value: 'calendar'
   }];
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
-    if (typeof window !== 'undefined' && window.postsByTabsSettings) {
-      setpostsByTabsSettings(window.postsByTabsSettings);
-      console.log('Plugin settings loaded:', window.postsByTabsSettings);
-    } else {
-      console.warn('postsByTabsSettings not found in global scope');
-    }
-  }, []);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
-    if (!postsByTabsSettings) return;
-    if (!attributes.blockId) {
-      setAttributes({
-        blockId: crypto.randomUUID()
-      });
-    }
-    if (!attributes.initialized && postsByTabsSettings.options) {
-      setAttributes({
-        initialized: true,
-        postsPerPage: postsByTabsSettings.options.postsPerPage,
-        postType: attributes.postType ? attributes.postType : 'post',
-        orderByMetaKey: attributes.orderByMetaKey ? attributes.orderByMetaKey : '',
-        tabs: attributes.tabs?.length ? attributes.tabs : [{
-          template: postsByTabsSettings.options.defaultTemplate,
-          options: {
-            map: {
-              apiKey: postsByTabsSettings.options.googleMapsApiKey,
-              center: {
-                lat: postsByTabsSettings.options.defaultLatitude,
-                lng: postsByTabsSettings.options.defaultLongitude
-              },
-              zoom: 13
-            }
-          }
-        }]
-      });
-    }
-  }, [setAttributes, attributes, postsByTabsSettings]);
   const handleTabValueChange = (value, key, index) => {
     const tabs = [...attributes.tabs];
     tabs[index][key] = value;
@@ -52061,35 +53202,118 @@ function Edit({
       tabs
     });
   };
+  const fetchPostsByTabsSettings = async () => {
+    try {
+      const response = await (0,_utils_universalFetch__WEBPACK_IMPORTED_MODULE_5__["default"])({
+        path: 'posts-by-tabs/v1/settings',
+        method: 'GET',
+        returnHeaders: false,
+        attributes: attributes
+      });
+      if (!response.error) {
+        setPostsByTabsSettings(response);
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const updateQueryAttributes = newAttributes => {
+    setAttributes({
+      ...attributes,
+      ...newAttributes
+    });
+    if (newAttributes.postType !== undefined) {
+      setSelectedPostType(newAttributes.postType);
+    }
+    if (newAttributes.orderByMetaKey !== undefined) {
+      setSelectedOrderByMetaKey(newAttributes.orderByMetaKey);
+    }
+    if (newAttributes.taxonomyTerms !== undefined) {
+      setTaxonomyTerms(newAttributes.taxonomyTerms);
+    }
+  };
+  const queryFieldProps = {
+    attributes,
+    setAttributes,
+    postsByTabsSettings,
+    selectedPostType,
+    setSelectedPostType,
+    selectedOrderByMetaKey,
+    setSelectedOrderByMetaKey,
+    taxonomyTerms,
+    setTaxonomyTerms,
+    updateQueryAttributes
+  };
+  const filterFieldProps = {
+    attributes,
+    setAttributes,
+    postsByTabsSettings,
+    selectedPostType,
+    setSelectedPostType,
+    taxonomyTerms,
+    setTaxonomyTerms,
+    updateQueryAttributes
+  };
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    fetchPostsByTabsSettings();
+  }, []);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    // Don't return early, use a conditional block instead
+    if (postsByTabsSettings) {
+      if (!attributes.blockId) {
+        setAttributes({
+          blockId: crypto.randomUUID()
+        });
+      }
+      if (!attributes.initialized && postsByTabsSettings.options) {
+        setAttributes({
+          initialized: true,
+          postsPerPage: postsByTabsSettings.options.postsPerPage,
+          postType: attributes.postType ? attributes.postType : 'post',
+          orderByMetaKey: attributes.orderByMetaKey ? attributes.orderByMetaKey : '',
+          tabs: attributes.tabs?.length ? attributes.tabs : [{
+            template: postsByTabsSettings.options.defaultTemplate,
+            options: {
+              map: {
+                apiKey: postsByTabsSettings.options.googleMapsApiKey,
+                center: {
+                  lat: postsByTabsSettings.options.defaultLatitude,
+                  lng: postsByTabsSettings.options.defaultLongitude
+                },
+                zoom: 13
+              }
+            }
+          }]
+        });
+      }
+    }
+  }, [setAttributes, attributes.blockId, attributes.initialized, attributes.tabs, attributes.postType, attributes.orderByMetaKey, postsByTabsSettings]);
+  if (isLoading) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, {});
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_QueryFields__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        attributes: attributes,
-        setAttributes: setAttributes,
-        postsByTabsSettings: postsByTabsSettings?.options
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_QueryFields__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        ...queryFieldProps
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tabs'),
         initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_TabFields__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_TabFields__WEBPACK_IMPORTED_MODULE_7__["default"], {
           attributes: attributes,
           setAttributes: setAttributes,
           handleTabValueChange: handleTabValueChange,
           templates: templates,
           postsByTabsSettings: postsByTabsSettings?.options
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Filter settings'),
-        initialOpen: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_FilterFields__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          attributes: attributes,
-          setAttributes: setAttributes,
-          postsByTabsSettings: postsByTabsSettings?.options
-        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_editor_FilterFields__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        ...filterFieldProps
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_GoogleMapsProvider__WEBPACK_IMPORTED_MODULE_8__.APIProvider, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_GoogleMapsProvider__WEBPACK_IMPORTED_MODULE_9__.APIProvider, {
       apiKey: postsByTabsSettings?.googleMapsApiKey,
       libraries: ['places', 'marker'],
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_PostsByTabs__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_front_PostsByTabs__WEBPACK_IMPORTED_MODULE_10__["default"], {
         templates: templates,
         attributes: attributes,
         setAttributes: setAttributes,
@@ -52120,15 +53344,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mui_material_Button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/material/Button */ "./node_modules/@mui/material/Button/Button.js");
-/* harmony import */ var _mui_material_IconButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/IconButton */ "./node_modules/@mui/material/IconButton/IconButton.js");
-/* harmony import */ var _mui_icons_material_Add__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @mui/icons-material/Add */ "./node_modules/@mui/icons-material/esm/Add.js");
-/* harmony import */ var _mui_icons_material_Delete__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/icons-material/Delete */ "./node_modules/@mui/icons-material/esm/Delete.js");
-/* harmony import */ var _mui_icons_material_DragIndicator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/icons-material/DragIndicator */ "./node_modules/@mui/icons-material/esm/DragIndicator.js");
+/* harmony import */ var _mui_material_Button__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @mui/material/Button */ "./node_modules/@mui/material/Button/Button.js");
+/* harmony import */ var _mui_material_IconButton__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/material/IconButton */ "./node_modules/@mui/material/IconButton/IconButton.js");
+/* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
+/* harmony import */ var _mui_material_Switch__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/Switch */ "./node_modules/@mui/material/Switch/Switch.js");
+/* harmony import */ var _mui_icons_material_Add__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @mui/icons-material/Add */ "./node_modules/@mui/icons-material/esm/Add.js");
+/* harmony import */ var _mui_icons_material_DeleteOutline__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @mui/icons-material/DeleteOutline */ "./node_modules/@mui/icons-material/esm/DeleteOutline.js");
+/* harmony import */ var _mui_icons_material_DragIndicator__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @mui/icons-material/DragIndicator */ "./node_modules/@mui/icons-material/esm/DragIndicator.js");
 /* harmony import */ var _MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MuiMultipleSelect */ "./src/posts-by-tabs/editor/MuiMultipleSelect.jsx");
 /* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
+/* harmony import */ var _mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/material/FormControlLabel */ "./node_modules/@mui/material/FormControlLabel/FormControlLabel.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
 
 
 
@@ -52146,32 +53375,11 @@ function EditorFilterFields(props) {
   const {
     attributes,
     setAttributes,
-    postsByTabsSettings
+    postsByTabsSettings,
+    selectedPostType,
+    taxonomyTerms,
+    updateQueryAttributes
   } = props;
-  const handleTermsChange = (taxonomy, newTerms) => {
-    setAttributes({
-      taxonomyTerms: {
-        ...attributes.taxonomyTerms,
-        [taxonomy.value]: {
-          label: taxonomy.label,
-          value: taxonomy.value,
-          selectedTerms: newTerms
-        }
-      }
-    });
-  };
-  const handleMetasChange = (meta, newMetas) => {
-    setAttributes({
-      metas: {
-        ...attributes.metas,
-        [meta.value]: {
-          label: meta.label,
-          value: meta.value,
-          selectedMetas: newMetas
-        }
-      }
-    });
-  };
   const filterTypes = [{
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Taxonomy'),
     value: 'taxonomy',
@@ -52219,12 +53427,35 @@ function EditorFilterFields(props) {
       updates.metas = {};
     }
     if (Object.keys(updates).length > 0) {
-      setAttributes({
-        ...attributes,
-        ...updates
-      });
+      updateQueryAttributes(updates);
     }
   }, []);
+  const handleTermsChange = (taxonomy, newTerms) => {
+    const updatedTaxTerms = {
+      ...attributes.taxonomyTerms,
+      [taxonomy.value]: {
+        label: taxonomy.label,
+        value: taxonomy.value,
+        selectedTerms: newTerms
+      }
+    };
+    updateQueryAttributes({
+      taxonomyTerms: updatedTaxTerms
+    });
+  };
+  const handleMetasChange = (meta, newMetas) => {
+    const updatedMetas = {
+      ...attributes.metas,
+      [meta.value]: {
+        label: meta.label,
+        value: meta.value,
+        selectedMetas: newMetas
+      }
+    };
+    updateQueryAttributes({
+      metas: updatedMetas
+    });
+  };
   const handleAddField = () => {
     const filterFields = [...(attributes.filterFields || [])];
     filterFields.push({
@@ -52282,14 +53513,16 @@ function EditorFilterFields(props) {
         }
       }
     });
-    setAttributes({
+
+    // Use updateQueryAttributes to ensure both components are updated
+    updateQueryAttributes({
       filterFields
     });
   };
   const handleRemoveField = index => {
     const filterFields = [...attributes.filterFields];
     filterFields.splice(index, 1);
-    setAttributes({
+    updateQueryAttributes({
       filterFields
     });
   };
@@ -52299,9 +53532,19 @@ function EditorFilterFields(props) {
       ...updatedFields[index],
       ...field
     };
-    setAttributes({
+    updateQueryAttributes({
       filterFields: updatedFields
     });
+    if (field.type === 'orderby' && (field.options?.orderBy?.defaultOption === 'metaValue' || field.options?.orderBy?.defaultOption === 'metaValueNum')) {
+      updateQueryAttributes({
+        orderByMetaKey: field.options.orderBy.metaKey
+      });
+    }
+    if (field.type === 'order' && field.options?.order?.defaultOption) {
+      updateQueryAttributes({
+        order: field.options.order.defaultOption
+      });
+    }
   };
   const isFilterTypeUsed = type => {
     if (!attributes.filterFields || attributes.filterFields.length === 0) {
@@ -52323,6 +53566,7 @@ function EditorFilterFields(props) {
     const {
       options
     } = field;
+    const availableTaxonomies = postsByTabsSettings?.taxonomies?.filter(tax => tax.postTypes?.some(t => t.value === selectedPostType)) || [];
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Taxonomy'),
@@ -52330,7 +53574,7 @@ function EditorFilterFields(props) {
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select Taxonomy'),
           value: ''
-        }, ...postsByTabsSettings.taxonomies],
+        }, ...availableTaxonomies],
         onChange: value => {
           const updatedField = {
             ...field
@@ -52338,116 +53582,57 @@ function EditorFilterFields(props) {
           updatedField.options.taxonomy.value = value;
           updateField(index, updatedField);
         }
-      }), postsByTabsSettings.taxonomies && postsByTabsSettings.taxonomies.length > 0 && postsByTabsSettings.taxonomies.map(tax => {
-        if (!tax.terms || tax.terms.length === 0) {
+      }), options.taxonomy.value && availableTaxonomies.map(tax => {
+        if (tax.value !== options.taxonomy.value || !tax.terms?.length) {
           return null;
         }
-        const selectedPostHasTaxonomy = tax.postTypes?.some(t => t.value === attributes.postType);
         const taxonomyTerms = attributes.taxonomyTerms || {};
         const currentTaxTerms = taxonomyTerms[tax.value] || {
           label: tax.label,
           value: tax.value,
           selectedTerms: []
         };
-        console.log('taxPostTypes', tax);
-        console.log('selectedPostType', attributes.postType);
-        console.log('selectedPostHasTaxonomy', selectedPostHasTaxonomy);
-        console.log('currentTaxTerms', currentTaxTerms);
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
-          children: selectedPostHasTaxonomy && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
-            terms: tax.terms,
-            selectedTerms: currentTaxTerms.selectedTerms,
-            label: `Select ${tax.label} terms`,
-            onChange: newTerms => handleTermsChange(tax, newTerms)
-          }, tax.value)
-        });
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show all options'),
-        checked: options.taxonomy.allOptions,
-        onChange: () => {
-          const updatedField = {
-            ...field
-          };
-          updatedField.options.taxonomy.allOptions = !updatedField.options.taxonomy.allOptions;
-          updateField(index, updatedField);
-        }
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          terms: tax.terms,
+          selectedTerms: currentTaxTerms.selectedTerms,
+          label: `Select ${tax.label} terms`,
+          onChange: newTerms => handleTermsChange(tax, newTerms)
+        }, tax.value);
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        control: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Switch__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          checked: options.taxonomy.allOptions,
+          onChange: () => {
+            const updatedField = {
+              ...field
+            };
+            const willSelectAll = !updatedField.options.taxonomy.allOptions;
+            updatedField.options.taxonomy.allOptions = willSelectAll;
+            const currentTaxonomy = options.taxonomy.value;
+            const availableTaxonomy = availableTaxonomies.find(tax => tax.value === currentTaxonomy);
+            if (currentTaxonomy && availableTaxonomy && availableTaxonomy.terms) {
+              const tax = {
+                label: availableTaxonomy.label,
+                value: availableTaxonomy.value
+              };
+              if (willSelectAll) {
+                const allTerms = availableTaxonomy.terms.map(term => term.value);
+                handleTermsChange(tax, allTerms);
+              } else {
+                handleTermsChange(tax, []);
+              }
+            }
+            updateField(index, updatedField);
+          }
+        }),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select all values')
       })]
     });
   };
-
-  /* const renderMetaKeyOptions = (index, field) => {
-       const { options } = field;
-        return(
-       <>
-       {postsByTabsSettings.metasByPostType && postsByTabsSettings.postTypes && postsByTabsSettings.postTypes.map(postType => {
-               
-               const hasMetaFields = postsByTabsSettings.metasByPostType && 
-                   postsByTabsSettings.metasByPostType[postType.value] &&
-                   Object.keys(postsByTabsSettings.metasByPostType[postType.value]).length > 0;
-                const selectedPostHasMeta = postType.postTypes?.some(t => t.value === attributes.postType);
-               const selectedMetas = attributes.metas[postType.value]?.selectedMetas || [];
-                  
-               return ( 
-               <>
-               {hasMetaFields && 
-                   <>
-                   <MuiSelect
-                   key={postType.value + '-filter-orderby-metafield'}
-                   label={`Orderby ${postType.label} Meta`}
-                   options={[
-                       { label: __('Select meta key'), value: '' },
-                       ...(hasMetaFields 
-                           ? Object.values(postsByTabsSettings.metasByPostType[postType.value]).map(field => ({
-                               label: field.label,
-                               value: field.value
-                           }))
-                           : [])
-                   ]}
-                   value={attributes.orderByMetaKey || ''}
-                   onChange={(value) => {
-                       updateQuery({ orderByMetaKey: value });
-                   }}
-                   className={`${attributes.postType &&
-                           attributes.postType === postType.value &&
-                           ( attributes.orderBy === 'meta_value' || attributes.orderBy === 'meta_value_num' )  ? "" : "hidden"}`
-                   }
-                   />
-                    {attributes.orderByMetaKey && 
-                       <MuiMultipleSelect
-                       key={postType.value + '-filter-orderby-metafield'}
-                       terms={postsByTabsSettings.metasByPostType[postType.value][attributes.orderByMetaKey].options}
-                       selectedTerms={selectedMetas}
-                       label={`Select ${postType.label} Meta`}
-                       onChange={(newMeta) => handleMetasChange(newMeta, newTerms)}
-                       className={
-                       `${field.options.metaKey.value === postType.value &&
-                           attributes.postType && 
-                           selectedPostHasMeta ? "" : "hidden"}`
-                       }
-                       />}
-                   </>
-                      
-               }
-               </>)
-       })} 
-       {attributes.orderByMetaKey && <ToggleControl
-           label={__('Show all options')}
-           checked={options.metaKey.allOptions}
-           onChange={() => {
-               const updatedField = { ...field };
-               updatedField.options.metaKey.allOptions = !updatedField.options.metaKey.allOptions;
-               updateField(index, updatedField);
-           }}
-       />
-       }
-        </>
-       );
-  };*/
-
   const renderMetaKeyOptions = (index, field) => {
     const {
       options
     } = field;
+    const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Meta Key'),
@@ -52455,10 +53640,10 @@ function EditorFilterFields(props) {
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select Meta Key'),
           value: ''
-        }].concat(postsByTabsSettings.metasByPostType && attributes.postType && postsByTabsSettings.metasByPostType[attributes.postType] ? Object.keys(postsByTabsSettings.metasByPostType[attributes.postType]).map(key => ({
-          label: postsByTabsSettings.metasByPostType[attributes.postType][key].label || key,
+        }].concat(Object.keys(metaKeysForPostType).map(key => ({
+          label: metaKeysForPostType[key].label || key,
           value: key
-        })) : []),
+        }))),
         onChange: value => {
           const updatedField = {
             ...field
@@ -52466,27 +53651,44 @@ function EditorFilterFields(props) {
           updatedField.options.metaKey.value = value;
           updateField(index, updatedField);
         }
-      }), options.metaKey.value && postsByTabsSettings.metasByPostType && attributes.postType && postsByTabsSettings?.metasByPostType?.[attributes.postType] && postsByTabsSettings?.metasByPostType?.[attributes.postType]?.[options.metaKey.value] && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        terms: postsByTabsSettings.metasByPostType[attributes.postType][options.metaKey.value].options || [],
-        selectedTerms: attributes.metas && attributes.metas[options.metaKey.value] && attributes.metas[options.metaKey.value].selectedMetas || [],
-        label: `Select values for ${options.metaKey.value}`,
+      }), options.metaKey.value && metaKeysForPostType[options.metaKey.value]?.options?.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        terms: metaKeysForPostType[options.metaKey.value].options,
+        selectedTerms: attributes.metas?.[options.metaKey.value]?.selectedMetas || [],
+        label: `Select values for ${metaKeysForPostType[options.metaKey.value].label || options.metaKey.value}`,
         onChange: newMetas => {
           const metaObj = {
-            label: postsByTabsSettings.metasByPostType[attributes.postType][options.metaKey.value].label || options.metaKey.value,
+            label: metaKeysForPostType[options.metaKey.value].label || options.metaKey.value,
             value: options.metaKey.value
           };
           handleMetasChange(metaObj, newMetas);
         }
-      }, `meta-values-${options.metaKey.value}`), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show all options'),
-        checked: options.metaKey.allOptions,
-        onChange: () => {
-          const updatedField = {
-            ...field
-          };
-          updatedField.options.metaKey.allOptions = !updatedField.options.metaKey.allOptions;
-          updateField(index, updatedField);
-        }
+      }, `meta-values-${options.metaKey.value}`), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        control: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Switch__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          checked: options.metaKey.allOptions,
+          onChange: () => {
+            const updatedField = {
+              ...field
+            };
+            const willSelectAll = !updatedField.options.metaKey.allOptions;
+            updatedField.options.metaKey.allOptions = willSelectAll;
+            const currentMetaKey = options.metaKey.value;
+            const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
+            if (currentMetaKey && metaKeysForPostType[currentMetaKey]?.options) {
+              const metaObj = {
+                label: metaKeysForPostType[currentMetaKey].label || currentMetaKey,
+                value: currentMetaKey
+              };
+              if (willSelectAll) {
+                const allMetaValues = metaKeysForPostType[currentMetaKey].options.map(option => option.value);
+                handleMetasChange(metaObj, allMetaValues);
+              } else {
+                handleMetasChange(metaObj, []);
+              }
+            }
+            updateField(index, updatedField);
+          }
+        }),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select all values')
       })]
     });
   };
@@ -52494,6 +53696,7 @@ function EditorFilterFields(props) {
     const {
       options
     } = field;
+    const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Default Option'),
@@ -52512,8 +53715,8 @@ function EditorFilterFields(props) {
         options: [{
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Select Meta Key'),
           value: ''
-        }, ...(postsByTabsSettings?.meta_keys || []).map(key => ({
-          label: key,
+        }, ...Object.keys(metaKeysForPostType).map(key => ({
+          label: metaKeysForPostType[key].label || key,
           value: key
         }))],
         onChange: value => {
@@ -52522,6 +53725,9 @@ function EditorFilterFields(props) {
           };
           updatedField.options.orderBy.metaKey = value;
           updateField(index, updatedField);
+          updateQueryAttributes({
+            orderByMetaKey: value
+          });
         }
       })]
     });
@@ -52540,6 +53746,9 @@ function EditorFilterFields(props) {
         };
         updatedField.options.order.defaultOption = value;
         updateField(index, updatedField);
+        updateQueryAttributes({
+          order: value
+        });
       }
     });
   };
@@ -52547,9 +53756,10 @@ function EditorFilterFields(props) {
     const {
       options
     } = field;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Switch__WEBPACK_IMPORTED_MODULE_7__["default"], {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enable Range Picking'),
-      value: options.calendar.options[0].value,
+      defaultChecked: true,
+      checked: options.calendar.options[0].value,
       onChange: () => {
         const updatedField = {
           ...field
@@ -52577,85 +53787,87 @@ function EditorFilterFields(props) {
   };
   const renderFieldCard = (field, index) => {
     const fieldType = filterTypes.find(type => type.value === field.type);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
-      className: "filter-field-card",
-      style: {
-        marginBottom: '16px'
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CardHeader, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-          className: "flex justify-between items-center",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_DragIndicator__WEBPACK_IMPORTED_MODULE_7__["default"], {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h3", {
-            className: "lowercase",
-            children: fieldType?.label || field.type
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            onClick: () => handleRemoveField(index),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_Delete__WEBPACK_IMPORTED_MODULE_8__["default"], {})
-          })]
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_mui_material_Paper__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      className: "p-2 mb-4",
+      elevation: 3,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+        className: "mb-6 flex justify-between w-full items-center",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Drag to reorder'),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_DragIndicator__WEBPACK_IMPORTED_MODULE_10__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+          className: "block lowercase mb-0",
+          children: fieldType?.label || field.type
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove field'),
+          onClick: () => handleRemoveField(index),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_DeleteOutline__WEBPACK_IMPORTED_MODULE_11__["default"], {})
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Field Type'),
+        value: field.type,
+        options: getAvailableFilterTypes().concat(isFilterTypeUsed(field.type) && !fieldType?.multiple ? [filterTypes.find(type => type.value === field.type)] : []),
+        onChange: value => {
+          const updatedField = {
+            ...field,
+            type: value
+          };
+          updateField(index, updatedField);
+        }
+      }), field.type !== 'search' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Template'),
+        value: field.template,
+        options: templateOptions,
+        onChange: value => updateField(index, {
+          ...field,
+          template: value
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CardBody, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Field Type'),
-          value: field.type,
-          options: getAvailableFilterTypes().concat(isFilterTypeUsed(field.type) && !fieldType?.multiple ? [filterTypes.find(type => type.value === field.type)] : []),
-          onChange: value => {
-            const updatedField = {
-              ...field,
-              type: value
-            };
-            updateField(index, updatedField);
-          }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Label'),
-          value: field.label,
-          onChange: value => updateField(index, {
-            ...field,
-            label: value
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Placeholder'),
-          value: field.placeholder,
-          onChange: value => updateField(index, {
-            ...field,
-            placeholder: value
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Info Text'),
-          value: field.info,
-          onChange: value => updateField(index, {
-            ...field,
-            info: value
-          })
-        }), field.type !== 'search' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Template'),
-          value: field.template,
-          options: templateOptions,
-          onChange: value => updateField(index, {
-            ...field,
-            template: value
-          })
-        }), renderFieldOptions(index, field)]
-      })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Label'),
+        value: field.label,
+        onChange: value => updateField(index, {
+          ...field,
+          label: value
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Placeholder'),
+        value: field.placeholder,
+        onChange: value => updateField(index, {
+          ...field,
+          placeholder: value
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Info Text'),
+        value: field.info,
+        onChange: value => updateField(index, {
+          ...field,
+          info: value
+        })
+      }), renderFieldOptions(index, field)]
     }, index);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-    className: "filter-fields-container",
-    children: [Array.isArray(attributes.filterFields) && attributes.filterFields.length > 0 ? attributes.filterFields.map((field, index) => renderFieldCard(field, index)) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No filter fields added yet. Click the button below to add your first filter field.')
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Button__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      color: "secondary",
-      sx: {
-        textTransform: "none",
-        marginTop: '16px'
-      },
-      size: "small",
-      variant: "contained",
-      startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_Add__WEBPACK_IMPORTED_MODULE_10__["default"], {}),
-      onClick: handleAddField,
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Filter Field')
-    })]
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Filter Fields'),
+    initialOpen: false,
+    children: !selectedPostType ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Please select a Post Type in Query Settings first to configure filters.')
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      className: "filter-fields-container",
+      children: [Array.isArray(attributes.filterFields) && attributes.filterFields.length > 0 ? attributes.filterFields.map((field, index) => renderFieldCard(field, index)) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No filter fields added yet. Click the button below to add your first filter field.')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Button__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        color: "secondary",
+        sx: {
+          textTransform: "none",
+          marginTop: '16px'
+        },
+        size: "small",
+        variant: "contained",
+        startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_Add__WEBPACK_IMPORTED_MODULE_13__["default"], {}),
+        onClick: handleAddField,
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Filter Field')
+      })]
+    })
   });
 }
 
@@ -53575,7 +54787,12 @@ function QueryFields(props) {
   const {
     attributes,
     setAttributes,
-    postsByTabsSettings
+    postsByTabsSettings,
+    selectedPostType,
+    selectedOrderByMetaKey,
+    setSelectedOrderByMetaKey,
+    taxonomyTerms,
+    updateQueryAttributes
   } = props;
   const {
     postsPerPage = 12,
@@ -53584,15 +54801,6 @@ function QueryFields(props) {
     orderBy = 'date',
     paginationType
   } = attributes;
-  const [selectedPostType, setSelectedPostType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(attributes.postType || 'post');
-  const [selectedOrderByMetaKey, setSelectedOrderByMetaKey] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(attributes.orderByMetaKey || '');
-  const [taxonomyTerms, setTaxonomyTerms] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(attributes.taxonomyTerms || {});
-  const updateQuery = newAttributes => {
-    setAttributes({
-      ...attributes,
-      ...newAttributes
-    });
-  };
   const handleTermsChange = (taxonomy, newTerms) => {
     const updatedTerms = {
       ...taxonomyTerms,
@@ -53602,8 +54810,7 @@ function QueryFields(props) {
         selectedTerms: newTerms
       }
     };
-    setTaxonomyTerms(updatedTerms);
-    updateQuery({
+    updateQueryAttributes({
       taxonomyTerms: updatedTerms
     });
   };
@@ -53621,8 +54828,7 @@ function QueryFields(props) {
           }, ...postsByTabsSettings.postTypes],
           value: selectedPostType || 'post',
           onChange: newPostType => {
-            setSelectedPostType(newPostType);
-            updateQuery({
+            updateQueryAttributes({
               postType: newPostType,
               taxonomy: '',
               terms: null
@@ -53747,12 +54953,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mui_material_Button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @mui/material/Button */ "./node_modules/@mui/material/Button/Button.js");
+/* harmony import */ var _mui_material_Button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @mui/material/Button */ "./node_modules/@mui/material/Button/Button.js");
+/* harmony import */ var _mui_material_IconButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/IconButton */ "./node_modules/@mui/material/IconButton/IconButton.js");
+/* harmony import */ var _mui_icons_material_Delete__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @mui/icons-material/Delete */ "./node_modules/@mui/icons-material/esm/Delete.js");
+/* harmony import */ var _mui_icons_material_Add__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @mui/icons-material/Add */ "./node_modules/@mui/icons-material/esm/Add.js");
 /* harmony import */ var _mui_material_Paper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @mui/material/Paper */ "./node_modules/@mui/material/Paper/Paper.js");
-/* harmony import */ var _TabTemplateOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TabTemplateOptions */ "./src/posts-by-tabs/editor/TabTemplateOptions.jsx");
-/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
+/* harmony import */ var _TabTemplateOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TabTemplateOptions */ "./src/posts-by-tabs/editor/TabTemplateOptions.jsx");
+/* harmony import */ var _MuiSelect__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./MuiSelect */ "./src/posts-by-tabs/editor/MuiSelect.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
 
 
 
@@ -53865,9 +55077,9 @@ function TabFields(props) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h3", {
             className: "lowercase",
             children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Onglet'), " ", index + 1]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(IconButton, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_5__["default"], {
             onClick: () => handleRemoveTab(index),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(DeleteIcon, {})
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_Delete__WEBPACK_IMPORTED_MODULE_6__["default"], {})
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           className: "mb-2",
@@ -53902,14 +55114,14 @@ function TabFields(props) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
             title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Template options'),
             initialOpen: false,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_MuiSelect__WEBPACK_IMPORTED_MODULE_7__["default"], {
               label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Template'),
               value: tab?.template || '',
               options: templates,
               onChange: value => {
                 handleTabValueChange(value, 'template', index);
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_TabTemplateOptions__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_TabTemplateOptions__WEBPACK_IMPORTED_MODULE_8__["default"], {
               tab: tab,
               postType: attributes.postType,
               index: index,
@@ -53918,14 +55130,14 @@ function TabFields(props) {
           })]
         })]
       }, index);
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_material_Button__WEBPACK_IMPORTED_MODULE_9__["default"], {
       variant: "contained",
       size: "small",
       color: "secondary",
       sx: {
         textTransform: "none"
       },
-      startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(AddIcon, {}),
+      startIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_mui_icons_material_Add__WEBPACK_IMPORTED_MODULE_10__["default"], {}),
       onClick: handleAddTab,
       children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Ajouter un onglet')
     })]
@@ -55664,14 +56876,15 @@ function PostsByTabs(props) {
         const result = await (0,_utils_fetchPosts__WEBPACK_IMPORTED_MODULE_3__.fetchPosts)({
           ...attributes
         }, fetchOptions);
-        if (result.headers && result.headers['x-wp-total']) {
-          setTotalPosts(parseInt(result.headers['x-wp-total']));
-        }
-        if (result.posts) {
-          setPosts(result.posts);
+        if (!result.error) {
+          if (result.headers && result.headers['x-wp-total']) {
+            setTotalPosts(parseInt(result.headers['x-wp-total']));
+          }
+          if (result.posts) {
+            setPosts(result.posts);
+          }
         }
       } catch (err) {
-        console.error("Error fetching posts:", err);
         setError(err.message);
         setPosts([]);
         setTotalPosts(0);

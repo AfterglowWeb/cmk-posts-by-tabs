@@ -1,64 +1,28 @@
 import { __ } from '@wordpress/i18n';
-import { 
-    Spinner,
-    PanelBody,
-    Card,
-    CardBody,
-    CardHeader,
-    CardFooter,
-    TextControl,
-    ToggleControl,
-    Flex,
-    FlexItem,
-    FlexBlock,
-    Icon,
-} from '@wordpress/components';
-import { 
-    useState, 
-    useEffect
-} from '@wordpress/element';
-
+import { TextControl, PanelBody } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import Switch from '@mui/material/Switch';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
-import MuiInputSlider from './MuiInputSlider';
-
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 export default function EditorFilterFields(props) {
-
-    const { attributes, setAttributes, postsByTabsSettings} = props;
-
-    const handleTermsChange = (taxonomy, newTerms) => {
-        setAttributes({
-            taxonomyTerms: {
-                ...attributes.taxonomyTerms,
-                [taxonomy.value]: {
-                    label: taxonomy.label,
-                    value: taxonomy.value,
-                    selectedTerms: newTerms
-                }
-            }
-        });
-    };
-
-    const handleMetasChange = (meta, newMetas) => {
-        setAttributes({
-            metas: {
-                ...attributes.metas,
-                [meta.value]: {
-                    label: meta.label,
-                    value: meta.value,
-                    selectedMetas: newMetas
-                }
-            }
-        });
-    };
+    const { 
+        attributes, 
+        setAttributes, 
+        postsByTabsSettings,
+        selectedPostType,
+        taxonomyTerms,
+        updateQueryAttributes
+    } = props;
 
     const filterTypes = [
         {
@@ -98,7 +62,7 @@ export default function EditorFilterFields(props) {
         { label: __('Radio Buttons'), value: 'radio' },
         { label: __('Checkboxes'), value: 'checkbox' },
     ];
-    
+
     useEffect(() => {
         const updates = {};
         
@@ -115,13 +79,39 @@ export default function EditorFilterFields(props) {
         }
         
         if (Object.keys(updates).length > 0) {
-            setAttributes({ ...attributes, ...updates });
+            updateQueryAttributes(updates);
         }
     }, []);
+
+    const handleTermsChange = (taxonomy, newTerms) => {
+        const updatedTaxTerms = {
+            ...attributes.taxonomyTerms,
+            [taxonomy.value]: {
+                label: taxonomy.label,
+                value: taxonomy.value,
+                selectedTerms: newTerms
+            }
+        };
+        
+        updateQueryAttributes({ taxonomyTerms: updatedTaxTerms });
+    };
+
+    const handleMetasChange = (meta, newMetas) => {
+        const updatedMetas = {
+            ...attributes.metas,
+            [meta.value]: {
+                label: meta.label,
+                value: meta.value,
+                selectedMetas: newMetas
+            }
+        };
+        
+        updateQueryAttributes({ metas: updatedMetas });
+    };
     
     const handleAddField = () => {
         const filterFields = [ ...attributes.filterFields || [] ];
-        filterFields.push( {
+        filterFields.push({
             type: 'taxonomy',
             label: 'Label',
             placeholder: 'Placeholder',
@@ -152,7 +142,6 @@ export default function EditorFilterFields(props) {
                         }
                     ],
                     defaultOption:'desc',
-
                 },
                 orderBy:{
                     options:[
@@ -186,20 +175,36 @@ export default function EditorFilterFields(props) {
                     ]
                 }
             }
-        } );
-        setAttributes( { filterFields } );
+        });
+        
+        // Use updateQueryAttributes to ensure both components are updated
+        updateQueryAttributes({ filterFields });
     };
 
-    const handleRemoveField = ( index ) => {
-        const filterFields = [ ...attributes.filterFields ];
-        filterFields.splice( index, 1 );
-        setAttributes( { filterFields } );
+    const handleRemoveField = (index) => {
+        const filterFields = [...attributes.filterFields];
+        filterFields.splice(index, 1);
+        updateQueryAttributes({ filterFields });
     };
 
     const updateField = (index, field) => {
         const updatedFields = [...attributes.filterFields];
         updatedFields[index] = { ...updatedFields[index], ...field };
-        setAttributes({ filterFields: updatedFields });
+        updateQueryAttributes({ filterFields: updatedFields });
+
+        if (field.type === 'orderby' && 
+            (field.options?.orderBy?.defaultOption === 'metaValue' || 
+             field.options?.orderBy?.defaultOption === 'metaValueNum')) {
+            updateQueryAttributes({ 
+                orderByMetaKey: field.options.orderBy.metaKey 
+            });
+        }
+
+        if (field.type === 'order' && field.options?.order?.defaultOption) {
+            updateQueryAttributes({ 
+                order: field.options.order.defaultOption
+            });
+        }
     };
 
     const isFilterTypeUsed = (type) => {
@@ -223,241 +228,201 @@ export default function EditorFilterFields(props) {
 
     const renderTaxonomyOptions = (index, field) => {
         const { options } = field;
+        const availableTaxonomies = postsByTabsSettings?.taxonomies?.filter(tax => 
+            tax.postTypes?.some(t => t.value === selectedPostType)
+        ) || [];
 
- 
         return (
             <>
                 <MuiSelect
-                label={__('Taxonomy')}
-                value={options.taxonomy.value}
-                options={[{ label: __('Select Taxonomy'), value: '' }, ...postsByTabsSettings.taxonomies]}
-                onChange={(value) => {
-                    const updatedField = { ...field };
-                    updatedField.options.taxonomy.value = value;
-                    updateField(index, updatedField);
-                }}
+                    label={__('Taxonomy')}
+                    value={options.taxonomy.value}
+                    options={[
+                        { label: __('Select Taxonomy'), value: '' }, 
+                        ...availableTaxonomies
+                    ]}
+                    onChange={(value) => {
+                        const updatedField = { ...field };
+                        updatedField.options.taxonomy.value = value;
+                        updateField(index, updatedField);
+                    }}
                 />
 
-                {postsByTabsSettings.taxonomies && 
-                 postsByTabsSettings.taxonomies.length > 0 && 
-                 postsByTabsSettings.taxonomies.map(tax => {
-                    
-                    if(!tax.terms || tax.terms.length === 0) {
+                {options.taxonomy.value && availableTaxonomies.map(tax => {
+                    if (tax.value !== options.taxonomy.value || !tax.terms?.length) {
                         return null;
                     }
                     
-                    const selectedPostHasTaxonomy = tax.postTypes?.some(t => t.value === attributes.postType);
                     const taxonomyTerms = attributes.taxonomyTerms || {};
                     const currentTaxTerms = taxonomyTerms[tax.value] || {
                         label: tax.label,
                         value: tax.value,
                         selectedTerms: []
                     };
-
-                    console.log('taxPostTypes', tax);
-                    console.log('selectedPostType', attributes.postType);
-                    console.log('selectedPostHasTaxonomy', selectedPostHasTaxonomy);
-                    console.log('currentTaxTerms', currentTaxTerms);
-                                
+           
                     return (
-                        <>
-                        {selectedPostHasTaxonomy && <MuiMultipleSelect
-                        key={tax.value}
-                        terms={tax.terms}
-                        selectedTerms={currentTaxTerms.selectedTerms}
-                        label={`Select ${tax.label} terms`}
-                        onChange={(newTerms) => handleTermsChange(tax, newTerms)}
-                        />}
-                        </>
+                        <MuiMultipleSelect
+                            key={tax.value}
+                            terms={tax.terms}
+                            selectedTerms={currentTaxTerms.selectedTerms}
+                            label={`Select ${tax.label} terms`}
+                            onChange={(newTerms) => handleTermsChange(tax, newTerms)}
+                        />
                     );
-
                 })}
-                
-                
-                <ToggleControl
-                label={__('Show all options')}
-                checked={options.taxonomy.allOptions}
-                onChange={() => {
-                    const updatedField = { ...field };
-                    updatedField.options.taxonomy.allOptions = !updatedField.options.taxonomy.allOptions;
-                    updateField(index, updatedField);
-                }}
+                <FormControlLabel
+                control={
+                    <Switch
+                    checked={options.taxonomy.allOptions}
+                    onChange={() => {
+                            const updatedField = { ...field };
+                            const willSelectAll = !updatedField.options.taxonomy.allOptions;
+                            updatedField.options.taxonomy.allOptions = willSelectAll;
+                            
+                            const currentTaxonomy = options.taxonomy.value;
+                            const availableTaxonomy = availableTaxonomies.find(tax => tax.value === currentTaxonomy);
+                            
+                            if (currentTaxonomy && availableTaxonomy && availableTaxonomy.terms) {
+                                const tax = {
+                                    label: availableTaxonomy.label,
+                                    value: availableTaxonomy.value
+                                };
+                                
+                                if (willSelectAll) {
+                                    const allTerms = availableTaxonomy.terms.map(term => term.value);
+                                    handleTermsChange(tax, allTerms);
+                                } 
+                                else {
+                                    handleTermsChange(tax, []);
+                                }
+                            }
+
+                            updateField(index, updatedField);
+                        }}
+                    />}
+                    label={__('Select all values')}
                 />
             </>
         );
     };
 
-   /* const renderMetaKeyOptions = (index, field) => {
+    const renderMetaKeyOptions = (index, field) => {
         const { options } = field;
+        const metaKeysForPostType = 
+            postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
 
-        return(
-        <>
-        {postsByTabsSettings.metasByPostType && postsByTabsSettings.postTypes && postsByTabsSettings.postTypes.map(postType => {
-                
-                const hasMetaFields = postsByTabsSettings.metasByPostType && 
-                    postsByTabsSettings.metasByPostType[postType.value] &&
-                    Object.keys(postsByTabsSettings.metasByPostType[postType.value]).length > 0;
-
-                const selectedPostHasMeta = postType.postTypes?.some(t => t.value === attributes.postType);
-                const selectedMetas = attributes.metas[postType.value]?.selectedMetas || [];
-
-
-
-                
-                return ( 
-                <>
-                {hasMetaFields && 
-                    <>
-                    <MuiSelect
-                    key={postType.value + '-filter-orderby-metafield'}
-                    label={`Orderby ${postType.label} Meta`}
-                    options={[
-                        { label: __('Select meta key'), value: '' },
-                        ...(hasMetaFields 
-                            ? Object.values(postsByTabsSettings.metasByPostType[postType.value]).map(field => ({
-                                label: field.label,
-                                value: field.value
-                            }))
-                            : [])
-                    ]}
-                    value={attributes.orderByMetaKey || ''}
-                    onChange={(value) => {
-                        updateQuery({ orderByMetaKey: value });
-                    }}
-                    className={`${attributes.postType &&
-                            attributes.postType === postType.value &&
-                            ( attributes.orderBy === 'meta_value' || attributes.orderBy === 'meta_value_num' )  ? "" : "hidden"}`
-                    }
-                    />
-
-                    {attributes.orderByMetaKey && 
-                        <MuiMultipleSelect
-                        key={postType.value + '-filter-orderby-metafield'}
-                        terms={postsByTabsSettings.metasByPostType[postType.value][attributes.orderByMetaKey].options}
-                        selectedTerms={selectedMetas}
-                        label={`Select ${postType.label} Meta`}
-                        onChange={(newMeta) => handleMetasChange(newMeta, newTerms)}
-                        className={
-                        `${field.options.metaKey.value === postType.value &&
-                            attributes.postType && 
-                            selectedPostHasMeta ? "" : "hidden"}`
-                        }
-                        />}
-                    </>
-                       
-                }
-                </>)
-        })} 
-        {attributes.orderByMetaKey && <ToggleControl
-            label={__('Show all options')}
-            checked={options.metaKey.allOptions}
-            onChange={() => {
-                const updatedField = { ...field };
-                updatedField.options.metaKey.allOptions = !updatedField.options.metaKey.allOptions;
-                updateField(index, updatedField);
-            }}
-        />
-        }
-
-        </>
-        );
-
-};*/
-
-const renderMetaKeyOptions = (index, field) => {
-    const { options } = field;
-
-    return (
-        <>
-            <MuiSelect
-                label={__('Meta Key')}
-                value={options.metaKey.value}
-                options={
-                    [{ label: __('Select Meta Key'), value: '' }].concat(
-                        postsByTabsSettings.metasByPostType && 
-                        attributes.postType && 
-                        postsByTabsSettings.metasByPostType[attributes.postType] 
-                            ? Object.keys(postsByTabsSettings.metasByPostType[attributes.postType]).map(key => ({
-                                label: postsByTabsSettings.metasByPostType[attributes.postType][key].label || key,
-                                value: key
-                              }))
-                            : []
-                    )
-                }
-                onChange={(value) => {
-                    const updatedField = { ...field };
-                    updatedField.options.metaKey.value = value;
-                    updateField(index, updatedField);
-                }}
-            />
-            
-            {options.metaKey.value && postsByTabsSettings.metasByPostType && 
-             attributes.postType && 
-             postsByTabsSettings?.metasByPostType?.[attributes.postType] && 
-             postsByTabsSettings?.metasByPostType?.[attributes.postType]?.[options.metaKey.value] && (
-                <MuiMultipleSelect
-                    key={`meta-values-${options.metaKey.value}`}
-                    terms={postsByTabsSettings.metasByPostType[attributes.postType][options.metaKey.value].options || []}
-                    selectedTerms={
-                        attributes.metas && 
-                        attributes.metas[options.metaKey.value] && 
-                        attributes.metas[options.metaKey.value].selectedMetas || []
-                    }
-                    label={`Select values for ${options.metaKey.value}`}
-                    onChange={(newMetas) => {
-                        const metaObj = {
-                            label: postsByTabsSettings.metasByPostType[attributes.postType][options.metaKey.value].label || options.metaKey.value,
-                            value: options.metaKey.value
-                        };
-                        handleMetasChange(metaObj, newMetas);
-                    }}
-                />
-            )}
-            
-            <ToggleControl
-                label={__('Show all options')}
-                checked={options.metaKey.allOptions}
-                onChange={() => {
-                    const updatedField = { ...field };
-                    updatedField.options.metaKey.allOptions = !updatedField.options.metaKey.allOptions;
-                    updateField(index, updatedField);
-                }}
-            />
-        </>
-    );
-};
-
-    const renderOrderByOptions = (index, field) => {
-        const { options } = field;
         return (
             <>
                 <MuiSelect
-                label={__('Default Option')}
-                value={options.orderBy.defaultOption}
-                options={options.orderBy.options}
-                onChange={(value) => {
-                    const updatedField = { ...field };
-                    updatedField.options.orderBy.defaultOption = value;
-                    updateField(index, updatedField);
-                }}
-                />
-                
-                {(options.orderBy.defaultOption === 'metaValue' || options.orderBy.defaultOption === 'metaValueNum') && (
-                    <MuiSelect
-                    label={__('Meta Key for Ordering')}
-                    value={options.orderBy.metaKey}
-                    options={[
-                        { label: __('Select Meta Key'), value: '' },
-                        ...(postsByTabsSettings?.meta_keys || []).map(key => ({
-                            label: key,
-                            value: key
-                        }))
-                    ]}
+                    label={__('Meta Key')}
+                    value={options.metaKey.value}
+                    options={
+                        [{ label: __('Select Meta Key'), value: '' }].concat(
+                            Object.keys(metaKeysForPostType).map(key => ({
+                                label: metaKeysForPostType[key].label || key,
+                                value: key
+                            }))
+                        )
+                    }
                     onChange={(value) => {
                         const updatedField = { ...field };
-                        updatedField.options.orderBy.metaKey = value;
+                        updatedField.options.metaKey.value = value;
                         updateField(index, updatedField);
                     }}
+                />
+                
+                {options.metaKey.value && 
+                 metaKeysForPostType[options.metaKey.value]?.options?.length > 0 && (
+                    <MuiMultipleSelect
+                        key={`meta-values-${options.metaKey.value}`}
+                        terms={metaKeysForPostType[options.metaKey.value].options}
+                        selectedTerms={
+                            attributes.metas?.[options.metaKey.value]?.selectedMetas || []
+                        }
+                        label={`Select values for ${metaKeysForPostType[options.metaKey.value].label || options.metaKey.value}`}
+                        onChange={(newMetas) => {
+                            const metaObj = {
+                                label: metaKeysForPostType[options.metaKey.value].label || options.metaKey.value,
+                                value: options.metaKey.value
+                            };
+                            handleMetasChange(metaObj, newMetas);
+                        }}
+                    />
+                )}
+                
+                <FormControlLabel
+                control={
+                <Switch
+                    checked={options.metaKey.allOptions}
+                    onChange={() => {
+                        const updatedField = { ...field };
+                        const willSelectAll = !updatedField.options.metaKey.allOptions;
+                        updatedField.options.metaKey.allOptions = willSelectAll;
+                
+                        const currentMetaKey = options.metaKey.value;
+                        const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
+                        
+                        if (currentMetaKey && metaKeysForPostType[currentMetaKey]?.options) {
+                            const metaObj = {
+                                label: metaKeysForPostType[currentMetaKey].label || currentMetaKey,
+                                value: currentMetaKey
+                            };
+                            
+                            if (willSelectAll) {
+                                const allMetaValues = metaKeysForPostType[currentMetaKey].options.map(option => option.value);
+                                handleMetasChange(metaObj, allMetaValues);
+                            } 
+                            else {
+                                handleMetasChange(metaObj, []);
+                            }
+                        }
+                
+                        updateField(index, updatedField);
+                    }}
+                />}
+                label={__('Select all values')}
+                />
+            </>
+        );
+    };
+
+    const renderOrderByOptions = (index, field) => {
+        const { options } = field;
+        const metaKeysForPostType = 
+            postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
+        
+        return (
+            <>
+                <MuiSelect
+                    label={__('Default Option')}
+                    value={options.orderBy.defaultOption}
+                    options={options.orderBy.options}
+                    onChange={(value) => {
+                        const updatedField = { ...field };
+                        updatedField.options.orderBy.defaultOption = value;
+                        updateField(index, updatedField);
+                    }}
+                />
+                
+                {(options.orderBy.defaultOption === 'metaValue' || 
+                  options.orderBy.defaultOption === 'metaValueNum') && (
+                    <MuiSelect
+                        label={__('Meta Key for Ordering')}
+                        value={options.orderBy.metaKey}
+                        options={[
+                            { label: __('Select Meta Key'), value: '' },
+                            ...Object.keys(metaKeysForPostType).map(key => ({
+                                label: metaKeysForPostType[key].label || key,
+                                value: key
+                            }))
+                        ]}
+                        onChange={(value) => {
+                            const updatedField = { ...field };
+                            updatedField.options.orderBy.metaKey = value;
+                            updateField(index, updatedField);
+                            
+                            updateQueryAttributes({ orderByMetaKey: value });
+                        }}
                     />
                 )}
             </>
@@ -468,14 +433,15 @@ const renderMetaKeyOptions = (index, field) => {
         const { options } = field;
         return (
             <MuiSelect
-            label={__('Default Order')}
-            value={options.order.defaultOption}
-            options={options.order.options}
-            onChange={(value) => {
-                const updatedField = { ...field };
-                updatedField.options.order.defaultOption = value;
-                updateField(index, updatedField);
-            }}
+                label={__('Default Order')}
+                value={options.order.defaultOption}
+                options={options.order.options}
+                onChange={(value) => {
+                    const updatedField = { ...field };
+                    updatedField.options.order.defaultOption = value;
+                    updateField(index, updatedField);
+                    updateQueryAttributes({ order: value });
+                }}
             />
         );
     };
@@ -483,9 +449,10 @@ const renderMetaKeyOptions = (index, field) => {
     const renderCalendarOptions = (index, field) => {
         const { options } = field;
         return (
-            <MuiSelect
-            label={__('Enable Range Picking')}
-            value={options.calendar.options[0].value}
+            <Switch 
+            label={__('Enable Range Picking')} 
+            defaultChecked 
+            checked={options.calendar.options[0].value}
             onChange={() => {
                 const updatedField = { ...field };
                 updatedField.options.calendar.options[0].value = !updatedField.options.calendar.options[0].value;
@@ -516,86 +483,91 @@ const renderMetaKeyOptions = (index, field) => {
         const fieldType = filterTypes.find(type => type.value === field.type);
         
         return (
-            <Card key={index} className="filter-field-card" style={{ marginBottom: '16px' }}>
-                <CardHeader>
-                    <div className="flex justify-between items-center">
-                        <IconButton>
+             <Paper key={ index } className="p-2 mb-4" elevation={3}>
+                <label className="mb-6 flex justify-between w-full items-center">
+                        <IconButton aria-label={__('Drag to reorder')}>
                             <DragIndicatorIcon />
                         </IconButton>
-                        <h3 className="lowercase">{fieldType?.label || field.type}</h3>
+                        <span className="block lowercase mb-0">{fieldType?.label || field.type}</span>
                         <IconButton  
-                        onClick={() => handleRemoveField(index)}
+                            aria-label={__('Remove field')}
+                            onClick={() => handleRemoveField(index)}
                         >
-                            <DeleteIcon />
+                            <DeleteOutlineIcon />
                         </IconButton>
-                    </div>
-                </CardHeader>
-                <CardBody>
+                </label>
+               
+                <MuiSelect
+                label={__('Field Type')}
+                value={field.type}
+                options={getAvailableFilterTypes().concat(
+                    isFilterTypeUsed(field.type) && !fieldType?.multiple 
+                        ? [filterTypes.find(type => type.value === field.type)] 
+                        : []
+                )}
+                onChange={(value) => {
+                    const updatedField = { ...field, type: value };
+                    updateField(index, updatedField);
+                }}
+                />
+
+                {field.type !== 'search' && (
                     <MuiSelect
-                        label={__('Field Type')}
-                        value={field.type}
-                        options={getAvailableFilterTypes().concat(
-                            isFilterTypeUsed(field.type) && !fieldType?.multiple 
-                                ? [filterTypes.find(type => type.value === field.type)] 
-                                : []
-                        )}
-                        onChange={(value) => {
-                            const updatedField = { ...field, type: value };
-                            updateField(index, updatedField);
-                        }}
+                        label={__('Template')}
+                        value={field.template}
+                        options={templateOptions}
+                        onChange={(value) => updateField(index, { ...field, template: value })}
                     />
-                    
-                    <TextControl
-                        label={__('Label')}
-                        value={field.label}
-                        onChange={(value) => updateField(index, { ...field, label: value })}
-                    />
-                    
-                    <TextControl
-                        label={__('Placeholder')}
-                        value={field.placeholder}
-                        onChange={(value) => updateField(index, { ...field, placeholder: value })}
-                    />
-                    
-                    <TextControl
-                        label={__('Info Text')}
-                        value={field.info}
-                        onChange={(value) => updateField(index, { ...field, info: value })}
-                    />
-                    
-                    {field.type !== 'search' && (
-                        <MuiSelect
-                            label={__('Template')}
-                            value={field.template}
-                            options={templateOptions}
-                            onChange={(value) => updateField(index, { ...field, template: value })}
-                        />
-                    )}
-                    
-                    {renderFieldOptions(index, field)}
-                </CardBody>
-            </Card>
+                )}
+                
+                <TextControl
+                    label={__('Label')}
+                    value={field.label}
+                    onChange={(value) => updateField(index, { ...field, label: value })}
+                />
+                
+                <TextControl
+                    label={__('Placeholder')}
+                    value={field.placeholder}
+                    onChange={(value) => updateField(index, { ...field, placeholder: value })}
+                />
+                
+                <TextControl
+                    label={__('Info Text')}
+                    value={field.info}
+                    onChange={(value) => updateField(index, { ...field, info: value })}
+                />
+                
+                {renderFieldOptions(index, field)}
+            
+            </Paper>
         );
     };
 
     return (
-        <div className="filter-fields-container">
-            {Array.isArray(attributes.filterFields) && attributes.filterFields.length > 0 ? (
-                attributes.filterFields.map((field, index) => renderFieldCard(field, index))
+        <PanelBody title={__('Filter Fields')} initialOpen={false}>
+            {!selectedPostType ? (
+                <p>{__('Please select a Post Type in Query Settings first to configure filters.')}</p>
             ) : (
-                <p>{__('No filter fields added yet. Click the button below to add your first filter field.')}</p>
+                <div className="filter-fields-container">
+                    {Array.isArray(attributes.filterFields) && attributes.filterFields.length > 0 ? (
+                        attributes.filterFields.map((field, index) => renderFieldCard(field, index))
+                    ) : (
+                        <p>{__('No filter fields added yet. Click the button below to add your first filter field.')}</p>
+                    )}
+                    
+                    <Button 
+                        color="secondary"
+                        sx={{textTransform:"none", marginTop: '16px'}}
+                        size="small"
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={handleAddField}
+                    >
+                        {__('Add Filter Field')}
+                    </Button>
+                </div>
             )}
-            
-            <Button 
-                color="secondary"
-                sx={{textTransform:"none", marginTop: '16px'}}
-                size="small"
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleAddField}
-            >
-                {__('Add Filter Field')}
-            </Button>
-        </div>
+        </PanelBody>
     );
 }

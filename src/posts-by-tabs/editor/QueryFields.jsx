@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { 
-    PanelBody
+    PanelBody,
 } from '@wordpress/components';
 import { 
     useState
@@ -12,16 +12,18 @@ import MuiInputSlider from './MuiInputSlider';
 
 export default function QueryFields(props) {
 
-    const { attributes, setAttributes, postsByTabsSettings} = props;
+    const { 
+        attributes, 
+        setAttributes, 
+        postsByTabsSettings,
+        selectedPostType,
+        selectedOrderByMetaKey,
+        setSelectedOrderByMetaKey,
+        taxonomyTerms,
+        updateQueryAttributes
+    } = props;
+
     const { postsPerPage = 12, maxNumPages = 10, order = 'desc', orderBy = 'date', paginationType } = attributes;
-    const [selectedPostType, setSelectedPostType] = useState(attributes.postType || 'post');
-    const [selectedOrderByMetaKey, setSelectedOrderByMetaKey] = useState(attributes.orderByMetaKey || '');
-
-    const [taxonomyTerms, setTaxonomyTerms] = useState(attributes.taxonomyTerms || {});
-
-    const updateQuery = (newAttributes) => {
-        setAttributes({...attributes, ...newAttributes});
-    };
 
     const handleTermsChange = (taxonomy, newTerms) => {
         const updatedTerms = {
@@ -33,8 +35,7 @@ export default function QueryFields(props) {
             }
         };
         
-        setTaxonomyTerms(updatedTerms);
-        updateQuery({ taxonomyTerms: updatedTerms });
+        updateQueryAttributes({ taxonomyTerms: updatedTerms });
     };
 
     return (
@@ -51,8 +52,7 @@ export default function QueryFields(props) {
                 ]}
                 value={selectedPostType || 'post'}
                 onChange={(newPostType) => {
-                    setSelectedPostType(newPostType)
-                    updateQuery({ 
+                    updateQueryAttributes({ 
                         postType: newPostType,
                         taxonomy: '',
                         terms: null
