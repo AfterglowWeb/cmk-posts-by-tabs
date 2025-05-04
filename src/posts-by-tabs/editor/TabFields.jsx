@@ -1,36 +1,22 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import { SelectControl, TextControl, PanelBody, CheckboxControl } from '@wordpress/components';
-import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { TextControl, PanelBody } from '@wordpress/components';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import TabTemplateOptions from './TabTemplateOptions';
+import MuiSelect from './MuiSelect';
+
+const postsByTabsSettings = window.postsByTabsSettings || {
+    googleMapsApiKey: '',
+    defaultLatitude: 48.8566,
+    defaultLongitude: 2.3522,
+    defaultTemplate: 'grid'
+};
 
 export default function TabFields(props) {
     
-    const { attributes, setAttributes, handleTabValueChange } = props;
+    const { attributes, setAttributes, handleTabValueChange, templates } = props;
     const { tabs } = attributes;
-    const templates = [
-		{
-			label: __('Posts Grid'),
-			value: 'posts-grid',
-		},
-		{
-			label: __('Posts Slider'),
-			value: 'posts-slider',
-		},
-		{
-			label: __('Posts Grid Simple Row'),
-			value: 'posts-grid',
-		},
-		{
-			label: __('Posts Map (events)'),
-			value: 'events-map',
-		},
-		{
-			label: __('Posts Calendar (events)'),
-			value: 'events-calendar',
-		}
-	];
 
     useEffect(() => {
         if (!attributes.tabs || !Array.isArray(attributes.tabs)) {
@@ -41,16 +27,62 @@ export default function TabFields(props) {
     const handleAddTab = () => {
         const tabs = [ ...attributes.tabs || [] ];
         tabs.push( {
-            template:'',
+            template: postsByTabsSettings.defaultTemplate,
             title: '',
             subtitle: '',
             meta_1: '',
             meta_2: '',
             content: '',
-            mediaId: 0,
-            mediaUrl: '',
-            mediaType: '',
-            mediaAlt: '',
+            options: {
+                grid:{
+                    free_flow: false,
+                    cols_desktop: 3,
+                    cols_tablet: 2,
+                    cols_mobile: 1,
+                    gap_desktop: 0,
+                    gap_tablet: 0,
+                    gap_mobile: 0
+                },
+                row:{
+                    infinite_scroll: false,
+                    free_flow: false,
+                    cols_desktop: 3,
+                    cols_tablet: 2,
+                    cols_mobile: 1,
+                    gap_desktop: 0,
+                    gap_tablet: 0,
+                    gap_mobile: 0
+                },
+                calendar:{
+                    start_key: 'start',
+                    end_key: 'end',
+                    default_view: 'week',
+                    show_days: false,
+                    show_weeks: false,
+                    show_months: true,
+                },
+                map:{
+                    apiKey: postsByTabsSettings.googleMapsApiKey,
+                    center: {
+                        lat: postsByTabsSettings.defaultLatitude,
+                        lng: postsByTabsSettings.defaultLongitude
+                    },
+                    zoom: 13,
+                    mapStyle: 'red',
+                },
+                slider:{
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                    effect: 'slide',
+                    autoplay: false,
+                    delay: 3000,
+                    speed: 500,
+                    loop: false,
+                    hideScrollBar: false,
+                    hideNavigation: false,
+                    hidePagination: false,
+                }
+            },
         } );
         setAttributes( { tabs } );
     };
@@ -61,23 +93,6 @@ export default function TabFields(props) {
         setAttributes( { tabs } );
     };
 
-    const removeTabMedia = ( index ) => {
-        const tabs = [ ...attributes.tabs ];
-        tabs[ index ].mediaId = 0;
-        tabs[ index ].mediaUrl = '';
-        tabs[ index ].mediaType = '';
-        tabs[ index ].mediaAlt = '';
-        setAttributes( { tabs } );
-    }
-
-    const onSelectTabMedia = (media , index) => {
-        const tabs = [ ...attributes.tabs ];
-        tabs[ index ].mediaId = media.id;
-        tabs[ index ].mediaUrl =  media.url;
-        tabs[ index ].mediaType = media.type;
-        tabs[ index ].mediaAlt = media.alt;
-        setAttributes( { tabs } );
-    }
 
     return (
     <>
@@ -96,68 +111,37 @@ export default function TabFields(props) {
                 </Button>
             </div>
             <div className="mb-2">
-                <PanelBody title={__('Textes')} initialOpen={true}>
-                    <SelectControl
-                        label="Template"
-                        value={ tab?.template || '' }
-                        options={templates}
-                        onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
-                    />
+                <PanelBody title={__('Titles')} initialOpen={false}>
                     <TextControl
-                        placeholder="Titre"
+                        placeholder={__('Title')}
                         value={ tab?.title || '' }
                         onChange={ ( value ) => {handleTabValueChange(value, 'title', index)} }
                     />
                     <TextControl
-                        placeholder="Sous-titre"
+                        placeholder={__('Subtitle')}
                         value={ tab?.subtitle }
                         onChange={ ( value ) => {handleTabValueChange(value, 'subtitle', index)} }
                     />
                     <TextControl
-                        placeholder="Donnée 1"
+                        placeholder={__('Data 1')}
                         value={ tab?.meta_1 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_1', index)} }
                     />
                     <TextControl
-                        placeholder="Donnée 2"
+                        placeholder={__('Data 2')}
                         value={ tab?.meta_2 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_2', index)} }
                     />
                 </PanelBody>
-            </div>
-            <div className="mb-2">
-                <PanelBody title={__('Image')} initialOpen={false}>
-                    <MediaUploadCheck>
-                        <MediaUpload
-                            onSelect={ ( media ) => {onSelectTabMedia(media, index)} }
-                            allowedTypes={ ['image'] }
-                            value={ tab?.mediaId }
-                            render={ ( { open } ) => (
-                                <Button color="secondary" className="mb-2 bg-slate-50 aspect-video" onClick={ open }>
-                                    {tab?.mediaUrl ? 
-                                        <img src={tab?.mediaUrl} alt={tab?.title || ''} className="w-full h-full object-cover"/>
-                                        :
-                                        __('Sélectionner une image')
-                                    }
-                                </Button>
-                            ) }
-                        />
-                    </MediaUploadCheck>
-                    {tab?.mediaId != 0 && 
-                    <div className="mt-2">
-                        <MediaUploadCheck>
-                            <Button 
-                            color="secondary"
-                            variant="outlined" 
-                            size="small" 
-                            sx={{textTransform:"none"}} 
-                            onClick={() => {removeTabMedia(index)}}>{__('Supprimer l\'image')}</Button>
-                        </MediaUploadCheck>
-                    </div>
-                    }
+                <PanelBody title={__('Template options')} initialOpen={false}>
+                    <MuiSelect
+                        label={__('Template')}
+                        value={ tab?.template || '' }
+                        options={templates}
+                        onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
+                    />
+                    <TabTemplateOptions tab={tab} postType={attributes.postType} index={index} handleTabValueChange={handleTabValueChange} />
                 </PanelBody>
-            </div>
-            <div className="mb-2">	
             </div>
         </Paper>
         )

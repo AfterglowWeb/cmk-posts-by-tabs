@@ -1,0 +1,12 @@
+{% if post and post.date %}
+    {% set isModified = post.modified and post.modified != post.date %}
+    <p class="flex gap-1 items-center {{ className|default('') }}">
+        <span class="block text-xs leading-none truncate ellipsis overflow-hidden">
+            {% if isModified %}
+                Màj. le {{ post.modified }}
+            {% else %}
+                Pub. le {{ post.date }}
+            {% endif %}
+        </span>
+    </p>
+{% endif %}

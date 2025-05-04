@@ -1,0 +1,12 @@
+<p class="flex gap-1 items-center">
+    <span class="block text-xs leading-none truncate ellipsis overflow-hidden">
+      {% for category in post.categories %}
+          <a href="{{category.url}}" title="{{category.name}}" class="no-underline">
+            {{category.name}}
+          </a>
+          {% if loop.last == false %}
+            <span>, </span>
+          {% endif %}
+      {% endfor %}
+    </span>
+</p>

@@ -1,8 +1,9 @@
-<?php
+<?php namespace Cmk\PostsByTabs;
+
 /**
  * Plugin Name:       Posts By Tabs
  * Description:       Display the same posts in multiple template formats using tabs : grid, list, slider, calendar, google map (events, venues).
- * Version:           1.0.0
+ * Version:           1.0.4
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Cédric Moris Kelly
@@ -14,10 +15,46 @@
  * @package CreateBlock
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
+if (!file_exists(plugin_dir_path(__FILE__) . '/vendor/autoload.php')) {
+	return;
 }
-function create_block_posts_by_tabs_block_init() {
+require_once realpath(plugin_dir_path(__FILE__) . '/vendor/autoload.php');
+
+RestExtend::get_instance();
+OptionPage::get_instance();
+PrepareAcfPostsRelations::get_instance();
+
+add_action( 'init', function () {
 	register_block_type( __DIR__ . '/build/posts-by-tabs' );
-}
-add_action( 'init', 'create_block_posts_by_tabs_block_init' );
+} );
+
+add_action('enqueue_block_editor_assets', function () {
+    
+	$asset_file_path = plugin_dir_path(__FILE__) . 'build/posts-by-tabs/index.asset.php';
+	
+	if ( ! file_exists( $asset_file_path ) ) {
+		return;
+	}
+
+	$asset_file = include( $asset_file_path );
+    
+    wp_register_script(
+        'posts-by-tabs-editor',
+        plugins_url('build/index.js', __FILE__),
+        $asset_file['dependencies'],
+        $asset_file['version']
+    );
+    
+    $rest_options = OptionPage::get_instance()->get_rest_options();
+
+    wp_localize_script(
+        'posts-by-tabs-editor',
+        'postsByTabsSettings',
+        ['options' => $rest_options]
+    );
+    
+    wp_enqueue_script('posts-by-tabs-editor');
+});
+

@@ -7,22 +7,23 @@ yarn-error.log*
 coverage
 
 build/Release
-
 node_modules/
 
 .npm
-
 .vscode
-
 .eslintcache
 
 *.tgz
-
 *.zip
-
 *.tar
-
 *.tar.gz
 
 .env
 .env*
+
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+vendor/

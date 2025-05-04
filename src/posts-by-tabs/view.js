@@ -1,28 +1,38 @@
 import { createRoot } from '@wordpress/element';
-import FrontendTabs from './components/FrontendTabs';
-import ThemePalette from './components/ThemePalette';
-import { ParallaxProvider } from 'react-scroll-parallax';
+import ThemePalette from './front/ThemePalette';
+import PostsByTabs from './front/PostsByTabs';
+import {APIProvider} from './front/GoogleMapsProvider';
+import './style.scss';
 
-function initializeReactComponents() {
-  const complexTabsBlocks = document.querySelectorAll('.posts-by-tabs-block');
-  
-  complexTabsBlocks.forEach(blockElement => {
 
-    if (complexTabsData) {
-      try {
-        const root = createRoot(blockElement);
-        root.render(
-          <ThemePalette>
-            <ParallaxProvider>
-              <FrontendTabs blockData={complexTabsData} />
-            </ParallaxProvider>
-          </ThemePalette>
-        )
-      } catch (error) {
-        console.error('Error initializing Complex Tabs React component:', error);
-      }
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const blockRoots = document.querySelectorAll('.posts-by-tabs-block');
+
+    if(!blockRoots) {
+        return;
     }
-  });
-}
+    blockRoots.forEach(blockRoot => {
+        const dataScript = blockRoot.querySelector('.block-data');
+        if(!dataScript) {
+            return;
+        }
+        const attributes = JSON.parse(dataScript.textContent);
+        if(attributes && blockRoot) {
+            const root = createRoot(blockRoot);
 
-document.addEventListener('DOMContentLoaded', initializeReactComponents);
+            root.render(
+                <APIProvider 
+                apiKey={attributes?.options?.googleMapsApiKey}
+                libraries={['places', 'marker']}
+                >
+                    <ThemePalette>
+                        <PostsByTabs 
+                        attributes={attributes} 
+                        />
+                    </ThemePalette>
+                </APIProvider>
+            )
+        }
+    });
+});

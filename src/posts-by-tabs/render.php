@@ -1,55 +1,28 @@
-<?php
+<?php 
 
-$title = isset($attributes['title']) ? $attributes['title'] : '';
-$subtitle = isset($attributes['subtitle']) ? $attributes['subtitle'] : '';
 $tabs = isset($attributes['tabs']) ? $attributes['tabs'] : [];
 $block_id = isset($attributes['blockId']) ? $attributes['blockId'] : '';
 $background = isset($attributes['background']) ? $attributes['background'] : [];
+$rest_options = \cmk\postsByTabs\optionPage::get_instance()->get_rest_options();
 
-$serialized_data = wp_json_encode($attributes);
+$attributes = array_merge(
+    $attributes, 
+    array(
+        'restUrl' => esc_url_raw(rest_url()),
+        'nonce' => wp_create_nonce('wp_rest'),
+        'options' => $rest_options
+    )
+);
+
 ?>
-<script>
-	var complexTabsData = <?php echo $serialized_data; ?>;			
-</script>
-<div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block bg-primary-light']); ?> id="block-<?php echo esc_attr($block_id); ?>" data-uuid="<?php echo esc_attr($block_id); ?>">
-    
-    <?php if (empty($tabs)) : ?>
+<div <?php echo get_block_wrapper_attributes(['class' => 'posts-by-tabs-block w-full min-w-full']); ?>>
+   
+<?php if (empty($tabs)) : ?>
         <div class="posts-by-tabs-empty">
             <?php esc_html_e('No tabs available.', 'posts-by-tabs'); ?>
         </div>
     <?php else : ?>
         <div class="container mx-auto xl:max-w-screen-xl">
-
-            <!-- Background Image -->
-            <?php if ( !empty($background) ) : ?>
-                <?php if ( isset($background["mediaType"]) && isset($background["mediaUrl"] ) ) : ?>
-                        <?php if ('video' === $background["mediaType"]) : ?>
-                        <div class="posts-by-tabs-background">
-                            <video autoplay muted loop playsinline title="<?php esc_attr_e($background["mediaAlt"]); ?>" >
-                                <source src="<?php echo esc_url($background["mediaUrl"]); ?>"  type="video/mp4" />
-                            </video>
-                        </div>
-                    <?php endif; ?>
-                    <?php if ('image' === $background["mediaType"]) : ?>
-                        <div class="posts-by-tabs-background">
-                            <img src="<?php echo esc_url($background["mediaUrl"]); ?>" alt="<?php esc_attr_e($background["mediaAlt"]); ?>" />
-                        </div>
-                    <?php endif; ?>
-                <?php endif; ?>
-            <?php endif; ?>
-               
-            <!-- Block Title -->
-            <?php if (!empty($title)) : ?>
-                <h2 class=" text-secondary font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0">
-                    <?php esc_html_e($title); ?>
-                </h2>
-            <?php endif; ?>
-            <?php if (!empty($subtitle)) : ?>
-				<p class="font-bold text-xl text-[30px] mb-0">
-                    <strong><?php esc_html_e($subtitle); ?></strong>
-				</p>
-            <?php endif; ?>
-            
 
             <!-- Tab Navigation -->
             <div class="posts-by-tabs-nav mb-3 overflow-x-auto" role="tablist">
@@ -96,8 +69,6 @@ $serialized_data = wp_json_encode($attributes);
                 $meta_1 = isset($tab['meta_1']) ? esc_html($tab['meta_1']) : '';
                 $meta_2 = isset($tab['meta_2']) ? esc_html($tab['meta_2']) : '';
                 $content = isset($tab['content']) ? wp_kses_post($tab['content']) : '';
-                $media_url = isset($tab['mediaUrl']) ? esc_url($tab['mediaUrl']) : '';
-                $starts = isset($tab['starts']) ? $tab['starts'] : [];
             ?>
             <div id="panel-<?php echo esc_attr($block_id); ?>-<?php echo $index; ?>" 
                 class="complex-tab-panel <?php echo $is_active; ?>" 
@@ -132,66 +103,52 @@ $serialized_data = wp_json_encode($attributes);
                             <div class="tab-content">
                                 <?php echo $content; ?>
                             </div>
+
+                            <div class="flex flex-col gap-2">
+                                <?php if (isset($posts) && !empty($posts)) : ?>
+                                    <?php foreach ($posts as $post) : 
+                                        $post_id = isset($post['id']) ? $post['id'] : '';
+                                        $post_title = isset($post['title']) ? esc_html($post['title']) : '';
+                                        $post_url = isset($post['link']) ? esc_url($post['link']) : '';
+                                        $post_date = isset($post['date']) ? esc_html($post['date']) : '';
+                                        $post_excerpt = isset($post['excerpt']) ? wp_kses_post($post['excerpt']) : '';
+                                        $media_url = isset($post['featured_media']) ? esc_url($post['featured_media']) : '';
+                                        $post_terms = isset($post['terms']) ? $post['terms'] : [];
+                                    ?>
+                                    <article class="flex items">
+                                        
+                                        <div class="flex-shrink-0">
+                                            <img src="<?php echo esc_url($media_url); ?>" alt="<?php echo esc_attr($post_title); ?>" class="w-16 h-16 object-cover rounded-md" />
+                                        </div>
+                                        <div class="ml-4">
+                                            <h4 class="text-lg font-bold">
+                                                <a href="<?php echo esc_url($post_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo $post_title; ?></a>
+                                            </h4>
+                                            <p class="text-sm text-gray-600"><?php echo $post_date; ?></p>
+                                            <p class="text-sm text-gray-500"><?php echo $post_excerpt; ?></p>
+                                        </div>
+                                        <div class="flex-grow"></div>
+                                        <div class="flex-shrink-0">
+                                            <a href="<?php echo esc_url($post_url); ?>" target="_blank" rel="noopener noreferrer" class="text-primary font-bold">
+                                                <?php esc_html_e('Read More', 'posts-by-tabs'); ?>
+                                            </a>
+                                        </div>
+                                    </article>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
                             
-                            <?php if (!empty($starts)) : ?>
-                            <div>
-                                <h3 class="py-4">
-                                    <span class="block text-lg font-bold"><?php esc_html_e('Départs', 'posts-by-tabs'); ?></span>
-                                </h3>
-                                <div class="flex gap-2 font-regular text-sm">
-                                    <?php if (!empty($starts['white'])) : ?>
-                                    <span class="block w-10 p-1 text-center rounded-lg border-2 border-solid border-slate-200 bg-white">
-                                        <?php echo intval($starts['white']); ?>
-                                    </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if (!empty($starts['yellow'])) : ?>
-                                    <span class="block w-10 p-1 text-center rounded-lg border-2 border-solid border-slate-200 bg-yellow-400">
-                                        <?php echo intval($starts['yellow']); ?>
-                                    </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if (!empty($starts['blue'])) : ?>
-                                    <span class="block w-10 p-1 text-center rounded-lg border-2 border-solid border-slate-200 bg-blue-400">
-                                        <?php echo intval($starts['blue']); ?>
-                                    </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if (!empty($starts['red'])) : ?>
-                                    <span class="block w-10 p-1 text-center rounded-lg border-2 border-solid border-slate-200 bg-red-400">
-                                        <?php echo intval($starts['red']); ?>
-                                    </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if (!empty($starts['orange'])) : ?>
-                                    <span class="block w-10 p-1 text-center rounded-lg border-2 border-solid border-slate-200 bg-orange-400">
-                                        <?php echo intval($starts['orange']); ?>
-                                    </span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <?php endif; ?>
                         </div>
-                        
-                        <?php if ($media_url) : ?>
-                        <div class="w-full md:w-1/2 p-2">
-                            <div class="aspect-video">
-                                <div class="relative cursor-pointer tab-image-modal" data-image="<?php echo esc_url($media_url); ?>" data-title="<?php echo esc_attr($title); ?>">
-                                    <img src="<?php echo esc_url($media_url); ?>" alt="<?php echo esc_attr($title); ?>" class="aspect-video object-cover" />
-                                    <button class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-white px-4 py-2 rounded-full flex items-center gap-2">
-                                        <?php esc_html_e('Détail', 'posts-by-tabs'); ?>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endif; ?>
+                
                     </div>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+    <?php
+        echo '<script type="application/json" class="block-data">';
+        echo wp_json_encode($attributes);
+        echo '</script>';
+    ?>
 </div>

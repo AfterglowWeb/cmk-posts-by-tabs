@@ -1,0 +1,17 @@
+<div class="day-view p-4 overflow-hidden h-[100px] w-1/6 bg-white rounded-lg shadow-md">
+    {% if day %}
+        {{ key }}
+        {% for post in day %}
+        <div class="mb-4 overflow-hidden">
+            {{ post.title }}
+            {% if post.multiDay %}
+                <figcaption class="text-xs mt-1 block">
+                    Durée : {{post.totalDays}} jours
+                    {% if post.position == 'start' %}Premier jour{% endif %}
+                    {% if post.position == 'end' %}Dernier jour{% else %}En cours{% endif %}
+                </figcaption>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
