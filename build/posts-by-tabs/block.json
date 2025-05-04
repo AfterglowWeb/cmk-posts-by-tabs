@@ -362,6 +362,13 @@
     },
     "orderByMetaKey": {
       "type": "string"
+    },
+    "filterFields": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object"
+      }
     }
   },
   "textdomain": "cmk-posts-by-tab",

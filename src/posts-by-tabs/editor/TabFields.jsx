@@ -2,6 +2,9 @@ import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { TextControl, PanelBody } from '@wordpress/components';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import Paper from '@mui/material/Paper';
 import TabTemplateOptions from './TabTemplateOptions';
 import MuiSelect from './MuiSelect';
@@ -101,14 +104,19 @@ export default function TabFields(props) {
         <Paper key={ index } className="p-2 mb-4" elevation={3}>
             <div className="mb-2 flex justify-between">
                 <h3 className="lowercase">{__('Onglet')} {index + 1}</h3>
-                <Button 
+                {/*<Button 
                 variant="outlined" 
                 size="small" 
                 color="secondary"
                 sx={{textTransform:"none"}} 
                 onClick={() => handleRemoveTab(index)} >
                     { __( 'Supprimer' ) }
-                </Button>
+                </Button>*/}
+                <IconButton  
+                onClick={() => handleRemoveTab(index)}
+                >
+                    <DeleteIcon />
+                </IconButton>
             </div>
             <div className="mb-2">
                 <PanelBody title={__('Titles')} initialOpen={false}>
@@ -151,6 +159,7 @@ export default function TabFields(props) {
     size="small" 
     color="secondary"
     sx={{textTransform:"none"}}
+    startIcon={<AddIcon />}
     onClick={handleAddTab} >
         { __( 'Ajouter un onglet' ) }
     </Button>

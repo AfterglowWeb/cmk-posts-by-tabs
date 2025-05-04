@@ -135,6 +135,18 @@ class RestExtend
                     ),
                     )
                 );
+
+                $rest_options = \cmk\postsByTabs\optionPage::get_instance()->get_rest_options();
+
+                register_rest_route(
+                    self::$endpoint,
+                    '/settings',
+                    array(
+                        'methods'             => 'GET',
+                        'callback'            => array( '\Cmk\PostsByTabs\restExtend', 'get_settings' ),
+                        'permission_callback' => '\Cmk\PostsByTabs\restExtend::validate_token',
+                    )
+                );
             }
         );
     }
@@ -142,6 +154,23 @@ class RestExtend
     public static function validate_token( \WP_REST_Request $request ): bool
     {
         return wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest') ? true : false;
+    }
+
+    public static function get_settings( \WP_REST_Request $request ): \WP_REST_Response
+    {
+        try {
+            $rest_options = OptionPage::get_instance()->get_rest_options();
+            return new \WP_REST_Response($rest_options, 200);
+        } catch (\Exception $e) {
+            return new \WP_REST_Response(
+                [
+                'error' => $e->getMessage(),
+                'code' => 'settings_error'
+                ], 404
+            );
+        }
+       
+       
     }
 
     public static function get_posts_rest( \WP_REST_Request $request ): \WP_REST_Response
@@ -236,97 +265,94 @@ class RestExtend
                 [
                 'error' => $e->getMessage() . json_encode($args),
                 'code' => 'posts_query_error'
-                ], 500
+                ], 404
             );
         }
-    }
-
-    private static function get_post_terms( $post_id ): array
-    {
-        $taxonomies = get_object_taxonomies(get_post_type($post_id));
-        $terms      = array();
-
-        foreach ( $taxonomies as $taxonomy ) {
-            $term_list = get_the_terms($post_id, $taxonomy);
-            if (is_wp_error($term_list) || empty($term_list) ) {
-                continue;
-            }
-            foreach ( $term_list as $term ) {
-                $terms[ $taxonomy ][] = array(
-                'id'   => $term->term_id,
-                'name' => $term->name,
-                'slug' => $term->slug,
-                );
-            }
-        }
-        return $terms;
     }
 
     public static function get_metafields_rest( \WP_REST_Request $request ): \WP_REST_Response
     {
-        $post_type   = $request->get_param('post_type');
-        $keys_only   = $request->get_param('keys_only');
-        $meta_fields = array();
-        $postIds       = get_posts(
-            array(
-            'fields'        => 'ids',
-            'post_type'      => $post_type,
-            'posts_per_page' => -1,
-            'paged'          => 1,
-            'order'          => 'DESC',
-            'orderby'        => 'DATE',
-            'status'         => 'publish',
-            )
-        );
-
-        if (empty($postIds) ) {
-            return new \WP_REST_Response('No posts found', 404);
-        }
-
-        foreach ( $postIds as $postId ) {
-            $post_meta_keys = get_post_custom_keys($postId);
-
-            if (empty($post_meta_keys) ) {
-                continue;
-            }
-            $post_meta_keys = array_filter(
-                $post_meta_keys,
-                function ( $key ) {
-                    return strpos($key, '_') !== 0;
-                }
+          
+        try {
+            $post_type   = $request->get_param('post_type');
+            $keys_only   = $request->get_param('keys_only');
+            $meta_fields = array();
+            $postIds       = get_posts(
+                array(
+                'fields'        => 'ids',
+                'post_type'      => $post_type,
+                'posts_per_page' => -1,
+                'paged'          => 1,
+                'order'          => 'DESC',
+                'orderby'        => 'DATE',
+                'status'         => 'publish',
+                )
             );
 
-            foreach ( $post_meta_keys as $key ) {
-                $meta_fields[ $key ][] = get_post_meta($postId, $key, true);
+            foreach ( $postIds as $postId ) {
+                $post_meta_keys = get_post_custom_keys($postId);
+
+                if (empty($post_meta_keys) ) {
+                    continue;
+                }
+                $post_meta_keys = array_filter(
+                    $post_meta_keys,
+                    function ( $key ) {
+                        return strpos($key, '_') !== 0;
+                    }
+                );
+
+                foreach ( $post_meta_keys as $key ) {
+                    $meta_fields[ $key ][] = get_post_meta($postId, $key, true);
+                }
             }
-        }
 
-        $meta_fields = array_map(
-            function ( $values ) {
-                return array_values(array_unique(array_filter($values)));
-            },
-            $meta_fields
-        );
+            $meta_fields = array_map(
+                function ( $values ) {
+                    return array_values(array_unique(array_filter($values)));
+                },
+                $meta_fields
+            );
 
-        if ($keys_only ) {
-            $keys_array = array();
-            foreach ( $meta_fields as $key => $values ) {
-                $keys_array[ $key ] = array();
+            if ($keys_only ) {
+                $keys_array = array();
+                foreach ( $meta_fields as $key => $values ) {
+                    $keys_array[ $key ] = array();
+                }
+                return new \WP_REST_Response($keys_array, 200);
             }
-            return new \WP_REST_Response($keys_array, 200);
-        }
 
-        return new \WP_REST_Response($meta_fields, 200);
+            return new \WP_REST_Response($meta_fields, 200);
+
+        } catch (\Exception $e) {
+            return new \WP_REST_Response(
+                [
+                'error' => $e->getMessage(),
+                'code' => 'metafields_error'
+                ], 404
+            );
+        }
     }
 
     public static function get_places_rest( \WP_REST_Request $request ): \WP_REST_Response
     {
-        $params = array(
-        'towns' => $request->get_param('towns'),
-        );
 
-        $towns = self::places($params);
-        return new \WP_REST_Response($towns, 200);
+        try {
+            $params = array(
+            'towns' => $request->get_param('towns'),
+            );
+
+            $towns = self::places($params);
+            return new \WP_REST_Response($towns, 200);
+
+        } catch (\Exception $e) {
+            return new \WP_REST_Response(
+                [
+                'error' => $e->getMessage(),
+                'code' => 'places_error'
+                ], 404
+            );
+        }
     }
 
     private static function places( $towns = array() ): array
@@ -427,7 +453,28 @@ class RestExtend
         return $sanitized;
     }
 
-    private static function public_post_types()
+    private static function get_post_terms( $post_id ): array
+    {
+        $taxonomies = get_object_taxonomies(get_post_type($post_id));
+        $terms      = array();
+
+        foreach ( $taxonomies as $taxonomy ) {
+            $term_list = get_the_terms($post_id, $taxonomy);
+            if (is_wp_error($term_list) || empty($term_list) ) {
+                continue;
+            }
+            foreach ( $term_list as $term ) {
+                $terms[ $taxonomy ][] = array(
+                'id'   => $term->term_id,
+                'name' => $term->name,
+                'slug' => $term->slug,
+                );
+            }
+        }
+        return $terms;
+    }
+
+    private static function public_post_types(): array
     {
         $types = array_keys(get_post_types(array( 'public' => true )));
         return array_diff($types, array( 'attachment', 'nav_menu_item' ));

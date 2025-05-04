@@ -1,11 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { 
-    Spinner,
-    PanelBody
+    PanelBody,
 } from '@wordpress/components';
 import { 
-    useState, 
-    useEffect
+    useState
 } from '@wordpress/element';
 import MetaFields from './MetaFields';
 import MuiMultipleSelect from './MuiMultipleSelect';
@@ -14,19 +12,18 @@ import MuiInputSlider from './MuiInputSlider';
 
 export default function QueryFields(props) {
 
-    const { attributes, setAttributes, postsByTabsSettings} = props;
+    const { 
+        attributes, 
+        setAttributes, 
+        postsByTabsSettings,
+        selectedPostType,
+        selectedOrderByMetaKey,
+        setSelectedOrderByMetaKey,
+        taxonomyTerms,
+        updateQueryAttributes
+    } = props;
+
     const { postsPerPage = 12, maxNumPages = 10, order = 'desc', orderBy = 'date', paginationType } = attributes;
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [selectedPostType, setSelectedPostType] = useState(attributes.postType || 'post');
-    const [selectedOrderByMetaKey, setSelectedOrderByMetaKey] = useState(attributes.orderByMetaKey || '');
-    const [terms, setTerms] = useState(attributes.terms || []);
-
-    const [taxonomyTerms, setTaxonomyTerms] = useState(attributes.taxonomyTerms || {});
-
-    const updateQuery = (newAttributes) => {
-        setAttributes({...attributes, ...newAttributes});
-    };
 
     const handleTermsChange = (taxonomy, newTerms) => {
         const updatedTerms = {
@@ -38,13 +35,13 @@ export default function QueryFields(props) {
             }
         };
         
-        setTaxonomyTerms(updatedTerms);
-        updateQuery({ taxonomyTerms: updatedTerms });
+        updateQueryAttributes({ taxonomyTerms: updatedTerms });
     };
 
     return (
+        <>
+        <PanelBody title={__('Query Settings')} initialOpen={false}>
         <div className="py-2">
-
             {postsByTabsSettings.postTypes && 
             postsByTabsSettings.postTypes.length > 0 &&
                 <MuiSelect
@@ -55,8 +52,7 @@ export default function QueryFields(props) {
                 ]}
                 value={selectedPostType || 'post'}
                 onChange={(newPostType) => {
-                    setSelectedPostType(newPostType)
-                    updateQuery({ 
+                    updateQueryAttributes({ 
                         postType: newPostType,
                         taxonomy: '',
                         terms: null
@@ -169,8 +165,14 @@ export default function QueryFields(props) {
             step={1}
             />
 
-            <MetaFields attributes={attributes} setAttributes={setAttributes} postsByTabsSettings={postsByTabsSettings} /> 
 
-        </div>   
+        </div> 
+        </PanelBody>
+        <PanelBody title={__('Meta Query Settings')} initialOpen={false}>
+            <div className="py-2">
+            <MetaFields attributes={attributes} setAttributes={setAttributes} postsByTabsSettings={postsByTabsSettings} /> 
+            </div>
+        </PanelBody>
+        </>
     );
 }

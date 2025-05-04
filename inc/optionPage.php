@@ -746,29 +746,96 @@ class OptionPage
     /**
      * Helper function to get all public taxonomies
      */
-    private function get_public_taxonomies()
+    /*private function get_public_taxonomies()
     {
         $taxonomies = get_taxonomies(
             array(
             'public' => true,
             ), 'objects'
         );
-        
+
+        $post_types = get_post_types(
+            array(
+            'public' => true,
+            ), 'objects'
+        );
+
         $taxonomies_array = array();
+
+        foreach ($post_types as $post_type) {
+            $taxonomies = array_merge($taxonomies, get_object_taxonomies($post_type->name, 'objects'));
+        }
+       
         foreach ($taxonomies as $taxonomy) {
             $taxonomies_array[] = array(
-                'label'=>$taxonomy->labels->singular_name,
-                'value'=>$taxonomy->name,
-                'terms' => $this->get_public_terms_by_taxonomy($taxonomy->name),
-                'postTypes' => array_map(
-                    function ($post_type) {
-                        return  $post_type->name;
-                    }, get_post_types(array('taxonomies' => $taxonomy->name), 'objects')
-                )
+            'label'=>$taxonomy->labels->singular_name,
+            'value'=>$taxonomy->name,
+            'terms' => $this->get_public_terms_by_taxonomy($taxonomy->name),
+            'postTypes' => array_map(
+                function ($post_type) use ($taxonomy) {
+                    if(get_object_taxonomies($post_type->name) === $taxonomy->name) {
+                        return array(
+                            'label' => $post_type->labels->singular_name,
+                            'value' => $post_type->name,
+                        );
+                    } 
+                }, $post_types)
             );
         }
         
         return $taxonomies_array;
+    }*/
+
+
+    private function get_public_taxonomies() {
+        // Get all public post types
+        $post_types = get_post_types(array('public' => true), 'objects');
+        $taxonomies_array = array();
+        
+        // Get unique taxonomies across all public post types
+        $all_taxonomies = array();
+        foreach ($post_types as $post_type) {
+            $post_taxonomies = get_object_taxonomies($post_type->name, 'objects');
+            foreach ($post_taxonomies as $tax_name => $taxonomy) {
+                if (!isset($all_taxonomies[$tax_name]) && $this->is_public_taxonomy($taxonomy)) {
+                    $all_taxonomies[$tax_name] = $taxonomy;
+                }
+            }
+        }
+        
+        // Build the final array with correct post type associations
+        foreach ($all_taxonomies as $taxonomy) {
+            // Get post types that use this taxonomy
+            $related_post_types = array();
+            foreach ($post_types as $post_type) {
+                $post_taxonomies = get_object_taxonomies($post_type->name);
+                if (in_array($taxonomy->name, $post_taxonomies)) {
+                    $related_post_types[] = array(
+                        'label' => $post_type->labels->singular_name,
+                        'value' => $post_type->name,
+                    );
+                }
+            }
+            
+            // Only add taxonomies that are associated with at least one post type
+            if (!empty($related_post_types)) {
+                $taxonomies_array[] = array(
+                    'label' => $taxonomy->labels->singular_name,
+                    'value' => $taxonomy->name,
+                    'terms' => $this->get_public_terms_by_taxonomy($taxonomy->name),
+                    'postTypes' => $related_post_types
+                );
+            }
+        }
+        
+        return $taxonomies_array;
+    }
+    
+    // Helper function to check if taxonomy is public
+    private function is_public_taxonomy($taxonomy) {
+        return $taxonomy->public || 
+               (isset($taxonomy->show_ui) && $taxonomy->show_ui) || 
+               (isset($taxonomy->publicly_queryable) && $taxonomy->publicly_queryable);
     }
 
 }
