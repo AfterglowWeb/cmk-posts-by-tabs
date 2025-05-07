@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -22,39 +21,30 @@ const MenuProps = {
 
 export default function MuiMultipleSelect(props) {
   const { 
-    terms = [], 
-    selectedTerms = [], 
+    values = [], 
+    selectedValues = [], 
     onChange,
-    label = __('Select terms')
+    label = __('Select values')
   } = props;
   
-  const [selectedValues, setSelectedValues] = useState(selectedTerms);
-
-
-  useEffect(() => {
-    setSelectedValues(selectedTerms);
-  }, [selectedTerms]);
-
   const handleChange = (event) => {
-    const newSelectedValues = event.target.value;
-    setSelectedValues(newSelectedValues);
 
     if (onChange) {
-      onChange(newSelectedValues);
+      onChange(event.target.value);
     }
   };
 
-  const getTermLabel = (termId) => {
-    const term = terms.find(t => t.value === termId);
-    return term ? term.label : termId;
+  const getValueLabel = (valueId) => {
+    const term = values.find(t => t.value === valueId);
+    return term ? term.label : valueId;
   };
 
   const theme = useTheme();
 
-  function getStyles(termId, selectedValues, theme) {
+  function getStyles(valueId, selectedValues, theme) {
     return {
       fontWeight:
-        selectedValues.indexOf(termId) === -1
+        selectedValues.indexOf(valueId) === -1
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
@@ -73,23 +63,23 @@ export default function MuiMultipleSelect(props) {
           multiple
           value={selectedValues}
           onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-terms" label={label} />}
+          input={<OutlinedInput id="select-multiple-values" label={label} />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {selected.map((value) => (
-                <Chip key={value} label={getTermLabel(value)} />
+                <Chip key={value} label={getValueLabel(value)} />
               ))}
             </Box>
           )}
           MenuProps={MenuProps}
         >
-          {terms.map((term) => (
+          {values.map((value) => (
             <MenuItem
-              key={term.value}
-              value={term.value}
-              style={getStyles(term.value, selectedValues, theme)}
+              key={value.value}
+              value={value.value}
+              style={getStyles(value.value, selectedValues, theme)}
             >
-              {term.label}
+              {value.label}
             </MenuItem>
           ))}
         </Select>

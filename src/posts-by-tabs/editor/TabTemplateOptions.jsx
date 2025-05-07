@@ -7,8 +7,7 @@ import MetaKeySelector from './MetaKeySelector';
 export default function TabTemplateOptions(props) {
 
     return (
-        <div className="px-4">
-            <h2 className="text-lg font-semibold mb-4">{__('Template Options')}</h2>
+        <div>
             {optionFields(props)}
         </div>
     );
@@ -68,8 +67,6 @@ function GridFields(props) {
     
     return (
         <>
-            <h3 className="text-base font-semibold mb-2">{__('Layout Settings')}</h3>
-            
             <CheckboxControl
                 label={__('Free-flow layout')}
                 checked={free_flow}

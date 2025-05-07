@@ -1,27 +1,29 @@
 import { __ } from '@wordpress/i18n';
-import { TextControl, PanelBody } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { PanelBody, Draggable } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
 
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import textInputStyle from '../styles/textInputStyle';
+
 export default function EditorFilterFields(props) {
+    
     const { 
         attributes, 
-        setAttributes, 
         postsByTabsSettings,
         selectedPostType,
-        taxonomyTerms,
-        updateQueryAttributes
+        updateAttributes
     } = props;
 
     const filterTypes = [
@@ -79,36 +81,12 @@ export default function EditorFilterFields(props) {
         }
         
         if (Object.keys(updates).length > 0) {
-            updateQueryAttributes(updates);
+            updateAttributes(updates);
         }
     }, []);
 
-    const handleTermsChange = (taxonomy, newTerms) => {
-        const updatedTaxTerms = {
-            ...attributes.taxonomyTerms,
-            [taxonomy.value]: {
-                label: taxonomy.label,
-                value: taxonomy.value,
-                selectedTerms: newTerms
-            }
-        };
-        
-        updateQueryAttributes({ taxonomyTerms: updatedTaxTerms });
-    };
+    const [draggedItemIndex, setDraggedItemIndex] = useState(null);
 
-    const handleMetasChange = (meta, newMetas) => {
-        const updatedMetas = {
-            ...attributes.metas,
-            [meta.value]: {
-                label: meta.label,
-                value: meta.value,
-                selectedMetas: newMetas
-            }
-        };
-        
-        updateQueryAttributes({ metas: updatedMetas });
-    };
-    
     const handleAddField = () => {
         const filterFields = [ ...attributes.filterFields || [] ];
         filterFields.push({
@@ -177,34 +155,29 @@ export default function EditorFilterFields(props) {
             }
         });
         
-        // Use updateQueryAttributes to ensure both components are updated
-        updateQueryAttributes({ filterFields });
+        updateAttributes({ filterFields });
     };
 
     const handleRemoveField = (index) => {
         const filterFields = [...attributes.filterFields];
         filterFields.splice(index, 1);
-        updateQueryAttributes({ filterFields });
+        updateAttributes({ filterFields });
     };
 
     const updateField = (index, field) => {
         const updatedFields = [...attributes.filterFields];
         updatedFields[index] = { ...updatedFields[index], ...field };
-        updateQueryAttributes({ filterFields: updatedFields });
+        updateAttributes({ filterFields: updatedFields });
+    };
 
-        if (field.type === 'orderby' && 
-            (field.options?.orderBy?.defaultOption === 'metaValue' || 
-             field.options?.orderBy?.defaultOption === 'metaValueNum')) {
-            updateQueryAttributes({ 
-                orderByMetaKey: field.options.orderBy.metaKey 
-            });
-        }
-
-        if (field.type === 'order' && field.options?.order?.defaultOption) {
-            updateQueryAttributes({ 
-                order: field.options.order.defaultOption
-            });
-        }
+    const handleReorderFields = (fromIndex, toIndex) => {
+        if (fromIndex === toIndex) return;
+        
+        const filterFields = [...attributes.filterFields];
+        const [movedItem] = filterFields.splice(fromIndex, 1);
+        filterFields.splice(toIndex, 0, movedItem);
+        
+        updateAttributes({ filterFields });
     };
 
     const isFilterTypeUsed = (type) => {
@@ -232,6 +205,15 @@ export default function EditorFilterFields(props) {
             tax.postTypes?.some(t => t.value === selectedPostType)
         ) || [];
 
+        const handleTermsChange = (taxonomy, newTerms) => {
+            const updatedField = { ...field };
+            if (!updatedField.options.taxonomy.terms) {
+                updatedField.options.taxonomy.terms = [];
+            }
+            updatedField.options.taxonomy.terms = newTerms;
+            updateField(index, updatedField);
+        };
+
         return (
             <>
                 <MuiSelect
@@ -253,28 +235,27 @@ export default function EditorFilterFields(props) {
                         return null;
                     }
                     
-                    const taxonomyTerms = attributes.taxonomyTerms || {};
-                    const currentTaxTerms = taxonomyTerms[tax.value] || {
-                        label: tax.label,
-                        value: tax.value,
-                        selectedTerms: []
-                    };
+                    const currentTaxTerms = options.taxonomy.terms || [];
            
                     return (
+                        <>
                         <MuiMultipleSelect
                             key={tax.value}
-                            terms={tax.terms}
-                            selectedTerms={currentTaxTerms.selectedTerms}
+                            values={tax.terms}
+                            selectedValues={
+                                options.taxonomy.allOptions ?
+                                tax.terms.map(term => term.value) : currentTaxTerms
+                            }
                             label={`Select ${tax.label} terms`}
-                            onChange={(newTerms) => handleTermsChange(tax, newTerms)}
+                            onChange={(newTerms) => {
+                                handleTermsChange(tax, newTerms)
+                            }}
                         />
-                    );
-                })}
-                <FormControlLabel
-                control={
-                    <Switch
-                    checked={options.taxonomy.allOptions}
-                    onChange={() => {
+                        <FormControlLabel
+                        control={
+                        <Switch
+                        checked={options.taxonomy.allOptions}
+                        onChange={() => {
                             const updatedField = { ...field };
                             const willSelectAll = !updatedField.options.taxonomy.allOptions;
                             updatedField.options.taxonomy.allOptions = willSelectAll;
@@ -283,25 +264,24 @@ export default function EditorFilterFields(props) {
                             const availableTaxonomy = availableTaxonomies.find(tax => tax.value === currentTaxonomy);
                             
                             if (currentTaxonomy && availableTaxonomy && availableTaxonomy.terms) {
-                                const tax = {
-                                    label: availableTaxonomy.label,
-                                    value: availableTaxonomy.value
-                                };
-                                
                                 if (willSelectAll) {
                                     const allTerms = availableTaxonomy.terms.map(term => term.value);
-                                    handleTermsChange(tax, allTerms);
+                                    handleTermsChange(availableTaxonomy, allTerms);
                                 } 
                                 else {
-                                    handleTermsChange(tax, []);
+                                    handleTermsChange(availableTaxonomy, []);
                                 }
                             }
 
                             updateField(index, updatedField);
                         }}
-                    />}
-                    label={__('Select all values')}
-                />
+                        />}
+                        label={__('Select all values')}
+                        />
+                        </>
+                    );
+                })}
+                
             </>
         );
     };
@@ -311,6 +291,15 @@ export default function EditorFilterFields(props) {
         const metaKeysForPostType = 
             postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
 
+        const handleMetasChange = (meta, newMetas) => {
+            const updatedField = { ...field };
+            if (!updatedField.options.metaKey.selectedMetas) {
+                updatedField.options.metaKey.selectedMetas = [];
+            }
+            updatedField.options.metaKey.selectedMetas = newMetas;
+            updateField(index, updatedField);
+        };
+        
         return (
             <>
                 <MuiSelect
@@ -335,9 +324,12 @@ export default function EditorFilterFields(props) {
                  metaKeysForPostType[options.metaKey.value]?.options?.length > 0 && (
                     <MuiMultipleSelect
                         key={`meta-values-${options.metaKey.value}`}
-                        terms={metaKeysForPostType[options.metaKey.value].options}
-                        selectedTerms={
-                            attributes.metas?.[options.metaKey.value]?.selectedMetas || []
+                        values={metaKeysForPostType[options.metaKey.value].options}
+                        selectedValues={
+                            options.metaKey.allOptions ?
+                            metaKeysForPostType[options.metaKey.value].options
+                            :
+                            options.metaKey.selectedMetas || []
                         }
                         label={`Select values for ${metaKeysForPostType[options.metaKey.value].label || options.metaKey.value}`}
                         onChange={(newMetas) => {
@@ -363,17 +355,12 @@ export default function EditorFilterFields(props) {
                         const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
                         
                         if (currentMetaKey && metaKeysForPostType[currentMetaKey]?.options) {
-                            const metaObj = {
-                                label: metaKeysForPostType[currentMetaKey].label || currentMetaKey,
-                                value: currentMetaKey
-                            };
-                            
                             if (willSelectAll) {
                                 const allMetaValues = metaKeysForPostType[currentMetaKey].options.map(option => option.value);
-                                handleMetasChange(metaObj, allMetaValues);
+                                handleMetasChange(metaKeysForPostType[currentMetaKey], allMetaValues);
                             } 
                             else {
-                                handleMetasChange(metaObj, []);
+                                handleMetasChange(metaKeysForPostType[currentMetaKey], []);
                             }
                         }
                 
@@ -420,8 +407,6 @@ export default function EditorFilterFields(props) {
                             const updatedField = { ...field };
                             updatedField.options.orderBy.metaKey = value;
                             updateField(index, updatedField);
-                            
-                            updateQueryAttributes({ orderByMetaKey: value });
                         }}
                     />
                 )}
@@ -440,7 +425,6 @@ export default function EditorFilterFields(props) {
                     const updatedField = { ...field };
                     updatedField.options.order.defaultOption = value;
                     updateField(index, updatedField);
-                    updateQueryAttributes({ order: value });
                 }}
             />
         );
@@ -449,16 +433,19 @@ export default function EditorFilterFields(props) {
     const renderCalendarOptions = (index, field) => {
         const { options } = field;
         return (
-            <Switch 
-            label={__('Enable Range Picking')} 
-            defaultChecked 
-            checked={options.calendar.options[0].value}
-            onChange={() => {
-                const updatedField = { ...field };
-                updatedField.options.calendar.options[0].value = !updatedField.options.calendar.options[0].value;
-                updateField(index, updatedField);
-            }}
-            />
+            <FormControlLabel
+            control={
+                <Switch 
+                    checked={options.calendar.options[0].value}
+                    onChange={() => {
+                        const updatedField = { ...field };
+                        updatedField.options.calendar.options[0].value = !updatedField.options.calendar.options[0].value;
+                        updateField(index, updatedField);
+                    }}
+                />
+            }
+            label={__('Enable Range Picking')}
+        />
         );
     };
 
@@ -481,66 +468,130 @@ export default function EditorFilterFields(props) {
 
     const renderFieldCard = (field, index) => {
         const fieldType = filterTypes.find(type => type.value === field.type);
+        const draggableId = `filter-field-${index}`;
         
         return (
-             <Paper key={ index } className="p-2 mb-4" elevation={3}>
-                <label className="mb-6 flex justify-between w-full items-center">
-                        <IconButton aria-label={__('Drag to reorder')}>
-                            <DragIndicatorIcon />
-                        </IconButton>
-                        <span className="block lowercase mb-0">{fieldType?.label || field.type}</span>
+            <div 
+                id={draggableId} 
+                key={index}
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.add('drag-over');
+                }}
+                onDragLeave={(e) => {
+                    e.currentTarget.classList.remove('drag-over');
+                }}
+                onDrop={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.remove('drag-over');
+                    
+                    if (draggedItemIndex !== null && draggedItemIndex !== index) {
+                        handleReorderFields(draggedItemIndex, index);
+                    }
+                    
+                    setDraggedItemIndex(null);
+                }}
+                className="filter-field-container"
+            >
+                <Paper className="p-2 mb-4" elevation={3}>
+                    <label className="mb-2 flex justify-between w-full items-center">
+                        <Draggable 
+                            elementId={draggableId} 
+                            transferData={{ index, field }}
+                        >
+                            {({ onDraggableStart, onDraggableEnd }) => (
+                                <div
+                                    draggable="true"
+                                    onDragStart={(e) => {
+                                        setDraggedItemIndex(index);
+                                        onDraggableStart(e);
+                                    }}
+                                    onDragEnd={(e) => {
+                                        onDraggableEnd(e);
+                                        setTimeout(() => {
+                                            setDraggedItemIndex(null);
+                                        }, 50);
+                                    }}
+                                    className="drag-handle"
+                                >
+                                    <IconButton aria-label={__('Drag to reorder')}>
+                                        <DragIndicatorIcon />
+                                    </IconButton>
+                                </div>
+                            )}
+                        </Draggable>
+                        <span className="block font-bold mb-0">{fieldType?.label || field.type}{field.label ? `: ${field.label}` : ''}</span>
                         <IconButton  
                             aria-label={__('Remove field')}
                             onClick={() => handleRemoveField(index)}
                         >
                             <DeleteOutlineIcon />
                         </IconButton>
-                </label>
-               
-                <MuiSelect
-                label={__('Field Type')}
-                value={field.type}
-                options={getAvailableFilterTypes().concat(
-                    isFilterTypeUsed(field.type) && !fieldType?.multiple 
-                        ? [filterTypes.find(type => type.value === field.type)] 
-                        : []
-                )}
-                onChange={(value) => {
-                    const updatedField = { ...field, type: value };
-                    updateField(index, updatedField);
-                }}
-                />
+                    </label>
+                    <PanelBody title={__('Settings')} initialOpen={false}>
+                        <div className="pt-4">
+                            
+                            <MuiSelect
+                            label={__('Field Type')}
+                            value={field.type}
+                            options={getAvailableFilterTypes().concat(
+                                isFilterTypeUsed(field.type) && !fieldType?.multiple 
+                                    ? [filterTypes.find(type => type.value === field.type)] 
+                                    : []
+                            )}
+                            onChange={(value) => {
+                                const updatedField = { ...field, type: value };
+                                updateField(index, updatedField);
+                            }}
+                            />
 
-                {field.type !== 'search' && (
-                    <MuiSelect
-                        label={__('Template')}
-                        value={field.template}
-                        options={templateOptions}
-                        onChange={(value) => updateField(index, { ...field, template: value })}
-                    />
-                )}
-                
-                <TextControl
-                    label={__('Label')}
-                    value={field.label}
-                    onChange={(value) => updateField(index, { ...field, label: value })}
-                />
-                
-                <TextControl
-                    label={__('Placeholder')}
-                    value={field.placeholder}
-                    onChange={(value) => updateField(index, { ...field, placeholder: value })}
-                />
-                
-                <TextControl
-                    label={__('Info Text')}
-                    value={field.info}
-                    onChange={(value) => updateField(index, { ...field, info: value })}
-                />
-                
-                {renderFieldOptions(index, field)}
-            
-            </Paper>
+                            {field.type !== 'search' && (
+                                <MuiSelect
+                                    label={__('Template')}
+                                    value={field.template}
+                                    options={templateOptions}
+                                    onChange={(value) => {
+                                        const updatedField = { ...field, template: value };
+                                        updateField(index, updatedField)
+                                    }
+                                    }
+                                />
+                            )}
+
+                            <FormControl fullWidth>
+                                <TextField
+                                label={__('Label')}
+                                value={field.label}
+                                onChange={(event) => {
+                                    updateField(index, { ...field, label: event.target.value })
+                                }}
+                                variant="standard"
+                                sx={textInputStyle}
+                                />
+
+                                <TextField
+                                label={__('Placeholder')}
+                                value={field.placeholder}
+                                onChange={(event) => updateField(index, { ...field, placeholder: event.target.value })}
+                                variant="standard"
+                                sx={textInputStyle}
+                                />
+                                
+                                <TextField
+                                label={__('Info Text')}
+                                value={field.info}
+                                onChange={(event) => updateField(index, { ...field, info: event.target.value })}
+                                variant="standard"
+                                sx={textInputStyle}
+                                />
+                            </FormControl>
+                            
+                            {renderFieldOptions(index, field)}
+
+                        </div>
+                    </PanelBody>
+                </Paper>
+            </div>
         );
     };
 
@@ -549,23 +600,62 @@ export default function EditorFilterFields(props) {
             {!selectedPostType ? (
                 <p>{__('Please select a Post Type in Query Settings first to configure filters.')}</p>
             ) : (
-                <div className="filter-fields-container">
-                    {Array.isArray(attributes.filterFields) && attributes.filterFields.length > 0 ? (
+                <div 
+                    className="filter-fields-container"
+                    onDragOver={(e) => {
+                        if (!e.target.closest('.filter-field-container')) {
+                            e.preventDefault();
+                            e.currentTarget.classList.add('drag-over-container');
+                        }
+                    }}
+                    onDragLeave={(e) => {
+                        if (!e.target.closest('.filter-field-container')) {
+                            e.currentTarget.classList.remove('drag-over-container');
+                        }
+                    }}
+                    onDrop={(e) => {
+                        if (!e.target.closest('.filter-field-container')) {
+                            e.preventDefault();
+                            e.currentTarget.classList.remove('drag-over-container');
+                            
+                            if (draggedItemIndex !== null && attributes.filterFields) {
+                                handleReorderFields(draggedItemIndex, attributes.filterFields.length - 1);
+                            }
+                            
+                            setDraggedItemIndex(null);
+                        }
+                    }}
+                >
+                    {Array.isArray(attributes.filterFields) && attributes.filterFields.length > 0 && (
                         attributes.filterFields.map((field, index) => renderFieldCard(field, index))
-                    ) : (
-                        <p>{__('No filter fields added yet. Click the button below to add your first filter field.')}</p>
                     )}
-                    
-                    <Button 
+
+                    <div className="flex gap-4 py-2">
+                        <Button 
+                        variant="contained" 
+                        size="small" 
                         color="secondary"
-                        sx={{textTransform:"none", marginTop: '16px'}}
-                        size="small"
-                        variant="contained"
                         startIcon={<AddIcon />}
-                        onClick={handleAddField}
-                    >
-                        {__('Add Filter Field')}
-                    </Button>
+                        sx={{textTransform:"none"}}
+                        onClick={handleAddField} >
+                            { __( 'Add a filter field' ) }
+                        </Button>
+                    </div>
+                    
+                    <style jsx>{`
+                        .filter-field-container.drag-over {
+                            border-top: 2px solid #007cba;
+                        }
+                        .filter-fields-container.drag-over-container {
+                            border-bottom: 2px solid #007cba;
+                        }
+                        .drag-handle {
+                            cursor: grab;
+                        }
+                        .drag-handle:active {
+                            cursor: grabbing;
+                        }
+                    `}</style>
                 </div>
             )}
         </PanelBody>

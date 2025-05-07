@@ -2,9 +2,6 @@ import { __ } from '@wordpress/i18n';
 import { 
     PanelBody,
 } from '@wordpress/components';
-import { 
-    useState
-} from '@wordpress/element';
 import MetaFields from './MetaFields';
 import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
@@ -14,13 +11,11 @@ export default function QueryFields(props) {
 
     const { 
         attributes, 
-        setAttributes, 
         postsByTabsSettings,
         selectedPostType,
         selectedOrderByMetaKey,
-        setSelectedOrderByMetaKey,
         taxonomyTerms,
-        updateQueryAttributes
+        updateAttributes
     } = props;
 
     const { postsPerPage = 12, maxNumPages = 10, order = 'desc', orderBy = 'date', paginationType } = attributes;
@@ -35,7 +30,7 @@ export default function QueryFields(props) {
             }
         };
         
-        updateQueryAttributes({ taxonomyTerms: updatedTerms });
+        updateAttributes({ taxonomyTerms: updatedTerms });
     };
 
     return (
@@ -52,7 +47,7 @@ export default function QueryFields(props) {
                 ]}
                 value={selectedPostType || 'post'}
                 onChange={(newPostType) => {
-                    updateQueryAttributes({ 
+                    updateAttributes({ 
                         postType: newPostType,
                         taxonomy: '',
                         terms: null
@@ -71,8 +66,8 @@ export default function QueryFields(props) {
                     return (
                         <MuiMultipleSelect
                         key={tax.value}
-                        terms={tax.terms}
-                        selectedTerms={currentSelectedTerms}
+                        values={tax.terms}
+                        selectedValues={currentSelectedTerms}
                         label={`Select ${tax.label} terms`}
                         onChange={(newTerms) => handleTermsChange(tax, newTerms)}
                         className={
@@ -92,7 +87,7 @@ export default function QueryFields(props) {
                 { label: __('Meta value number'), value: 'meta_value_num' }
             ]}
             value={orderBy}
-            onChange={(value) => updateQuery({ orderBy: value })}
+            onChange={(value) => updateAttributes({ orderBy: value })}
             />
 
             {postsByTabsSettings.metasByPostType && postsByTabsSettings.postTypes && postsByTabsSettings.postTypes.map(postType => {
@@ -119,8 +114,7 @@ export default function QueryFields(props) {
                     ]}
                     value={selectedOrderByMetaKey || ''}
                     onChange={(value) => {
-                        setSelectedOrderByMetaKey(value);
-                        updateQuery({ orderByMetaKey: value });
+                        updateAttributes({ orderByMetaKey: value });
                     }}
                     className={`${selectedPostType &&
                             selectedPostType === postType.value &&
@@ -139,14 +133,14 @@ export default function QueryFields(props) {
             ]}
             value={order}
             onChange={(value) => 
-                updateQuery({ order: value })
+                updateAttributes({ order: value })
             }
             />
 
             <MuiInputSlider
             value={postsPerPage}
             onChange={(value) => 
-                updateQuery({ postsPerPage: value })
+                updateAttributes({ postsPerPage: value })
             }
             label={__('Posts per page')}
             min={1}
@@ -157,7 +151,7 @@ export default function QueryFields(props) {
             <MuiInputSlider
             value={maxNumPages}
             onChange={
-                (value) => updateQuery({ maxNumPages: value })
+                (value) => updateAttributes({ maxNumPages: value })
             }
             label={__('Number of pages')}
             min={1}
@@ -170,7 +164,7 @@ export default function QueryFields(props) {
         </PanelBody>
         <PanelBody title={__('Meta Query Settings')} initialOpen={false}>
             <div className="py-2">
-            <MetaFields attributes={attributes} setAttributes={setAttributes} postsByTabsSettings={postsByTabsSettings} /> 
+            <MetaFields attributes={attributes} updateAttributes={updateAttributes} postsByTabsSettings={postsByTabsSettings} /> 
             </div>
         </PanelBody>
         </>

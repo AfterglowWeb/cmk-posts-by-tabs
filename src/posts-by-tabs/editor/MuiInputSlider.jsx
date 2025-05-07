@@ -49,7 +49,7 @@ export default function MuiInputSlider(props) {
     const id = crypto.randomUUID();
 
     return (
-        <div className="px-4">
+        <div>
             <InputLabel size="small" sx={{mb:2}} id={id}>{label}</InputLabel>
             <div className="flex gap-2 items-center">
                 <Slider
