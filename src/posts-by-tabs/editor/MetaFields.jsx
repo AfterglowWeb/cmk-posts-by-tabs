@@ -17,7 +17,7 @@ const relations = [
 
 export default function MetaFields(props) {
     
-    const { attributes, setAttributes, postsByTabsSettings } = props;
+    const { attributes, updateAttributes, postsByTabsSettings } = props;
 
     useEffect(() => {
         if (attributes.metaFields === undefined ||
@@ -25,7 +25,7 @@ export default function MetaFields(props) {
             !attributes.metaFields.fields ||
             !Array.isArray(attributes.metaFields.fields)) {
             
-            setAttributes({
+            updateAttributes({
                 metaFields: {
                     'relation': 'AND',
                     'fields': []
@@ -39,7 +39,7 @@ export default function MetaFields(props) {
             ...attributes.metaFields,
             relation: value
         };
-        setAttributes({ metaFields: updatedMetaFields });
+        updateAttributes({ metaFields: updatedMetaFields });
     };
     
     const handleAddMetaField = () => {
@@ -57,7 +57,7 @@ export default function MetaFields(props) {
                 }
             ]
         };
-        setAttributes({ metaFields: updatedMetaFields });
+        updateAttributes({ metaFields: updatedMetaFields });
     };
 
     return (
@@ -71,7 +71,7 @@ export default function MetaFields(props) {
         />
         {Array.isArray(attributes.metaFields.fields) && attributes.metaFields.fields.map( ( metaField, index ) => {
             return (
-            <MetaField key={index} attributes={attributes} setAttributes={setAttributes} metaField={metaField} index={index} postsByTabsSettings={postsByTabsSettings} />
+            <MetaField key={index} attributes={attributes} updateAttributes={updateAttributes} metaField={metaField} index={index} postsByTabsSettings={postsByTabsSettings} />
             )
         })}
         <div className="flex gap-4 py-2">

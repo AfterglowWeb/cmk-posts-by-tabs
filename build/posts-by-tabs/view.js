@@ -45178,11 +45178,7 @@ async function fetchPosts(attributes, options = {}) {
   } = options;
   let response;
   try {
-    if (hasMetaQuery(attributes)) {
-      response = await fetchPostsWithMetaQuery(attributes, headers);
-    } else {
-      response = await fetchPostsWithStandardQuery(attributes, headers);
-    }
+    response = await fetchPostsWithMetaQuery(attributes, headers);
     if (headers) {
       return {
         posts: Array.isArray(response) ? response : response.posts || [],

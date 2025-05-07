@@ -12,15 +12,18 @@
 	border-radius: 2px;
 }
 
-body .posts-by-tabs-panel input[type=text] {
-    box-shadow: inherit!important;
-    border-radius: inherit!important;
-    border: inherit!important;
-    background-color: inherit!important;
-    color: inherit!important;
-}
-
 .posts-by-tabs-block.alignfull {
     width: 100%; 
     min-width: 100%;
+}
+
+body .MuiFormControl-root {
+    input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week] {
+        padding:4px 0 5px!important;
+        min-height: 30px;
+        border-radius: 0;
+        border: unset;
+        background: none;
+        color: black; 
+    }
 }

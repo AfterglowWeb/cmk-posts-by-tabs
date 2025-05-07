@@ -3,12 +3,11 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, Spinner } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
+import './style.scss';
 import universalFetch from './utils/universalFetch';
-
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
 import EditorFilterFields from './editor/FilterFields';
-
 import PostsByTabs from './front/PostsByTabs';
 import {APIProvider} from './front/GoogleMapsProvider';
 
@@ -67,7 +66,7 @@ export default function Edit({attributes, setAttributes}) {
         }
     };
 
-	const updateQueryAttributes = (newAttributes) => {
+	const updateAttributes = (newAttributes) => {
         setAttributes({...attributes, ...newAttributes});
         
         if (newAttributes.postType !== undefined) {
@@ -85,26 +84,20 @@ export default function Edit({attributes, setAttributes}) {
     
     const queryFieldProps = {
         attributes,
-        setAttributes,
         postsByTabsSettings,
         selectedPostType,
-        setSelectedPostType,
         selectedOrderByMetaKey,
-        setSelectedOrderByMetaKey,
         taxonomyTerms,
-        setTaxonomyTerms,
-        updateQueryAttributes
+        updateAttributes
     };
     
     const filterFieldProps = {
         attributes,
-        setAttributes,
         postsByTabsSettings,
         selectedPostType,
         setSelectedPostType,
         taxonomyTerms,
-        setTaxonomyTerms,
-        updateQueryAttributes
+        updateAttributes
     };
 
 	useEffect(() => {
@@ -113,7 +106,6 @@ export default function Edit({attributes, setAttributes}) {
 
 
 	useEffect(() => {
-		// Don't return early, use a conditional block instead
 		if (postsByTabsSettings) {
 			if (!attributes.blockId) {
 				setAttributes({ blockId: crypto.randomUUID() });

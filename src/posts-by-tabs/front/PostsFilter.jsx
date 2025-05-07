@@ -63,8 +63,6 @@ export default function PostsFilter({ onFilterChange, taxonomyName = 'categories
     
     const termValues = typeof value === 'string' ? value.split(',') : value;
     setSelectedTerms(termValues);
-    
-    // Apply the filter
     applyFilter(termValues);
   };
 

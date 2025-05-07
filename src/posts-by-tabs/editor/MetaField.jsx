@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useReducer } from '@wordpress/element';
-import { DatePicker, TextControl, CheckboxControl } from '@wordpress/components';
-import Button from '@mui/material/Button';
+import { DatePicker, TextControl, CheckboxControl, PanelBody } from '@wordpress/components';
+import IconButton from '@mui/material/IconButton';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Paper from '@mui/material/Paper';
 import MuiSelect from './MuiSelect';
 
@@ -154,7 +155,7 @@ function metaFieldReducer(state, action) {
 }
 
 export default function MetaField(props) {
-    const { attributes, setAttributes, metaField, index, postsByTabsSettings } = props;
+    const { attributes, updateAttributes, metaField, index, postsByTabsSettings } = props;
     
     const initialState = {
       key: metaField?.key || '',
@@ -208,7 +209,7 @@ export default function MetaField(props) {
         ...updatedMetaFields.fields[index],
         ...state
       };
-      setAttributes({ metaFields: updatedMetaFields });
+      updateAttributes({ metaFields: updatedMetaFields });
     };
     
     useEffect(() => {
@@ -221,7 +222,7 @@ export default function MetaField(props) {
             fields: [...attributes.metaFields.fields]
         };
         updatedMetaFields.fields.splice(index, 1);
-        setAttributes({ metaFields: updatedMetaFields });
+        updateAttributes({ metaFields: updatedMetaFields });
     };
 
     if (!hasMetaFields) {
@@ -316,91 +317,90 @@ export default function MetaField(props) {
       };
 
     return (
-        <Paper className="p-2 mb-4" elevation={2}>
-            <div className="mb-2 flex justify-between">
-                <h3 className="lowercase">{__('Meta query')} {index + 1}</h3>
-                <Button 
-                  variant="outlined" 
-                  size="small" 
-                  color="secondary"
-                  sx={{textTransform:"none"}} 
-                  onClick={() => handleRemoveMetaField(index)} 
+        <Paper className="p-2 mb-4" elevation={3}>
+            <label className="mb-2 flex justify-between w-full items-center">
+                <span className="block w-10" />
+                <span className="block font-bold mb-0">{__('Meta query')} {index + 1} {`: ${state.key ? state.key : ''}`}</span>
+                <IconButton  
+                aria-label={__('Remove')}
+                onClick={() => handleRemoveMetaField(index)} 
                 >
-                  {__('Remove')}
-                </Button>
-            </div>
-            <div className="mb-2">
-                <MuiSelect
-                    label={__('Meta key')}
-                    options={[
-                        { label: __('Select meta key'), value: '' },
-                        ...metaFields
-                    ]}
-                    value={state.key || ''}
-                    onChange={(value) => dispatch({ type: 'SET_KEY', payload: value })}
-                />
+                    <DeleteOutlineIcon />
+                </IconButton>
+            </label>
 
-                <MuiSelect
-                    label={__('Meta value type')}
-                    options={[
-                        { label: __('Select meta value type'), value: '' },
-                        ...types
-                    ]}
-                    value={state.type || 'CHAR'}
-                    onChange={(value) => dispatch({ type: 'SET_TYPE', payload: value })}
-                />
-
-                {state.isUserValue || (state.type === 'DATE' && state.isDateToday) ? (
-                    <div className="bg-gray-50 p-2 mb-2 rounded-[2px]">
-                        <span className="block font-bold mb-2">
-                            {state.isDateToday ? __('Using today\'s date:') : __('Custom value input:')}
-                        </span>
-                        {state.isDateToday ? (
-                            <div className="px-2 py-1 bg-white border border-gray-300 rounded">
-                                {wpDate()}
-                            </div>
-                        ) : (
-                            freeFieldByType(state.type, state.value)
-                        )}
-                    </div>
-                ) : (
+            <PanelBody title={__('Settings')} initialOpen={false}>
                     <MuiSelect
-                        label={__('Meta value')}
-                        options={getValueOptions()}
-                        value={state.value || ''}
-                        onChange={(value) => dispatch({ type: 'SET_VALUE', payload: value })}
+                        label={__('Meta key')}
+                        options={[
+                            { label: __('Select meta key'), value: '' },
+                            ...metaFields
+                        ]}
+                        value={state.key || ''}
+                        onChange={(value) => dispatch({ type: 'SET_KEY', payload: value })}
                     />
-                )}
 
-                <div className="p-2 mb-2 rounded-[2px]">
-                    <CheckboxControl 
-                      label={__('Enter custom value')} 
-                      checked={!!state.isUserValue} 
-                      onChange={(value) => dispatch({ type: 'TOGGLE_USER_VALUE', payload: value })} 
+                    <MuiSelect
+                        label={__('Meta value type')}
+                        options={[
+                            { label: __('Select meta value type'), value: '' },
+                            ...types
+                        ]}
+                        value={state.type || 'CHAR'}
+                        onChange={(value) => dispatch({ type: 'SET_TYPE', payload: value })}
                     />
-                </div>
-            
-                {state.type === 'DATE' && (
+
+                    {state.isUserValue || (state.type === 'DATE' && state.isDateToday) ? (
+                        <div className="bg-gray-50 p-2 mb-2 rounded-[2px]">
+                            <span className="block font-bold mb-2">
+                                {state.isDateToday ? __('Using today\'s date:') : __('Custom value input:')}
+                            </span>
+                            {state.isDateToday ? (
+                                <div className="px-2 py-1 bg-white border border-gray-300 rounded">
+                                    {wpDate()}
+                                </div>
+                            ) : (
+                                freeFieldByType(state.type, state.value)
+                            )}
+                        </div>
+                    ) : (
+                        <MuiSelect
+                            label={__('Meta value')}
+                            options={getValueOptions()}
+                            value={state.value || ''}
+                            onChange={(value) => dispatch({ type: 'SET_VALUE', payload: value })}
+                        />
+                    )}
+
                     <div className="p-2 mb-2 rounded-[2px]">
                         <CheckboxControl 
-                          label={__('Use today\'s date')} 
-                          checked={!!state.isDateToday} 
-                          onChange={(value) => dispatch({ type: 'SET_TODAY', payload: value })} 
+                        label={__('Enter custom value')} 
+                        checked={!!state.isUserValue} 
+                        onChange={(value) => dispatch({ type: 'TOGGLE_USER_VALUE', payload: value })} 
                         />
                     </div>
-                )}
+                
+                    {state.type === 'DATE' && (
+                        <div className="p-2 mb-2 rounded-[2px]">
+                            <CheckboxControl 
+                            label={__('Use today\'s date')} 
+                            checked={!!state.isDateToday} 
+                            onChange={(value) => dispatch({ type: 'SET_TODAY', payload: value })} 
+                            />
+                        </div>
+                    )}
 
-                <div className="py-2" />
-                <MuiSelect
-                    label={__('Compare')}
-                    value={state.compare || '='}
-                    options={[
-                        { label: __('Select comparison'), value: '' },
-                        ...compares
-                    ]}
-                    onChange={(value) => dispatch({ type: 'SET_COMPARE', payload: value })}
-                />
-            </div>
+                    <div className="py-2" />
+                    <MuiSelect
+                        label={__('Compare')}
+                        value={state.compare || '='}
+                        options={[
+                            { label: __('Select comparison'), value: '' },
+                            ...compares
+                        ]}
+                        onChange={(value) => dispatch({ type: 'SET_COMPARE', payload: value })}
+                    />
+            </PanelBody>
         </Paper>
     );
 

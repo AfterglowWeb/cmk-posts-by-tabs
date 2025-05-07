@@ -1,13 +1,17 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import { TextControl, PanelBody } from '@wordpress/components';
+import { PanelBody } from '@wordpress/components';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+
 import TabTemplateOptions from './TabTemplateOptions';
 import MuiSelect from './MuiSelect';
+import textInputStyle from '../styles/textInputStyle';
 
 const postsByTabsSettings = window.postsByTabsSettings || {
     googleMapsApiKey: '',
@@ -102,53 +106,59 @@ export default function TabFields(props) {
     {tabs && tabs.map( ( tab, index ) => {
         return (
         <Paper key={ index } className="p-2 mb-4" elevation={3}>
-            <div className="mb-2 flex justify-between">
-                <h3 className="lowercase">{__('Onglet')} {index + 1}</h3>
-                {/*<Button 
-                variant="outlined" 
-                size="small" 
-                color="secondary"
-                sx={{textTransform:"none"}} 
-                onClick={() => handleRemoveTab(index)} >
-                    { __( 'Supprimer' ) }
-                </Button>*/}
+
+            <label className="mb-2 flex justify-between w-full items-center">
+                <IconButton aria-label={__('Drag to reorder')}>
+                    <DragIndicatorIcon />
+                </IconButton>
+                <span className="block font-bold mb-0">{__('Onglet')} {index + 1}{ tab.title ? `: ${tab.title}` : '' }</span>
                 <IconButton  
+                aria-label={__('Remove tab')}
                 onClick={() => handleRemoveTab(index)}
                 >
-                    <DeleteIcon />
+                    <DeleteOutlineIcon />
                 </IconButton>
-            </div>
+            </label>
+
             <div className="mb-2">
                 <PanelBody title={__('Titles')} initialOpen={false}>
-                    <TextControl
+                    <div className="pt-4">
+                    <TextField
+                        sx={textInputStyle}
                         placeholder={__('Title')}
                         value={ tab?.title || '' }
                         onChange={ ( value ) => {handleTabValueChange(value, 'title', index)} }
                     />
-                    <TextControl
+                    <TextField
+                        sx={textInputStyle}
                         placeholder={__('Subtitle')}
                         value={ tab?.subtitle }
                         onChange={ ( value ) => {handleTabValueChange(value, 'subtitle', index)} }
                     />
-                    <TextControl
+                    <TextField
+                        sx={textInputStyle}
                         placeholder={__('Data 1')}
                         value={ tab?.meta_1 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_1', index)} }
                     />
-                    <TextControl
+                    <TextField
+                        sx={textInputStyle}
                         placeholder={__('Data 2')}
                         value={ tab?.meta_2 }
                         onChange={ ( value ) => {handleTabValueChange(value, 'meta_2', index)} }
                     />
+                    </div>
                 </PanelBody>
                 <PanelBody title={__('Template options')} initialOpen={false}>
-                    <MuiSelect
-                        label={__('Template')}
-                        value={ tab?.template || '' }
-                        options={templates}
-                        onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
-                    />
-                    <TabTemplateOptions tab={tab} postType={attributes.postType} index={index} handleTabValueChange={handleTabValueChange} />
+                    <div className="pt-4">
+                        <MuiSelect
+                            label={__('Template')}
+                            value={ tab?.template || '' }
+                            options={templates}
+                            onChange={ ( value ) => {handleTabValueChange(value, 'template', index)} }
+                        />
+                        <TabTemplateOptions tab={tab} postType={attributes.postType} index={index} handleTabValueChange={handleTabValueChange} />
+                    </div>
                 </PanelBody>
             </div>
         </Paper>
