@@ -291,14 +291,64 @@ export default function EditorFilterFields(props) {
         const metaKeysForPostType = 
             postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
 
-        const handleMetasChange = (meta, newMetas) => {
+        const getNormalizedMetaOptions = (metaKey) => {
+            if (!metaKey || !metaKeysForPostType[metaKey]) return [];
+            
+            const metaData = metaKeysForPostType[metaKey];
+            let allValues = [];
+            
+            if (Array.isArray(metaData.options)) {
+
+                const flattenArray = (arr) => {
+                    return arr.reduce((acc, val) => {
+                        if (Array.isArray(val)) {
+                            return [...acc, ...flattenArray(val)];
+                        }
+                        return [...acc, val];
+                    }, []);
+                };
+                
+                allValues = flattenArray(metaData.options);
+            } else if (typeof metaData === 'object') {
+
+                Object.values(metaData).forEach(val => {
+                    if (Array.isArray(val)) {
+                        allValues = [...allValues, ...val];
+                    } else if (val !== null && val !== undefined) {
+                        allValues.push(val);
+                    }
+                });
+            }
+            
+            allValues = allValues.filter(val => val !== null && val !== undefined && val !== '');
+            allValues = allValues.map(val => String(val));
+            allValues = [...new Set(allValues)];
+            return allValues.map(val => ({
+                label: val,
+                value: val
+            }));
+        };
+
+        const handleMetasChange = (metaKey, newMetas) => {
             const updatedField = { ...field };
+            
             if (!updatedField.options.metaKey.selectedMetas) {
                 updatedField.options.metaKey.selectedMetas = [];
             }
+            
             updatedField.options.metaKey.selectedMetas = newMetas;
+            updatedField.options.metaKey.options = getNormalizedMetaOptions(metaKey);
+            
             updateField(index, updatedField);
         };
+
+        const getMetaLabel = (key) => {
+            if (!metaKeysForPostType[key]) return key;
+            return metaKeysForPostType[key].label || key;
+        };
+
+        const currentMetaOptions = options.metaKey.value ? 
+            getNormalizedMetaOptions(options.metaKey.value) : [];
         
         return (
             <>
@@ -308,7 +358,7 @@ export default function EditorFilterFields(props) {
                     options={
                         [{ label: __('Select Meta Key'), value: '' }].concat(
                             Object.keys(metaKeysForPostType).map(key => ({
-                                label: metaKeysForPostType[key].label || key,
+                                label: getMetaLabel(key),
                                 value: key
                             }))
                         )
@@ -316,28 +366,22 @@ export default function EditorFilterFields(props) {
                     onChange={(value) => {
                         const updatedField = { ...field };
                         updatedField.options.metaKey.value = value;
+                        if (value) {
+                            updatedField.options.metaKey.options = getNormalizedMetaOptions(value);
+                        }
+                        
                         updateField(index, updatedField);
                     }}
                 />
                 
-                {options.metaKey.value && 
-                 metaKeysForPostType[options.metaKey.value]?.options?.length > 0 && (
+                {options.metaKey.value && currentMetaOptions.length > 0 && (
                     <MuiMultipleSelect
                         key={`meta-values-${options.metaKey.value}`}
-                        values={metaKeysForPostType[options.metaKey.value].options}
-                        selectedValues={
-                            options.metaKey.allOptions ?
-                            metaKeysForPostType[options.metaKey.value].options
-                            :
-                            options.metaKey.selectedMetas || []
-                        }
-                        label={`Select values for ${metaKeysForPostType[options.metaKey.value].label || options.metaKey.value}`}
+                        values={currentMetaOptions}
+                        selectedValues={options.metaKey.selectedMetas || []}
+                        label={`Select values for ${getMetaLabel(options.metaKey.value)}`}
                         onChange={(newMetas) => {
-                            const metaObj = {
-                                label: metaKeysForPostType[options.metaKey.value].label || options.metaKey.value,
-                                value: options.metaKey.value
-                            };
-                            handleMetasChange(metaObj, newMetas);
+                            handleMetasChange(options.metaKey.value, newMetas);
                         }}
                     />
                 )}
@@ -352,15 +396,15 @@ export default function EditorFilterFields(props) {
                         updatedField.options.metaKey.allOptions = willSelectAll;
                 
                         const currentMetaKey = options.metaKey.value;
-                        const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
                         
-                        if (currentMetaKey && metaKeysForPostType[currentMetaKey]?.options) {
+                        if (currentMetaKey) {
+                            const normalizedOptions = getNormalizedMetaOptions(currentMetaKey);
+                            
                             if (willSelectAll) {
-                                const allMetaValues = metaKeysForPostType[currentMetaKey].options.map(option => option.value);
-                                handleMetasChange(metaKeysForPostType[currentMetaKey], allMetaValues);
-                            } 
-                            else {
-                                handleMetasChange(metaKeysForPostType[currentMetaKey], []);
+                                const allMetaValues = normalizedOptions.map(opt => opt.value);
+                                handleMetasChange(currentMetaKey, allMetaValues);
+                            } else {
+                                handleMetasChange(currentMetaKey, []);
                             }
                         }
                 

@@ -14,6 +14,7 @@ import Pagination from './Pagination';
 import EventsCalendar from './EventsCalendar';
 import PostsGrid from './PostsGrid';
 import EventsMapCluster from './EventsMapCluster';
+import FrontFilterFields from './FrontFilterFields';
 
 export default function PostsByTabs(props) {
     const { attributes, setAttributes, clientId, isEditor, useBlockProps } = props;
@@ -135,6 +136,21 @@ export default function PostsByTabs(props) {
             return 'lg';
         }
     }
+
+    const onFilterChange = useCallback((newFilters) => {
+        setAttributes({
+            ...attributes,
+            ...newFilters
+        });
+    }, [attributes]);
+
+    /*const filterFieldProps = { 
+        filterFields: attributes.filterFields, 
+        taxonomyTerms: attributes.taxonomyTerms,
+        metas: attributes.metaFields,
+        isLoading: false,
+        error: null
+    }*/
     
     return (
         <div {...blockProps} >
@@ -142,18 +158,9 @@ export default function PostsByTabs(props) {
         sx={{position: 'relative', widht:'100%'}}
         maxWidth={maxWidth()}
         >
-            {attributes.title && 
-            <Box 
-            component="h2" 
-            className={`font-bold text-3xl lg:text-[40px] lg:leading-[50px] mb-0`}>
-                {attributes.title}
-            </Box>}
-
-            {attributes.subtitle && <p className="font-bold text-xl text-[30px] mb-0">
-                <strong>{attributes.subtitle}</strong>
-            </p>}
             
             <Box>
+                <FrontFilterFields attributes={attributes} onFilterChange={onFilterChange} isLoading={false} error={null} />
                 <Tabs
                 value={selectedTab}
                 onChange={handleTabChange}
