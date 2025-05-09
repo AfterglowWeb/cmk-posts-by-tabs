@@ -21,8 +21,8 @@ import { format, parse, startOfWeek, addDays, startOfMonth, endOfMonth, eachDayO
 import { fr } from 'date-fns/locale';
 import { Tooltip } from '@mui/material';
 
-import SmallCard from '../posts/SmallCard';
-import XSmallCard from '../posts/XSmallCard';
+import SmallCard from '../posts/calendar/SmallCard';
+import XSmallCard from '../posts/calendar/XSmallCard';
 
 export default function EventsCalendar(props) {
   const { posts, tab } = props;

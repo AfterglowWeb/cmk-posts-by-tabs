@@ -4,8 +4,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Tooltip from '@mui/material/Tooltip';
-import PostTerms from './PostTerms';
-import sanitizeHtml from '../utils/sanitizeHtml';
+import PostTerms from '../PostTerms';
+import sanitizeHtml from '../../utils/sanitizeHtml';
 
 export default function XSmallCard({post, compact = false, hideImage = false}) {
 

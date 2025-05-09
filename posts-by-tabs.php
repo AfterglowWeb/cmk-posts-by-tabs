@@ -42,7 +42,7 @@ add_action('enqueue_block_editor_assets', function () {
     
     wp_register_script(
         'posts-by-tabs-editor',
-        plugins_url('build/index.js', __FILE__),
+        plugins_url('build/posts-by-tabs/index.js', __FILE__),
         $asset_file['dependencies'],
         $asset_file['version']
     );
