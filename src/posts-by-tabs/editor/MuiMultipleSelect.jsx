@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -19,71 +19,76 @@ const MenuProps = {
   },
 };
 
-export default function MuiMultipleSelect(props) {
-  const { 
-    values = [], 
-    selectedValues = [], 
-    onChange,
-    label = __('Select values')
-  } = props;
-  
-  const handleChange = (event) => {
+function getStyles(value, selectedValues, theme) {
+  return {
+    fontWeight:
+      selectedValues.indexOf(value) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 
+export default function MuiMultipleSelect(props) {
+  const theme = useTheme();
+  const { values, selectedValues = [], label, onChange } = props;
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    
+    // Handle both string and array values
+    const newValues = typeof value === 'string' ? value.split(',') : value;
+    
     if (onChange) {
-      onChange(event.target.value);
+      onChange(newValues);
     }
   };
 
-  const getValueLabel = (valueId) => {
-    const term = values.find(t => t.value === valueId);
-    return term ? term.label : valueId;
-  };
-
-  const theme = useTheme();
-
-  function getStyles(valueId, selectedValues, theme) {
-    return {
-      fontWeight:
-        selectedValues.indexOf(valueId) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
-
-  const id = crypto.randomUUID();
+  // Ensure values is always an array and IDs are strings for consistent comparison
+  const normalizedSelectedValues = selectedValues ? 
+    (Array.isArray(selectedValues) ? selectedValues : [selectedValues]) : 
+    [];
 
   return (
-    <div className="mb-4">
-      <FormControl sx={{ width: '100%' }}>
-        <InputLabel id={`${id}-label`} size='small'>{label}</InputLabel>
-        <Select
-          labelId={`${id}-label`}
-          id={id}
-          size="small"
-          multiple
-          value={selectedValues}
-          onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-values" label={label} />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={getValueLabel(value)} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {values.map((value) => (
-            <MenuItem
-              key={value.value}
-              value={value.value}
-              style={getStyles(value.value, selectedValues, theme)}
-            >
-              {value.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl variant="standard" fullWidth margin="normal" sx={{
+        '& .MuiInputBase-root': {
+          'border': 'unset'
+      }}}>
+      <InputLabel
+      variant='standard'
+      id="multiple-chip-label"
+      >{label}</InputLabel>
+      <Select
+        labelId="multiple-chip-label"
+        id="multiple-chip"
+        multiple
+        variant='standard'
+        value={normalizedSelectedValues}
+        onChange={handleChange}
+        input={<OutlinedInput id="select-multiple-chip" label={label} />}
+        renderValue={(selected) => (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            {selected.map((value) => {
+              const selectedItem = values.find(item => item.value === value);
+              return (
+                <Chip key={value} label={selectedItem ? selectedItem.label : value} />
+              );
+            })}
+          </Box>
+        )}
+        MenuProps={MenuProps}
+      >
+        {values.map((item) => (
+          <MenuItem
+            key={item.value}
+            value={item.value}
+            style={getStyles(item.value, normalizedSelectedValues, theme)}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }

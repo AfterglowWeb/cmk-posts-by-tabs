@@ -2,12 +2,12 @@ import React, {useEffect, useRef, useState} from 'react';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import PostTerms from './PostTerms';
 import PostTop from './PostTop';
 import PostBottom from './PostBottom';
-import { eventDatesString } from './EventDates';
-import sanitizeHtml from '../utils/sanitizeHtml';
-import SubEvent from './SubEvent';
+import sanitizeHtml from '../../utils/sanitizeHtml';
+import PostTerms from '../PostTerms';
+import { eventDatesString } from '../EventDates';
+import SubEvent from '../SubEvent';
 
 export default function Post({post}) {
     const [anchorEl, setAnchorEl] = useState(null);

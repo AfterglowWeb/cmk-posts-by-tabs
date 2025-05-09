@@ -11,7 +11,6 @@ export default async function universalFetch(props) {
     }
 
     const url = `${restUrl}${path}`;
-
     
     const fetchOptions = {
         method: props.method || 'GET',
@@ -38,15 +37,21 @@ export default async function universalFetch(props) {
         });
         
         const data = await response.json();
+        const posts = data?.posts || [];
+
+        if (!posts || posts.length === 0) {
+            console.error('No posts found');
+            return { error: 'No posts found' };
+        }
         
         if (props.returnHeaders) {
             return { 
-                data,
+                posts,
                 headers 
             };
         }
         
-        return data;
+        return posts;
     } catch (error) {
         console.error('Error in universalFetch:', error);
         throw error;

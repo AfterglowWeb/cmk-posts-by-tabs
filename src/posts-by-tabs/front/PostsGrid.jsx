@@ -1,5 +1,5 @@
 import React from 'react';
-import Post from '../posts/Post';
+import Post from '../posts/card-round/Post';
 
 export default function PostsGrid (props) {
   const { attributes, posts, tab } = props;

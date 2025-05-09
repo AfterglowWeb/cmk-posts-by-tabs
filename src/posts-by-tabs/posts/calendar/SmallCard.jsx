@@ -3,12 +3,15 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import PostTerms from './PostTerms';
-import PostDate from './PostDate';
-import EventDates from './EventDates';
-import sanitizeHtml from '../utils/sanitizeHtml';
-import SubEvent from './SubEvent';
 import Tooltip from '@mui/material/Tooltip';
+
+import PostTerms from '../PostTerms';
+import PostDate from '../PostDate';
+import SubEvent from '../SubEvent';
+import EventDates from '../EventDates';
+
+import sanitizeHtml from '../../utils/sanitizeHtml';
+
 
 export default function SmallCard({post, compact = false, hideImage = false}) {
 

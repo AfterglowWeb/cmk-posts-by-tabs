@@ -17,7 +17,7 @@ import EventsMapCluster from './EventsMapCluster';
 import FrontFilterFields from './FrontFilterFields';
 
 export default function PostsByTabs(props) {
-    const { attributes, setAttributes, clientId, isEditor, useBlockProps } = props;
+    const { attributes, clientId, isEditor, useBlockProps } = props;
     const [selectedTab, setSelectedTab] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -94,10 +94,7 @@ export default function PostsByTabs(props) {
     const handlePageChange = (page, newOffset, append = false) => {
         
         setCurrentPage(page);
-        setAttributes({
-            ...attributes,
-            offset: newOffset
-        });
+
         
         if (append) {
             // We'll handle this in the useEffect by passing append option to fetchPosts
@@ -138,19 +135,42 @@ export default function PostsByTabs(props) {
     }
 
     const onFilterChange = useCallback((newFilters) => {
-        setAttributes({
+        setIsLoading(true);
+        setError(null);
+        setPosts([]);
+        setTotalPosts(0);
+        setCurrentPage(1);
+
+        const fetchOptions = {
+            headers: true,
+            append: false 
+        };
+
+        fetchPosts({
             ...attributes,
             ...newFilters
+        }, fetchOptions)
+        .then((result) => {
+            if (!result.error) {
+                if (result.headers && result.headers['x-wp-total']) {
+                    setTotalPosts(parseInt(result.headers['x-wp-total']));
+                }
+    
+                if (result.posts) {
+                    setPosts(result.posts);
+                }
+            }
+        })
+        .catch((err) => {
+            setError(err.message);
+            setPosts([]);
+            setTotalPosts(0);
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
-    }, [attributes]);
-
-    /*const filterFieldProps = { 
-        filterFields: attributes.filterFields, 
-        taxonomyTerms: attributes.taxonomyTerms,
-        metas: attributes.metaFields,
-        isLoading: false,
-        error: null
-    }*/
+    }
+    , [attributes]);
     
     return (
         <div {...blockProps} >
@@ -160,7 +180,7 @@ export default function PostsByTabs(props) {
         >
             
             <Box>
-                <FrontFilterFields attributes={attributes} onFilterChange={onFilterChange} isLoading={false} error={null} />
+                <FrontFilterFields attributes={attributes} isLoading={false} error={null} onFilterChange={onFilterChange} />
                 <Tabs
                 value={selectedTab}
                 onChange={handleTabChange}

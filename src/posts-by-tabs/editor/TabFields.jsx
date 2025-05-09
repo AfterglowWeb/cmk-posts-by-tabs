@@ -127,25 +127,25 @@ export default function TabFields(props) {
                         sx={textInputStyle}
                         placeholder={__('Title')}
                         value={ tab?.title || '' }
-                        onChange={ ( value ) => {handleTabValueChange(value, 'title', index)} }
+                        onChange={ ( event ) => {handleTabValueChange(event.target.value, 'title', index)} }
                     />
                     <TextField
                         sx={textInputStyle}
                         placeholder={__('Subtitle')}
                         value={ tab?.subtitle }
-                        onChange={ ( value ) => {handleTabValueChange(value, 'subtitle', index)} }
+                        onChange={ ( event ) => {handleTabValueChange(event.target.value, 'subtitle', index)} }
                     />
                     <TextField
                         sx={textInputStyle}
                         placeholder={__('Data 1')}
                         value={ tab?.meta_1 }
-                        onChange={ ( value ) => {handleTabValueChange(value, 'meta_1', index)} }
+                        onChange={ ( event ) => {handleTabValueChange(event.target.value, 'meta_1', index)} }
                     />
                     <TextField
                         sx={textInputStyle}
                         placeholder={__('Data 2')}
                         value={ tab?.meta_2 }
-                        onChange={ ( value ) => {handleTabValueChange(value, 'meta_2', index)} }
+                        onChange={ ( event ) => {handleTabValueChange(event.target.value, 'meta_2', index)} }
                     />
                     </div>
                 </PanelBody>

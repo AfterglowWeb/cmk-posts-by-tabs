@@ -7,7 +7,7 @@ import './style.scss';
 import universalFetch from './utils/universalFetch';
 import QueryFields from './editor/QueryFields';
 import TabFields from './editor/TabFields';
-import EditorFilterFields from './editor/FilterFields';
+import EditorFilterFields from './editor/EditorFilterFields';
 import PostsByTabs from './front/PostsByTabs';
 import {APIProvider} from './front/GoogleMapsProvider';
 
