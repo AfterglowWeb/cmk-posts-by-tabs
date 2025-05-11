@@ -53640,11 +53640,6 @@ const MenuProps = {
     }
   }
 };
-function getStyles(value, selectedValues, theme) {
-  return {
-    fontWeight: selectedValues.indexOf(value) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium
-  };
-}
 function MuiMultipleSelect(props) {
   const theme = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_2__["default"])();
   const {
@@ -53653,25 +53648,24 @@ function MuiMultipleSelect(props) {
     label,
     onChange
   } = props;
+
+  // Ensure selectedValues is always an array
+  const normalizedSelectedValues = Array.isArray(selectedValues) ? selectedValues : [selectedValues].filter(Boolean);
+
+  // Function to check if a value is selected, handling different types
+  const isValueSelected = itemValue => {
+    return normalizedSelectedValues.some(selectedValue =>
+    // Handle both string and number comparison
+    String(selectedValue) === String(itemValue));
+  };
   const handleChange = event => {
     const {
-      target: {
-        value
-      }
-    } = event;
-
-    // Handle both string and array values
-    const newValues = typeof value === 'string' ? value.split(',') : value;
-
-    // Convert string numbers to actual numbers to maintain consistency
-    const normalizedValues = newValues.map(val => typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val);
+      value
+    } = event.target;
     if (onChange) {
-      onChange(normalizedValues);
+      onChange(value);
     }
   };
-
-  // Normalize selected values to ensure consistent comparison
-  const normalizedSelectedValues = (selectedValues || []).map(val => typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_FormControl__WEBPACK_IMPORTED_MODULE_3__["default"], {
     variant: "standard",
     fullWidth: true,
@@ -53703,23 +53697,21 @@ function MuiMultipleSelect(props) {
           gap: 0.5
         },
         children: selected.map(value => {
-          // Use loose equality (==) to match string and number values
-          const selectedItem = values.find(item => item.value == value);
+          // Use string comparison to match values reliably
+          const selectedItem = values.find(item => String(item.value) === String(value));
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Chip__WEBPACK_IMPORTED_MODULE_8__["default"], {
             label: selectedItem ? selectedItem.label : value
           }, value);
         })
       }),
       MenuProps: MenuProps,
-      children: values.map(item => {
-        // Convert item.value to a number if it's a numeric string
-        const normalizedValue = typeof item.value === 'string' && !isNaN(item.value) ? parseInt(item.value, 10) : item.value;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
-          value: normalizedValue,
-          style: getStyles(normalizedValue, normalizedSelectedValues, theme),
-          children: item.label
-        }, item.value);
-      })
+      children: values.map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        value: item.value,
+        style: {
+          fontWeight: isValueSelected(item.value) ? theme.typography.fontWeightMedium : theme.typography.fontWeightRegular
+        },
+        children: item.label
+      }, item.value))
     })]
   });
 }
