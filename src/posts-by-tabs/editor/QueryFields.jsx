@@ -2,7 +2,6 @@ import { __ } from '@wordpress/i18n';
 import { 
     PanelBody,
 } from '@wordpress/components';
-import MetaFields from './MetaFields';
 import MuiMultipleSelect from './MuiMultipleSelect';
 import MuiSelect from './MuiSelect';
 import MuiInputSlider from './MuiInputSlider';
@@ -34,7 +33,6 @@ export default function QueryFields(props) {
     };
 
     return (
-        <>
         <PanelBody title={__('Query Settings')} initialOpen={false}>
         <div className="py-2">
             {postsByTabsSettings.postTypes && 
@@ -162,11 +160,5 @@ export default function QueryFields(props) {
 
         </div> 
         </PanelBody>
-        <PanelBody title={__('Meta Query Settings')} initialOpen={false}>
-            <div className="py-2">
-            <MetaFields attributes={attributes} updateAttributes={updateAttributes} postsByTabsSettings={postsByTabsSettings} /> 
-            </div>
-        </PanelBody>
-        </>
     );
 }

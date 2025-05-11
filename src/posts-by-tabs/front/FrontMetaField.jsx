@@ -15,32 +15,27 @@ import Tooltip from '@mui/material/Tooltip';
 import MuiMultipleSelect from '../editor/MuiMultipleSelect';
 
 export default function FrontMetaField (props) {
-    const {field, index, onFilterChange, initialValues = [] } = props;
+    const {field, index, onFilterChange,  attributes } = props;
     const { options, label, placeholder, info, template } = field;
     const metaKey = options.metaKey.value;
     const metaOptions = options.metaKey.options || [];
-    const [selectedValues, setSelectedValues] = useState(template === 'radio' ? '' : []);
+    const [selectedValues, setSelectedValues] = useState([]);
     
-    // Enable parent component communication
     useEffect(() => {
-        // Notify parent component when selectedValues change
         if (onFilterChange) {
             onFilterChange(metaKey, selectedValues);
         }
     }, [selectedValues, metaKey, onFilterChange]);
 
     const handleFilterValues = (newValue) => {
-        // Handle select differently - MuiMultipleSelect likely returns the full array of selected values
         if (template === 'select') {
             setSelectedValues(newValue);
             return;
         }
         
         if (template === 'radio') {
-            // For radio, just use the single value
             setSelectedValues(newValue);
         } else {
-            // For checkbox, toggle the selection
             const newSelectedValues = [...selectedValues];
             const valueIndex = newSelectedValues.indexOf(newValue);
             
@@ -52,13 +47,14 @@ export default function FrontMetaField (props) {
             setSelectedValues(newSelectedValues);
         }
     };
+
     
     switch (template) {
         case 'select':
             return (
                 <Tooltip title={info || ''} arrow placement="top">
                     <MuiMultipleSelect                    
-                        values={metaOptions}
+                        values={options}
                         selectedValues={selectedValues}
                         label={label}
                         // Pass the full array directly from the select component
@@ -73,7 +69,7 @@ export default function FrontMetaField (props) {
                     <FormControl variant="standard" key={`meta-${index}`} component="fieldset" margin="normal">
                         <Typography variant="subtitle1">{label}</Typography>
                         <RadioGroup
-                            value={selectedValues || ''}
+                            value={selectedValues}
                             onChange={(e) => handleFilterValues(e.target.value)}
                         >
                             <FormControlLabel 

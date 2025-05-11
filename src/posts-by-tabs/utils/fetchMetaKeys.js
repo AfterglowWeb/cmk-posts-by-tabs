@@ -6,12 +6,10 @@ const pendingRequests = {};
 
 export async function fetchMetaKeys(postType, useCache = true) {
     if (!postType) {
-        console.log('No post type provided to fetchMetaKeys');
         return [];
     }
     
     if (useCache && metaKeysCache[postType]) {
-        console.log(`Using cached meta keys for ${postType}`);
         return metaKeysCache[postType];
     }
     
@@ -21,13 +19,10 @@ export async function fetchMetaKeys(postType, useCache = true) {
     
     const requestPromise = new Promise(async (resolve) => {
         try {
-            console.log(`Fetching meta keys for post type: ${postType}`);
             const fetchedMetaKeys = await universalFetch({ 
                 path: `/posts-by-tabs/v1/meta/${postType}?keys_only=true`
             });
-            
-            console.log('Fetched meta keys:', fetchedMetaKeys);
-            
+
             let metaKeysArray = [];
             
             if (Array.isArray(fetchedMetaKeys)) {
@@ -50,7 +45,6 @@ export async function fetchMetaKeys(postType, useCache = true) {
             
             resolve(metaKeyOptions);
         } catch (error) {
-            console.error(`Error fetching meta keys for ${postType}:`, error);
             resolve([]);
         } finally {
             delete pendingRequests[postType];

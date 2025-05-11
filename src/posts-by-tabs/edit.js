@@ -1,11 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, Spinner } from '@wordpress/components';
+import { Spinner } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
 import './style.scss';
 import universalFetch from './utils/universalFetch';
 import QueryFields from './editor/QueryFields';
+import MetaFields from './editor/MetaFields';
 import TabFields from './editor/TabFields';
 import EditorFilterFields from './editor/EditorFilterFields';
 import PostsByTabs from './front/PostsByTabs';
@@ -58,6 +59,7 @@ export default function Edit({attributes, setAttributes}) {
 
             if (!response.error) {
                 setPostsByTabsSettings(response);
+				setAttributes({...attributes, ...{options:response}});
             }
         } catch (error) {
             console.error('Error fetching settings:', error);
@@ -82,24 +84,6 @@ export default function Edit({attributes, setAttributes}) {
         }
     };
     
-    const queryFieldProps = {
-        attributes,
-        postsByTabsSettings,
-        selectedPostType,
-        selectedOrderByMetaKey,
-        taxonomyTerms,
-        updateAttributes
-    };
-    
-    const filterFieldProps = {
-        attributes,
-        postsByTabsSettings,
-        selectedPostType,
-        setSelectedPostType,
-        taxonomyTerms,
-        updateAttributes
-    };
-
 	useEffect(() => {
         fetchPostsByTabsSettings();
     }, []);
@@ -129,11 +113,12 @@ export default function Edit({attributes, setAttributes}) {
 								zoom: 13
 							}
 						}
-					}]
+					}],
+					options: postsByTabsSettings ? postsByTabsSettings : {}
 				});
 			}
 		}
-	}, [setAttributes, attributes.blockId, attributes.initialized, attributes.tabs, attributes.postType, attributes.orderByMetaKey, postsByTabsSettings]);
+	}, [setAttributes, attributes.blockId, attributes.initialized, attributes.tabs, attributes.postType, attributes.orderByMetaKey, attributes.options, postsByTabsSettings]);
 
 	if (isLoading) {
         return <Spinner />;
@@ -144,20 +129,46 @@ export default function Edit({attributes, setAttributes}) {
 			<InspectorControls>
 
 		
-				<QueryFields {...queryFieldProps} />
+				<QueryFields 
+				{...{
+					attributes,
+					postsByTabsSettings,
+					selectedPostType,
+					selectedOrderByMetaKey,
+					taxonomyTerms,
+					updateAttributes
+				}} 
+				/>
+
+				<MetaFields 
+				{...{
+					attributes,
+					postsByTabsSettings,
+					selectedPostType,
+					updateAttributes
+				}}
+				/> 
+
+				<EditorFilterFields 
+				{...{
+					attributes,
+					postsByTabsSettings,
+					selectedPostType,
+					setSelectedPostType,
+					taxonomyTerms,
+					updateAttributes
+				}} />
 	
-
-				<PanelBody title={__('Tabs')} initialOpen={false}>
-					<TabFields 
-					attributes={attributes} 
-					setAttributes={setAttributes} 
-					handleTabValueChange={handleTabValueChange} 
-					templates={templates}  
-					postsByTabsSettings={postsByTabsSettings?.options}
+				<TabFields 
+					{...{
+					attributes,
+					setAttributes,
+					handleTabValueChange,
+					templates,
+					postsByTabsSettings,
+					updateAttributes
+				}}
 					/>
-				</PanelBody>
-
-				<EditorFilterFields {...filterFieldProps} />
 
 			</InspectorControls>
 			
@@ -171,7 +182,7 @@ export default function Edit({attributes, setAttributes}) {
 				setAttributes={setAttributes} 
 				isEditor={true}
 				useBlockProps={useBlockProps}
-				postsByTabsSettings={postsByTabsSettings?.options}
+				postsByTabsSettings={postsByTabsSettings}
 				/>
 			</APIProvider>
 

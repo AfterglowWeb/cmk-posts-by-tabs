@@ -13,16 +13,16 @@ import TabTemplateOptions from './TabTemplateOptions';
 import MuiSelect from './MuiSelect';
 import textInputStyle from '../styles/textInputStyle';
 
-const postsByTabsSettings = window.postsByTabsSettings || {
+/*const postsByTabsSettings = window.postsByTabsSettings || {
     googleMapsApiKey: '',
     defaultLatitude: 48.8566,
     defaultLongitude: 2.3522,
     defaultTemplate: 'grid'
-};
+};*/
 
 export default function TabFields(props) {
     
-    const { attributes, setAttributes, handleTabValueChange, templates } = props;
+    const { attributes, setAttributes, handleTabValueChange, templates, postsByTabsSettings } = props;
     const { tabs } = attributes;
 
     useEffect(() => {
@@ -102,7 +102,7 @@ export default function TabFields(props) {
 
 
     return (
-    <>
+    <PanelBody title={__('Tabs')} initialOpen={false}>
     {tabs && tabs.map( ( tab, index ) => {
         return (
         <Paper key={ index } className="p-2 mb-4" elevation={3}>
@@ -173,6 +173,6 @@ export default function TabFields(props) {
     onClick={handleAddTab} >
         { __( 'Ajouter un onglet' ) }
     </Button>
-    </>
+    </PanelBody>
 );
 }

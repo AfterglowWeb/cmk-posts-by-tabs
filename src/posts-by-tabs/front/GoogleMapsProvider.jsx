@@ -28,7 +28,6 @@ export const GoogleMapsProvider = ({ apiKey, children, libraries = ['places'], v
 
     const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
     if (existingScript) {
-      console.log('Google Maps API is already being loaded by another script');
       
       const checkGoogleMaps = setInterval(() => {
         if (isApiLoaded()) {
