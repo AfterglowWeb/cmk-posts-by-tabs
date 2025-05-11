@@ -1,10 +1,8 @@
-import React, {useState, useEffect} from '@wordpress/element';
+import {useState, useEffect} from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Checkbox from '@mui/material/Checkbox';
@@ -19,7 +17,7 @@ export default function FrontMetaField (props) {
     const { options, label, placeholder, info, template } = field;
     const metaKey = options.metaKey.value;
     const metaOptions = options.metaKey.options || [];
-    const [selectedValues, setSelectedValues] = useState([]);
+    const [selectedValues, setSelectedValues] = useState(template === 'radio' ? '' : []);
     
     useEffect(() => {
         if (onFilterChange) {
@@ -48,13 +46,35 @@ export default function FrontMetaField (props) {
         }
     };
 
+     const getValueOptions = () => {
+
+        if (!options || !attributes.options.metasByPostType) {
+            return [{ label: __('Select meta value'), value: '' }];
+        }
+        if (!attributes.options.metasByPostType[attributes.postType]) {
+            return [{ label: __('Select meta value'), value: '' }];
+        }
+        if (!attributes.options.metasByPostType[attributes.postType][options.metaKey]?.options) {
+            return [{ label: __('Select meta value'), value: '' }];
+        }
+        
+        const optionObjects = attributes.options.metasByPostType[attributes.postType][metaKey].options;
+        
+        return [
+            { label: __('Select meta value'), value: '' }, 
+            ...optionObjects.map(optionObject => ({
+                label: optionObject?.label ? optionObject.label : String(optionObject),
+                value: optionObject?.value ? optionObject.value : String(optionObject)
+            }))
+        ];
+        };
     
     switch (template) {
         case 'select':
             return (
                 <Tooltip title={info || ''} arrow placement="top">
                     <MuiMultipleSelect                    
-                        values={options}
+                        values={metaOptions}
                         selectedValues={selectedValues}
                         label={label}
                         // Pass the full array directly from the select component
