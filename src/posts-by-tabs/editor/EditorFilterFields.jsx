@@ -288,8 +288,7 @@ export default function EditorFilterFields(props) {
 
     const renderMetaKeyOptions = (index, field) => {
         const { options } = field;
-        const metaKeysForPostType = 
-            postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
+        const metaKeysForPostType = postsByTabsSettings?.metasByPostType?.[selectedPostType] || {};
 
         const getNormalizedMetaOptions = (metaKey) => {
             if (!metaKey || !metaKeysForPostType[metaKey]) return [];
@@ -309,23 +308,17 @@ export default function EditorFilterFields(props) {
                 };
                 
                 allValues = flattenArray(metaData.options);
-            } else if (typeof metaData === 'object') {
-
-                Object.values(metaData).forEach(val => {
-                    if (Array.isArray(val)) {
-                        allValues = [...allValues, ...val];
-                    } else if (val !== null && val !== undefined) {
-                        allValues.push(val);
-                    }
-                });
             }
+
+            
             
             allValues = allValues.filter(val => val !== null && val !== undefined && val !== '');
-            allValues = allValues.map(val => String(val));
             allValues = [...new Set(allValues)];
+            console.log('All Values:', allValues);
+            
             return allValues.map(val => ({
-                label: val,
-                value: val
+                label: val.label || val,
+                value: val.value || val
             }));
         };
 
@@ -337,7 +330,6 @@ export default function EditorFilterFields(props) {
             }
             
             updatedField.options.metaKey.selectedMetas = newMetas;
-            updatedField.options.metaKey.options = getNormalizedMetaOptions(metaKey);
             
             updateField(index, updatedField);
         };
@@ -347,8 +339,6 @@ export default function EditorFilterFields(props) {
             return metaKeysForPostType[key].label || key;
         };
 
-        const currentMetaOptions = options.metaKey.value ? 
-            getNormalizedMetaOptions(options.metaKey.value) : [];
         
         return (
             <>
@@ -374,10 +364,10 @@ export default function EditorFilterFields(props) {
                     }}
                 />
                 
-                {options.metaKey.value && currentMetaOptions.length > 0 && (
+                {options.metaKey?.value && options.metaKey?.options && (
                     <MuiMultipleSelect
                         key={`meta-values-${options.metaKey.value}`}
-                        values={currentMetaOptions}
+                        values={options.metaKey.options}
                         selectedValues={options.metaKey.selectedMetas || []}
                         label={`Select values for ${getMetaLabel(options.metaKey.value)}`}
                         onChange={(newMetas) => {
