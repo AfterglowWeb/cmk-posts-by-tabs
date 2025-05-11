@@ -1,5 +1,4 @@
-import React, {useState} from '@wordpress/element';
-
+import {useState} from '@wordpress/element';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
@@ -11,44 +10,84 @@ import Tooltip from '@mui/material/Tooltip';
 
 import MuiMultipleSelect from '../editor/MuiMultipleSelect';
 
-
-export default function FrontTaxonomyField (props) {
-    const {field, index } = props;
-    const { options, label, placeholder, info, template } = field;
-    const taxonomyKey = options.taxonomy.value;
-    const terms = options.taxonomy.terms;
-    const [selectedValues, setSelectedValues ] = useState([]);
+function findTermById (taxonomyName, termId, attributesOptions) {
     
-    const handleFilterValues = (value) => {
-        const newSelectedValues = [...selectedValues];
-        const index = newSelectedValues.indexOf(value);
-        if (index === -1) {
-            newSelectedValues.push(value);
-        } else {
-            newSelectedValues.splice(index, 1);
-        }
-        setSelectedValues(newSelectedValues);
-    }
-
-
-    if(!terms || terms.length === 0) {
+    if (!attributesOptions || !attributesOptions.taxonomies) {
         return null;
     }
+    const taxonomy = attributesOptions.taxonomies.find(t => t.value === taxonomyName);
+
+    if (taxonomy) {
+        const terms = taxonomy.terms;
+        if (terms) {
+            const term = terms.find(t => t.value === termId);
+            if (term) {
+                return term
+            }
+        }
+    }
+    
+    return null;
+};
+
+export default function FrontTaxonomyField (props) {
+    const {field, index, attributesOptions } = props;
+    const { options, label, placeholder, info, template } = field;
+    const taxonomyKey = options.taxonomy.value;
+    const [selectedValues, setSelectedValues ] = useState([]);
+
+    if (!taxonomyKey && !options.taxonomy.terms && !attributesOptions) {
+        return null;
+    }
+
+   const termsObjects = options.taxonomy.terms.map(termIds => {
+
+        const termObject = findTermById(taxonomyKey, termIds, attributesOptions);
+        if (termObject) {
+            return {
+                value: termObject.value,
+                label: termObject.label
+            };
+        }
+        return null;
+    }).filter(term => term !== null);
+
+    
+    const handleOnChange = (value) => {
+        if (Array.isArray(value)) {
+            setSelectedValues(value);
+            return;
+        }
+        if (template === 'radio') {
+            setSelectedValues([value]);
+        } else {
+            const newSelectedValues = [...selectedValues];
+            const index = newSelectedValues.indexOf(value);
+            
+            if (index === -1) {
+                newSelectedValues.push(value);
+            } else {
+                newSelectedValues.splice(index, 1);
+            }
+            setSelectedValues(newSelectedValues);
+        }
+    };
+
+
+    if(!termsObjects) {
+        return null;
+    }
+
 
     switch (template) {
         case 'select':
             return (
                 <Tooltip title={info || ''} arrow placement="top">
                     <MuiMultipleSelect                    
-                        values={terms.map(term => ({
-                            value: term.value,
-                            label: term.label
-                        }))}
+                        values={termsObjects}
                         selectedValues={selectedValues}
                         label={label}
-                        onChange={(newTerms) => {
-                            handleFilterValues(newTerms)
-                        }}
+                        onChange={handleOnChange}  // Pass the value directly
                     />
                 </Tooltip>
             );
@@ -60,14 +99,14 @@ export default function FrontTaxonomyField (props) {
                     <Typography variant="subtitle1">{label}</Typography>
                     <RadioGroup
                         value={Array.isArray(selectedValues) ? selectedValues[0] || '' : selectedValues || ''}
-                        onChange={(e) => handleFilterValues(taxonomyKey, e.target.value)}
+                        onChange={(e) => setSelectedValues(e.target.value)}
                     >
                         <FormControlLabel 
                             value="" 
                             control={<Radio size='small' />} 
                             label={placeholder || 'All'} 
                         />
-                        {terms.map(term => (
+                        {termsObjects.map(term => (
                             <FormControlLabel 
                                 key={term.value} 
                                 value={term.value} 
@@ -87,13 +126,13 @@ export default function FrontTaxonomyField (props) {
                 <FormControl variant="standard" key={`tax-${index}`} component="fieldset" margin="normal">
                     <Typography variant="subtitle1">{label}</Typography>
                     <FormGroup>
-                        {terms.map(term => (
+                        {termsObjects.map(term => (
                             <FormControlLabel
                                 key={term.value}
                                 control={
                                     <Checkbox 
                                         checked={selectedValues.includes(term.value)}
-                                        onChange={() => handleFilterValues(taxonomyKey, term.value)}
+                                        onChange={() => handleOnChange(taxonomyKey, term.value)}
                                     />
                                 }
                                 label={term.label}

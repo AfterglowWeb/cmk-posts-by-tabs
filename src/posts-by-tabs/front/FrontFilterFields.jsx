@@ -17,8 +17,8 @@ import FrontCalendarField from './FrontCalendarField';
 
 
 export default function FrontFilterFields(props) {
-    const { isLoading, error } = props;
-    const { filterFields } = props.attributes
+    const { isLoading, error, attributes } = props;
+    const { filterFields } = attributes
     const [filtersValues, setFiltersValues] = useState({
         taxonomies: [],
         metaKeys: [],
@@ -30,6 +30,8 @@ export default function FrontFilterFields(props) {
             end: null
         }
     });
+
+    console.log('attributes', attributes);
 
     const handleFilterChange = (type, key, value) => {
         const newFiltersValues = { ...filtersValues };
@@ -107,9 +109,9 @@ export default function FrontFilterFields(props) {
 
         switch (field.type) {
             case 'taxonomy':
-                return <FrontTaxonomyField field={field} index={index} />;
+                return <FrontTaxonomyField field={field} index={index} attributesOptions={attributes?.options} />;
             case 'metaKey':
-                return <FrontMetaField field={field} index={index} />;
+                return <FrontMetaField field={field} index={index}  attributes={attributes} />;
             case 'order':
                 return <FrontOrderField field={field} index={index} />;
             case 'orderby':

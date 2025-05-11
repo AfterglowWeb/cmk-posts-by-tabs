@@ -3,6 +3,7 @@ import { useEffect } from '@wordpress/element';
 import Button from '@mui/material/Button';
 import MetaField from './MetaField';
 import MuiSelect from './MuiSelect';
+import { PanelBody } from '@wordpress/components';
 
 const relations = [
     {
@@ -61,7 +62,7 @@ export default function MetaFields(props) {
     };
 
     return (
-    <div>
+    <PanelBody title={__('Meta Query Settings')} initialOpen={false}>
         <div className="py-2" />
         <MuiSelect
             label={__('Relation')}
@@ -84,6 +85,6 @@ export default function MetaFields(props) {
                 { __( 'Add a meta query' ) }
             </Button>
         </div>
-    </div>
+    </PanelBody>
 );
 }

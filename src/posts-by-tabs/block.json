@@ -326,6 +326,10 @@
 				}	
 			}
 		},
+		"taxonomyTerms": {
+			"type": "object",
+			"default": {}
+		},
 		"postsPerPage": {
 			"type": "number",
 			"default": 12
@@ -363,6 +367,10 @@
 			"items": {
 				"type": "object"
 			}
+		},
+		"options": {
+			"type": "object",
+			"default": {}
 		}
 	},
 	"textdomain": "cmk-posts-by-tab",

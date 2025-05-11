@@ -598,6 +598,22 @@ class OptionPage
                         }
                         
                         $label = ucfirst(str_replace(['-','_'], [' ', ' '], $key));
+
+                        if(is_array($value)) {
+                      
+                                foreach ($value as $k => $v) {
+                                    if (is_numeric($v)) {
+                                        $post = get_post($v);
+                                        if(is_a($post, 'WP_Post')) {
+                                            $value[$k] = array(
+                                                'label' => $post->post_title,
+                                                'value' => $v,
+                                            );
+                                        }
+                                    }
+                                }
+                            
+                        }
                         
                         if(isset($meta_fields[$key])) {
                             $meta_fields[$key]['options'][] = is_array($value) && isset($value[0]) && 1 === count($value) ? $value[0] : $value;

@@ -53662,13 +53662,16 @@ function MuiMultipleSelect(props) {
 
     // Handle both string and array values
     const newValues = typeof value === 'string' ? value.split(',') : value;
+
+    // Convert string numbers to actual numbers to maintain consistency
+    const normalizedValues = newValues.map(val => typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val);
     if (onChange) {
-      onChange(newValues);
+      onChange(normalizedValues);
     }
   };
 
-  // Ensure values is always an array and IDs are strings for consistent comparison
-  const normalizedSelectedValues = selectedValues ? Array.isArray(selectedValues) ? selectedValues : [selectedValues] : [];
+  // Normalize selected values to ensure consistent comparison
+  const normalizedSelectedValues = (selectedValues || []).map(val => typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_FormControl__WEBPACK_IMPORTED_MODULE_3__["default"], {
     variant: "standard",
     fullWidth: true,
@@ -53700,18 +53703,23 @@ function MuiMultipleSelect(props) {
           gap: 0.5
         },
         children: selected.map(value => {
-          const selectedItem = values.find(item => item.value === value);
+          // Use loose equality (==) to match string and number values
+          const selectedItem = values.find(item => item.value == value);
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Chip__WEBPACK_IMPORTED_MODULE_8__["default"], {
             label: selectedItem ? selectedItem.label : value
           }, value);
         })
       }),
       MenuProps: MenuProps,
-      children: values.map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
-        value: item.value,
-        style: getStyles(item.value, normalizedSelectedValues, theme),
-        children: item.label
-      }, item.value))
+      children: values.map(item => {
+        // Convert item.value to a number if it's a numeric string
+        const normalizedValue = typeof item.value === 'string' && !isNaN(item.value) ? parseInt(item.value, 10) : item.value;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          value: normalizedValue,
+          style: getStyles(normalizedValue, normalizedSelectedValues, theme),
+          children: item.label
+        }, item.value);
+      })
     })]
   });
 }
@@ -54655,11 +54663,12 @@ __webpack_require__.r(__webpack_exports__);
 function FrontFilterFields(props) {
   const {
     isLoading,
-    error
+    error,
+    attributes
   } = props;
   const {
     filterFields
-  } = props.attributes;
+  } = attributes;
   const [filtersValues, setFiltersValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)({
     taxonomies: [],
     metaKeys: [],
@@ -54671,6 +54680,7 @@ function FrontFilterFields(props) {
       end: null
     }
   });
+  console.log('attributes', attributes);
   const handleFilterChange = (type, key, value) => {
     const newFiltersValues = {
       ...filtersValues
@@ -54740,12 +54750,14 @@ function FrontFilterFields(props) {
       case 'taxonomy':
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_FrontTaxonomyField__WEBPACK_IMPORTED_MODULE_2__["default"], {
           field: field,
-          index: index
+          index: index,
+          attributesOptions: attributes?.options
         });
       case 'metaKey':
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_FrontMetaField__WEBPACK_IMPORTED_MODULE_3__["default"], {
           field: field,
-          index: index
+          index: index,
+          attributes: attributes
         });
       case 'order':
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_FrontOrderField__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -54856,7 +54868,7 @@ function FrontMetaField(props) {
     field,
     index,
     onFilterChange,
-    initialValues = []
+    attributes
   } = props;
   const {
     options,
@@ -54867,26 +54879,20 @@ function FrontMetaField(props) {
   } = field;
   const metaKey = options.metaKey.value;
   const metaOptions = options.metaKey.options || [];
-  const [selectedValues, setSelectedValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(template === 'radio' ? '' : []);
-
-  // Enable parent component communication
+  const [selectedValues, setSelectedValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    // Notify parent component when selectedValues change
     if (onFilterChange) {
       onFilterChange(metaKey, selectedValues);
     }
   }, [selectedValues, metaKey, onFilterChange]);
   const handleFilterValues = newValue => {
-    // Handle select differently - MuiMultipleSelect likely returns the full array of selected values
     if (template === 'select') {
       setSelectedValues(newValue);
       return;
     }
     if (template === 'radio') {
-      // For radio, just use the single value
       setSelectedValues(newValue);
     } else {
-      // For checkbox, toggle the selection
       const newSelectedValues = [...selectedValues];
       const valueIndex = newSelectedValues.indexOf(newValue);
       if (valueIndex === -1) {
@@ -54904,7 +54910,7 @@ function FrontMetaField(props) {
         arrow: true,
         placement: "top",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_editor_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          values: metaOptions,
+          values: options,
           selectedValues: selectedValues,
           label: label
           // Pass the full array directly from the select component
@@ -54925,7 +54931,7 @@ function FrontMetaField(props) {
             variant: "subtitle1",
             children: label
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_RadioGroup__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            value: selectedValues || '',
+            value: selectedValues,
             onChange: e => handleFilterValues(e.target.value),
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
               value: "",
@@ -55267,10 +55273,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+function findTermById(taxonomyName, termId, attributesOptions) {
+  if (!attributesOptions || !attributesOptions.taxonomies) {
+    return null;
+  }
+  const taxonomy = attributesOptions.taxonomies.find(t => t.value === taxonomyName);
+  if (taxonomy) {
+    const terms = taxonomy.terms;
+    if (terms) {
+      const term = terms.find(t => t.value === termId);
+      if (term) {
+        return term;
+      }
+    }
+  }
+  return null;
+}
+;
 function FrontTaxonomyField(props) {
   const {
     field,
-    index
+    index,
+    attributesOptions
   } = props;
   const {
     options,
@@ -55280,19 +55304,39 @@ function FrontTaxonomyField(props) {
     template
   } = field;
   const taxonomyKey = options.taxonomy.value;
-  const terms = options.taxonomy.terms;
   const [selectedValues, setSelectedValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const handleFilterValues = value => {
-    const newSelectedValues = [...selectedValues];
-    const index = newSelectedValues.indexOf(value);
-    if (index === -1) {
-      newSelectedValues.push(value);
-    } else {
-      newSelectedValues.splice(index, 1);
+  if (!taxonomyKey && !options.taxonomy.terms && !attributesOptions) {
+    return null;
+  }
+  const termsObjects = options.taxonomy.terms.map(termIds => {
+    const termObject = findTermById(taxonomyKey, termIds, attributesOptions);
+    if (termObject) {
+      return {
+        value: termObject.value,
+        label: termObject.label
+      };
     }
-    setSelectedValues(newSelectedValues);
+    return null;
+  }).filter(term => term !== null);
+  const handleOnChange = value => {
+    if (Array.isArray(value)) {
+      setSelectedValues(value);
+      return;
+    }
+    if (template === 'radio') {
+      setSelectedValues([value]);
+    } else {
+      const newSelectedValues = [...selectedValues];
+      const index = newSelectedValues.indexOf(value);
+      if (index === -1) {
+        newSelectedValues.push(value);
+      } else {
+        newSelectedValues.splice(index, 1);
+      }
+      setSelectedValues(newSelectedValues);
+    }
   };
-  if (!terms || terms.length === 0) {
+  if (!termsObjects) {
     return null;
   }
   switch (template) {
@@ -55302,15 +55346,10 @@ function FrontTaxonomyField(props) {
         arrow: true,
         placement: "top",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_editor_MuiMultipleSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          values: terms.map(term => ({
-            value: term.value,
-            label: term.label
-          })),
+          values: termsObjects,
           selectedValues: selectedValues,
           label: label,
-          onChange: newTerms => {
-            handleFilterValues(newTerms);
-          }
+          onChange: handleOnChange // Pass the value directly
         })
       });
     case 'radio':
@@ -55327,14 +55366,14 @@ function FrontTaxonomyField(props) {
             children: label
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_mui_material_RadioGroup__WEBPACK_IMPORTED_MODULE_6__["default"], {
             value: Array.isArray(selectedValues) ? selectedValues[0] || '' : selectedValues || '',
-            onChange: e => handleFilterValues(taxonomyKey, e.target.value),
+            onChange: e => setSelectedValues(e.target.value),
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
               value: "",
               control: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Radio__WEBPACK_IMPORTED_MODULE_8__["default"], {
                 size: "small"
               }),
               label: placeholder || 'All'
-            }), terms.map(term => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            }), termsObjects.map(term => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
               value: term.value,
               control: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Radio__WEBPACK_IMPORTED_MODULE_8__["default"], {}),
               label: term.label
@@ -55356,10 +55395,10 @@ function FrontTaxonomyField(props) {
             variant: "subtitle1",
             children: label
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormGroup__WEBPACK_IMPORTED_MODULE_9__["default"], {
-            children: terms.map(term => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            children: termsObjects.map(term => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
               control: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_mui_material_Checkbox__WEBPACK_IMPORTED_MODULE_10__["default"], {
                 checked: selectedValues.includes(term.value),
-                onChange: () => handleFilterValues(taxonomyKey, term.value)
+                onChange: () => handleOnChange(taxonomyKey, term.value)
               }),
               label: term.label
             }, term.value))
@@ -55419,7 +55458,6 @@ const GoogleMapsProvider = ({
     }
     const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
     if (existingScript) {
-      console.log('Google Maps API is already being loaded by another script');
       const checkGoogleMaps = setInterval(() => {
         if (isApiLoaded()) {
           setGoogleMaps(window.google.maps);
@@ -57253,13 +57291,11 @@ function groupEventsByPlaces(attributes, posts) {
       places = post[placeForeignKey];
     }
     if (!places) {
-      console.log('No place data found for post:', post.id);
       return;
     }
     const placesArray = Array.isArray(places) ? places : [places];
     placesArray.forEach(place => {
       if (!place || !place.id) {
-        console.log('Invalid place data for post:', post.id);
         return;
       }
       const existingIndex = grouped.findIndex(item => item.place.id === place.id);

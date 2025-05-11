@@ -40,15 +40,20 @@ export default function MuiMultipleSelect(props) {
     // Handle both string and array values
     const newValues = typeof value === 'string' ? value.split(',') : value;
     
+    // Convert string numbers to actual numbers to maintain consistency
+    const normalizedValues = newValues.map(val => 
+      typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val
+    );
+    
     if (onChange) {
-      onChange(newValues);
+      onChange(normalizedValues);
     }
   };
 
-  // Ensure values is always an array and IDs are strings for consistent comparison
-  const normalizedSelectedValues = selectedValues ? 
-    (Array.isArray(selectedValues) ? selectedValues : [selectedValues]) : 
-    [];
+  // Normalize selected values to ensure consistent comparison
+  const normalizedSelectedValues = (selectedValues || []).map(val => 
+    typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val
+  );
 
   return (
     <FormControl variant="standard" fullWidth margin="normal" sx={{
@@ -70,7 +75,8 @@ export default function MuiMultipleSelect(props) {
         renderValue={(selected) => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value) => {
-              const selectedItem = values.find(item => item.value === value);
+              // Use loose equality (==) to match string and number values
+              const selectedItem = values.find(item => item.value == value);
               return (
                 <Chip key={value} label={selectedItem ? selectedItem.label : value} />
               );
@@ -79,15 +85,23 @@ export default function MuiMultipleSelect(props) {
         )}
         MenuProps={MenuProps}
       >
-        {values.map((item) => (
-          <MenuItem
-            key={item.value}
-            value={item.value}
-            style={getStyles(item.value, normalizedSelectedValues, theme)}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
+        {values.map((item) => {
+          // Convert item.value to a number if it's a numeric string
+          const normalizedValue = 
+            typeof item.value === 'string' && !isNaN(item.value) 
+              ? parseInt(item.value, 10) 
+              : item.value;
+              
+          return (
+            <MenuItem
+              key={item.value}
+              value={normalizedValue}
+              style={getStyles(normalizedValue, normalizedSelectedValues, theme)}
+            >
+              {item.label}
+            </MenuItem>
+          );
+        })}
       </Select>
     </FormControl>
   );

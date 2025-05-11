@@ -21,7 +21,6 @@ export default function groupEventsByPlaces(attributes, posts) {
     }
 
     if (!places) {
-      console.log('No place data found for post:', post.id);
       return;
     }
 
@@ -29,7 +28,6 @@ export default function groupEventsByPlaces(attributes, posts) {
     
     placesArray.forEach(place => {
       if (!place || !place.id) {
-        console.log('Invalid place data for post:', post.id);
         return;
       }
       
