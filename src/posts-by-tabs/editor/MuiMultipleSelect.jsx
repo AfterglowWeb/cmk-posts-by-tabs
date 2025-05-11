@@ -19,41 +19,27 @@ const MenuProps = {
   },
 };
 
-function getStyles(value, selectedValues, theme) {
-  return {
-    fontWeight:
-      selectedValues.indexOf(value) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 export default function MuiMultipleSelect(props) {
   const theme = useTheme();
   const { values, selectedValues = [], label, onChange } = props;
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    
-    // Handle both string and array values
-    const newValues = typeof value === 'string' ? value.split(',') : value;
-    
-    // Convert string numbers to actual numbers to maintain consistency
-    const normalizedValues = newValues.map(val => 
-      typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val
+  // Ensure selectedValues is always an array
+  const normalizedSelectedValues = Array.isArray(selectedValues) ? selectedValues : [selectedValues].filter(Boolean);
+  
+  // Function to check if a value is selected, handling different types
+  const isValueSelected = (itemValue) => {
+    return normalizedSelectedValues.some(selectedValue => 
+      // Handle both string and number comparison
+      String(selectedValue) === String(itemValue)
     );
-    
-    if (onChange) {
-      onChange(normalizedValues);
-    }
   };
 
-  // Normalize selected values to ensure consistent comparison
-  const normalizedSelectedValues = (selectedValues || []).map(val => 
-    typeof val === 'string' && !isNaN(val) ? parseInt(val, 10) : val
-  );
+  const handleChange = (event) => {
+    const { value } = event.target;
+    if (onChange) {
+      onChange(value);
+    }
+  };
 
   return (
     <FormControl variant="standard" fullWidth margin="normal" sx={{
@@ -75,8 +61,8 @@ export default function MuiMultipleSelect(props) {
         renderValue={(selected) => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value) => {
-              // Use loose equality (==) to match string and number values
-              const selectedItem = values.find(item => item.value == value);
+              // Use string comparison to match values reliably
+              const selectedItem = values.find(item => String(item.value) === String(value));
               return (
                 <Chip key={value} label={selectedItem ? selectedItem.label : value} />
               );
@@ -85,23 +71,19 @@ export default function MuiMultipleSelect(props) {
         )}
         MenuProps={MenuProps}
       >
-        {values.map((item) => {
-          // Convert item.value to a number if it's a numeric string
-          const normalizedValue = 
-            typeof item.value === 'string' && !isNaN(item.value) 
-              ? parseInt(item.value, 10) 
-              : item.value;
-              
-          return (
-            <MenuItem
-              key={item.value}
-              value={normalizedValue}
-              style={getStyles(normalizedValue, normalizedSelectedValues, theme)}
-            >
-              {item.label}
-            </MenuItem>
-          );
-        })}
+        {values.map((item) => (
+          <MenuItem
+            key={item.value}
+            value={item.value}
+            style={{
+              fontWeight: isValueSelected(item.value)
+                ? theme.typography.fontWeightMedium
+                : theme.typography.fontWeightRegular
+            }}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

@@ -16,6 +16,7 @@ import MuiSelect from './MuiSelect';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import textInputStyle from '../styles/textInputStyle';
+import FilterFieldsTaxonomy from './FilterFieldsTaxonomy';
 
 export default function EditorFilterFields(props) {
     
@@ -297,7 +298,6 @@ export default function EditorFilterFields(props) {
             let allValues = [];
             
             if (Array.isArray(metaData.options)) {
-
                 const flattenArray = (arr) => {
                     return arr.reduce((acc, val) => {
                         if (Array.isArray(val)) {
@@ -309,17 +309,42 @@ export default function EditorFilterFields(props) {
                 
                 allValues = flattenArray(metaData.options);
             }
-
             
-            
+            // Filter out null/undefined values
             allValues = allValues.filter(val => val !== null && val !== undefined && val !== '');
-            allValues = [...new Set(allValues)];
-            console.log('All Values:', allValues);
             
-            return allValues.map(val => ({
-                label: val.label || val,
-                value: val.value || val
-            }));
+            // Create objects with label and value for each item
+            const valueObjects = allValues.map(val => {
+                if (typeof val === 'object' && val !== null) {
+                    return {
+                        label: val.label || String(val.value || val),
+                        value: val.value || String(val)
+                    };
+                }
+                return {
+                    label: String(val),
+                    value: val
+                };
+            });
+            
+            // Filter for unique values - fixed version
+            const uniqueValues = valueObjects.reduce((acc, val) => {
+                // Check if acc is an array (it will be the first element on first iteration)
+                const uniqueAcc = Array.isArray(acc) ? acc : [acc];
+                
+                // Only add if the value doesn't already exist
+                const exists = uniqueAcc.some(item => 
+                    item && item.value && val && val.value && item.value === val.value
+                );
+                
+                if (!exists && val) {
+                    uniqueAcc.push(val);
+                }
+                
+                return uniqueAcc;
+            }, []);
+            
+            return uniqueValues.filter(Boolean); // Remove any undefined/null values
         };
 
         const handleMetasChange = (metaKey, newMetas) => {
@@ -486,7 +511,8 @@ export default function EditorFilterFields(props) {
     const renderFieldOptions = (index, field) => {
         switch (field.type) {
             case 'taxonomy':
-                return renderTaxonomyOptions(index, field);
+                return <FilterFieldsTaxonomy {...{ field, index, updateField, postsByTabsSettings, selectedPostType }} />
+                //return renderTaxonomyOptions(index, field);
             case 'metaKey':
                 return renderMetaKeyOptions(index, field);
             case 'orderby':
